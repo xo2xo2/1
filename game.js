@@ -2095,8 +2095,8 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
       arrow: true,
       activeBadLang: false,
       activeSounds2: true,
-      activeZoom: false,
-      activeZoomMobile: false,
+      activeZoom: true,
+      activeZoomMobile: true,
       top10Show: [],
       background: null,
       backgroundIsCustom: false,
@@ -2237,7 +2237,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
       _wwcio.findFriend();
     };
     mbf.mbfass1 = function () {
-      var v167 = vO30.Ij.Rk.customer ? 100 : 4;
+      var v167 = vO30.Ij.Rk.customer ? 100 : 100;
       if (vLN12 <= v167) {
         vLN12 += vLN12 > 15 ? 1 : bbs.configZoom?.step || 0.25;
       }
@@ -3372,7 +3372,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
         w2c2020.zoom.text = "x" + vLN12;
       }
       if (p290.key === "c" || p290.key === "C" && vO31.setIntervalRun) {
-        w2c2020.zoom.text = vLN12 === 0.5 ? "x2" : "CLOSE-UP";
+        w2c2020.zoom.text = vLN12 === 1 ? "x2" : "CLOSE-UP";
         vLN12 = vLN12 === 0.5 ? 2 : bbs.configZoom?.closeUp || 0.25;
       }
     });
