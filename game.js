@@ -6236,17 +6236,20 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
                 v500.height = this.kh * 2.75;
                 v500.anchor.set(0.5);
               }
-              this.jh = new vF4.Graphics();
-              this.jh.zIndex = 2;
-              this.jh.alpha = 0.9;
-              this.jh.beginFill(16747520);
-              this.jh.drawCircle(0, 0, this.kh * 0.1);
-              this.jh.endFill();
-              this.jh.lineStyle(1, "black");
-              this.addChild(v500);
-              this.addChild(this.qh);
-              this.addChild(this.jh);
-              this.addChild(w2c2020.conteinerTeam);
+              this.jh = new _.Graphics,
+              this.jh.zIndex = 2,
+              this.jh.alpha = .9,
+              this.jh.lineStyle(1, 0, 1),
+              this.jh.beginFill(16747520, 1),
+              this.jh.drawCircle(0, 0, 4.5),
+              this.jh.endFill(),
+              this.jh.drawCircle(0, 0, .1 * this.kh),
+              this.jh.endFill(),
+              this.jh.lineStyle(1, "black"),
+              this.addChild(t),
+              this.addChild(this.qh),
+              this.addChild(this.jh),
+              this.addChild(w2c2020.conteinerTeam)
             });
           }();
           var vF11 = function () {
