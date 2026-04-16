@@ -6239,8 +6239,9 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
               this.jh = new vF4.Graphics();
               this.jh.zIndex = 2;
               this.jh.alpha = .9;
+              this.jh.lineStyle(1, 0, 1),
               this.jh.beginFill(16747520, 1);
-              this.jh.drawCircle(0, 0, this.kh * 0.1);
+              this.jh.drawCircle(0, 0, .1 * this.kh),
               this.jh.endFill();
               this.jh.lineStyle(1, "black");
               this.addChild(v500);
