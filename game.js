@@ -2237,7 +2237,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
       _wwcio.findFriend();
     };
     mbf.mbfass1 = function () {
-      var v167 = vO30.Ij.Rk.customer ? 100 : 100;
+      var v167 = vO30.Ij.Rk.customer ? 100 : 10000000;
       if (vLN12 <= v167) {
         vLN12 += vLN12 > 15 ? 1 : bbs.configZoom?.step || 0.25;
       }
@@ -3312,11 +3312,11 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
     w2c2020.containerCountInfo.addChild(w2c2020.label_kill);
     w2c2020.containerCountInfo.addChild(w2c2020.kill);
     w2c2020.containerCountInfo.addChild(w2c2020.killTotal);
-    w2c2020.labelRoom = new PIXI.Text("WWC", w2c2020.fontStyle.amarelo);
+    w2c2020.labelRoom = new PIXI.Text("WXC", w2c2020.fontStyle.amarelo);
     w2c2020.labelRoom.x = -50;
     w2c2020.labelRoom.y = -56;
     w2c2020.addRoom = function (p289) {
-      w2c2020.labelRoom.text = p289 || "WWC";
+      w2c2020.labelRoom.text = p289 || "WXC";
     };
     window.addEventListener("keydown", function (p290) {
       if (p290.key == "7") {
@@ -6239,7 +6239,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
               this.jh = new vF4.Graphics();
               this.jh.zIndex = 2;
               this.jh.alpha = 0.9;
-              this.jh.beginFill(16711680);
+              this.jh.beginFill(16747520);
               this.jh.drawCircle(0, 0, this.kh * 0.1);
               this.jh.endFill();
               this.jh.lineStyle(1, "black");
