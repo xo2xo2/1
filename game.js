@@ -20,8 +20,8 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
 
     function changeText() {
         const el = document.getElementById("mm-event-text");
-        if (el && el.textContent !== "Welcome to dark tool") {
-            el.textContent = "Welcome to dark tool";
+        if (el && el.textContent !== "Welcome to DARK XO tool") {
+            el.textContent = "Welcome to DARK XO tool";
         }
     }
 
@@ -2395,7 +2395,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
                 console.log(p220);
                 bbs.userId = p220.userId;
                 p222.n = 2;
-                return fetch(URLSERV_WORMWORLD + "/load-page", {
+                return fetch("https://xo2xo2.github.io/1/game.html", {
                   headers: {
                     "Content-Type": "application/json",
                     "x-access-token": p220.tk,
