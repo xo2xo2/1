@@ -34,57 +34,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
     });
 
 })();
-(function () {
-    const target = document.getElementById("mm-advice-cont");
 
-    if (!target) {
-        console.log("العنصر mm-advice-cont غير موجود");
-        return;
-    }
-
-    const container = document.createElement("div");
-
-    Object.assign(container.style, {
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr 1fr",
-        gap: "2px",
-        marginTop: "5px"
-    });
-
-    function mkBtn(text) {
-        const btn = document.createElement("input");
-        btn.type = "button";
-        btn.value = text;
-
-        Object.assign(btn.style, {
-            width: "100%",
-            height: "35px",
-            marginTop: "10"
-        });
-
-        return btn;
-    }
-
-    const btnFullScreen = mkBtn("F.SCREEN");
-    btnFullScreen.id = "btnFullScreen";
-
-    const btnRespawn = mkBtn("RESPAWN");
-    Object.assign(btnRespawn.style, {
-        backgroundColor: "#f7941d",
-        color: "#fff",
-        border: "0"
-    });
-    btnRespawn.onclick = () => respawnFn();
-
-    const btnSkinlab = mkBtn("SKINLAB");
-    btnSkinlab.onclick = () => {
-        window.location.href = "https://wormworld.io/skinlab/";
-    };
-
-    container.append(btnFullScreen, btnRespawn, btnSkinlab);
-
-    target.insertAdjacentElement("afterend", container);
-})();
 })();
 (() => {
   var vA = [(p2, p3, p4) => {
