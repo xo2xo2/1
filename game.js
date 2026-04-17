@@ -3586,7 +3586,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
           var v252 = vO30.Lc.Xb().textureDict;
           var v253 = v245 === "B";
           if (v247 !== "000") {
-            var v254 = "SKIN_S" + v247.substring(0, 2) + "___" + v247.substring(2);
+            var v254 = "SKIN_S" + v247.substring(0, 2) + "_______________XO" + v247.substring(2);
             var v255 = v252[v254];
             p324.dh.Fh[p323.ae].Eh.Hh = !v253 ? parseInt(_wwc.skinMap[v247]) : v255 ? v254 : p324.dh.Fh[p323.ae].Eh.Hh;
           }
