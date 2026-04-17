@@ -34,6 +34,53 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
     });
 
 })();
+// إنشاء الديف الرئيسي
+const container = document.createElement("div");
+container.className = "wormworld-connect-count-b32";
+
+container.style.display = "grid";
+container.style.gridTemplateColumns = "1fr 1fr 1fr";
+container.style.gap = "2px";
+
+// زر Full Screen
+const btnFullScreen = document.createElement("input");
+btnFullScreen.type = "button";
+btnFullScreen.value = "F.SCREEN";
+btnFullScreen.id = "btnFullScreen";
+btnFullScreen.style.marginTop = "5px";
+btnFullScreen.style.width = "100%";
+btnFullScreen.style.height = "35px";
+
+// زر Respawn
+const btnRespawn = document.createElement("input");
+btnRespawn.type = "button";
+btnRespawn.value = "RESPAWN";
+btnRespawn.onclick = () => respawnFn();
+btnRespawn.style.marginTop = "5px";
+btnRespawn.style.width = "100%";
+btnRespawn.style.height = "35px";
+btnRespawn.style.backgroundColor = "#f7941d";
+btnRespawn.style.color = "#fff";
+btnRespawn.style.border = "0";
+
+// زر Skinlab
+const btnSkinlab = document.createElement("input");
+btnSkinlab.type = "button";
+btnSkinlab.value = "SKINLAB";
+btnSkinlab.onclick = () => {
+    window.location.href = "https://wormworld.io/skinlab/";
+};
+btnSkinlab.style.marginTop = "5px";
+btnSkinlab.style.width = "100%";
+btnSkinlab.style.height = "35px";
+
+// إضافتهم داخل الديف
+container.appendChild(btnFullScreen);
+container.appendChild(btnRespawn);
+container.appendChild(btnSkinlab);
+
+// إضافته للصفحة
+document.body.appendChild(container);
 })();
 (() => {
   var vA = [(p2, p3, p4) => {
