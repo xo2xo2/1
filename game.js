@@ -16,7 +16,24 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
         childList: true,
         subtree: true
     });
+(function () {
 
+    function changeText() {
+        const el = document.getElementById("mm-event-text");
+        if (el && el.textContent !== "Welcome to dark tool") {
+            el.textContent = "Welcome to dark tool";
+        }
+    }
+
+    changeText();
+
+    new MutationObserver(changeText).observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true
+    });
+
+})();
 })();
 (() => {
   var vA = [(p2, p3, p4) => {
