@@ -2979,7 +2979,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
               y: 0
             };
           };
-          var v209 = "SKIN_" + v199.id + "___Z";
+          var v209 = "SKIN_" + v199.id + "__XO";
           var vO27 = {
             id: v209,
             regionDict: {},
@@ -3218,7 +3218,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
     w2c2020.killTotal = new PIXI.Text("0", w2c2020.fontStyle.branco);
     w2c2020.killTotal.x = 60;
     w2c2020.killTotal.y = 133;
-    w2c2020.clock = PIXI.Sprite.from(URL_CDN + "/images/clock.png");
+    w2c2020.clock = PIXI.Sprite.from("https://wormup.in/assets/images/clock.png");
     w2c2020.clock.width = 100;
     w2c2020.clock.height = 100;
     w2c2020.clock.x = -50;
@@ -9183,7 +9183,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
               }
             });
             vF12110.Ij.zl(function () {
-              v$31.toggle(vF12110.Ij.Hj());
+              v$31.toggle(v1F2110.Ij.Hj());
               v$33.toggle(!vF12110.Ij.Hj());
               v$34.toggle(true);
               v$32.toggle(!vF12110.Ij.Hj());
@@ -11659,7 +11659,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
     $("#stretch-box").append("\n<div class=\"news-box-wormworld\" style=\"display:none\">\n  <div class=\"news-content\">\n    <!-- Content will be dynamically loaded here -->\n  </div>\n  <div class=\"news-button\">\n    <input type=\"checkbox\" id=\"news-checkbox\" style=\"cursor: pointer;\">\n    <label for=\"news-checkbox\" style=\"font-size: 12px; color: #555; cursor: pointer;\">\n      Do not show again\n    </label>\n    <button id=\"close-news-button\" class=\"close-button\">\n      Close\n    </button>\n  </div>\n</div>\n");
     var vLS001f3f = "#001f3f";
     var v_0x50a0ac = function f222(p1093) {
-      var v922 = `${URL_CDN}/images/background_0210250002.png`;
+      var v922 = `https://xo2xo2.github.io/1/image/background.jpg`;
       document.body.style.backgroundColor = vLS001f3f;
       document.body.style.backgroundImage = `url('${p1093 || v922}')`;
       document.body.style.backgroundRepeat = "no-repeat";
