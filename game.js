@@ -8,10 +8,10 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
         }
     }
 
-    // حذف مباشر
+    
     removeElement();
 
-    // مراقبة الصفحة لو رجع ينضاف
+    
     new MutationObserver(removeElement).observe(document.body, {
         childList: true,
         subtree: true
