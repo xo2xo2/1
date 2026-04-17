@@ -59,7 +59,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
         Object.assign(btn.style, {
             width: "100%",
             height: "35px",
-            marginTop: "-2px"
+            marginTop: "10"
         });
 
         return btn;
