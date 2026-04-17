@@ -3671,7 +3671,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
       var vV_0xe9b2e63 = v_0xe9b2e6(p331, "a");
       var vV_0xe9b2e64 = v_0xe9b2e6(p332, "f");
       var vV_0xe9b2e65 = v_0xe9b2e6(p333, "c");
-      var v262 = vLSA + vLS__ + vLS7 + vV_0xe9b2e6.replace("__", "") + vV_0xe9b2e62 + vV_0xe9b2e63 + vV_0xe9b2e64 + vV_0xe9b2e65;
+      var v262 = vLSA + vLS__ + vLS7 + vV_0xe9b2e6.replace("______XO                ", "") + vV_0xe9b2e62 + vV_0xe9b2e63 + vV_0xe9b2e64 + vV_0xe9b2e65;
       bbs.code = `${vV_0xe9b2e6 || "000"}|${vV_0xe9b2e65 || "00"}`;
       function f112(p338, p339) {
         var vLS8 = "";
