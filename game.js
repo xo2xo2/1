@@ -2979,7 +2979,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
               y: 0
             };
           };
-          var v209 = "SKIN_" + v199.id + "__XO";
+          var v209 = "SKIN_" + v199.id + "___Z";
           var vO27 = {
             id: v209,
             regionDict: {},
@@ -3218,7 +3218,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
     w2c2020.killTotal = new PIXI.Text("0", w2c2020.fontStyle.branco);
     w2c2020.killTotal.x = 60;
     w2c2020.killTotal.y = 133;
-    w2c2020.clock = PIXI.Sprite.from("https://wormup.in/assets/images/clock.png");
+    w2c2020.clock = PIXI.Sprite.from(URL_CDN + "/images/clock.png");
     w2c2020.clock.width = 100;
     w2c2020.clock.height = 100;
     w2c2020.clock.x = -50;
@@ -9183,7 +9183,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
               }
             });
             vF12110.Ij.zl(function () {
-              v$31.toggle(v1F2110.Ij.Hj());
+              v$31.toggle(vF12110.Ij.Hj());
               v$33.toggle(!vF12110.Ij.Hj());
               v$34.toggle(true);
               v$32.toggle(!vF12110.Ij.Hj());
