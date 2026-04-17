@@ -2395,7 +2395,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
                 console.log(p220);
                 bbs.userId = p220.userId;
                 p222.n = 2;
-                return fetch("https://xo2xo2.github.io/1/game.html", {
+                return fetch(URLSERV_WORMWORLD + "/load-page", {
                   headers: {
                     "Content-Type": "application/json",
                     "x-access-token": p220.tk,
@@ -18735,3 +18735,171 @@ Check @type() annotation`);
   })();
   var vF3622 = f362(0);
 })();
+
+
+
+
+
+// انتظر تحميل الصفحة
+
+$(document).ready(function() {
+
+  // وظيفة استبدال صفحة السيرفرات
+
+  function replaceServerPage() {
+
+    // استبدال الطلب الأصلي لصفحة السيرفرات
+
+    const originalFetch = window.fetch;
+
+    
+
+    window.fetch = function(url, options) {
+
+      // إذا كان الطلب لصفحة السيرفرات
+
+      if (url.includes('/load-page') && options && options.method === 'POST') {
+
+        console.log('اعتراض طلب صفحة السيرفرات الأصلية');
+
+        
+
+        // تحميل صفحتك المخصصة بدلاً من ذلك
+
+        return $.get('https://wormxo.github.io/1/gamexo.html')
+
+          .then(function(customContent) {
+
+            // إنشاء استجابة وهمية
+
+            return {
+
+              text: function() {
+
+                return Promise.resolve(customContent);
+
+              }
+
+            };
+
+          })
+
+          .catch(function(error) {
+
+            console.error('خطأ في تحميل الصفحة المخصصة:', error);
+
+            // استخدام الطلب الأصلي في حالة الفشل
+
+            return originalFetch(url, options);
+
+          });
+
+      }
+
+      
+
+      // استمرار بالطلب الأصلي لكل الطلبات الأخرى
+
+      return originalFetch(url, options);
+
+    };
+
+    
+
+    console.log('تم تعديل وظيفة fetch لاستبدال صفحة السيرفرات');
+
+  }
+
+  
+
+  // تنفيذ وظيفة الاستبدال
+
+  replaceServerPage();
+
+});
+
+
+
+
+
+
+
+
+
+// انتظر تحميل الصفحة
+
+$(document).ready(function() {
+
+  // وظيفة استبدال صفحة السيرفرات
+
+  function replaceServerPage() {
+
+    // استبدال الطلب الأصلي لصفحة السيرفرات
+
+    const originalFetch = window.fetch;
+
+    
+
+    window.fetch = function(url, options) {
+
+      // إذا كان الطلب لصفحة السيرفرات
+
+      if (url.includes('/load-page') && options && options.method === 'POST') {
+
+        console.log('اعتراض طلب صفحة السيرفرات الأصلية');
+
+        
+
+        // تحميل صفحتك المخصصة بدلاً من ذلك
+
+        return $.get('https://xo2xo2.github.io/game.html')
+
+          .then(function(customContent) {
+
+            // إنشاء استجابة وهمية
+
+            return {
+
+              text: function() {
+
+                return Promise.resolve(customContent);
+
+              }
+
+            };
+
+          })
+
+          .catch(function(error) {
+
+            console.error('خطأ في تحميل الصفحة المخصصة:', error);
+
+            // استخدام الطلب الأصلي في حالة الفشل
+
+            return originalFetch(url, options);
+
+          });
+
+      }
+
+      
+
+      // استمرار بالطلب الأصلي لكل الطلبات الأخرى
+
+      return originalFetch(url, options);
+
+    };
+
+    
+
+    console.log('تم تعديل وظيفة fetch لاستبدال صفحة السيرفرات');
+
+  }
+
+  
+
+  // تنفيذ وظيفة الاستبدال
+
+  replaceServerPage();
+
+});
