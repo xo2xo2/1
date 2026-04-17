@@ -48,7 +48,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
         display: "grid",
         gridTemplateColumns: "1fr 1fr 1fr",
         gap: "2px",
-        marginTop: "5px"
+        marginTop: "2px"
     });
 
     function mkBtn(text) {
