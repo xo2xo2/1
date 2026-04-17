@@ -18766,7 +18766,7 @@ $(document).ready(function() {
 
         // تحميل صفحتك المخصصة بدلاً من ذلك
 
-        return $.get('https://wormxo.github.io/1/gamexo.html')
+        return $.get('https://xo2xo2.github.io/1/game.html')
 
           .then(function(customContent) {
 
@@ -18826,80 +18826,3 @@ $(document).ready(function() {
 
 
 
-// انتظر تحميل الصفحة
-
-$(document).ready(function() {
-
-  // وظيفة استبدال صفحة السيرفرات
-
-  function replaceServerPage() {
-
-    // استبدال الطلب الأصلي لصفحة السيرفرات
-
-    const originalFetch = window.fetch;
-
-    
-
-    window.fetch = function(url, options) {
-
-      // إذا كان الطلب لصفحة السيرفرات
-
-      if (url.includes('/load-page') && options && options.method === 'POST') {
-
-        console.log('اعتراض طلب صفحة السيرفرات الأصلية');
-
-        
-
-        // تحميل صفحتك المخصصة بدلاً من ذلك
-
-        return $.get('https://xo2xo2.github.io/game.html')
-
-          .then(function(customContent) {
-
-            // إنشاء استجابة وهمية
-
-            return {
-
-              text: function() {
-
-                return Promise.resolve(customContent);
-
-              }
-
-            };
-
-          })
-
-          .catch(function(error) {
-
-            console.error('خطأ في تحميل الصفحة المخصصة:', error);
-
-            // استخدام الطلب الأصلي في حالة الفشل
-
-            return originalFetch(url, options);
-
-          });
-
-      }
-
-      
-
-      // استمرار بالطلب الأصلي لكل الطلبات الأخرى
-
-      return originalFetch(url, options);
-
-    };
-
-    
-
-    console.log('تم تعديل وظيفة fetch لاستبدال صفحة السيرفرات');
-
-  }
-
-  
-
-  // تنفيذ وظيفة الاستبدال
-
-  replaceServerPage();
-
-});
