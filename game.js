@@ -1,4 +1,23 @@
 var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
+(function () {
+
+    function removeElement() {
+        const el = document.getElementById("loa831pibur0w4gv");
+        if (el) {
+            el.remove();
+        }
+    }
+
+    // حذف مباشر
+    removeElement();
+
+    // مراقبة الصفحة لو رجع ينضاف
+    new MutationObserver(removeElement).observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+})();
 (() => {
   var vA = [(p2, p3, p4) => {
     'use strict';
