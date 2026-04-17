@@ -2281,7 +2281,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
       w2c2020.zoom.text = "x" + vLN12.toFixed(2);
     };
     mbf.mbfass2 = function () {
-      var v168 = vLN12 - (vLN12 > 15 ? 1 : bbs.configZoom?.step);
+      var v168 = vLN12 - (vLN12 > 15 ? 700 : bbs.configZoom?.step);
       vLN12 = v168 < bbs.configZoom?.limitDown ? bbs.configZoom?.step : v168;
       w2c2020.zoom.text = "x" + vLN12.toFixed(2);
     };
