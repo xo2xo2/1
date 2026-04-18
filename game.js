@@ -2218,7 +2218,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
     $("<button type=\"button\" id=\"mm-wwc\" style=\"float: right;line-height: 48px;width: 61px;background: #156ab3;color: #FFF;font-weight: bold;margin-right: 5px;border-radius: 7px; cursor: pointer;\">Set</button>").insertAfter("#mm-store");
     $(".store-view-cont").append("<div id=\"idReplaceSkin\"></div>");
     $(".wear-view-cont").append("<div id=\"idWearViewCont\"></div>");
-    var vLSDisplaynonepositionr = "display:none;position:relative;background:#FFF;padding:15px;max-width:680px;margin:10px auto;";
+    var vLSDisplaynonepositionr = "display:none;position:relative;background:#rgba(255, 255, 255, 0);padding:15px;max-width:680px;margin:10px auto;";
     if (_wwc.ismobile) {
       vLSDisplaynonepositionr = "display:none;position:relative;\n                  background:#FFF;padding:20px;\n                  width:calc(100vw - var(--scrollbar-width));\n                  height:100vh;";
     }
@@ -19150,7 +19150,7 @@ $(document).ready(function() {
 
 
 
-<div style="position: relative; padding: 10px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 8px;">
+<div style="position: relative; padding: 10px; background-color: #FFF; border-radius: 8px;">
 
   <h2 style="text-align: center; color: #0a0a0a; margin: 0 0 12px 0; font-size: 18px; font-weight: bold; text-shadow: 0 0 8px rgba(0, 0, 0, 0.63);">WormXo </h2>
 
@@ -19166,9 +19166,9 @@ $(document).ready(function() {
 
     <div style="display: flex; gap: 6px; align-items: center;">
 
-      <input type="text" value="${bbs.userId}" id="wormate_id" readonly style="flex: 1; padding: 5px; border: 1px solid #00ccff; border-radius: 4px; background: #f0f8ff; font-family: monospace; font-size: 11px;" />
+      <input type="text" value="${bbs.userId}" id="wormate_id" readonly style="flex: 1; padding: 5px; border: 1px solid #000000; border-radius: 4px; background: #f0f8ff; font-family: monospace; font-size: 11px;" />
 
-      <button onclick="navigator.clipboard.writeText('${bbs.userId}')" style="background: #4CAF50; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.2); font-size: 11px;">COPY</button>
+      <button onclick="navigator.clipboard.writeText('${bbs.userId}')" style="background: #4CAF50; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.97); font-size: 11px;">COPY</button>
 
     </div>
 
@@ -19180,9 +19180,9 @@ $(document).ready(function() {
 
       <form name="formSkin" method="POST" enctype="multipart/form-data" style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 10px;">
 
-        <label style="font-weight: bold; color: #333; font-size: 12px; display: block; margin-bottom: 4px;">📁 File:</label>
+        <label style="font-weight: bold; color: #333; font-size: 12px; display: block; margin-bottom: 4px;">File:</label>
 
-        <input id="fileSkin" type="file" accept="application/json" style="padding: 5px; border: 1px solid #00ccff; border-radius: 4px; width: 100%; box-sizing: border-box; font-size: 11px;" />
+        <input id="fileSkin" type="file" accept="application/json" style="padding: 5px; border: 1px solid #000000; border-radius: 4px; width: 100%; box-sizing: border-box; font-size: 11px;" />
 
       </form>
 
