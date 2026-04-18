@@ -11698,7 +11698,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
       $(".mm-merchant-cont").append(`
   <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px;">
     <a href="https://wormworld.io/install" target="_blank" style="margin-right: 10px;">
-      <img src="https://xo2xo2.github.io/image/wxo-AA4.png" alt="Happy">
+      <img src="https://xo2xo2.github.io/1/image/wxo-AA4.png" alt="Happy">
     </a>
   </div>
   `);
