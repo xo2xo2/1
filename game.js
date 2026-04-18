@@ -19152,7 +19152,7 @@ $(document).ready(function() {
 
 <div style="position: relative; padding: 10px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 8px;">
 
-  <h2 style="text-align: center; color: #00ccff; margin: 0 0 12px 0; font-size: 18px; font-weight: bold; text-shadow: 0 0 8px rgba(0, 200, 255, 0.4);">🐛 WormWorld 🐛</h2>
+  <h2 style="text-align: center; color: #0a0a0a; margin: 0 0 12px 0; font-size: 18px; font-weight: bold; text-shadow: 0 0 8px rgba(0, 0, 0, 0.63);">WormXo </h2>
 
   <button style="background: linear-gradient(135deg, #ff4444, #cc0000); color: #fff; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.2); position: absolute; top: 8px; right: 8px; font-size: 12px;" id="mm-wwc-close">
 
@@ -19232,16 +19232,6 @@ $(document).ready(function() {
         <label>Background:</label>
 
         <select id="backgroundArena"></select>
-    </div>
-
-    <div style="width: 25%">
-        <label style="display: block; text-align: center; font-weight: bold; color: #00ccff; text-shadow: 0 0 5px rgba(0,204,255,0.5); font-size: 14px; margin-bottom: 3px;">&#128028; ZIGZAG &#128028;</label>
-        <select id="sel_zigzag" style="width: 100%; padding: 4px; border: 1px solid #4a9bff; border-radius: 4px; background: #1a1a2e; color: white; font-size: 12px; box-shadow: 0 0 5px rgba(74,155,255,0.3);">
-            <option value="0">Normal</option>
-            <option value="1">Zigzag 1</option>
-            <option value="2">Zigzag 2</option>
-            <option value="3">Zigzag 3</option>
-        </select>
     </div>
 
 
