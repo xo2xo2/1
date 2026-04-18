@@ -2215,6 +2215,16 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
       vO30.dh.Np();
       v_0x24d305();
     };
+    $("#mm-advice-cont").html("<div class=\"wormworld-connect-count-b32\" style=\"display: grid !important; grid-template-columns: 1fr 1fr 1fr;gap: 2px;\">\n    <input type=\"button\" value=\"F.SCREEN\" id=\"btnFullScreen\" style=\"background-image: linear-gradient(#00ffc7, #ff47fc); font-weight: bold;font-size: 13px; border-width: 0px; border-color: #ffffff; color: #fff; border-radius: 5px; margin-top: 5px; width: 100%; height: 35px;\" />\n    <input type=\"button\" value=\"RESPAWN\" onclick=\"respawnFn()\" style=\"background-image: linear-gradient(#00ffc7, #ff47fc); font-weight: bold;font-size: 13px; border-width: 0px; border-color: #ffffff; color: #fff; border-radius: 5px; margin-top: 5px; width: 100%; height: 35px;\" />\n    </div>");
+const btn = document.getElementById("btnFullScreen");
+
+btn.onclick = () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+};
     $("<button type=\"button\" id=\"mm-wwc\" style=\"float: right;line-height: 48px;width: 61px;background: #156ab3;color: #FFF;font-weight: bold;margin-right: 5px;border-radius: 7px; cursor: pointer;\">Set</button>").insertAfter("#mm-store");
     $(".store-view-cont").append("<div id=\"idReplaceSkin\"></div>");
     $(".wear-view-cont").append("<div id=\"idWearViewCont\"></div>");
@@ -3348,11 +3358,11 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
     w2c2020.containerCountInfo.addChild(w2c2020.label_kill);
     w2c2020.containerCountInfo.addChild(w2c2020.kill);
     w2c2020.containerCountInfo.addChild(w2c2020.killTotal);
-    w2c2020.labelRoom = new PIXI.Text("WXC", w2c2020.fontStyle.amarelo);
+    w2c2020.labelRoom = new PIXI.Text("WXO", w2c2020.fontStyle.amarelo);
     w2c2020.labelRoom.x = -50;
     w2c2020.labelRoom.y = -56;
     w2c2020.addRoom = function (p289) {
-      w2c2020.labelRoom.text = p289 || "WXC";
+      w2c2020.labelRoom.text = p289 || "WXO";
     };
     window.addEventListener("keydown", function (p290) {
       if (p290.key == "7") {
