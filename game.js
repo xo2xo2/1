@@ -9110,7 +9110,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
           var v$28 = $("#mm-skin-over-button-list");
           var v$29 = $("#mm-params-nickname");
           var v$30 = $("#mm-params-game-mode");
-          var v$31 = $("#mm-action-play");
+          var v$99 = $("#mm-action-play");
           var v$32 = $("#mm-action-guest");
           var v$33 = $("#mm-action-login");
           var v$34 = $("#mm-player-info");
@@ -9152,7 +9152,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
                 vF1219.Pn(true);
               }
             });
-            v$31.click(function () {
+            v$99.click(function () {
               vF1219.Ci.Be();
               vF1219.Pn(true);
             });
