@@ -19303,16 +19303,7 @@ $(document).ready(function() {
 
               <span class="setting-label"><i class="fas fa-desktop" style="color: #ffbb00;"></i> :</span>
 
-              <select id="hudPositionMode">
-
-                <option value="0">100%</option>
-
-                <option value="1">75%</option>
-
-                <option value="2">Center</option>
-
-              </select>
-
+              
             </div>
 
 <div style="margin-bottom: 5px">
