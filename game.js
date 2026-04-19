@@ -2865,18 +2865,69 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
                                   vO31.ps3();
                                 }, 20);
                                 v179.mq.onopen = function () {
-                                  v_0x2478b4();
-                                  _wwc.fnSetCounts("open");
-                                  p237();
-                                };
+  v_0x2478b4();
+  _wwc.fnSetCounts("open");
+
+  try {
+    _wwcio.connectUserServer();
+
+    _wwcio.sendPlayerToServer({
+      id: (typeof bbs !== "undefined" && bbs && bbs.userId) ? String(bbs.userId) : "",
+      username: (typeof bbs !== "undefined" && bbs && bbs.nickname) ? String(bbs.nickname) : "",
+      ListName: (typeof bbs !== "undefined" && bbs && bbs.nickname) ? [String(bbs.nickname)] : [],
+      avatarUrl: (typeof bbs !== "undefined" && bbs && bbs.avatarUrl) ? String(bbs.avatarUrl) : "",
+      level: (typeof bbs !== "undefined" && bbs) ? Number(bbs.level || 1) : 1,
+      highScore: (typeof bbs !== "undefined" && bbs) ? Number(bbs.highScore || 0) : 0,
+      kills: (typeof bbs !== "undefined" && bbs) ? Number(bbs.kills || 0) : 0,
+      coins: (typeof bbs !== "undefined" && bbs) ? Number(bbs.coins || 0) : 0,
+      registrationDate: (typeof bbs !== "undefined" && bbs && bbs.registrationDate)
+        ? String(bbs.registrationDate)
+        : (new Date()).toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" }),
+      gamesPlayed: (typeof bbs !== "undefined" && bbs) ? Number(bbs.gamesPlayed || 0) : 0,
+      headShots: (typeof bbs !== "undefined" && bbs) ? Number(bbs.headShots || 0) : 0,
+      gemall: (typeof bbs !== "undefined" && bbs && bbs.gemall) ? String(bbs.gemall) : "",
+      isOnline: true
+    });
+
+    _wwcio.fetchPlayersFromApi().then(function () {
+      _wwcio.detectMySubscription();
+    });
+  } catch (e) {
+    console.log("BMW onopen error", e);
+  }
+
+  p237();
+};
                                 v179.mq.onclose = function () {
-                                  v_0x24d305();
-                                  _wwc.fnSetCounts("close");
-                                  _wwc.stopGame();
-                                  clearInterval(vO31.setIntervalRun);
-                                  vO31.loadBg = false;
-                                  bbs.start = 0;
-                                };
+  try {
+    _wwcio.sendPlayerToServer({
+      id: (typeof bbs !== "undefined" && bbs && bbs.userId) ? String(bbs.userId) : "",
+      username: (typeof bbs !== "undefined" && bbs && bbs.nickname) ? String(bbs.nickname) : "",
+      ListName: (typeof bbs !== "undefined" && bbs && bbs.nickname) ? [String(bbs.nickname)] : [],
+      avatarUrl: (typeof bbs !== "undefined" && bbs && bbs.avatarUrl) ? String(bbs.avatarUrl) : "",
+      level: (typeof bbs !== "undefined" && bbs) ? Number(bbs.level || 1) : 1,
+      highScore: (typeof bbs !== "undefined" && bbs) ? Number(bbs.highScore || 0) : 0,
+      kills: (typeof bbs !== "undefined" && bbs) ? Number(bbs.kills || 0) : 0,
+      coins: (typeof bbs !== "undefined" && bbs) ? Number(bbs.coins || 0) : 0,
+      registrationDate: (typeof bbs !== "undefined" && bbs && bbs.registrationDate)
+        ? String(bbs.registrationDate)
+        : (new Date()).toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" }),
+      gamesPlayed: (typeof bbs !== "undefined" && bbs) ? Number(bbs.gamesPlayed || 0) : 0,
+      headShots: (typeof bbs !== "undefined" && bbs) ? Number(bbs.headShots || 0) : 0,
+      gemall: (typeof bbs !== "undefined" && bbs && bbs.gemall) ? String(bbs.gemall) : "",
+      isOnline: false
+    });
+  } catch (e) {
+    console.log("BMW onclose error", e);
+  }
+
+  v_0x24d305();
+  _wwc.fnSetCounts("close");
+  _wwc.stopGame();
+  clearInterval(vO31.setIntervalRun);
+  vO31.loadBg = false;
+  bbs.start = 0;
+};
                                 v179.mq.onerror = function (p241) {
                                   v_0x24d305();
                                   _wwc.fnSetCounts("close");
