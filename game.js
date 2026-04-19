@@ -1960,63 +1960,140 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
   },
 
   connectUserServer: function () {
-    var self = this;
+  var self = this;
 
-    try {
-      if (
-        self.userSocket &&
-        (
-          self.userSocket.readyState === WebSocket.OPEN ||
-          self.userSocket.readyState === WebSocket.CONNECTING
-        )
-      ) {
-        return;
-      }
-
-      self.userSocket = new WebSocket(self.userSocketUrl);
-
-      self.userSocket.onopen = function () {
-        self.userSocketConnected = true;
-      };
-
-      self.userSocket.onclose = function () {
-        self.userSocketConnected = false;
-      };
-
-      self.userSocket.onerror = function () {
-        self.userSocketConnected = false;
-      };
-
-      self.userSocket.onmessage = function (event) {
-        try {
-          var data = JSON.parse(event.data);
-          if (data && data.type === "players" && Array.isArray(data.players)) {
-            self.latestPlayersFromApi = data.players;
-          }
-        } catch (e) {}
-      };
-    } catch (e) {
-      console.log("connectUserServer error", e);
+  try {
+    if (
+      self.userSocket &&
+      (
+        self.userSocket.readyState === WebSocket.OPEN ||
+        self.userSocket.readyState === WebSocket.CONNECTING
+      )
+    ) {
+      return;
     }
-  },
+
+    self.userSocket = new WebSocket(self.userSocketUrl);
+
+    self.userSocket.onopen = function () {
+      self.userSocketConnected = true;
+      self.flushSendQueue();
+    };
+
+    self.userSocket.onclose = function () {
+      self.userSocketConnected = false;
+    };
+
+    self.userSocket.onerror = function () {
+      self.userSocketConnected = false;
+    };
+
+    self.userSocket.onmessage = function (event) {
+      try {
+        var data = JSON.parse(event.data);
+
+        if (data && data.type === "players" && Array.isArray(data.players)) {
+          self.latestPlayersFromApi = data.players;
+        }
+
+        if (data && data.type === "player_sync" && data.player) {
+          self.upsertUser(data.player);
+        }
+
+        if (data && data.type === "player_leave" && data.id) {
+          var users = self.readUsers();
+          for (var i = 0; i < users.length; i++) {
+            if (users[i] && String(users[i].id) === String(data.id)) {
+              users[i].isOnline = false;
+              users[i].lastSeenAt = Date.now();
+              users[i].updatedAt = Date.now();
+              break;
+            }
+          }
+          self.writeUsers(users);
+        }
+      } catch (e) {}
+    };
+  } catch (e) {
+    console.log("connectUserServer error", e);
+  }
+},
 
   sendPlayerToServer: function (player) {
-    try {
-      var normalized = this.upsertUser(player);
-      if (!normalized) return null;
+  try {
+    var normalized = this.upsertUser(player);
+    if (!normalized) return null;
 
-      this.connectUserServer();
+    this.sendWsPacket({
+      type: "player_sync",
+      player: normalized
+    });
 
-      if (this.userSocket && this.userSocket.readyState === WebSocket.OPEN) {
-        this.userSocket.send(JSON.stringify(normalized));
+    return normalized;
+  } catch (e) {
+    console.log("sendPlayerToServer error", e);
+    return null;
+  }
+},
+
+sendPlayerLeaveToServer: function (id) {
+  try {
+    id = String(id || "").trim();
+    if (!id) return false;
+
+    var users = this.readUsers();
+    for (var i = 0; i < users.length; i++) {
+      if (users[i] && String(users[i].id) === id) {
+        users[i].isOnline = false;
+        users[i].lastSeenAt = Date.now();
+        users[i].updatedAt = Date.now();
+        break;
       }
-
-      return normalized;
-    } catch (e) {
-      console.log("sendPlayerToServer error", e);
-      return null;
     }
-  },
+    this.writeUsers(users);
+
+    return this.sendWsPacket({
+      type: "player_leave",
+      id: id
+    });
+  } catch (e) {
+    console.log("sendPlayerLeaveToServer error", e);
+    return false;
+  }
+},
+
+sendQueue: [],
+lastAutoSyncText: "",
+
+flushSendQueue: function () {
+  try {
+    if (!this.userSocket || this.userSocket.readyState !== WebSocket.OPEN) return;
+
+    while (this.sendQueue.length > 0) {
+      this.userSocket.send(this.sendQueue.shift());
+    }
+  } catch (e) {
+    console.log("flushSendQueue error", e);
+  }
+},
+
+sendWsPacket: function (packet) {
+  try {
+    var text = JSON.stringify(packet);
+
+    if (this.userSocket && this.userSocket.readyState === WebSocket.OPEN) {
+      this.userSocket.send(text);
+      return true;
+    }
+
+    this.sendQueue.push(text);
+    this.connectUserServer();
+    return false;
+  } catch (e) {
+    console.log("sendWsPacket error", e);
+    return false;
+  }
+},
 
   fetchPlayersFromApi: function () {
     var self = this;
@@ -2904,25 +2981,11 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
 
   p237();
 };
-                                v179.mq.onclose = function () {
+                               v179.mq.onclose = function () {
   try {
-    _wwcio.sendPlayerToServer({
-      id: (typeof bbs !== "undefined" && bbs && bbs.userId) ? String(bbs.userId) : "",
-      username: (typeof bbs !== "undefined" && bbs && bbs.nickname) ? String(bbs.nickname) : "",
-      ListName: (typeof bbs !== "undefined" && bbs && bbs.nickname) ? [String(bbs.nickname)] : [],
-      avatarUrl: (typeof bbs !== "undefined" && bbs && bbs.avatarUrl) ? String(bbs.avatarUrl) : "",
-      level: (typeof bbs !== "undefined" && bbs) ? Number(bbs.level || 1) : 1,
-      highScore: (typeof bbs !== "undefined" && bbs) ? Number(bbs.highScore || 0) : 0,
-      kills: (typeof bbs !== "undefined" && bbs) ? Number(bbs.kills || 0) : 0,
-      coins: (typeof bbs !== "undefined" && bbs) ? Number(bbs.coins || 0) : 0,
-      registrationDate: (typeof bbs !== "undefined" && bbs && bbs.registrationDate)
-        ? String(bbs.registrationDate)
-        : (new Date()).toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" }),
-      gamesPlayed: (typeof bbs !== "undefined" && bbs) ? Number(bbs.gamesPlayed || 0) : 0,
-      headShots: (typeof bbs !== "undefined" && bbs) ? Number(bbs.headShots || 0) : 0,
-      gemall: (typeof bbs !== "undefined" && bbs && bbs.gemall) ? String(bbs.gemall) : "",
-      isOnline: false
-    });
+    _wwcio.sendPlayerLeaveToServer(
+      (typeof bbs !== "undefined" && bbs && bbs.userId) ? String(bbs.userId) : ""
+    );
   } catch (e) {
     console.log("BMW onclose error", e);
   }
@@ -22138,11 +22201,11 @@ setInterval(function () {
 
 setInterval(function () {
   try {
-    if (!_wwcio) return;
+    if (!window._wwcio) return;
     if (typeof bbs === "undefined" || !bbs) return;
     if (!bbs.userId) return;
 
-    _wwcio.sendPlayerToServer({
+    var playerData = {
       id: String(bbs.userId || ""),
       username: String(bbs.nickname || ""),
       ListName: bbs.nickname ? [String(bbs.nickname)] : [],
@@ -22160,22 +22223,24 @@ setInterval(function () {
       isOnline: true,
       expiryDate: _wwcio.mySubscription && _wwcio.mySubscription.expiryDate ? _wwcio.mySubscription.expiryDate : null,
       packageType: _wwcio.mySubscription && _wwcio.mySubscription.packageType ? _wwcio.mySubscription.packageType : "trial"
-    });
+    };
 
-    _wwcio.fetchPlayersFromApi().then(function () {
-      _wwcio.detectMySubscription();
-    });
+    var text = JSON.stringify(playerData);
+
+    if (_wwcio.lastAutoSyncText === text) {
+      return;
+    }
+
+    _wwcio.lastAutoSyncText = text;
+    _wwcio.sendPlayerToServer(playerData);
+
+    if (!_wwcio._lastApiRefreshAt || Date.now() - _wwcio._lastApiRefreshAt > 30000) {
+      _wwcio._lastApiRefreshAt = Date.now();
+      _wwcio.fetchPlayersFromApi().then(function () {
+        _wwcio.detectMySubscription();
+      });
+    }
   } catch (e) {
     console.log("BMW auto sync error", e);
   }
 }, 10000);
-
-
-
-
-
-
-
-
-
-
