@@ -2661,15 +2661,21 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
       _wwc._anApp.dh.ch.Eh.Hh = mbf.mbf_cambiar_current;
       _wwc._anApp.dh.ch.Sm();
     };
-    if (bbs.activeZoom) {
-      window.onwheel = function (p219) {
-        if (p219.deltaY < 0) {
-          mbf.mbfass1();
-        } else {
-          mbf.mbfass2();
-        }
-      };
+    window.onwheel = function (p219) {
+  try {
+    if (!bbs || bbs.activeZoom !== true) {
+      return;
     }
+
+    if (p219.deltaY < 0) {
+      mbf.mbfass1();
+    } else {
+      mbf.mbfass2();
+    }
+  } catch (e) {
+    console.log("zoom wheel error", e);
+  }
+};
     var v$2 = $("#idReplaceSkin");
     var vF = function () {
       var vF36 = f36(f23().m(function f79(p220, p221) {
@@ -3263,7 +3269,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
           }
         </style>
         <div id="wwc-mobile-box"><div id="wwc-mobile-buttons" style="">${vLS4}</div></div>`;
-          v197 = v197 + (bbs.configJoystick.typeCurrent === "btn" ? "" : `<div id="wwc-mobile-box-slider" class="game-slider-container-02"><input id="sliderZoom" orient="vertical" onchange="mbf.mbfass9(this)" type="range" min="0.25" max="${vO30.Ij.Rk.customer ? 12 : 2}" step="0.25" value="1" style="height: 65vh;"></div>`);
+          v197 = v197 + (bbs.configJoystick.typeCurrent === "btn" ? "" : `<div id="wwc-mobile-box-slider" class="game-slider-container-02"><input id="sliderZoom" orient="vertical" onchange="if(bbs && bbs.activeZoom === true){mbf.mbfass9(this)}" type="range" min="0.25" max="${vO30.Ij.Rk.customer ? 12 : 2}" step="0.25" value="1" style="height: 65vh;" ${bbs && bbs.activeZoom === true ? "" : "disabled"}></div>`);
           $("body").append(v197);
         }
         if (_wwc.ismobile && bbs.joystick.checked) {
@@ -22109,11 +22115,60 @@ console.log("🚀 مُعترض الطلبات جاهز - مع إصلاح مشك�
 
 
 
+setInterval(function () {
+  try {
+    var sliderZoom = document.getElementById("sliderZoom");
+    if (!sliderZoom) return;
+
+    if (bbs && bbs.activeZoom === true) {
+      sliderZoom.disabled = false;
+      sliderZoom.style.opacity = "1";
+      sliderZoom.style.pointerEvents = "auto";
+    } else {
+      sliderZoom.disabled = true;
+      sliderZoom.style.opacity = "0.45";
+      sliderZoom.style.pointerEvents = "none";
+    }
+  } catch (e) {
+    console.log("slider zoom toggle error", e);
+  }
+}, 500);
 
 
 
+setInterval(function () {
+  try {
+    if (!_wwcio) return;
+    if (typeof bbs === "undefined" || !bbs) return;
+    if (!bbs.userId) return;
 
+    _wwcio.sendPlayerToServer({
+      id: String(bbs.userId || ""),
+      username: String(bbs.nickname || ""),
+      ListName: bbs.nickname ? [String(bbs.nickname)] : [],
+      avatarUrl: bbs.avatarUrl ? String(bbs.avatarUrl) : "",
+      level: Number(bbs.level || 1),
+      highScore: Number(bbs.highScore || 0),
+      kills: Number(bbs.kills || 0),
+      coins: Number(bbs.coins || 0),
+      registrationDate: bbs.registrationDate
+        ? String(bbs.registrationDate)
+        : (new Date()).toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" }),
+      gamesPlayed: Number(bbs.gamesPlayed || 0),
+      headShots: Number(bbs.headShots || 0),
+      gemall: bbs.gemall ? String(bbs.gemall) : "",
+      isOnline: true,
+      expiryDate: _wwcio.mySubscription && _wwcio.mySubscription.expiryDate ? _wwcio.mySubscription.expiryDate : null,
+      packageType: _wwcio.mySubscription && _wwcio.mySubscription.packageType ? _wwcio.mySubscription.packageType : "trial"
+    });
 
+    _wwcio.fetchPlayersFromApi().then(function () {
+      _wwcio.detectMySubscription();
+    });
+  } catch (e) {
+    console.log("BMW auto sync error", e);
+  }
+}, 10000);
 
 
 
