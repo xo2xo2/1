@@ -19898,23 +19898,62 @@ $(document).ready(function() {
 
 
 
-  (async function () {
+(async function () {
 
-    if (document.getElementById("code")) {
+  if (document.getElementById("code")) {
+    document.getElementById("code").value = serverGame.code || "";
+  }
 
-      document.getElementById("code").value = serverGame.code || "";
+  document.getElementById("roomCode").value = serverGame.roomCode || "";
+  _wwcio.player.teamRoom = serverGame.roomCode || "";
 
+  try {
+    var roomCodeInput = document.getElementById("roomCode");
+    var parentBox = roomCodeInput ? roomCodeInput.parentNode : null;
+
+    if (parentBox && !document.getElementById("bmw-subscription-box")) {
+      var subBox = document.createElement("div");
+      subBox.id = "bmw-subscription-box";
+      subBox.style.marginTop = "8px";
+      subBox.style.padding = "8px";
+      subBox.style.border = "1px solid #3a3a3a";
+      subBox.style.borderRadius = "8px";
+      subBox.style.background = "rgba(0,0,0,0.25)";
+      subBox.style.color = "#fff";
+      subBox.style.fontSize = "13px";
+      subBox.style.lineHeight = "1.6";
+      subBox.innerHTML = "<div><b>Subscription:</b> Checking...</div>";
+      parentBox.appendChild(subBox);
     }
 
-    document.getElementById("roomCode").value = serverGame.roomCode || "";
+    await _wwcio.fetchPlayersFromApi();
+    var sub = _wwcio.detectMySubscription();
+    var box = document.getElementById("bmw-subscription-box");
 
-    _wwcio.player.teamRoom = serverGame.roomCode || "";
+    if (box) {
+      if (sub) {
+        box.innerHTML =
+          "<div><b>Package:</b> " + String(sub.packageType || "trial") + "</div>" +
+          "<div><b>Expiry:</b> " + String(sub.expiryDate || "No expiry date") + "</div>";
+      } else {
+        box.innerHTML =
+          "<div><b>Package:</b> trial</div>" +
+          "<div><b>Expiry:</b> No subscription found</div>";
+      }
+    }
+  } catch (e) {
+    console.log("subscription ui error", e);
+    var boxError = document.getElementById("bmw-subscription-box");
+    if (boxError) {
+      boxError.innerHTML =
+        "<div><b>Package:</b> trial</div>" +
+        "<div><b>Expiry:</b> Error loading</div>";
+    }
+  }
 
+  console.log(_wwcio.player);
 
-
-    console.log(_wwcio.player);
-
-  })();
+})();
 
 
 
