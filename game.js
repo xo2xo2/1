@@ -19991,19 +19991,57 @@ $(document).ready(function() {
       subBox.style.color = "#fff";
       subBox.style.fontSize = "13px";
       subBox.style.lineHeight = "1.6";
-      subBox.innerHTML = "<div><b>Subscription:</b> Checking...</div>";
+      subBox.innerHTML =
+        "<div><b>Package:</b> Checking...</div>" +
+        "<div><b>Expiry:</b> Checking...</div>";
       parentBox.appendChild(subBox);
     }
 
-    await _wwcio.fetchPlayersFromApi();
-    var sub = _wwcio.detectMySubscription();
     var box = document.getElementById("bmw-subscription-box");
+    var players = [];
+
+    try {
+      var res = await fetch("https://bmw-player-server.iraq-hader7b.workers.dev/api/players");
+      players = await res.json();
+      if (!Array.isArray(players)) players = [];
+    } catch (e) {
+      players = [];
+    }
+
+    var myId = (typeof bbs !== "undefined" && bbs && bbs.userId) ? String(bbs.userId) : "";
+    var myName = (typeof bbs !== "undefined" && bbs && bbs.nickname) ? String(bbs.nickname) : "";
+    var found = null;
+
+    for (var i = 0; i < players.length; i++) {
+      var p = players[i] || {};
+      if (String(p.id || "") === myId) {
+        found = p;
+        break;
+      }
+    }
+
+    if (!found && myName) {
+      for (var j = 0; j < players.length; j++) {
+        var p2 = players[j] || {};
+        if (
+          String(p2.username || "") === myName ||
+          (Array.isArray(p2.ListName) && p2.ListName.indexOf(myName) !== -1)
+        ) {
+          found = p2;
+          break;
+        }
+      }
+    }
+
+    if (found) {
+      _wwcio.mySubscription = found;
+    }
 
     if (box) {
-      if (sub) {
+      if (found) {
         box.innerHTML =
-          "<div><b>Package:</b> " + String(sub.packageType || "trial") + "</div>" +
-          "<div><b>Expiry:</b> " + String(sub.expiryDate || "No expiry date") + "</div>";
+          "<div><b>Package:</b> " + String(found.packageType || "trial") + "</div>" +
+          "<div><b>Expiry:</b> " + String(found.expiryDate || "No expiry date") + "</div>";
       } else {
         box.innerHTML =
           "<div><b>Package:</b> trial</div>" +
