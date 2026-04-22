@@ -4964,17 +4964,22 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
                 this.Jc.addChild(v361.xc);
                 this.Kc.push(v361);
               }
-              this.message.zIndex = 0.0012;
-              this.addChild(this.message);
-              this.VcUn();
-              this.Jc.zIndex = 0.0011;
-              this.addChild(this.Jc);
-              this.Mc();
-              this.Nc = new vO37.sc();
-              this.Nc.Bc(f121().Lc.xb);
-              this.Nc.xc.zIndex = 0.001;
-              this.addChild(this.Nc.xc);
-              this.Oc();
+             this.message.zIndex = 0.0012;
+                this.addChild(this.message);
+                this.VcUn();
+                this.Jc.zIndex = 0.0011;
+                this.addChild(this.Jc);
+                this.Mc();
+                this.Nc = new p2054.sc();
+                this.Nc.Bc(f309().Lc.xb);
+                this.Nc.xc.zIndex = 0.001;
+                this.addChild(this.Nc.xc);
+                this.Oc();
+                this.pwr_flex = new p2054.sc();
+                this.pwr_flex.Bc((bbs && bbs.zigzag) === "1" ? f309().Lc.pwrFlex : (bbs && bbs.zigzag) === "2" ? f309().Lc.pwrFlex3 : (bbs && bbs.zigzag) === "3" ? f309().Lc.pwrFlex2 : f309().Lc.pwrFlex);
+                this.pwr_flex.xc.zIndex = 0.001;
+                this.addChild(this.pwr_flex.xc);
+                this.disableFlex();
             });
             v360.prototype.yc = function (p532, p533, p534, p535) {
               this.Pc(0.002, this.Fc, p532.ub);
@@ -5044,10 +5049,20 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
               this.Nc.xc.alpha = vO39.Q(this.Nc.xc.alpha, p552.Xc ? 0.9 : 0.2, p555, 0.0025);
               this.Nc.Tc(p553);
             };
-            v360.prototype.WXX = function (p556, p557, p558, p559) {
-              this.Nc.xc.visible = true;
-              this.Nc.xc.alpha = vO39.Q(this.Nc.xc.alpha, p556.Xc ? 0.9 : 0.2, p559, 0.0025);
-              this.Nc.Tc(p557);
+             v2193.prototype.activeFlex = function (p2636, p2637, p2638, p2639) {
+                this.pwr_flex.xc.visible = true;
+                // Only show zigzag effect without changing color when taking spedes
+                this.pwr_flex.xc.alpha = 1; // Keep constant alpha
+                this.pwr_flex.Tc(p2637);
+              };
+               v2193.prototype.disableFlex = function () {
+                this.pwr_flex.xc.visible = false;
+              };
+             v2193.prototype.WXX = function (p2640, p2641, p2642, p2643) {
+                this.Nc.xc.visible = true;
+                // Keep constant alpha for consistency with zigzag behavior
+                this.Nc.xc.alpha = 1; // Keep constant alpha
+                this.Nc.Tc(p2641);
             };
             v360.prototype.Oc = function () {
               this.Nc.xc.visible = false;
