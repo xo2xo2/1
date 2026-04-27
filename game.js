@@ -4657,19 +4657,6 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
             this.wb = new vO37.la("magnet_ability", v336, 158, 86, 67, 124, 148, 63.5, 128, 128);
             this.xb = new vO37.la("velocity_ability", v336, 158, 4, 87, 74, 203, 63.5, 128, 128);
             this.yb = new vO37.la("flex_ability", v336, 4, 4, 146, 146, 63.5, 63.5, 128, 128);
-
-              // Zigzag 1: First custom image
-              var newTexture = vF4.BaseTexture.from("https://i.imgur.com/LFiCido.png");
-              this.pwrFlex = new vO37.la("flex_ability", newTexture, 156, 140, 87, 60, 170, 128.5, 128, 128);
-
-  // Zigzag 2: Second custom image (LvJ1RxC - working)
-              var newTexture2 = vF4.BaseTexture.from("https://i.imgur.com/LvJ1RxC.png");
-              this.pwrFlex2 = new vO37.la("flex_ability2", newTexture2, 156, 4, 87, 74, 285, 63.5, 128, 128);
-
-               // Zigzag 3: Third custom image
-              var newTexture3 = vF4.BaseTexture.from("https://wormup.in/assets/images/zigzagability1.png");
-              this.pwrFlex3 = new vO37.la("flex_ability3", newTexture3, 158, 4, 87, 74, 203, 63.5, 128, 128);
-
             var v337 = vF4.BaseTexture.from("/images/def-look.png");
             var v338 = new vO37.la("def_eyes", v337, 0, 0, 42, 80, 75, 64, 128, 128);
             var v339 = new vO37.la("def_mouth", v337, 46, 0, 20, 48, 109, 63, 128, 128);
@@ -4913,32 +4900,8 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
               this.Nc.Bc(f121().Lc.xb);
               this.Nc.xc.zIndex = 0.001;
               this.addChild(this.Nc.xc);
-              this.Oc();this.pwr_flex = new vO54.sc();
-                (function () {
-                  try {
-                    var z = String((window.bbsConfig || window.bbs || {}).zigzag || "0");
-                    console.log("Game loading zigzag config:", z);
-                    var set = f205().Lc;
-                    var tex = set.pwrFlex1 || set.yb; // Default/Normal zigzag
-                    if (z === "1") {
-                      tex = set.pwrFlex || set.pwrFlex1;
-                    } else if (z === "2") {
-                      tex = set.pwrFlex2 || set.pwrFlex;
-                    } else if (z === "3") {
-                      tex = set.pwrFlex3 || set.pwrFlex2 || set.pwrFlex;
-                    }
-                    console.log("Selected zigzag texture:", tex);
-                    this.pwr_flex.Bc(tex);
-                  } catch (err) {
-                    console.error("Error loading zigzag:", err);
-                    this.pwr_flex.Bc(f205().Lc.pwrFlex);
-                  }
-                }).call(this);
-                this.pwr_flex.xc.zIndex = 0.001;
-                this.addChild(this.pwr_flex.xc);
-                this.disableFlex();
-              });
-          
+              this.Oc();
+            });
             v360.prototype.yc = function (p532, p533, p534, p535) {
               this.Pc(0.002, this.Fc, p532.ub);
               this.Pc(0.003, this.Gc, p533.ub);
@@ -5007,14 +4970,6 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
               this.Nc.xc.alpha = vO39.Q(this.Nc.xc.alpha, p552.Xc ? 0.9 : 0.2, p555, 0.0025);
               this.Nc.Tc(p553);
             };
-              v729.prototype.activeFlex = function (app, config, utils, hexByte) {
-                this.pwr_flex.xc.visible = true;
-                this.pwr_flex.xc.alpha = decoder.Q(this.Nc.xc.alpha, app.Xc ? 0.9 : 0.2, hexByte, 0.0025);
-                this.pwr_flex.Tc(config);
-              };
-                v729.prototype.disableFlex = function () {
-                this.pwr_flex.xc.visible = false;
-              };
             v360.prototype.WXX = function (p556, p557, p558, p559) {
               this.Nc.xc.visible = true;
               this.Nc.xc.alpha = vO39.Q(this.Nc.xc.alpha, p556.Xc ? 0.9 : 0.2, p559, 0.0025);
@@ -8882,7 +8837,6 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
           };
           return f210;
         }();
-        
         vO37.kf = function () {
           function f211(p974) {
             this.nd = p974;
@@ -18882,516 +18836,7 @@ $(document).ready(function() {
 
 
 
-(function () {
-  try {
-    if (typeof PIXI === "undefined") {
-      return;
-    }
 
-    // Initialize zigzag config from localStorage first
-    try {
-      var savedZigzag = localStorage.getItem("zigzag_choice");
-      if (savedZigzag) {
-        if (!window.bbsConfig) {
-          window.bbsConfig = {};
-        }
-        if (!window.bbs) {
-          window.bbs = {};
-        }
-        window.bbsConfig.zigzag = savedZigzag;
-        window.bbs.zigzag = savedZigzag;
-        console.log("Zigzag config initialized from localStorage:", savedZigzag);
-      }
-    } catch (_) {}
-    var texFrom = window.utils && window.utils.k && window.utils.k.m && window.utils.k.m.from ? window.utils.k.m.from : PIXI.Texture && PIXI.Texture.from ? PIXI.Texture.from.bind(PIXI.Texture) : null;
-    if (!texFrom) {
-      return;
-    }
-
-    // Load all 3 custom zigzag images
-    var zigzag = texFrom("https://wormup.in/assets/images/zigzagability.png");
-    var zigzag1Texture = texFrom("https://wormup.in/assets/images/zigzagability1.png");
-    var zigzag2Texture = texFrom("https://i.imgur.com/LvJ1RxC.png");
-    var zigzag3Texture = texFrom("https://i.imgur.com/LFiCido.png");
-
-    // pwrFlex1 uses zigzagability1.png (NOT USED IN applyZigzagChoice)
-    var pwrFlex1 = new PIXI.Sprite(zigzag1Texture);
-    pwrFlex1.name = "flex_ability";
-    pwrFlex1.width = 87;
-    pwrFlex1.height = 74;
-    pwrFlex1.x = 203;
-    pwrFlex1.y = 63.5;
-    pwrFlex1.anchor.set(0.5);
-    // Make it interactive
-    if (pwrFlex1.eventMode !== undefined) {
-      pwrFlex1.eventMode = "static";
-    } else {
-      pwrFlex1.interactive = true;
-    }
-    pwrFlex1.buttonMode = true;
-    pwrFlex1.cursor = "pointer";
-
-    // Also handle clicks on any existing zigzag1 icon created elsewhere
-    function getAppAndStage() {
-      try {
-        var app = window.app && window.app.renderer ? window.app : PIXI.app && PIXI.app.renderer ? PIXI.app : window.gameApp && window.gameApp.renderer ? window.gameApp : null;
-        var stageRef = findStage();
-        return {
-          app: app,
-          stage: stageRef
-        };
-      } catch (_) {
-        return {
-          app: null,
-          stage: null
-        };
-      }
-    }
-    function collectFlexAbilitySprites(root) {
-      var result = [];
-      try {
-        if (root && root.children) {
-          root.children.forEach(function (child) {
-            try {
-              if (child && (child.name === "flex_ability" || child.name === "flex_ability2") && child.texture) {
-                result.push(child);
-              }
-              if (child && child.children && child.children.length) {
-                result = result.concat(collectFlexAbilitySprites(child));
-              }
-            } catch (_) {}
-          });
-        }
-      } catch (_) {}
-      return result;
-    }
-    (function installGlobalClick() {
-      var ref = getAppAndStage();
-      if (!ref.app || !ref.stage || !ref.app.renderer || !ref.app.renderer.view) {
-        return;
-      }
-      var view = ref.app.renderer.view;
-      if (view.__zigzagSwapInstalled) {
-        return;
-      } // idempotent
-      view.__zigzagSwapInstalled = true;
-      view.addEventListener("pointerdown", function (ev) {
-        try {
-          var rect = view.getBoundingClientRect();
-          var x = ev.clientX - rect.left;
-          var y = ev.clientY - rect.top;
-          var stageRef = getAppAndStage().stage;
-          if (!stageRef) {
-            return;
-          }
-          var candidates = collectFlexAbilitySprites(stageRef);
-          for (var i = 0; i < candidates.length; i++) {
-            var s = candidates[i];
-            var b = s.getBounds();
-            if (x >= b.x && x <= b.x + b.width && y >= b.y && y <= b.y + b.height) {
-              // Choose texture based on which zigzag sprite was clicked
-              if (s.name === "flex_ability2") {
-                s.texture = zigzag2Texture; // Zigzag 2 image
-              } else if (s.name === "flex_ability") {
-                s.texture = zigzag3Texture; // Zigzag 1 image
-              }
-              // ensure it shows if hidden
-              if (typeof s.visible === "boolean") {
-                s.visible = true;
-              }
-              // Force texture update
-              if (s._texture) {
-                s._texture = s.texture;
-              }
-              break;
-            }
-          }
-        } catch (_) {}
-      }, true);
-    })();
-
-    // pwrFlex uses LFiCido.png (Zigzag 1)
-    var pwrFlex = new PIXI.Sprite(zigzag3Texture);
-    pwrFlex.name = "flex_ability";
-    pwrFlex.width = 87;
-    pwrFlex.height = 74;
-    pwrFlex.x = 203;
-    pwrFlex.y = 63.5;
-    pwrFlex.anchor.set(0.5);
-
-    // pwrFlex2 uses LvJ1RxC.png (Zigzag 2)
-    var pwrFlex2 = new PIXI.Sprite(zigzag2Texture);
-    pwrFlex2.name = "flex_ability2";
-    pwrFlex2.width = 87;
-    pwrFlex2.height = 74;
-    pwrFlex2.x = 203;
-    pwrFlex2.y = 63.5;
-    pwrFlex2.anchor.set(0.5);
-    // enable click for zigzag 2
-    if (pwrFlex2.eventMode !== undefined) {
-      pwrFlex2.eventMode = "static";
-    } else {
-      pwrFlex2.interactive = true;
-    }
-    pwrFlex2.buttonMode = true;
-    pwrFlex2.on("pointerdown", function () {
-      pwrFlex2.texture = zigzag2Texture;
-      pwrFlex2.visible = true;
-    });
-
-    // pwrFlex3 uses zigzagability1.png (Zigzag 3)
-    var pwrFlex3 = new PIXI.Sprite(zigzag1Texture);
-    pwrFlex3.name = "flex_ability3";
-    pwrFlex3.width = 87;
-    pwrFlex3.height = 74;
-    pwrFlex3.x = 203;
-    pwrFlex3.y = 63.5;
-    pwrFlex3.anchor.set(0.5);
-    // enable click for zigzag 3 to ensure it uses the requested image
-    if (pwrFlex3.eventMode !== undefined) {
-      pwrFlex3.eventMode = "static";
-    } else {
-      pwrFlex3.interactive = true;
-    }
-    pwrFlex3.buttonMode = true;
-    pwrFlex3.on("pointerdown", function () {
-      pwrFlex3.texture = zigzag1Texture;
-      pwrFlex3.visible = true;
-    });
-
-    // expose
-    window.pwrFlex1 = pwrFlex1;
-    window.pwrFlex = pwrFlex;
-    window.pwrFlex2 = pwrFlex2;
-    window.pwrFlex3 = pwrFlex3;
-    function findStage() {
-      try {
-        if (window.app && window.app.stage instanceof PIXI.Container) {
-          return window.app.stage;
-        }
-        if (PIXI.app && PIXI.app.stage instanceof PIXI.Container) {
-          return PIXI.app.stage;
-        }
-        if (window.gameApp && window.gameApp.stage instanceof PIXI.Container) {
-          return window.gameApp.stage;
-        }
-        if (window._wwc && window._wwc.mf instanceof PIXI.Container) {
-          return window._wwc.mf;
-        }
-        // Try to find in _wwc structure
-        if (window._wwc && window._wwc._anApp && window._wwc._anApp.og && window._wwc._anApp.og.af && window._wwc._anApp.og.af.ng && window._wwc._anApp.og.af.ng.mf) {
-          return window._wwc._anApp.og.af.ng.mf;
-        }
-      } catch (_) {}
-      return null;
-    }
-
-    // Try to add sprites to stage with retry logic
-    function addSpritesToStage() {
-      var stage = findStage();
-      if (stage) {
-        try {
-          // Remove if already added to prevent duplicates
-          [pwrFlex1, pwrFlex, pwrFlex2, pwrFlex3].forEach(function (sprite) {
-            if (sprite && sprite.parent) {
-              sprite.parent.removeChild(sprite);
-            }
-          });
-
-          // Add sprites
-          stage.addChild(pwrFlex1);
-          stage.addChild(pwrFlex);
-          stage.addChild(pwrFlex2);
-          stage.addChild(pwrFlex3);
-          try {
-            console.log("Zigzag sprites added to stage successfully");
-          } catch (e) {}
-          return true;
-        } catch (e) {
-          try {
-            console.error("Error adding sprites:", e);
-          } catch (_) {}
-        }
-      }
-      return false;
-    }
-
-    // Try immediately
-    if (!addSpritesToStage()) {
-      // Retry after a delay if stage not ready
-      setTimeout(addSpritesToStage, 500);
-      setTimeout(addSpritesToStage, 1500);
-      setTimeout(addSpritesToStage, 3000);
-    }
-
-    // hook zigzag selector if present
-    function applyZigzagChoice(v) {
-      var val = String(v || "0");
-      [pwrFlex1, pwrFlex, pwrFlex2, pwrFlex3].forEach(function (s) {
-        if (s) {
-          s.visible = false;
-        }
-      });
-      if (val === "0") {
-        // Show default zigzag (Option 0)
-        if (pwrFlex3) {
-          // pwrFlex3 uses zigzagability.png
-          pwrFlex3.visible = true;
-          pwrFlex3.alpha = 1;
-        }
-      } else if (val === "1") {
-        if (pwrFlex) {
-          // pwrFlex uses LFiCido.png (Zigzag 1)
-          pwrFlex.visible = true;
-          pwrFlex.alpha = 1;
-          // Ensure texture is loaded
-          if (pwrFlex.texture && !pwrFlex.texture.baseTexture.valid) {
-            pwrFlex.texture.baseTexture.on("loaded", function () {
-              pwrFlex.visible = true;
-            });
-          }
-          try {
-            console.log("Zigzag 1 activated with texture:", pwrFlex.texture);
-          } catch (e) {}
-        }
-      } else if (val === "2") {
-        if (pwrFlex2) {
-          // pwrFlex2 uses LvJ1RxC.png (Zigzag 2)
-          pwrFlex2.visible = true;
-          pwrFlex2.alpha = 1;
-        }
-      } else if (val === "3") {
-        if (pwrFlex3) {
-          // pwrFlex3 uses zigzagability1.png (Zigzag 3)
-          pwrFlex3.visible = true;
-          pwrFlex3.alpha = 1;
-        }
-      }
-
-      // update preview image in settings view
-      try {
-        var container = document.getElementById("wwc-set-view");
-        if (container) {
-          var img = document.getElementById("zigzag_preview");
-          if (!img) {
-            img = document.createElement("img");
-            img.id = "zigzag_preview";
-            img.style.cssText = "display:block;margin:5px auto;max-width:80px;border:1px solid #4a9bff;border-radius:4px;box-shadow:0 0 8px rgba(74,155,255,0.4);background:rgba(26,26,46,0.6);padding:5px;";
-            container.appendChild(img);
-          }
-          var src;
-          if (val === "1") {
-            src = "https://i.imgur.com/LFiCido.png";
-          } else if (val === "2") {
-            src = "https://i.imgur.com/LvJ1RxC.png";
-          } else if (val === "3") {
-            src = "https://wormup.in/assets/images/zigzagability1.png";
-          } else {
-            src = "https://wormup.in/assets/images/zigzagability.png";
-          }
-          if (img.src !== src) {
-            img.src = src;
-          }
-        }
-      } catch (_) {/* no-op */}
-    }
-
-    // S key to cycle through zigzag images in-game
-    (function setupZigzagKeyboard() {
-      var currentIndex = 0;
-
-      // Get current zigzag from localStorage
-      try {
-        var saved = localStorage.getItem("zigzag_choice");
-        if (saved) {
-          currentIndex = parseInt(saved) || 0;
-        }
-      } catch (_) {}
-      document.addEventListener("keydown", function (e) {
-        // S key (83) or 's'/'S'
-        if ((e.keyCode === 83 || e.key === "s" || e.key === "S") && !e.ctrlKey && !e.altKey && !e.metaKey) {
-          // Don't trigger in input fields
-          var tag = e.target.tagName;
-          if (tag === "INPUT" || tag === "TEXTAREA" || e.target.isContentEditable) {
-            return;
-          }
-          e.preventDefault();
-
-          // Cycle: 0 -> 1 -> 2 -> 3 -> 0
-          currentIndex = (currentIndex + 1) % 4;
-          var val = String(currentIndex);
-
-          // Apply zigzag change
-          applyZigzagChoice(val);
-
-          // Save to storage and config
-          try {
-            localStorage.setItem("zigzag_choice", val);
-            if (!window.bbsConfig) {
-              window.bbsConfig = {};
-            }
-            if (!window.bbs) {
-              window.bbs = {};
-            }
-            window.bbsConfig.zigzag = val;
-            window.bbs.zigzag = val;
-          } catch (_) {}
-
-          // Update dropdown
-          try {
-            var sel = document.getElementById("sel_zigzag");
-            if (sel) {
-              sel.value = val;
-            }
-          } catch (_) {}
-
-          // Show zigzag name on display
-          try {
-            var names = ["Default", "Zigzag 1", "Zigzag 2", "Zigzag 3"];
-            var notif = document.createElement("div");
-            notif.textContent = names[currentIndex];
-            notif.style.cssText = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.9);color:#fff;padding:15px 30px;border-radius:8px;z-index:999999;font-size:24px;font-weight:bold;border:3px solid #00ff00;box-shadow:0 0 20px rgba(0,255,0,0.5);";
-            document.body.appendChild(notif);
-            setTimeout(function () {
-              notif.style.transition = "opacity 0.3s";
-              notif.style.opacity = "0";
-              setTimeout(function () {
-                if (notif.parentNode) {
-                  notif.parentNode.removeChild(notif);
-                }
-              }, 300);
-            }, 1000);
-          } catch (_) {}
-        }
-      });
-    })();
-
-    // Wait for DOM to be ready and retry finding selector
-    function initializeZigzagSelector() {
-      var sel = document.getElementById("sel_zigzag");
-      if (!sel) {
-        console.log("Zigzag selector not found, retrying...");
-        setTimeout(initializeZigzagSelector, 500);
-        return;
-      }
-
-      // Check if event listener is already attached
-      if (sel.__zigzagListenerAttached) {
-        console.log("Zigzag selector already initialized");
-        return;
-      }
-      console.log("Zigzag selector found, initializing...");
-
-      // Mark that we've attached the listener
-      sel.__zigzagListenerAttached = true;
-      sel.addEventListener("change", function (e) {
-        var v = String(e.target && e.target.value || "0");
-        console.log("Zigzag selector changed to:", v);
-        applyZigzagChoice(v);
-        // Save choice to localStorage and bbsConfig
-        try {
-          localStorage.setItem("zigzag_choice", v);
-          if (!window.bbsConfig) {
-            window.bbsConfig = {};
-          }
-          if (!window.bbs) {
-            window.bbs = {};
-          }
-          window.bbsConfig.zigzag = v;
-          window.bbs.zigzag = v;
-          console.log("Zigzag choice saved to config:", v);
-
-          // Force update the game's flex ability if it exists
-          try {
-            var gameInstance = window._wwc || window.game || window.app;
-            if (gameInstance && gameInstance._anApp && gameInstance._anApp.og) {
-              console.log("Attempting to update active game flex ability...");
-              // The game will pick up the new config on next use
-            }
-          } catch (updateErr) {
-            console.log("Could not update active game:", updateErr);
-          }
-        } catch (err) {
-          console.error("Error saving zigzag choice:", err);
-        }
-        // also mirror a small preview using jQuery if available
-        try {
-          if (typeof window.$ === "function") {
-            if (v === "1") {
-              if (!$("#zigzag_preview").length) {
-                $("#wwc-set-view").append("<img id=\"zigzag_preview\" src=\"https://i.imgur.com/LFiCido.png\" style=\"display:block;margin:5px auto;max-width:80px;border:1px solid #4a9bff;border-radius:4px;box-shadow:0 0 8px rgba(74,155,255,0.4);background:rgba(26,26,46,0.6);padding:5px;\">");
-              } else {
-                $("#zigzag_preview").attr("src", "https://i.imgur.com/LFiCido.png");
-              }
-            } else if (v === "2") {
-              if (!$("#zigzag_preview").length) {
-                $("#wwc-set-view").append("<img id=\"zigzag_preview\" src=\"https://i.imgur.com/LvJ1RxC.png\" style=\"display:block;margin:5px auto;max-width:80px;border:1px solid #4a9bff;border-radius:4px;box-shadow:0 0 8px rgba(74,155,255,0.4);background:rgba(26,26,46,0.6);padding:5px;\">");
-              } else {
-                $("#zigzag_preview").attr("src", "https://i.imgur.com/LvJ1RxC.png");
-              }
-            } else if (v === "3") {
-              if (!$("#zigzag_preview").length) {
-                $("#wwc-set-view").append("<img id=\"zigzag_preview\" src=\"https://wormup.in/assets/images/zigzagability1.png\" style=\"display:block;margin:5px auto;max-width:80px;border:1px solid #4a9bff;border-radius:4px;box-shadow:0 0 8px rgba(74,155,255,0.4);background:rgba(26,26,46,0.6);padding:5px;\">");
-              } else {
-                $("#zigzag_preview").attr("src", "https://wormup.in/assets/images/zigzagability1.png");
-              }
-            } else {
-              $("#zigzag_preview").remove();
-            }
-            try {
-              console.debug("zigzag changed:", v);
-            } catch (e) {}
-          }
-        } catch (_) {}
-      });
-      // Initialize select from saved value and trigger change once
-      try {
-        var savedChoice = localStorage.getItem("zigzag_choice");
-        if (!window.bbsConfig) {
-          window.bbsConfig = {};
-        }
-        if (!window.bbs) {
-          window.bbs = {};
-        }
-        var bbs = window.bbsConfig || window.bbs || {};
-        var zv = savedChoice || (bbs && bbs.zigzag ? String(bbs.zigzag) : sel.value || "0");
-        // Set to both config objects
-        window.bbsConfig.zigzag = zv;
-        window.bbs.zigzag = zv;
-        sel.value = zv;
-
-        // Also try to update any other zigzag selectors that might exist
-        var allSelectors = document.querySelectorAll("select[id*=\"zigzag\"]");
-        for (var i = 0; i < allSelectors.length; i++) {
-          if (allSelectors[i] !== sel) {
-            allSelectors[i].value = zv;
-          }
-        }
-        var evt;
-        if (typeof Event === "function") {
-          evt = new Event("change", {
-            bubbles: true
-          });
-        } else {
-          evt = document.createEvent("Event");
-          evt.initEvent("change", true, true);
-        }
-        sel.dispatchEvent(evt);
-        console.log("Zigzag initialized to:", zv);
-      } catch (err) {
-        console.error("Error initializing zigzag:", err);
-      }
-    }
-
-    // Try to initialize immediately
-    setTimeout(initializeZigzagSelector, 100); // Try sooner
-    setTimeout(initializeZigzagSelector, 500); // Also try after delays in case DOM loads slowly
-    setTimeout(initializeZigzagSelector, 1000);
-    setTimeout(initializeZigzagSelector, 3000);
-  } catch (err) {
-    console.error("Error in zigzag setup:", err);
-  }
-})();
 
 
 
@@ -19800,20 +19245,7 @@ $(document).ready(function() {
         <label>Background:</label>
 
         <select id="backgroundArena"></select>
-
-
     </div>
-
-<div style="width: 25%">
-        <label style="display: block; text-align: center; font-weight: bold; color: #00ccff; text-shadow: 0 0 5px rgba(0,204,255,0.5); font-size: 14px; margin-bottom: 3px;">&#128028; ZIGZAG &#128028;</label>
-        <select id="sel_zigzag" style="width: 100%; padding: 4px; border: 1px solid #4a9bff; border-radius: 4px; background: #1a1a2e; color: white; font-size: 12px; box-shadow: 0 0 5px rgba(74,155,255,0.3);">
-            <option value="0">Normal</option>
-            <option value="1">Zigzag 1</option>
-            <option value="2">Zigzag 2</option>
-            <option value="3">Zigzag 3</option>
-        </select>
-    </div>
-
 
 
 
@@ -22301,6 +21733,117 @@ PREVIEW
 
 
 console.log("🚀 مُعترض الطلبات جاهز - مع إصلاح مشكلة التوكن!");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
