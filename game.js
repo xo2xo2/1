@@ -18841,19 +18841,61 @@ $(document).ready(function() {
   replaceServerPage();
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
+// كود مقاوم للإخفاء - يجبر العنصر على الظهور باستمرار
+(function() {
+    var target = $("#final-share-fb");
+    var originalToggle = target.toggle;
+    var originalHide = target.hide;
+    var originalFadeOut = target.fadeOut;
+    var originalSlideUp = target.slideUp;
+    
+    // تعطيل دوال الإخفاء
+    target.toggle = function(show) {
+        if (show === false) {
+            return target.show();
+        }
+        return originalToggle.apply(this, arguments);
+    };
+    
+    target.hide = function() {
+        return target.show();
+    };
+    
+    target.fadeOut = function() {
+        return target.show();
+    };
+    
+    target.slideUp = function() {
+        return target.show();
+    };
+    
+    // إضافة مراقب لتغيرات الـ style والعناصر الأب
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.attributeName === 'style' || mutation.attributeName === 'display') {
+                if (target.css('display') === 'none' || target.css('visibility') === 'hidden') {
+                    target.css({display: 'flex', visibility: 'visible'}).show();
+                }
+            }
+        });
+    });
+    
+    observer.observe(target[0], {attributes: true});
+    observer.observe(target[0].parentNode, {childList: true, subtree: true});
+    
+    // إظهار العنصر فوراً
+    target.css({display: 'flex', visibility: 'visible'}).show();
+    
+    // تكرار التأكيد كل ثانية (احتياطي قوي)
+    setInterval(function() {
+        var el = $("#final-share-fb");
+        if (el.is(':hidden') || el.css('display') === 'none') {
+            el.css({display: 'flex', visibility: 'visible'}).show();
+        }
+    }, 1000);
+    
+    console.log("✅ تم تفعيل الحماية - #final-share-fb سيظهر دائماً");
+})();
 
 // اعتراض جميع طلبات fetch
 

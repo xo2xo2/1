@@ -4,3 +4,7 @@
 #game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats .controls #final-continue {
  background-color: #f7941d;
 }
+#game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats .controls #final-continue:hover
+{
+ background-color: #f7941d
+}
