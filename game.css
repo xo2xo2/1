@@ -1,0 +1,6 @@
+#game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats {
+ width: 407px;
+}
+#game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats .controls #final-continue {
+ background-color: #f7941d;
+}
