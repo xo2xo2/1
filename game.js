@@ -3724,7 +3724,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
       bbs.code = `${vV_0xe9b2e6 || "000"}|${vV_0xe9b2e65 || "00"}`;
       function f112(p338, p339) {
         var vLS8 = "";
-        vLS8 = p338.substring(0, vLN18).padEnd(vLN18, "_______XO        ");
+        vLS8 = p338.substring(0, vLN18).padEnd(vLN18, "_________XO        ");
         var v263 = vLS8 + p339;
         return v263;
       }
