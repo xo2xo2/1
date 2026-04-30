@@ -8,10 +8,10 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
         }
     }
 
-    
+    // حذف مباشر
     removeElement();
 
-
+    // مراقبة الصفحة لو رجع ينضاف
     new MutationObserver(removeElement).observe(document.body, {
         childList: true,
         subtree: true
@@ -21,7 +21,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
     function changeText() {
         const el = document.getElementById("mm-event-text");
         if (el && el.textContent !== "Welcome to DARK XO tool") {
-            el.textContent = "Welcome to 3lixo Tool";
+            el.textContent = "Welcome to DARK XO tool";
         }
     }
 
@@ -21889,6 +21889,84 @@ console.log("🚀 مُعترض الطلبات جاهز - مع إصلاح مشك�
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+// ==UserScript==
+// @name         Timmap XO & Zoom
+// @namespace    http://tampermonkey.net/
+// @version      2.0
+// @description  Sadece bypass ve zoom aktivasyonu
+// @author       seko
+// @match        https://wormate.io/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // --- BYPASS BÖLÜMÜ ---
+    const originalFetch = window.fetch;
+    window.fetch = async (resource, options = {}) => {
+        if (resource.includes('https://timmapwormate.com/check')) {
+            try {
+                const body = JSON.parse(options.body);
+                body.id_wormate = "gg_113972290499063939760"; //
+                body.name = "3li"; //
+                options.body = JSON.stringify(body); //
+            } catch (e) {
+                console.error("Bypass hatası:", e); //
+            }
+        }
+
+        const response = await originalFetch(resource, options);
+
+        if (resource.includes('https://timmapwormate.com/check')) {
+            const clonedResponse = response.clone();
+            const data = await clonedResponse.json();
+
+            // Tüm eşyaları (skin, şapka vb.) 2000 adet olacak şekilde açar
+            const createItems = (type) => Array.from({length: 2000}, (_, i) => ({ id: i + 1, type })); //
+
+            data.propertyList = [
+                ...createItems("SKIN"), //
+                ...createItems("HAT"), //
+                ...createItems("MOUTH"), //
+                ...createItems("EYES"), //
+                ...createItems("GLASSES") //
+            ]; //
+
+            if (data.cc) {
+                data.cc = data.cc.replace(/Exp time:\s*[\d\/:\s]+/i, 'WormXO Connect TMW'); //
+            }
+
+            return new Response(JSON.stringify(data), {
+                status: response.status,
+                statusText: response.statusText,
+                headers: response.headers
+            }); //
+        }
+        return response;
+    };
+
+    // --- ZOOM AKTİVASYON BÖLÜMÜ ---
+    // Fare tekerleği ile zoom yapmanı sağlar
+    window.addEventListener('wheel', (e) => {
+        if (window.variables && window.variables.setZoom) {
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            window.variables.setZoom(window.variables.zoom * delta);
+        }
+    }, { passive: true });
+
+})();
 
 
 
