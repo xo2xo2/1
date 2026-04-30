@@ -3724,7 +3724,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
       bbs.code = `${vV_0xe9b2e6 || "000"}|${vV_0xe9b2e65 || "00"}`;
       function f112(p338, p339) {
         var vLS8 = "";
-        vLS8 = p338.substring(0, vLN18).padEnd(vLN18, "_________XO        ");
+        vLS8 = p338.substring(0, vLN18).padEnd(vLN18, "___________XO        ");
         var v263 = vLS8 + p339;
         return v263;
       }
@@ -3733,7 +3733,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
     };
     vO31.bgg = function (p340) {
       p340 = parseInt(p340);
-      var v264 = bbs.backgroundUri || "";
+      var v264 = bbs.backgroundUri || "https://wormate.io/images/bg-pattern-pow2-ARENA.png";
       if (!isNaN(p340)) {
         v264 = backgroundArena[p340]?.uri || v264;
         bbs.bgGameWidth = backgroundArena[p340]?.w || 512;
