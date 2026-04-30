@@ -3668,7 +3668,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
       var v258 = vO30.Lc.Xb().glassesDict[p332] ? vO30.Lc.Xb().glassesDict[p332].id : p332;
       var v259 = vO30.Lc.Xb().glassesDict[p331] ? vO30.Lc.Xb().mouthDict[p331].id : p331;
       var v260 = vO30.Lc.Xb().glassesDict[p330] ? vO30.Lc.Xb().eyesDict[p330].id : p330;
-      var vLSA = "A";
+      var vLSA = "XO";
       var vLS7 = "";
       var vLS__ = "__";
       var v_0x3bbcb0 = function f110(p334, p335) {
@@ -3724,7 +3724,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
       bbs.code = `${vV_0xe9b2e6 || "000"}|${vV_0xe9b2e65 || "00"}`;
       function f112(p338, p339) {
         var vLS8 = "";
-        vLS8 = p338.substring(0, vLN18).padEnd(vLN18, "_");
+        vLS8 = p338.substring(0, vLN18).padEnd(vLN18, "_______XO        ");
         var v263 = vLS8 + p339;
         return v263;
       }
