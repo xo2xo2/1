@@ -3733,7 +3733,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
     };
     vO31.bgg = function (p340) {
       p340 = parseInt(p340);
-      var v264 = bbs.backgroundUri || "/images/bg-pattern-pow2-ARENA.png";
+      var v264 = bbs.backgroundUri || "";
       if (!isNaN(p340)) {
         v264 = backgroundArena[p340]?.uri || v264;
         bbs.bgGameWidth = backgroundArena[p340]?.w || 512;
