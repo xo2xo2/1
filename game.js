@@ -506,7 +506,7 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
     var v37 = true;
     var v38 = true;
     var v39 = false;
-    var vLN18 = 15;
+    var vLN18 = 25;
     window.backgroundArena = [{
       nome: "Default",
       uri: window.URL_CDN + "/backgrounds/bkgnd0.png"
