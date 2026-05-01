@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="wormatrixapp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Worm Matrix</title>
+
+<link rel="icon" type="image/png" sizes="16x16" href="assets/img/icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/icon.png">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/img/icon.png">
+<link rel="icon" type="image/png" sizes="128x128" href="assets/img/icon.png">
+
+<link rel="shortcut icon" href="assets/img/icon.png">
+<link rel="apple-touch-icon" sizes="128x128" href="assets/img/icon.png">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #dddddd;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 1894.81px;
+    min-height: 914.81px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.top-header {
+    width: 100%;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.header-inner {
+    width: 100%;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    gap: 10px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    min-width: 0;
+}
+
+.brand img {
+    width: 83px;
+    height: 83px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    position: relative;
+    top: 25px;
+    left: 6px;
+    flex: 0 0 auto;
+}
+
+.brand span {
+    color: #7FB02E;
+    font-size: 27px;
+    font-weight: 700;
+    position: relative;
+    top: 4px;
+    left: 5px;
+    white-space: nowrap;
+}
+
+.nav-links {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+}
+
+.nav-links a {
+    background: #7FB02E;
+    color: #fff;
+    padding: 8px 11px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: .2px;
+    white-space: nowrap;
+    box-shadow: 0 2px 7px rgba(127,176,46,.35);
+    transition: .22s;
+}
+
+.nav-links a:hover {
+    background: #5f8f24;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.blue-bar {
+    width: 100%;
+    height: 57px;
+    background: #0d6efd;
+}
+
+.main {
+    width: 100%;
+    margin: 0 auto;
+    padding: 8px 10px 30px;
+}
+
+.main img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 14px;
+}
+
+.social-icons {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.social-icons a {
+    color: #7FB02E;
+    font-size: 26px;
+    margin: 0 12px;
+    transition: 0.3s;
+    display: inline-block;
+}
+
+.social-icons a:hover {
+    transform: scale(1.2);
+    opacity: 0.8;
+}
+
+footer {
+    text-align: center;
+    padding: 18px;
+    color: #777;
+    font-size: 13px;
+    border-top: 1px solid #eee;
+}
+
+@media (min-width: 900px) {
+    body {
+        min-height: 100vh;
+        align-items: flex-start;
+    }
+
+    .wrapper {
+        width: 100%;
+        max-width: 1894.81px;
+        min-height: 914.81px;
+        margin: 0 auto;
+    }
+
+    .nav-links a {
+        font-size: 11px;
+        padding: 9px 12px;
+    }
+}
+
+@media (max-width: 500px) {
+    body {
+        display: flex;
+        background: #ffffff;
+        justify-content: center;
+    }
+
+    .wrapper {
+        width: 100%;
+        max-width: 444.22px;
+        min-height: 914.81px;
+    }
+
+    .header-inner {
+        padding: 0 8px;
+        gap: 6px;
+    }
+
+    .brand {
+        gap: 6px;
+        flex-shrink: 1;
+    }
+
+    .brand img {
+        width: 58px;
+        height: 58px;
+        top: 16px;
+        left: 2px;
+    }
+
+    .brand span {
+        font-size: clamp(18px, 5vw, 23px);
+        top: 3px;
+        left: 2px;
+    }
+
+    .nav-links {
+        gap: 5px;
+        flex-shrink: 0;
+    }
+
+    .nav-links a {
+        font-size: clamp(8px, 2.4vw, 9px);
+        padding: 7px 6px;
+        border-radius: 7px;
+    }
+
+    .blue-bar {
+        height: 48px;
+    }
+
+    .main {
+        padding: 8px 7px 25px;
+    }
+}
+
+@media (max-width: 360px) {
+    .header-inner {
+        padding: 0 6px;
+    }
+
+    .brand img {
+        width: 52px;
+        height: 52px;
+        top: 14px;
+    }
+
+    .brand span {
+        font-size: 17px;
+    }
+
+    .nav-links {
+        gap: 4px;
+    }
+
+    .nav-links a {
+        font-size: 7.5px;
+        padding: 6px 5px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<header class="top-header">
+    <div class="header-inner">
+        <div class="brand">
+            <img src="assets/img/icon.png" alt="Worm Matrix">
+            <span>Worm Matrix</span>
+        </div>
+
+        <nav class="nav-links">
+            <a href="file/wormatrix.zip" download>EXTENSIONS</a>
+            <a href="skinlab/">SKINLAB</a>
+        </nav>
+    </div>
+</header>
+
+<div class="blue-bar"></div>
+
+<main class="main">
+    <img src="assets/img/wm-1.png">
+    <img src="assets/img/wm-2.png">
+    <img src="assets/img/wm-3.png">
+    <img src="assets/img/wm-4.png">
+    <img src="assets/img/wm-5.png">
+    <img src="assets/img/wm-6.png">
+</main>
+
+<div class="social-icons">
+    <a href="https://discord.gg/dzBn8Zw4xG" target="_blank"><i class="fab fa-discord"></i></a>
+    <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+</div>
+
+<footer>
+    © 2026 Worm Matrix
+</footer>
+
+</div>
+
+<script>
+console.log("Worm Matrix");
+</script>
+
+</body>
+</html>
