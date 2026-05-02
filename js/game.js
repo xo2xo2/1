@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-
+// by xo and bmw 
   const WormXoSelector = {
     storageKey: "WORMXO_SELECTED_SCRIPT",
 
