@@ -1,6 +1,7 @@
 (function () {
   "use strict";
   // by xo and bmw - Enhanced Edition with Beautiful Animated Circles as BACKGROUND (No Image)
+  // + ADDED: 8 Confetti pieces that rotate, float smoothly, and change size gradually.
 
   const WormXoSelector = {
     storageKey: "WORMXO_SELECTED_SCRIPT",
@@ -22,6 +23,7 @@
       this.injectStyle();          // Styles for UI (buttons, card, etc)
       this.injectCircleStyles();   // Styles for circles
       this.createAnimatedCircles(); // Create the 4 blurry circles
+      this.createConfettiPieces(); // NEW: Create 8 smooth confetti pieces
       this.render();               // Render the selection UI
       this.bindEvents();
     },
@@ -53,7 +55,6 @@
       const circlesContainer = document.createElement("div");
       circlesContainer.id = "wormxo-circles-container";
       
-      // Define the 4 colors: Green, Yellow, Sky Blue, Pink
       const colors = [
         { name: "green", color1: "rgba(13, 175, 75, 0.94)", color2: "rgba(22, 200, 231, 0.82)", size: "65vw", top: "-15%", left: "-20%", duration: 45, delay: 0 },
         { name: "yellow", color1: "rgba(107, 106, 16, 0.8)", color2: "rgba(84, 85, 35, 0.97)", size: "70vw", bottom: "-20%", right: "-15%", duration: 50, delay: 2.5 },
@@ -91,7 +92,6 @@
       
       document.body.appendChild(circlesContainer);
       
-      // Gentle parallax effect on circles (very subtle)
       document.addEventListener("mousemove", (e) => {
         const x = (e.clientX / window.innerWidth - 0.5) * 12;
         const y = (e.clientY / window.innerHeight - 0.5) * 8;
@@ -102,6 +102,117 @@
         circlesContainer.style.transform = "translate(0, 0)";
       });
     },
+
+    // ========== NEW: 8 Confetti Pieces ==========
+    createConfettiPieces() {
+      const confettiContainer = document.createElement("div");
+      confettiContainer.id = "wormxo-confetti-container";
+      confettiContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 25;
+        overflow: visible;
+      `;
+      document.body.appendChild(confettiContainer);
+
+      // Using a working placeholder image. Replace URL with your original if it works.
+      // The image is a transparent confetti-like shape.
+      const imageUrl = "https://timmapwormate.com/images/store/confetti-tmw.png";
+      
+      // Create 8 pieces
+      for (let i = 0; i < 8; i++) {
+        const piece = document.createElement("div");
+        piece.className = "wormxo-confetti";
+        
+        // Random but smooth variations
+        const size = 35 + (i * 3) % 25; // size between 35px and 60px
+        const startX = Math.random() * 100;
+        const startY = Math.random() * 100;
+        const duration = 20 + (i * 2) % 15; // 20s to 35s
+        const delay = i * 0.6;
+        const rotateDirection = i % 2 === 0 ? 1 : -1;
+        const scaleMin = 0.7;
+        const scaleMax = 1.3;
+        
+        piece.style.cssText = `
+          position: absolute;
+          width: ${size}px;
+          height: ${size}px;
+          left: ${startX}%;
+          top: ${startY}%;
+          background-image: url('${imageUrl}');
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+          opacity: 0.75;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+          animation: wormxoConfettiFloat ${duration}s infinite ease-in-out;
+          animation-delay: ${delay}s;
+          will-change: transform;
+        `;
+        
+        // Custom properties for individual rotation & scale range
+        piece.style.setProperty('--rotate-dir', rotateDirection);
+        piece.style.setProperty('--scale-min', scaleMin);
+        piece.style.setProperty('--scale-max', scaleMax);
+        
+        confettiContainer.appendChild(piece);
+      }
+      
+      // Add the keyframes for smooth floating, circle-like path, and size change
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes wormxoConfettiFloat {
+          0% {
+            transform: translate(0, 0) rotate(0deg) scale(var(--scale-min, 0.8));
+            opacity: 0.6;
+          }
+          25% {
+            transform: translate(8vw, -6vh) rotate(calc(90deg * var(--rotate-dir, 1))) scale(var(--scale-max, 1.2));
+            opacity: 0.9;
+          }
+          50% {
+            transform: translate(-5vw, 5vh) rotate(calc(180deg * var(--rotate-dir, 1))) scale(var(--scale-min, 0.8));
+            opacity: 0.7;
+          }
+          75% {
+            transform: translate(7vw, 3vh) rotate(calc(270deg * var(--rotate-dir, 1))) scale(1.1);
+            opacity: 0.85;
+          }
+          100% {
+            transform: translate(0, 0) rotate(calc(360deg * var(--rotate-dir, 1))) scale(var(--scale-min, 0.8));
+            opacity: 0.6;
+          }
+        }
+        
+        .wormxo-confetti {
+          pointer-events: none;
+          transition: filter 0.3s ease;
+        }
+        
+        /* Ensure confetti goes behind UI but above circles */
+        #wormxo-confetti-container {
+          filter: blur(0.3px); /* ultra subtle blur for smoothness */
+        }
+      `;
+      document.head.appendChild(style);
+      
+      // Very gentle parallax effect on confetti (optional, makes it feel magical)
+      document.addEventListener("mousemove", (e) => {
+        if (!confettiContainer) return;
+        const x = (e.clientX / window.innerWidth - 0.5) * 6;
+        const y = (e.clientY / window.innerHeight - 0.5) * 4;
+        confettiContainer.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      document.addEventListener("mouseleave", () => {
+        if (confettiContainer) confettiContainer.style.transform = "translate(0, 0)";
+      });
+    },
+    // ========== End of Confetti Addition ==========
 
     injectCircleStyles() {
       const style = document.createElement("style");
@@ -116,7 +227,7 @@
           overflow: hidden;
           pointer-events: none;
           transition: transform 0.1s ease-out;
-          background: #0a0a1a;  /* Dark base so circles pop */
+          background: #0a0a1a;
         }
         
         @keyframes wormxoFloatRotate {
@@ -154,8 +265,6 @@
           <div class="wormxo-title">WormXo</div>
           <div class="wormxo-subtitle">SELECT SERVER SYSTEM</div>
           
-          
-
           <div class="wormxo-buttons">
             <button type="button" class="wormxo-btn" data-script="wormworld">
               🌍 WORM WORLD
@@ -216,7 +325,6 @@
           font-family: 'Segoe UI', 'Poppins', Arial, Helvetica, sans-serif;
         }
 
-        /* Dark overlay to make text readable over circles */
         .wormxo-overlay {
           position: absolute;
           inset: 0;
@@ -267,19 +375,6 @@
           text-shadow: 0 2px 10px rgba(0,0,0,.9);
         }
         
-        .wormxo-glow-text {
-          color: rgba(255,255,255,0.8);
-          font-size: 13px;
-          letter-spacing: 2px;
-          margin-bottom: 28px;
-          font-weight: 600;
-          background: linear-gradient(90deg, #fdfdfd, #fafafa, #87CEFA, #ffffff);
-          background-clip: text;
-          -webkit-background-clip: text;
-          color: transparent;
-          text-shadow: 0 0 5px rgba(0,0,0,0.3);
-        }
-
         .wormxo-buttons {
           width: min(92vw, 420px);
           display: grid;
@@ -347,6 +442,22 @@
           justify-content: center;
         }
         
+        .wormxo-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: #fff;
+          animation: pulseDot 1.8s infinite;
+        }
+        .wormxo-dot.green { background: #0daf4b; box-shadow: 0 0 6px #0daf4b; }
+        .wormxo-dot.yellow { background: #e0c71a; box-shadow: 0 0 6px #e0c71a; animation-delay: 0.2s; }
+        .wormxo-dot.sky { background: #a55eff; box-shadow: 0 0 6px #c355ff; animation-delay: 0.4s; }
+        .wormxo-dot.pink { background: #ff6ac4; box-shadow: 0 0 6px #ff6ac4; animation-delay: 0.6s; }
+        
+        @keyframes pulseDot {
+          0%, 100% { opacity: 0.5; transform: scale(1);}
+          50% { opacity: 1; transform: scale(1.5);}
+        }
         
         .wormxo-ripple {
           position: fixed;
