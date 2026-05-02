@@ -129,7 +129,7 @@
         piece.className = "wormxo-confetti";
         
         // Random but smooth variations
-        const size = 35 + (i * 3) % 25; // size between 35px and 60px
+        const size = 70 + (i * 3) % 25; // size between 35px and 60px
         const startX = Math.random() * 100;
         const startY = Math.random() * 100;
         const duration = 20 + (i * 2) % 15; // 20s to 35s
