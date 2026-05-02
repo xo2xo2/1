@@ -8,8 +8,8 @@
         document.body.innerHTML = ''; // Limpiar la página
 
         function cargarScript(url) {
-            localStorage.setItem('scriptSeleccionado', url); // Guardar la selección
-            location.reload(); // Recargar la página automáticamente
+            localStorage.setItem('scriptSeleccionado', url);
+            location.reload(); 
         }
 
         function crearMenu() {
@@ -30,7 +30,7 @@
             });
 
             document.getElementById('opcion2').addEventListener('click', function () {
-                cargarScript('هنا رابط تيم ماب'); // Reemplaza con la URL real del otro script
+                cargarScript('هنا رابط تيم ماب');
             });
 
             var estilos = document.createElement('style');
