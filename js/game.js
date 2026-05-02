@@ -55,10 +55,10 @@
       
       // Define the 4 colors: Green, Yellow, Sky Blue, Pink
       const colors = [
-        { name: "green", color1: "rgba(0, 0, 0, 0.94)", color2: "rgba(22, 200, 231, 0.82)", size: "65vw", top: "-15%", left: "-20%", duration: 45, delay: 0 },
-        { name: "yellow", color1: "rgba(231, 23, 23, 0.8)", color2: "rgba(84, 85, 35, 0.97)", size: "70vw", bottom: "-20%", right: "-15%", duration: 50, delay: 2.5 },
-        { name: "sky", color1: "rgba(247, 9, 255, 0.8)", color2: "rgb(212, 0, 255)", size: "60vw", top: "40%", left: "30%", duration: 48, delay: 1.2 },
-        { name: "pink", color1: "rgb(9, 194, 250)", color2: "rgba(21, 192, 44, 0.63)", size: "68vw", bottom: "5%", left: "-25%", duration: 52, delay: 3.8 }
+        { name: "green", color1: "rgba(13, 175, 75, 0.94)", color2: "rgba(22, 200, 231, 0.82)", size: "65vw", top: "-15%", left: "-20%", duration: 45, delay: 0 },
+        { name: "yellow", color1: "rgba(107, 106, 16, 0.8)", color2: "rgba(84, 85, 35, 0.97)", size: "70vw", bottom: "-20%", right: "-15%", duration: 50, delay: 2.5 },
+        { name: "sky", color1: "rgba(247, 9, 255, 0.4)", color2: "rgb(212, 0, 255)", size: "60vw", top: "40%", left: "30%", duration: 48, delay: 1.2 },
+        { name: "pink", color1: "rgba(9, 194, 250, 0.4)", color2: "rgba(21, 192, 44, 0.63)", size: "68vw", bottom: "5%", left: "-25%", duration: 52, delay: 3.8 }
       ];
 
       colors.forEach((color) => {
