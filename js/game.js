@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-// by xo and bmw - Enhanced Edition with Beautiful Animated Circles
+  // by xo and bmw - Enhanced Edition with Beautiful Animated Circles as BACKGROUND (No Image)
 
   const WormXoSelector = {
     storageKey: "WORMXO_SELECTED_SCRIPT",
@@ -19,10 +19,10 @@
       }
 
       this.lockPage();
-      this.injectStyle();
-      this.injectCircleStyles();
-      this.createAnimatedCircles();
-      this.render();
+      this.injectStyle();          // Styles for UI (buttons, card, etc)
+      this.injectCircleStyles();   // Styles for circles
+      this.createAnimatedCircles(); // Create the 4 blurry circles
+      this.render();               // Render the selection UI
       this.bindEvents();
     },
 
@@ -48,19 +48,20 @@
       document.head.appendChild(script);
     },
 
+    // Creates the 4 animated blurry circles as the ONLY background
     createAnimatedCircles() {
       const circlesContainer = document.createElement("div");
       circlesContainer.id = "wormxo-circles-container";
       
-      // 4 ألوان: سمائي (Sky Blue)، وردي (Pink)، أخضر (Green)، أصفر (Yellow)
+      // Define the 4 colors: Green, Yellow, Sky Blue, Pink
       const colors = [
-        { name: "sky", color1: "rgba(135, 206, 250, 0.8)", color2: "rgba(30, 144, 255, 0.4)", size: "55vw", top: "-20%", left: "-15%", duration: 32, delay: 0 },
-        { name: "pink", color1: "rgba(255, 105, 180, 0.8)", color2: "rgba(255, 20, 147, 0.4)", size: "60vw", bottom: "-25%", right: "-20%", duration: 36, delay: 2 },
-        { name: "green", color1: "rgba(50, 205, 50, 0.8)", color2: "rgba(34, 139, 34, 0.4)", size: "50vw", top: "30%", left: "40%", duration: 40, delay: 1 },
-        { name: "yellow", color1: "rgba(255, 215, 0, 0.85)", color2: "rgba(255, 165, 0, 0.45)", size: "65vw", bottom: "10%", left: "-30%", duration: 38, delay: 3 }
+        { name: "green", color1: "rgba(50, 205, 50, 0.75)", color2: "rgba(34, 139, 34, 0.4)", size: "65vw", top: "-15%", left: "-20%", duration: 45, delay: 0 },
+        { name: "yellow", color1: "rgba(255, 215, 0, 0.8)", color2: "rgba(255, 165, 0, 0.45)", size: "70vw", bottom: "-20%", right: "-15%", duration: 50, delay: 2.5 },
+        { name: "sky", color1: "rgba(135, 206, 250, 0.8)", color2: "rgba(30, 144, 255, 0.4)", size: "60vw", top: "40%", left: "30%", duration: 48, delay: 1.2 },
+        { name: "pink", color1: "rgba(255, 105, 180, 0.8)", color2: "rgba(255, 20, 147, 0.4)", size: "68vw", bottom: "5%", left: "-25%", duration: 52, delay: 3.8 }
       ];
 
-      colors.forEach((color, index) => {
+      colors.forEach((color) => {
         const circle = document.createElement("div");
         circle.className = `wormxo-circle wormxo-circle-${color.name}`;
         
@@ -77,10 +78,10 @@
           position: absolute;
           ${positionStyle}
           border-radius: 50%;
-          filter: blur(70px);
+          filter: blur(80px);
           animation: wormxoFloatRotate ${color.duration}s infinite ease-in-out;
           animation-delay: ${color.delay}s;
-          opacity: 0.65;
+          opacity: 0.6;
           mix-blend-mode: screen;
           will-change: transform;
         `;
@@ -90,10 +91,10 @@
       
       document.body.appendChild(circlesContainer);
       
-      // إضافة تأثير بارالاكس مع حركة الماوس
+      // Gentle parallax effect on circles (very subtle)
       document.addEventListener("mousemove", (e) => {
-        const x = (e.clientX / window.innerWidth - 0.5) * 20;
-        const y = (e.clientY / window.innerHeight - 0.5) * 12;
+        const x = (e.clientX / window.innerWidth - 0.5) * 12;
+        const y = (e.clientY / window.innerHeight - 0.5) * 8;
         circlesContainer.style.transform = `translate(${x}px, ${y}px)`;
       });
       
@@ -114,21 +115,19 @@
           z-index: 1;
           overflow: hidden;
           pointer-events: none;
-          transition: transform 0.08s ease-out;
+          transition: transform 0.1s ease-out;
+          background: #0a0a1a;  /* Dark base so circles pop */
         }
         
         @keyframes wormxoFloatRotate {
           0% {
             transform: translate(0, 0) rotate(0deg) scale(1);
           }
-          25% {
-            transform: translate(5%, 3%) rotate(5deg) scale(1.02);
+          33% {
+            transform: translate(4%, 2%) rotate(4deg) scale(1.03);
           }
-          50% {
-            transform: translate(-3%, 5%) rotate(0deg) scale(0.98);
-          }
-          75% {
-            transform: translate(4%, -2%) rotate(-3deg) scale(1.01);
+          66% {
+            transform: translate(-3%, 4%) rotate(-2deg) scale(0.97);
           }
           100% {
             transform: translate(0, 0) rotate(0deg) scale(1);
@@ -137,7 +136,7 @@
         
         @media (max-width: 700px) {
           .wormxo-circle {
-            filter: blur(55px) !important;
+            filter: blur(65px) !important;
           }
         }
       `;
@@ -149,32 +148,28 @@
       root.id = "wormxo-select-root";
 
       root.innerHTML = `
-        <div class="wormxo-bg"></div>
         <div class="wormxo-overlay"></div>
-
         <div class="wormxo-card">
           <img class="wormxo-logo" src="https://wormxo.store/image/wxo.png" alt="WormXo">
-
           <div class="wormxo-title">WormXo</div>
           <div class="wormxo-subtitle">SELECT SERVER SYSTEM</div>
           
-          <div class="wormxo-glow-text">✨ سمائي • وردي • أخضر • أصفر ✨</div>
+          <div class="wormxo-glow-text">✨ أخضر • أصفر • سمائي • وردي ✨</div>
 
           <div class="wormxo-buttons">
             <button type="button" class="wormxo-btn" data-script="wormworld">
               🌍 WORM WORLD
             </button>
-
             <button type="button" class="wormxo-btn" data-script="timmap">
               🗺️ TIM MAP
             </button>
           </div>
           
           <div class="wormxo-footer">
-            <span class="wormxo-dot sky"></span>
-            <span class="wormxo-dot pink"></span>
             <span class="wormxo-dot green"></span>
             <span class="wormxo-dot yellow"></span>
+            <span class="wormxo-dot sky"></span>
+            <span class="wormxo-dot pink"></span>
           </div>
         </div>
       `;
@@ -187,17 +182,11 @@
         btn.addEventListener("click", (e) => {
           const key = btn.getAttribute("data-script");
           const url = this.scripts[key];
-
           if (!url) return;
 
-          // تأثير النقر
           btn.classList.add("loading");
-          const originalText = btn.innerHTML;
           btn.innerHTML = "⏳ LOADING...";
-          
-          // تأثير وميض
           this.createRippleEffect(e);
-          
           this.selectScript(url);
         });
       });
@@ -209,10 +198,7 @@
       ripple.style.left = `${event.clientX}px`;
       ripple.style.top = `${event.clientY}px`;
       document.body.appendChild(ripple);
-      
-      setTimeout(() => {
-        ripple.remove();
-      }, 600);
+      setTimeout(() => ripple.remove(), 600);
     },
 
     injectStyle() {
@@ -227,32 +213,22 @@
           height: 100vh;
           z-index: 2147483647;
           overflow: hidden;
-          background: #000;
           font-family: 'Segoe UI', 'Poppins', Arial, Helvetica, sans-serif;
         }
 
-        .wormxo-bg {
-          position: absolute;
-          inset: -18px;
-          background:
-            linear-gradient(rgba(0,0,0,.50), rgba(0,0,0,.70)),
-            url("https://i.imgur.com/oXntzBc.jpeg") center center / cover no-repeat;
-          filter: blur(6px);
-          transform: scale(1.04);
-        }
-
+        /* Dark overlay to make text readable over circles */
         .wormxo-overlay {
           position: absolute;
           inset: 0;
-          background:
-            radial-gradient(circle at center, rgba(255,132,0,.15), transparent 50%),
-            linear-gradient(135deg, rgba(135,206,250,.1), rgba(255,105,180,.1), rgba(50,205,50,.1), rgba(255,215,0,.1));
-          backdrop-filter: blur(2px);
+          background: radial-gradient(circle at center, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+          backdrop-filter: blur(3px);
+          z-index: 2;
+          pointer-events: none;
         }
 
         .wormxo-card {
           position: relative;
-          z-index: 10;
+          z-index: 15;
           min-height: 100vh;
           width: 100%;
           display: flex;
@@ -278,9 +254,7 @@
           font-size: clamp(34px, 6vw, 64px);
           font-weight: 900;
           letter-spacing: 1px;
-          text-shadow:
-            0 0 10px rgba(255,132,0,.8),
-            0 4px 18px rgba(0,0,0,.85);
+          text-shadow: 0 0 10px rgba(255,132,0,.8), 0 4px 18px rgba(0,0,0,.85);
         }
 
         .wormxo-subtitle {
@@ -294,16 +268,16 @@
         }
         
         .wormxo-glow-text {
-          color: rgba(255,255,255,0.7);
-          font-size: 12px;
+          color: rgba(255,255,255,0.8);
+          font-size: 13px;
           letter-spacing: 2px;
           margin-bottom: 28px;
-          font-weight: 500;
-          text-shadow: 0 0 10px rgba(255,132,0,0.5);
-          background: linear-gradient(90deg, #87CEFA, #FF69B4, #32CD32, #FFD700);
+          font-weight: 600;
+          background: linear-gradient(90deg, #32CD32, #FFD700, #87CEFA, #FF69B4);
           background-clip: text;
           -webkit-background-clip: text;
           color: transparent;
+          text-shadow: 0 0 5px rgba(0,0,0,0.3);
         }
 
         .wormxo-buttons {
@@ -324,14 +298,8 @@
           font-weight: 900;
           letter-spacing: .8px;
           cursor: pointer;
-          box-shadow:
-            0 10px 24px rgba(0,0,0,.45),
-            inset 0 1px 0 rgba(255,255,255,.45);
-          transition:
-            transform .18s ease,
-            background .18s ease,
-            color .18s ease,
-            box-shadow .18s ease;
+          box-shadow: 0 10px 24px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.45);
+          transition: transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
           position: relative;
           overflow: hidden;
         }
@@ -358,9 +326,7 @@
           transform: translateY(-3px) scale(1.02);
           background: #fff;
           color: #ff7a00;
-          box-shadow:
-            0 14px 30px rgba(255,132,0,.42),
-            0 0 20px rgba(255,255,255,.30);
+          box-shadow: 0 14px 30px rgba(255,132,0,.42), 0 0 20px rgba(255,255,255,.30);
         }
 
         .wormxo-btn:active {
@@ -377,48 +343,48 @@
         .wormxo-footer {
           margin-top: 35px;
           display: flex;
-          gap: 12px;
+          gap: 15px;
           justify-content: center;
         }
         
         .wormxo-dot {
-          width: 10px;
-          height: 10px;
+          width: 12px;
+          height: 12px;
           border-radius: 50%;
-          animation: pulseDot 1.5s infinite ease-in-out;
-        }
-        
-        .wormxo-dot.sky {
-          background: #87CEFA;
-          box-shadow: 0 0 10px #87CEFA;
-          animation-delay: 0s;
-        }
-        
-        .wormxo-dot.pink {
-          background: #FF69B4;
-          box-shadow: 0 0 10px #FF69B4;
-          animation-delay: 0.2s;
+          animation: pulseDot 1.8s infinite ease-in-out;
         }
         
         .wormxo-dot.green {
           background: #32CD32;
-          box-shadow: 0 0 10px #32CD32;
-          animation-delay: 0.4s;
+          box-shadow: 0 0 12px #32CD32;
+          animation-delay: 0s;
         }
         
         .wormxo-dot.yellow {
           background: #FFD700;
-          box-shadow: 0 0 10px #FFD700;
+          box-shadow: 0 0 12px #FFD700;
+          animation-delay: 0.3s;
+        }
+        
+        .wormxo-dot.sky {
+          background: #87CEFA;
+          box-shadow: 0 0 12px #87CEFA;
           animation-delay: 0.6s;
+        }
+        
+        .wormxo-dot.pink {
+          background: #FF69B4;
+          box-shadow: 0 0 12px #FF69B4;
+          animation-delay: 0.9s;
         }
         
         @keyframes pulseDot {
           0%, 100% {
             transform: scale(1);
-            opacity: 0.6;
+            opacity: 0.7;
           }
           50% {
-            transform: scale(1.5);
+            transform: scale(1.6);
             opacity: 1;
           }
         }
@@ -468,11 +434,9 @@
           .wormxo-card {
             padding: 16px;
           }
-
           .wormxo-logo {
             margin-bottom: 18px;
           }
-
           .wormxo-subtitle {
             margin-bottom: 22px;
           }
