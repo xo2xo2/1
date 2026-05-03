@@ -1,7 +1,5 @@
 (function () {
   "use strict";
-  // by xo and bmw - Enhanced Edition with Beautiful Animated Circles as BACKGROUND (No Image)
-  // + UPDATED: Snow confetti pieces rotate in circular falling paths.
 
   const WormXoSelector = {
     storageKey: "WORMXO_SELECTED_SCRIPT",
@@ -21,9 +19,9 @@
 
       this.lockPage();
       this.injectStyle();
-      this.injectCircleStyles();
-      this.createAnimatedCircles();
-      this.createConfettiPieces();
+      this.injectBackgroundStyles();
+      this.createAnimatedBackground();
+      this.createTridentLogos();
       this.render();
       this.bindEvents();
     },
@@ -50,215 +48,229 @@
       document.head.appendChild(script);
     },
 
-    createAnimatedCircles() {
-      const circlesContainer = document.createElement("div");
-      circlesContainer.id = "wormxo-circles-container";
+    createAnimatedBackground() {
+      const bg = document.createElement("div");
+      bg.id = "wormxo-bg-container";
 
       const colors = [
-        { name: "green", color1: "rgba(13, 175, 75, 0.94)", color2: "rgba(22, 200, 231, 0.82)", size: "65vw", top: "-15%", left: "-20%", duration: 45, delay: 0 },
-        { name: "yellow", color1: "rgba(107, 106, 16, 0.8)", color2: "rgba(84, 85, 35, 0.97)", size: "70vw", bottom: "-20%", right: "-15%", duration: 50, delay: 2.5 },
-        { name: "sky", color1: "rgba(247, 9, 255, 0.4)", color2: "rgb(212, 0, 255)", size: "60vw", top: "40%", left: "30%", duration: 48, delay: 1.2 },
-        { name: "pink", color1: "rgba(9, 194, 250, 0.4)", color2: "rgba(21, 192, 44, 0.63)", size: "68vw", bottom: "5%", left: "-25%", duration: 52, delay: 3.8 }
+        {
+          name: "blue",
+          color1: "rgba(0, 155, 255, .72)",
+          color2: "rgba(0, 65, 145, .45)",
+          size: "72vw",
+          top: "-18%",
+          left: "-18%",
+          duration: 44,
+          delay: 0
+        },
+        {
+          name: "yellow",
+          color1: "rgba(255, 220, 0, .70)",
+          color2: "rgba(145, 120, 0, .55)",
+          size: "78vw",
+          top: "-14%",
+          right: "-22%",
+          duration: 52,
+          delay: -7
+        },
+        {
+          name: "red",
+          color1: "rgba(255, 0, 42, .62)",
+          color2: "rgba(135, 0, 20, .44)",
+          size: "76vw",
+          bottom: "-24%",
+          right: "-18%",
+          duration: 48,
+          delay: -4
+        },
+        {
+          name: "deep",
+          color1: "rgba(0, 215, 255, .28)",
+          color2: "rgba(255, 30, 0, .18)",
+          size: "65vw",
+          bottom: "-18%",
+          left: "-16%",
+          duration: 58,
+          delay: -12
+        }
       ];
 
-      colors.forEach((color) => {
-        const circle = document.createElement("div");
-        circle.className = `wormxo-circle wormxo-circle-${color.name}`;
+      colors.forEach((c) => {
+        const orb = document.createElement("div");
+        orb.className = `wormxo-bg-orb wormxo-bg-${c.name}`;
 
-        let positionStyle = "";
-        if (color.top) positionStyle += `top: ${color.top};`;
-        if (color.bottom) positionStyle += `bottom: ${color.bottom};`;
-        if (color.left) positionStyle += `left: ${color.left};`;
-        if (color.right) positionStyle += `right: ${color.right};`;
+        let pos = "";
+        if (c.top) pos += `top:${c.top};`;
+        if (c.bottom) pos += `bottom:${c.bottom};`;
+        if (c.left) pos += `left:${c.left};`;
+        if (c.right) pos += `right:${c.right};`;
 
-        circle.style.cssText = `
-          width: ${color.size};
-          height: ${color.size};
-          background: radial-gradient(circle at 30% 30%, ${color.color1}, ${color.color2});
-          position: absolute;
-          ${positionStyle}
-          border-radius: 50%;
-          filter: blur(80px);
-          animation: wormxoFloatRotate ${color.duration}s infinite ease-in-out;
-          animation-delay: ${color.delay}s;
-          opacity: 0.6;
-          mix-blend-mode: screen;
-          will-change: transform;
+        orb.style.cssText = `
+          width:${c.size};
+          height:${c.size};
+          ${pos}
+          background:radial-gradient(circle at 35% 35%, ${c.color1}, ${c.color2}, transparent 68%);
+          animation:wormxoBgMove ${c.duration}s ease-in-out infinite;
+          animation-delay:${c.delay}s;
         `;
 
-        circlesContainer.appendChild(circle);
+        bg.appendChild(orb);
       });
 
-      document.body.appendChild(circlesContainer);
+      document.body.appendChild(bg);
 
       document.addEventListener("mousemove", (e) => {
-        const x = (e.clientX / window.innerWidth - 0.5) * 12;
-        const y = (e.clientY / window.innerHeight - 0.5) * 8;
-        circlesContainer.style.transform = `translate(${x}px, ${y}px)`;
+        const x = (e.clientX / window.innerWidth - 0.5) * 14;
+        const y = (e.clientY / window.innerHeight - 0.5) * 10;
+        bg.style.transform = `translate3d(${x}px, ${y}px, 0)`;
       });
 
       document.addEventListener("mouseleave", () => {
-        circlesContainer.style.transform = "translate(0, 0)";
+        bg.style.transform = "translate3d(0,0,0)";
       });
     },
 
-    createConfettiPieces() {
-      const old = document.getElementById("wormxo-confetti-container");
-      if (old) old.remove();
+    createTridentLogos() {
+      const wrap = document.createElement("div");
+      wrap.id = "wormxo-trident-container";
 
-      const confettiContainer = document.createElement("div");
-      confettiContainer.id = "wormxo-confetti-container";
-      confettiContainer.style.cssText = `
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 25;
-        overflow: hidden;
-        filter: blur(0.15px);
-      `;
-      document.body.appendChild(confettiContainer);
+      const svg = encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150">
+          <path d="M60 8
+                   C70 32 72 58 67 84
+                   C76 66 88 48 104 34
+                   C99 62 98 88 105 116
+                   L78 116
+                   C75 102 70 92 60 82
+                   C50 92 45 102 42 116
+                   L15 116
+                   C22 88 21 62 16 34
+                   C32 48 44 66 53 84
+                   C48 58 50 32 60 8 Z
+                   M60 82
+                   C69 101 75 120 60 142
+                   C45 120 51 101 60 82 Z"
+                fill="none"
+                stroke="white"
+                stroke-width="8"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </svg>
+      `);
 
-      const imageUrl = "https://wormate.io/images/confetti-xmas2023.png";
-
-      const snowList = [
-        { x: 8,  y: -18, size: 52, dur: 22, delay: -2,  drift: 130, orbit: 58,  spin: 1,  opacity: .70 },
-        { x: 20, y: -28, size: 70, dur: 28, delay: -8,  drift: 180, orbit: 72,  spin: -1, opacity: .82 },
-        { x: 34, y: -16, size: 46, dur: 24, delay: -5,  drift: 150, orbit: 64,  spin: 1,  opacity: .68 },
-        { x: 48, y: -32, size: 78, dur: 32, delay: -12, drift: 220, orbit: 86,  spin: -1, opacity: .76 },
-        { x: 62, y: -20, size: 58, dur: 26, delay: -7,  drift: 165, orbit: 68,  spin: 1,  opacity: .72 },
-        { x: 76, y: -36, size: 84, dur: 35, delay: -16, drift: 250, orbit: 95,  spin: -1, opacity: .80 },
-        { x: 88, y: -14, size: 50, dur: 23, delay: -4,  drift: 140, orbit: 60,  spin: 1,  opacity: .66 },
-        { x: 96, y: -30, size: 66, dur: 30, delay: -11, drift: 210, orbit: 78,  spin: -1, opacity: .74 },
-        { x: 14, y: -45, size: 42, dur: 27, delay: -14, drift: 195, orbit: 70,  spin: -1, opacity: .62 },
-        { x: 42, y: -50, size: 62, dur: 34, delay: -18, drift: 260, orbit: 90,  spin: 1,  opacity: .70 },
-        { x: 68, y: -48, size: 48, dur: 29, delay: -10, drift: 215, orbit: 76,  spin: -1, opacity: .65 },
-        { x: 84, y: -55, size: 74, dur: 38, delay: -22, drift: 300, orbit: 105, spin: 1,  opacity: .78 }
+      const logos = [
+        { x: 50, y: 78, s: 92, c: "rgba(255,0,35,.92)", d: 30, r: 0, delay: -4 },
+        { x: 18, y: 38, s: 70, c: "rgba(0,160,255,.78)", d: 42, r: -18, delay: -10 },
+        { x: 76, y: 24, s: 64, c: "rgba(255,210,0,.86)", d: 38, r: 22, delay: -16 },
+        { x: 86, y: 68, s: 74, c: "rgba(255,70,0,.70)", d: 45, r: -10, delay: -21 },
+        { x: 34, y: 12, s: 58, c: "rgba(255,0,45,.45)", d: 50, r: 18, delay: -26 },
+        { x: 62, y: 42, s: 52, c: "rgba(255,255,255,.28)", d: 36, r: 8, delay: -8 }
       ];
 
-      snowList.forEach((cfg, i) => {
-        const piece = document.createElement("div");
-        piece.className = "wormxo-confetti-snow";
-
-        piece.style.cssText = `
-          position: absolute;
-          left: ${cfg.x}vw;
-          top: ${cfg.y}vh;
-          width: ${cfg.size}px;
-          height: ${cfg.size}px;
-          background-image: url('${imageUrl}');
-          background-size: contain;
-          background-repeat: no-repeat;
-          background-position: center;
-          opacity: ${cfg.opacity};
-          filter: drop-shadow(0 4px 8px rgba(255,255,255,.18)) drop-shadow(0 3px 8px rgba(0,0,0,.20));
-          will-change: transform, opacity;
-          animation: wormxoSnowCircleFall${i} ${cfg.dur}s linear infinite;
-          animation-delay: ${cfg.delay}s;
+      logos.forEach((cfg, i) => {
+        const logo = document.createElement("div");
+        logo.className = "wormxo-trident";
+        logo.style.cssText = `
+          left:${cfg.x}vw;
+          top:${cfg.y}vh;
+          width:${cfg.s}px;
+          height:${cfg.s * 1.25}px;
+          background-color:${cfg.c};
+          mask:url("data:image/svg+xml,${svg}") center / contain no-repeat;
+          -webkit-mask:url("data:image/svg+xml,${svg}") center / contain no-repeat;
+          filter:drop-shadow(0 0 8px ${cfg.c}) drop-shadow(0 0 18px ${cfg.c});
+          transform:rotate(${cfg.r}deg);
+          animation:wormxoTridentFloat${i} ${cfg.d}s ease-in-out infinite;
+          animation-delay:${cfg.delay}s;
         `;
 
-        confettiContainer.appendChild(piece);
-
-        const direction = cfg.spin;
-        const d = cfg.drift;
-        const o = cfg.orbit;
+        wrap.appendChild(logo);
 
         const key = document.createElement("style");
         key.textContent = `
-          @keyframes wormxoSnowCircleFall${i} {
-            0% {
-              transform: translate3d(0, -12vh, 0) rotate(0deg) scale(.74);
-              opacity: 0;
+          @keyframes wormxoTridentFloat${i} {
+            0%,100% {
+              transform:translate3d(0,0,0) rotate(${cfg.r}deg) scale(1);
+              opacity:.38;
             }
-            8% {
-              opacity: ${cfg.opacity};
+            25% {
+              transform:translate3d(${18 + i * 3}px, ${-20 - i * 2}px, 0) rotate(${cfg.r + 12}deg) scale(1.08);
+              opacity:.72;
             }
-            22% {
-              transform: translate3d(${o * direction}px, 14vh, 0) rotate(${130 * direction}deg) scale(1.06);
+            50% {
+              transform:translate3d(${-16 - i * 2}px, ${12 + i * 2}px, 0) rotate(${cfg.r - 9}deg) scale(.92);
+              opacity:.48;
             }
-            44% {
-              transform: translate3d(${-o * .75 * direction}px, 38vh, 0) rotate(${260 * direction}deg) scale(.88);
-            }
-            66% {
-              transform: translate3d(${o * 1.05 * direction}px, 64vh, 0) rotate(${420 * direction}deg) scale(1.12);
-            }
-            86% {
-              opacity: ${cfg.opacity * .85};
-            }
-            100% {
-              transform: translate3d(${d * direction}px, 118vh, 0) rotate(${620 * direction}deg) scale(.76);
-              opacity: 0;
+            75% {
+              transform:translate3d(${10 + i}px, ${22 + i}px, 0) rotate(${cfg.r + 6}deg) scale(1.03);
+              opacity:.66;
             }
           }
         `;
         document.head.appendChild(key);
       });
 
-      const style = document.createElement("style");
-      style.textContent = `
-        .wormxo-confetti-snow {
-          pointer-events: none;
-          transform-origin: 50% 50%;
-          backface-visibility: hidden;
-        }
-
-        @media (max-width: 520px) {
-          .wormxo-confetti-snow {
-            width: 42px !important;
-            height: 42px !important;
-            opacity: .62 !important;
-          }
-        }
-      `;
-      document.head.appendChild(style);
-
-      document.addEventListener("mousemove", (e) => {
-        if (!confettiContainer) return;
-        const x = (e.clientX / window.innerWidth - 0.5) * 7;
-        const y = (e.clientY / window.innerHeight - 0.5) * 5;
-        confettiContainer.style.transform = `translate(${x}px, ${y}px)`;
-      });
-
-      document.addEventListener("mouseleave", () => {
-        if (confettiContainer) confettiContainer.style.transform = "translate(0, 0)";
-      });
+      document.body.appendChild(wrap);
     },
 
-    injectCircleStyles() {
+    injectBackgroundStyles() {
       const style = document.createElement("style");
       style.textContent = `
-        #wormxo-circles-container {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-          overflow: hidden;
-          pointer-events: none;
-          transition: transform 0.1s ease-out;
-          background: #0a0a1a;
+        #wormxo-bg-container {
+          position:fixed;
+          inset:0;
+          width:100%;
+          height:100%;
+          z-index:1;
+          overflow:hidden;
+          pointer-events:none;
+          background:
+            radial-gradient(circle at 20% 35%, rgba(0,130,255,.36), transparent 42%),
+            radial-gradient(circle at 84% 58%, rgba(255,0,25,.28), transparent 48%),
+            radial-gradient(circle at 62% 16%, rgba(255,210,0,.32), transparent 45%),
+            linear-gradient(135deg, #071727 0%, #102735 42%, #191b10 100%);
+          transition:transform .12s ease-out;
         }
 
-        @keyframes wormxoFloatRotate {
-          0% {
-            transform: translate(0, 0) rotate(0deg) scale(1);
-          }
-          33% {
-            transform: translate(4%, 2%) rotate(4deg) scale(1.03);
-          }
-          66% {
-            transform: translate(-3%, 4%) rotate(-2deg) scale(0.97);
-          }
-          100% {
-            transform: translate(0, 0) rotate(0deg) scale(1);
-          }
+        .wormxo-bg-orb {
+          position:absolute;
+          border-radius:50%;
+          filter:blur(85px);
+          opacity:.78;
+          mix-blend-mode:screen;
+          will-change:transform;
         }
 
-        @media (max-width: 700px) {
-          .wormxo-circle {
-            filter: blur(65px) !important;
+        @keyframes wormxoBgMove {
+          0%,100% { transform:translate3d(0,0,0) rotate(0deg) scale(1); }
+          33% { transform:translate3d(5%, -3%, 0) rotate(8deg) scale(1.08); }
+          66% { transform:translate3d(-4%, 5%, 0) rotate(-7deg) scale(.94); }
+        }
+
+        #wormxo-trident-container {
+          position:fixed;
+          inset:0;
+          width:100%;
+          height:100%;
+          z-index:4;
+          pointer-events:none;
+          overflow:hidden;
+        }
+
+        .wormxo-trident {
+          position:absolute;
+          opacity:.58;
+          will-change:transform, opacity;
+          pointer-events:none;
+        }
+
+        @media (max-width:700px) {
+          .wormxo-bg-orb {
+            filter:blur(65px);
+          }
+          .wormxo-trident {
+            width:54px !important;
+            height:72px !important;
           }
         }
       `;
@@ -278,18 +290,18 @@
 
           <div class="wormxo-buttons">
             <button type="button" class="wormxo-btn" data-script="wormworld">
-              🌍 WORM WORLD
+              WORM WORLD
             </button>
             <button type="button" class="wormxo-btn" data-script="timmap">
-              🗺️ TIM MAP
+              TIM MAP
             </button>
           </div>
 
           <div class="wormxo-footer">
-            <span class="wormxo-dot green"></span>
+            <span class="wormxo-dot blue"></span>
+            <span class="wormxo-dot red"></span>
             <span class="wormxo-dot yellow"></span>
-            <span class="wormxo-dot sky"></span>
-            <span class="wormxo-dot pink"></span>
+            <span class="wormxo-dot white"></span>
           </div>
         </div>
       `;
@@ -305,7 +317,7 @@
           if (!url) return;
 
           btn.classList.add("loading");
-          btn.innerHTML = "⏳ LOADING...";
+          btn.innerHTML = "LOADING...";
           this.createRippleEffect(e);
           this.selectScript(url);
         });
@@ -318,7 +330,7 @@
       ripple.style.left = `${event.clientX}px`;
       ripple.style.top = `${event.clientY}px`;
       document.body.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 600);
+      setTimeout(() => ripple.remove(), 650);
     },
 
     injectStyle() {
@@ -327,201 +339,222 @@
 
       style.textContent = `
         #wormxo-select-root {
-          position: fixed;
-          inset: 0;
-          width: 100vw;
-          height: 100vh;
-          z-index: 2147483647;
-          overflow: hidden;
-          font-family: 'Segoe UI', 'Poppins', Arial, Helvetica, sans-serif;
+          position:fixed;
+          inset:0;
+          width:100vw;
+          height:100vh;
+          z-index:2147483647;
+          overflow:hidden;
+          font-family:'Segoe UI','Poppins',Arial,Helvetica,sans-serif;
         }
 
         .wormxo-overlay {
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(circle at center, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
-          backdrop-filter: blur(3px);
-          z-index: 2;
-          pointer-events: none;
+          position:absolute;
+          inset:0;
+          z-index:6;
+          pointer-events:none;
+          background:
+            radial-gradient(circle at center, rgba(0,0,0,.08), rgba(0,0,0,.58)),
+            linear-gradient(90deg, rgba(0,0,0,.30), transparent 45%, rgba(0,0,0,.30));
+          backdrop-filter:blur(2.5px);
         }
 
         .wormxo-card {
-          position: relative;
-          z-index: 15;
-          min-height: 100vh;
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          box-sizing: border-box;
-          padding: 22px;
-          text-align: center;
+          position:relative;
+          z-index:15;
+          min-height:100vh;
+          width:100%;
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          justify-content:center;
+          box-sizing:border-box;
+          padding:22px;
+          text-align:center;
         }
 
         .wormxo-logo {
-          width: clamp(145px, 22vw, 220px);
-          height: auto;
-          object-fit: contain;
-          margin-bottom: 24px;
-          animation: wormxoFloat 3.8s ease-in-out infinite;
-          filter: drop-shadow(0 0 24px rgba(255,132,0,.65));
+          width:clamp(145px,22vw,220px);
+          height:auto;
+          object-fit:contain;
+          margin-bottom:24px;
+          animation:wormxoFloat 3.8s ease-in-out infinite;
+          filter:
+            drop-shadow(0 0 16px rgba(0,160,255,.75))
+            drop-shadow(0 0 24px rgba(255,210,0,.40))
+            drop-shadow(0 0 18px rgba(255,0,35,.45));
         }
 
         .wormxo-title {
-          color: #fff;
-          font-size: clamp(34px, 6vw, 64px);
-          font-weight: 900;
-          letter-spacing: 1px;
-          text-shadow: 0 0 10px rgba(255,132,0,.8), 0 4px 18px rgba(0,0,0,.85);
+          color:#fff;
+          font-size:clamp(34px,6vw,64px);
+          font-weight:900;
+          letter-spacing:1px;
+          text-shadow:
+            0 0 8px rgba(0,160,255,.85),
+            0 0 14px rgba(255,210,0,.45),
+            0 0 20px rgba(255,0,35,.42),
+            0 5px 20px rgba(0,0,0,.9);
         }
 
         .wormxo-subtitle {
-          margin-top: 8px;
-          margin-bottom: 18px;
-          color: #ff9800;
-          font-size: clamp(13px, 2.5vw, 18px);
-          font-weight: 800;
-          letter-spacing: 2px;
-          text-shadow: 0 2px 10px rgba(0,0,0,.9);
+          margin-top:8px;
+          margin-bottom:18px;
+          color:#ffffff;
+          font-size:clamp(13px,2.5vw,18px);
+          font-weight:800;
+          letter-spacing:2px;
+          text-shadow:
+            0 0 8px rgba(0,160,255,.75),
+            0 0 12px rgba(255,210,0,.55),
+            0 2px 10px rgba(0,0,0,.95);
         }
 
         .wormxo-buttons {
-          width: min(92vw, 420px);
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 14px;
+          width:min(92vw,420px);
+          display:grid;
+          grid-template-columns:1fr;
+          gap:14px;
         }
 
         .wormxo-btn {
-          width: 100%;
-          height: clamp(48px, 8vh, 62px);
-          border: 2px solid #fff;
-          border-radius: 14px;
-          background: linear-gradient(135deg, rgba(255,132,0,.95), rgba(255,170,35,.85));
-          color: #fff;
-          font-size: clamp(16px, 3vw, 21px);
-          font-weight: 900;
-          letter-spacing: .8px;
-          cursor: pointer;
-          box-shadow: 0 10px 24px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.45);
-          transition: transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
-          position: relative;
-          overflow: hidden;
+          width:100%;
+          height:clamp(48px,8vh,62px);
+          border:2px solid rgba(255,255,255,.92);
+          border-radius:14px;
+          background:
+            linear-gradient(135deg, rgba(0,150,255,.88), rgba(255,210,0,.78) 54%, rgba(255,0,35,.82));
+          color:#fff;
+          font-size:clamp(16px,3vw,21px);
+          font-weight:900;
+          letter-spacing:.8px;
+          cursor:pointer;
+          box-shadow:
+            0 12px 28px rgba(0,0,0,.48),
+            0 0 18px rgba(0,160,255,.28),
+            0 0 22px rgba(255,210,0,.20),
+            inset 0 1px 0 rgba(255,255,255,.45);
+          transition:transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
+          position:relative;
+          overflow:hidden;
         }
 
         .wormxo-btn::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 0;
-          height: 0;
-          border-radius: 50%;
-          background: rgba(255,255,255,0.4);
-          transform: translate(-50%, -50%);
-          transition: width 0.5s, height 0.5s;
+          content:'';
+          position:absolute;
+          top:50%;
+          left:50%;
+          width:0;
+          height:0;
+          border-radius:50%;
+          background:rgba(255,255,255,.38);
+          transform:translate(-50%,-50%);
+          transition:width .5s,height .5s;
         }
 
         .wormxo-btn:hover::before {
-          width: 300px;
-          height: 300px;
+          width:320px;
+          height:320px;
         }
 
         .wormxo-btn:hover {
-          transform: translateY(-3px) scale(1.02);
-          background: #fff;
-          color: #ff7a00;
-          box-shadow: 0 14px 30px rgba(255,132,0,.42), 0 0 20px rgba(255,255,255,.30);
+          transform:translateY(-3px) scale(1.02);
+          background:#fff;
+          color:#111;
+          box-shadow:
+            0 14px 32px rgba(0,0,0,.52),
+            0 0 24px rgba(0,160,255,.42),
+            0 0 28px rgba(255,210,0,.36),
+            0 0 24px rgba(255,0,35,.30);
         }
 
         .wormxo-btn:active {
-          transform: scale(.98);
+          transform:scale(.98);
         }
 
         .wormxo-btn.loading {
-          pointer-events: none;
-          opacity: .75;
-          background: #fff;
-          color: #ff7a00;
+          pointer-events:none;
+          opacity:.78;
+          background:#fff;
+          color:#111;
         }
 
         .wormxo-footer {
-          margin-top: 35px;
-          display: flex;
-          gap: 15px;
-          justify-content: center;
+          margin-top:35px;
+          display:flex;
+          gap:15px;
+          justify-content:center;
         }
 
         .wormxo-dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background: #fff;
-          animation: pulseDot 1.8s infinite;
+          width:10px;
+          height:10px;
+          border-radius:50%;
+          background:#fff;
+          animation:pulseDot 1.8s infinite;
         }
 
-        .wormxo-dot.green { background: #0daf4b; box-shadow: 0 0 6px #0daf4b; }
-        .wormxo-dot.yellow { background: #e0c71a; box-shadow: 0 0 6px #e0c71a; animation-delay: 0.2s; }
-        .wormxo-dot.sky { background: #a55eff; box-shadow: 0 0 6px #c355ff; animation-delay: 0.4s; }
-        .wormxo-dot.pink { background: #ff6ac4; box-shadow: 0 0 6px #ff6ac4; animation-delay: 0.6s; }
+        .wormxo-dot.blue {
+          background:#009dff;
+          box-shadow:0 0 8px #009dff;
+        }
+
+        .wormxo-dot.red {
+          background:#ff002b;
+          box-shadow:0 0 8px #ff002b;
+          animation-delay:.2s;
+        }
+
+        .wormxo-dot.yellow {
+          background:#ffd600;
+          box-shadow:0 0 8px #ffd600;
+          animation-delay:.4s;
+        }
+
+        .wormxo-dot.white {
+          background:#fff;
+          box-shadow:0 0 8px #fff;
+          animation-delay:.6s;
+        }
 
         @keyframes pulseDot {
-          0%, 100% { opacity: 0.5; transform: scale(1);}
-          50% { opacity: 1; transform: scale(1.5);}
+          0%,100% { opacity:.48; transform:scale(1); }
+          50% { opacity:1; transform:scale(1.55); }
         }
 
         .wormxo-ripple {
-          position: fixed;
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(255,132,0,0.8), rgba(255,215,0,0));
-          transform: translate(-50%, -50%);
-          animation: rippleAnim 0.6s ease-out forwards;
-          pointer-events: none;
-          z-index: 2147483647;
+          position:fixed;
+          width:10px;
+          height:10px;
+          border-radius:50%;
+          background:radial-gradient(circle, rgba(255,255,255,.9), rgba(0,155,255,.35), rgba(255,0,35,0));
+          transform:translate(-50%,-50%);
+          animation:rippleAnim .65s ease-out forwards;
+          pointer-events:none;
+          z-index:2147483647;
         }
 
         @keyframes rippleAnim {
-          0% {
-            width: 0;
-            height: 0;
-            opacity: 0.7;
-          }
-          100% {
-            width: 200px;
-            height: 200px;
-            opacity: 0;
-          }
+          0% { width:0; height:0; opacity:.8; }
+          100% { width:230px; height:230px; opacity:0; }
         }
 
         @keyframes wormxoFloat {
-          0%, 100% {
-            transform: translateY(0) scale(1);
-          }
-          50% {
-            transform: translateY(-12px) scale(1.06);
-          }
+          0%,100% { transform:translateY(0) scale(1); }
+          50% { transform:translateY(-12px) scale(1.06); }
         }
 
-        @media (min-width: 640px) {
+        @media (min-width:640px) {
           .wormxo-buttons {
-            grid-template-columns: 1fr 1fr;
-            width: min(92vw, 620px);
+            grid-template-columns:1fr 1fr;
+            width:min(92vw,620px);
           }
         }
 
-        @media (max-width: 420px) {
-          .wormxo-card {
-            padding: 16px;
-          }
-          .wormxo-logo {
-            margin-bottom: 18px;
-          }
-          .wormxo-subtitle {
-            margin-bottom: 22px;
-          }
+        @media (max-width:420px) {
+          .wormxo-card { padding:16px; }
+          .wormxo-logo { margin-bottom:18px; }
+          .wormxo-subtitle { margin-bottom:22px; }
         }
       `;
 
