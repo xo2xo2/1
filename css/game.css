@@ -8,3 +8,16 @@
 {
  background-color: #f7941d
 }
+
+#game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats .controls #final-share-fb div {
+ border-radius: 5px;
+    overflow: hidden;
+    border: 2px solid #517ad1;
+    color: #517ad1;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    padding-left: 35px;
+    transition: background-color .5s ease;
+    background-color: #fff;
+}
