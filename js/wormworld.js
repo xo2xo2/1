@@ -8897,9 +8897,11 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
             vO37.kf.call(this, vO37.Fk.wn);
             var vThis61 = this;
             var vF1218 = f121();
-            v$10.toggle(vF20.xn);
+            
             v$6.text(vO39.H("index.game.result.title"));
+            v$10.text(vO39.H("index.game.result.share"));
             v$7.text(vO39.H("index.game.result.continue"));
+            
             v$7.click(function () {
               vF1218.Ci.Be();
               vF1218.zn.yn.ka();
