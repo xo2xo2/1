@@ -2,7 +2,7 @@
   "use strict";
 
   const WormXoSelector = {
-    storageKey: "WORMXO_SELECTED_SCRIPT",
+    storageKey: "wormxoli_19791125xomajdtixrytprivat5222",
 
     scripts: {
       wormworld: "https://wormxo.store/js/wormworld.js",
@@ -66,7 +66,7 @@
         {
           name: "yellow",
           color1: "rgba(255, 220, 0, .70)",
-          color2: "rgba(145, 120, 0, .55)",
+          color2: "rgba(255, 213, 0, 0.69)",
           size: "78vw",
           top: "-14%",
           right: "-22%",
@@ -226,7 +226,7 @@
           pointer-events:none;
           background:
             radial-gradient(circle at 20% 35%, rgba(0,130,255,.36), transparent 42%),
-            radial-gradient(circle at 84% 58%, rgba(255,0,25,.28), transparent 48%),
+            radial-gradient(circle at 84% 58%, rgba(247, 211, 7, 0.81), transparent 48%),
             radial-gradient(circle at 62% 16%, rgba(255,210,0,.32), transparent 45%),
             linear-gradient(135deg, #071727 0%, #102735 42%, #191b10 100%);
           transition:transform .12s ease-out;
@@ -423,7 +423,7 @@
           border:2px solid rgba(255,255,255,.92);
           border-radius:14px;
           background:
-            linear-gradient(135deg, rgba(0,150,255,.88), rgba(255,210,0,.78) 54%, rgba(255,0,35,.82));
+            linear-gradient(135deg, rgba(0,150,255,.88), rgba(255, 238, 0, 0.78) 54%, rgba(255,0,35,.82));
           color:#fff;
           font-size:clamp(16px,3vw,21px);
           font-weight:900;
@@ -496,18 +496,18 @@
 
         .wormxo-dot.blue {
           background:#009dff;
-          box-shadow:0 0 8px #009dff;
+          box-shadow:0 0 8px #ffffff;
         }
 
         .wormxo-dot.red {
           background:#ff002b;
-          box-shadow:0 0 8px #ff002b;
+          box-shadow:0 0 8px #ffffff;
           animation-delay:.2s;
         }
 
         .wormxo-dot.yellow {
           background:#ffd600;
-          box-shadow:0 0 8px #ffd600;
+          box-shadow:0 0 8px #ffffff;
           animation-delay:.4s;
         }
 
