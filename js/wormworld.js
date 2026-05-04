@@ -9029,29 +9029,10 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
             v$13.html(vUndefined14);
             v$14.html(vUndefined15);
             if (vF20.xn) {
-  var v759 = vO39.H("index.game.result.share");
-  vO39.H("index.game.social.shareResult.caption");
-
-  // إظهار العنصر والحاوية
-  if (vO37.kf && vO37.kf.socialButtons) {
-    vO37.kf.socialButtons.show();
-  }
-
-  v$10
-    .show()
-    .css("display", "block")
-    .empty()
-    .append(
-      f212(
-        v759,
-        "https://wormate.io",
-        "wormate.io",
-        vUndefined16,
-        vUndefined16,
-        "https://wormate.io/images/og-share-img-new.jpg"
-      )
-    );
-}
+              var v$10 = vO39.H("index.game.result.share");
+              vO39.H("index.game.social.shareResult.caption");
+              v$10.empty().append(f212(v$10, "https://wormate.io", "wormate.io", vUndefined16, vUndefined16, "https://wormate.io/images/og-share-img-new.jpg"));
+            }
           };
           v758.prototype.Gn = function () {
             return this.Bn;
