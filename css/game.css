@@ -29,7 +29,7 @@
   position: relative;
 }
 
-/* مربع الفيسبوك الأزرق */
+
 #game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats .controls #final-share-fb::before {
   content: "f";
   font-family: Arial, sans-serif;

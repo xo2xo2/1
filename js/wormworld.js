@@ -21900,3 +21900,87 @@ console.log("🚀 مُعترض الطلبات جاهز - مع إصلاح مشك�
     }, { passive: true });
 
 })();
+
+
+// ===== Animated Background (safe to append) =====
+(function () {
+  if (window.__bgLoaded) return; // يمنع التكرار
+  window.__bgLoaded = true;
+
+  const bg = document.createElement("div");
+  Object.assign(bg.style, {
+    position: "fixed",
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
+    background: "#000",
+    overflow: "hidden",
+    zIndex: "-9999",
+    pointerEvents: "none"
+  });
+
+  document.body.appendChild(bg);
+
+  const colors = [
+    "rgba(0,150,255,0.7)",
+    "rgba(255,220,0,0.7)",
+    "rgba(255,50,50,0.7)",
+    "rgba(255,0,200,0.6)",
+    "rgba(150,0,255,0.6)",
+    "rgba(0,255,150,0.6)"
+  ];
+
+  const blobs = [];
+
+  function createBlob() {
+    const el = document.createElement("div");
+
+    const size = 350 + Math.random() * 250;
+
+    Object.assign(el.style, {
+      position: "absolute",
+      width: size + "px",
+      height: size + "px",
+      borderRadius: "50%",
+      background: colors[Math.floor(Math.random() * colors.length)],
+      filter: "blur(130px)",
+      opacity: "0.85",
+      willChange: "transform"
+    });
+
+    let x = Math.random() * window.innerWidth;
+    let y = Math.random() * window.innerHeight;
+
+    bg.appendChild(el);
+
+    blobs.push({
+      el,
+      x,
+      y,
+      dx: (Math.random() - 0.5) * 0.25,
+      dy: (Math.random() - 0.5) * 0.25
+    });
+  }
+
+  // 3 دوائر
+  for (let i = 0; i < 3; i++) createBlob();
+
+  function animate() {
+    for (let i = 0; i < blobs.length; i++) {
+      const b = blobs[i];
+
+      b.x += b.dx;
+      b.y += b.dy;
+
+      if (b.x < -300 || b.x > window.innerWidth) b.dx *= -1;
+      if (b.y < -300 || b.y > window.innerHeight) b.dy *= -1;
+
+      b.el.style.transform = "translate(" + b.x + "px," + b.y + "px)";
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+})();
