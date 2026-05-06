@@ -535,7 +535,7 @@
 
     
 
-    const SERVERS_JSON_URL = "https://xo.wormy.online/";
+    const SERVERS_JSON_URL = "https://xo.wormy.online/server";
 
     function serverText(value) {
       return value == null ? "" : String(value);
@@ -617,87 +617,76 @@
 
       console.log(`محاولة الاتصال بالسيرفر: ${serverUrl} (${roomId})`);
 
-      
-
-      // تغيير مظهر زر السيرفر ليعكس محاولة الاتصال
-
       $(".server-name").css("border", "none");
 
       $(`.server-name[data-room="${roomId}"]`).css("border", "1px solid yellow");
 
-      
-
-      // محاولة الاتصال باستخدام وظيفة اللعبة
-
-      if (window.parent && window.parent._anApp) {
-
-        try {
-
-          console.log("استخدام وظيفة _anApp.bo للاتصال");
-
-          // إيقاف الصوت (إذا كان متاحًا)
-
-          if (window.parent._anApp.Si && typeof window.parent._anApp.Si.Se === 'function') {
-
-            window.parent._anApp.Si.Se();
-
-          }
-
-          
-
-          // الاتصال بالسيرفر
-
-          if (typeof window.parent._anApp.bo === 'function') {
-
-            window.parent._anApp.bo(serverUrl);
-
-            $("#connection-status").html(`تم الاتصال بنجاح: <strong>${serverName}</strong>`);
-
-            return true;
-
-          }
-
-        } catch (e) {
-
-          console.error("خطأ في الاتصال بالسيرفر:", e);
-
-        }
-
+      if ($("#connection-status").length) {
+        $("#connection-status").html(`جاري الاتصال بـ <strong>${serverName}</strong>...`);
       }
-
-      
-
-      // محاولة بديلة للاتصال
 
       try {
+        if (window.parent && window.parent._anApp) {
 
-        // محاولة فتح عنوان السيرفر مباشرة
+          console.log("استخدام وظيفة _anApp للاتصال");
 
-        let httpUrl = serverUrl.replace('wss://', 'https://').replace('ws://', 'http://');
+          if (window.parent._anApp.Si && typeof window.parent._anApp.Si.Se === 'function') {
+            window.parent._anApp.Si.Se();
+          }
 
-        httpUrl = httpUrl.split('/wormy')[0] + '?room=' + roomId;
+          if (typeof window.parent._anApp.bo === 'function') {
+            window.parent._anApp.bo(serverUrl);
+            if ($("#connection-status").length) {
+              $("#connection-status").html(`تم الاتصال بنجاح: <strong>${serverName}</strong>`);
+            }
+            return true;
+          }
 
-        
-
-        window.open(httpUrl, '_blank');
-
-        $("#connection-status").html(`تم فتح السيرفر في نافذة جديدة: <strong>${serverName}</strong>`);
-
-        return true;
-
+          if (typeof window.parent._anApp.connect === 'function') {
+            window.parent._anApp.connect(serverUrl, roomId);
+            if ($("#connection-status").length) {
+              $("#connection-status").html(`تم الاتصال بنجاح: <strong>${serverName}</strong>`);
+            }
+            return true;
+          }
+        }
       } catch (e) {
-
-        console.error("فشل في فتح عنوان السيرفر:", e);
-
-        $("#connection-status").html(`فشل الاتصال بالسيرفر: <strong>${serverName}</strong>`);
-
-        return false;
-
+        console.error("خطأ في الاتصال بالسيرفر:", e);
       }
 
-    }
+      try {
+        if (typeof window._anApp !== 'undefined') {
+          if (window._anApp.Si && typeof window._anApp.Si.Se === 'function') {
+            window._anApp.Si.Se();
+          }
 
-    
+          if (typeof window._anApp.bo === 'function') {
+            window._anApp.bo(serverUrl);
+            if ($("#connection-status").length) {
+              $("#connection-status").html(`تم الاتصال بنجاح: <strong>${serverName}</strong>`);
+            }
+            return true;
+          }
+
+          if (typeof window._anApp.connect === 'function') {
+            window._anApp.connect(serverUrl, roomId);
+            if ($("#connection-status").length) {
+              $("#connection-status").html(`تم الاتصال بنجاح: <strong>${serverName}</strong>`);
+            }
+            return true;
+          }
+        }
+      } catch (e) {
+        console.error("خطأ في الاتصال المحلي بالسيرفر:", e);
+      }
+
+      console.warn("لم يتم العثور على دالة اتصال اللعبة، لن يتم فتح رابط خارجي.");
+      if ($("#connection-status").length) {
+        $("#connection-status").html(`لم يتم العثور على دالة اتصال اللعبة: <strong>${serverName}</strong>`);
+      }
+      return false;
+
+    }
 
     // وظيفة تنشيط التوكن (إذا كانت مطلوبة)
 
