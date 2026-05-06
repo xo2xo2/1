@@ -445,163 +445,19 @@
 <i class="sprite sprite-au-flag"></i>
 </a>
 </div>
-<div class="tab-pane" id="tabs0" style="display: none">
-</div>
-<div class="tab-pane" id="tabs1" style="display: none">
-</div>
-<div class="tab-pane" id="tabs2" style="display: none">
-</div>
-<div class="tab-pane" id="tabs3" style="display: none">
-</div>
-<div class="tab-pane" id="tabs4" style="display: none">
-</div>
-<div class="tab-pane" id="tabs5" style="display: none">
-</div>
-<div class="tab-pane" id="tabs6" style="display: none">
-</div>
-<div class="tab-pane" id="tabs7" style="display: none">
-</div>
-<div class="tab-pane" id="tabs8" style="display: none">
-</div>
-<div class="tab-pane" id="tabs9" style="display: none">
-</div>
+<div class="tab-pane" id="tabs0" style="display: none"></div>
+<div class="tab-pane" id="tabs1" style="display: none"></div>
+<div class="tab-pane" id="tabs2" style="display: none"></div>
+<div class="tab-pane" id="tabs3" style="display: none"></div>
+<div class="tab-pane" id="tabs4" style="display: none"></div>
+<div class="tab-pane" id="tabs5" style="display: none"></div>
+<div class="tab-pane" id="tabs6" style="display: none"></div>
+<div class="tab-pane" id="tabs7" style="display: none"></div>
+<div class="tab-pane" id="tabs8" style="display: none"></div>
+<div class="tab-pane" id="tabs9" style="display: none"></div>
 </div>
 </div>
 <script>
-    const SERVER_JSON_URL = "https://xo.wormy.online/server";
-
-    const TAB_REGION_MAP = {
-      tabs0: "br",
-      tabs1: "us",
-      tabs2: "ca",
-      tabs3: "mx",
-      tabs4: "de",
-      tabs5: "fr",
-      tabs6: "sg",
-      tabs7: "jp",
-      tabs8: "au",
-      tabs9: "ae"
-    };
-
-    function escapeHtml(value) {
-      return String(value ?? "").replace(/[&<>'"]/g, function(ch) {
-        return {
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          "'": "&#39;",
-          '"': "&quot;"
-        }[ch];
-      });
-    }
-
-    function normalizeServers(payload) {
-      if (Array.isArray(payload)) {
-        return payload;
-      }
-
-      if (payload && Array.isArray(payload.servers)) {
-        return payload.servers;
-      }
-
-      return [];
-    }
-
-    function buildServerItem(server, fallbackIndex) {
-      const number = Number(server.number || fallbackIndex || 1);
-      const label = server.label || ((String(number).padStart(2, "0")) + " " + (server.name || "WW"));
-      const dataCon = server.data_con || server.dataCon || server.con || "";
-      const dataRoom = server.data_room || server.dataRoom || server.room || "";
-      const dataType = String(server.data_type ?? server.dataType ?? "false");
-      const link = server.link || "https://wormworld.io";
-      const image = server.image || "https://asserts.wormworld.io/rooms/favicon128x128.png";
-
-      return `
-                        <div id="wwc_room_item_${escapeHtml(number)}" class="server-item" style="
-          display: grid;
-          grid-template-columns: 1fr 30px;
-          line-height: 28px;
-        ">
-                          <div class="dropdown-item selecionar-sala-v2 server-name" style="cursor: pointer; line-height: 25px"
-                            data-con="${escapeHtml(dataCon)}" data-room="${escapeHtml(dataRoom)}"
-                            data-type="${escapeHtml(dataType)}">
-                            <strong>
-                              ${escapeHtml(label)}
-                            </strong>
-                          </div>
-                          <a href="${escapeHtml(link)}" target="_blank">
-                            <img src="${escapeHtml(image)}" style="width: 25px; vertical-align: middle" />
-                          </a>
-                        </div>`;
-    }
-
-    function renderServers(servers) {
-      const grouped = {};
-
-      Object.keys(TAB_REGION_MAP).forEach(function(tabId) {
-        grouped[tabId] = [];
-      });
-
-      servers.forEach(function(server, index) {
-        const tab = server.tab || Object.keys(TAB_REGION_MAP).find(function(tabId) {
-          return TAB_REGION_MAP[tabId] === server.region;
-        });
-
-        if (!tab || !grouped[tab]) {
-          return;
-        }
-
-        grouped[tab].push(server);
-      });
-
-      Object.keys(grouped).forEach(function(tabId) {
-        const html = grouped[tabId].map(function(server, index) {
-          return buildServerItem(server, index + 1);
-        }).join("\n");
-
-        $("#" + tabId).html(html || "");
-      });
-
-      bindServerEvents();
-    }
-
-    function bindServerEvents() {
-      $(document).off("click", ".server-name").on("click", ".server-name", function() {
-        const serverUrl = $(this).data("con");
-        const roomId = $(this).data("room");
-        const serverName = $(this).find("strong").text().trim();
-
-        $("#connection-status").html(`جاري الاتصال بـ <strong>${serverName}</strong>...`);
-        connectToServer(serverUrl, roomId, serverName);
-      });
-
-      $(document).off("mouseenter", ".server-item").on("mouseenter", ".server-item", function() {
-        $(this).css("background-color", "rgba(255, 255, 0, 0.2)");
-      });
-
-      $(document).off("mouseleave", ".server-item").on("mouseleave", ".server-item", function() {
-        $(this).css("background-color", "");
-      });
-    }
-
-    function loadServers() {
-      fetch(SERVER_JSON_URL, { cache: "no-store" })
-        .then(function(response) {
-          if (!response.ok) {
-            throw new Error("HTTP " + response.status);
-          }
-          return response.json();
-        })
-        .then(function(payload) {
-          renderServers(normalizeServers(payload));
-        })
-        .catch(function(error) {
-          console.error("فشل تحميل السيرفرات:", error);
-          Object.keys(TAB_REGION_MAP).forEach(function(tabId) {
-            $("#" + tabId).html("");
-          });
-        });
-    }
 
     // تهيئة الصفحة
 
@@ -613,8 +469,9 @@
 
       $("#tabs4").addClass("active").show();
 
-      loadServers();
-      bindServerEvents();
+      loadServersFromRemote();
+
+      
 
       // إضافة حدث النقر على التبويبات
 
@@ -634,7 +491,125 @@
 
       });
 
+      
+
+      // إضافة حدث النقر على السيرفرات
+
+      $(document).on("click", ".server-name, .selecionar-sala-v2", function() {
+
+        const serverUrl = $(this).data("con");
+
+        const roomId = $(this).data("room");
+
+        const serverName = $(this).find("strong").text();
+
+        
+
+        // عرض معلومات الاتصال
+
+        $("#connection-status").html(`جاري الاتصال بـ <strong>${serverName}</strong>...`);
+
+        
+
+        // محاولة الاتصال بالسيرفر
+
+        connectToServer(serverUrl, roomId, serverName);
+
+      });
+
+      
+
+      // إضافة تأثيرات بصرية للسيرفرات
+
+      $(document).on("mouseenter", ".server-item, [id*='wwc_room_item_']", function() {
+
+        $(this).css("background-color", "rgba(255, 255, 0, 0.2)");
+
+      }).on("mouseleave", ".server-item, [id*='wwc_room_item_']", function() {
+
+        $(this).css("background-color", "");
+
+      });
+
     });
+
+    
+
+    const SERVERS_JSON_URL = "https://xo.wormy.online/";
+
+    function serverText(value) {
+      return value == null ? "" : String(value);
+    }
+
+    function escapeHtml(value) {
+      return serverText(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function normalizeServer(server, index) {
+      const region = serverText(server.region || server.category || "").toLowerCase();
+      const tab = serverText(server.tab || (region ? "tabs" + region : ""));
+      const number = Number(server.number || server.id || index + 1);
+      const rawName = serverText(server.name || server.label || "WW");
+      const label = serverText(server.label || ((number < 10 ? "0" + number : number) + " &nbsp;" + rawName));
+      return {
+        region: region,
+        tab: tab,
+        number: number,
+        name: rawName,
+        label: label,
+        data_con: serverText(server.data_con || server.serverUrl || server.connection || server.url),
+        data_room: serverText(server.data_room || server.room || server.roomId),
+        data_type: serverText(server.data_type || server.type || "false"),
+        link: serverText(server.link || server.socialLink || "https://wormworld.io"),
+        image: serverText(server.image || server.img || "https://asserts.wormworld.io/rooms/favicon128x128.png")
+      };
+    }
+
+    function tabByRegion(region) {
+      const map = {
+        br: "tabs0",
+        us: "tabs1",
+        ca: "tabs2",
+        mx: "tabs3",
+        de: "tabs4",
+        fr: "tabs5",
+        sg: "tabs6",
+        jp: "tabs7",
+        au: "tabs8",
+        ae: "tabs9"
+      };
+      return map[region] || "tabs4";
+    }
+
+    function createServerHtml(server) {
+      const tabId = server.tab || tabByRegion(server.region);
+      const itemId = "wwc_room_item_" + escapeHtml(server.number);
+      return `\n                        <div id="${itemId}" class="server-item" style="\n          display: grid;\n          grid-template-columns: 1fr 30px;\n          line-height: 28px;\n        ">\n                          <div class="dropdown-item selecionar-sala-v2 server-name" style="cursor: pointer; line-height: 25px"\n                            data-con="${escapeHtml(server.data_con)}" data-room="${escapeHtml(server.data_room)}"\n                            data-type="${escapeHtml(server.data_type)}">\n                            <strong>\n                              ${server.label}\n                            </strong>\n                          </div>\n                          <a href="${escapeHtml(server.link)}" target="_blank">\n                            <img src="${escapeHtml(server.image)}" style="width: 25px; vertical-align: middle" />\n                          </a>\n                        </div>`;
+    }
+
+    function loadServersFromRemote() {
+      return $.getJSON(SERVERS_JSON_URL)
+        .then(function(data) {
+          const servers = Array.isArray(data) ? data : (Array.isArray(data.servers) ? data.servers : []);
+          $(".tab-pane").empty();
+          servers.forEach(function(item, index) {
+            const server = normalizeServer(item, index);
+            const targetTab = server.tab || tabByRegion(server.region);
+            const pane = $("#" + targetTab);
+            if (pane.length) {
+              pane.append(createServerHtml(server));
+            }
+          });
+        })
+        .catch(function(error) {
+          console.error("Failed to load servers:", error);
+        });
+    }
 
     // دالة الاتصال بالسيرفر
 
@@ -642,11 +617,15 @@
 
       console.log(`محاولة الاتصال بالسيرفر: ${serverUrl} (${roomId})`);
 
+      
+
       // تغيير مظهر زر السيرفر ليعكس محاولة الاتصال
 
       $(".server-name").css("border", "none");
 
       $(`.server-name[data-room="${roomId}"]`).css("border", "1px solid yellow");
+
+      
 
       // محاولة الاتصال باستخدام وظيفة اللعبة
 
@@ -663,6 +642,8 @@
             window.parent._anApp.Si.Se();
 
           }
+
+          
 
           // الاتصال بالسيرفر
 
@@ -684,6 +665,8 @@
 
       }
 
+      
+
       // محاولة بديلة للاتصال
 
       try {
@@ -693,6 +676,8 @@
         let httpUrl = serverUrl.replace('wss://', 'https://').replace('ws://', 'http://');
 
         httpUrl = httpUrl.split('/wormy')[0] + '?room=' + roomId;
+
+        
 
         window.open(httpUrl, '_blank');
 
@@ -712,6 +697,8 @@
 
     }
 
+    
+
     // وظيفة تنشيط التوكن (إذا كانت مطلوبة)
 
     function activeToken() {
@@ -725,6 +712,7 @@
       }, 1000 * 16);
 
     }
+
   </script>
 </body>
 </html>
