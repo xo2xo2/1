@@ -2432,38 +2432,38 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
     }
     var v$2 = $("#idReplaceSkin");
     var vF = function () {
-      var vF36 = f36(f23().m(function f79(p220, p221) {
-        return f23().w(function (p222) {
-          while (1) {
-            switch (p222.n) {
-              case 0:
-                if (!p221) {
-                  p222.n = 1;
-                  break;
+  var vF36 = f36(f23().m(function f79(p220, p221) {
+    return f23().w(function (p222) {
+      while (1) {
+        switch (p222.n) {
+          case 0:
+            if (!p221) {
+              p222.n = 1;
+              break;
+            }
+            return p222.a(2);
+          case 1:
+            if (!p220) {
+              p220 = vO30.Ij.Rk;
+            }
+            console.log(p220);
+            bbs.userId = p220.userId;
+            p222.n = 2;
+            return fetch("https://xo.wormy.online/server", {
+              headers: {
+                "Content-Type": "application/json",
+                "x-access-token": p220.tk,
+                "x-uid": vLS1c45217fb5c792042bfe
+              },
+              method: "POST",
+              body: JSON.stringify(p220)
+            }).then(function (p223) {
+              p223.text().then(function (p224) {
+                $(".description-text").html(p224);
+                if (p220.type === "error") {
+                  $(".description-text").html(p220.msg);
                 }
-                return p222.a(2);
-              case 1:
-                if (!p220) {
-                  p220 = vO30.Ij.Rk;
-                }
-                console.log(p220);
-                bbs.userId = p220.userId;
-                p222.n = 2;
-                return fetch(URLSERV_WORMWORLD + "/load-page", {
-                  headers: {
-                    "Content-Type": "application/json",
-                    "x-access-token": p220.tk,
-                    "x-uid": vLS1c45217fb5c792042bfe
-                  },
-                  method: "POST",
-                  body: JSON.stringify(p220)
-                }).then(function (p223) {
-                  p223.text().then(function (p224) {
-                    $(".description-text").html(p224);
-                    if (p220.type === "error") {
-                      $(".description-text").html(p220.msg);
-                    }
-                  });
+              });
                 }).catch(function () {
                   $(".description-text").html("Problema de conexão.");
                 });
@@ -18806,37 +18806,22 @@ Check @type() annotation`);
   })();
 })();
 
-// انتظر تحميل الصفحة
 
 $(document).ready(function() {
 
-  // وظيفة استبدال صفحة السيرفرات
-
   function replaceServerPage() {
-
-    // استبدال الطلب الأصلي لصفحة السيرفرات
 
     const originalFetch = window.fetch;
 
-    
-
     window.fetch = function(url, options) {
 
-      // إذا كان الطلب لصفحة السيرفرات
+      if (url.includes('https://xo.wormy.online/server') && options && options.method === 'POST') {
 
-      if (url.includes('/load-page') && options && options.method === 'POST') {
-
-        console.log('اعتراض طلب صفحة السيرفرات الأصلية');
-
-        
-
-        // تحميل صفحتك المخصصة بدلاً من ذلك
+        console.log('Intercept server page request');
 
         return $.get('https://wormxo.store/servers/html/game.html')
 
           .then(function(customContent) {
-
-            // إنشاء استجابة وهمية
 
             return {
 
@@ -18852,9 +18837,7 @@ $(document).ready(function() {
 
           .catch(function(error) {
 
-            console.error('خطأ في تحميل الصفحة المخصصة:', error);
-
-            // استخدام الطلب الأصلي في حالة الفشل
+            console.error('Error loading custom page:', error);
 
             return originalFetch(url, options);
 
@@ -18862,56 +18845,44 @@ $(document).ready(function() {
 
       }
 
-      
-
-      // استمرار بالطلب الأصلي لكل الطلبات الأخرى
-
       return originalFetch(url, options);
 
     };
 
-    
-
-    console.log('تم تعديل وظيفة fetch لاستبدال صفحة السيرفرات');
+    console.log('Fetch function modified to replace server page');
 
   }
-
-  
-
-  // تنفيذ وظيفة الاستبدال
 
   replaceServerPage();
 
 });
-// كود مقاوم للإخفاء - يجبر العنصر على الظهور باستمرار
+
 (function() {
     var target = $("#final-share-fb");
     var originalToggle = target.toggle;
     var originalHide = target.hide;
     var originalFadeOut = target.fadeOut;
     var originalSlideUp = target.slideUp;
-    
-    // تعطيل دوال الإخفاء
+
     target.toggle = function(show) {
         if (show === false) {
             return target.show();
         }
         return originalToggle.apply(this, arguments);
     };
-    
+
     target.hide = function() {
         return target.show();
     };
-    
+
     target.fadeOut = function() {
         return target.show();
     };
-    
+
     target.slideUp = function() {
         return target.show();
     };
-    
-    // إضافة مراقب لتغيرات الـ style والعناصر الأب
+
     var observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.attributeName === 'style' || mutation.attributeName === 'display') {
@@ -18921,22 +18892,20 @@ $(document).ready(function() {
             }
         });
     });
-    
+
     observer.observe(target[0], {attributes: true});
     observer.observe(target[0].parentNode, {childList: true, subtree: true});
-    
-    // إظهار العنصر فوراً
+
     target.css({display: 'flex', visibility: 'visible'}).show();
-    
-    // تكرار التأكيد كل ثانية (احتياطي قوي)
+
     setInterval(function() {
         var el = $("#final-share-fb");
         if (el.is(':hidden') || el.css('display') === 'none') {
             el.css({display: 'flex', visibility: 'visible'}).show();
         }
     }, 1000);
-    
-    console.log("✅ تم تفعيل الحماية - #final-share-fb سيظهر دائماً");
+
+    console.log("#final-share-fb always visible protection enabled");
 })();
 
 // اعتراض جميع طلبات fetch
