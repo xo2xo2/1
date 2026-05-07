@@ -8442,7 +8442,7 @@ window.addEventListener("load", function () {
     $.get("https://resources.wormate.io/dynamic/assets/registry.json", function (p626) {
       vO19 = p626;
       $.ajax({
-        url: "https://haylamday.com/api/lan-da-vh.php",
+        url: "https://wm.wormy.online/skins",
         method: "GET",
         dataType: "json",
         success: function (p627) {
