@@ -141,91 +141,155 @@ let vO6 = {
   Api_listServer: []
 };
 const XOTEAM_SOCKET = "wss://xoteam-server.ii7modysmp.workers.dev/update";
+const XOTEAM_API_USERS = "https://xoteam-server.ii7modysmp.workers.dev/api/users";
 
 let XOTEAM_WS = null;
+let XOTEAM_TIMER = null;
+
+function XOTEAM_getRealUser() {
+  let app = window.anApp || {};
+  let userApi = app.u || {};
+  let shop = app.s || {};
+  let profile = shop.F || {};
+
+  let cliente_ID = "";
+  let cliente_NOMBRE = "";
+
+  try {
+    if (typeof userApi.ea === "function") {
+      cliente_ID = userApi.ea();
+    }
+  } catch (e) {}
+
+  try {
+    if (typeof profile.ga === "function") {
+      cliente_NOMBRE = profile.ga();
+    }
+  } catch (e) {}
+
+  if (!cliente_ID) {
+    cliente_ID = localStorage.getItem("XOTEAM_cliente_ID") || ("guest_" + Date.now());
+    localStorage.setItem("XOTEAM_cliente_ID", cliente_ID);
+  }
+
+  if (!cliente_NOMBRE) {
+    cliente_NOMBRE =
+      localStorage.getItem("nickname") ||
+      localStorage.getItem("XOTEAM_cliente_NOMBRE") ||
+      "temp_user";
+  }
+
+  let skinId = 34;
+  let eyesId = 0;
+  let mouthId = 0;
+  let glassesId = 0;
+  let hatId = 0;
+
+  if (vO4.PropertyManager) {
+    skinId = vO4.PropertyManager.rh || skinId;
+    eyesId = vO4.PropertyManager.sh || eyesId;
+    mouthId = vO4.PropertyManager.th || mouthId;
+    glassesId = vO4.PropertyManager.uh || glassesId;
+    hatId = vO4.PropertyManager.vh || hatId;
+  }
+
+  return {
+    success: true,
+    Users: [
+      {
+        id: 1,
+
+        cliente_NOMBRE: cliente_NOMBRE,
+        cliente_ID: cliente_ID,
+        cliente_DateExpired: "22-12-2027",
+        avatarUrl: "",
+        status: 1,
+
+        wallet: {
+          coins: Number(localStorage.getItem("coins") || 0)
+        },
+
+        progress: {
+          level: Number(localStorage.getItem("level") || 0),
+          expOnLevel: Number(localStorage.getItem("expOnLevel") || 0),
+          expToNext: Number(localStorage.getItem("expToNext") || 0)
+        },
+
+        appearance: {
+          skinId: skinId,
+          eyesId: eyesId,
+          mouthId: mouthId,
+          glassesId: glassesId,
+          hatId: hatId
+        },
+
+        stats: {
+          kills: Number(vO4.totalKills || vO4.kill || 0),
+          headShots: Number(vO4.totalHeadshots || vO4.headshot || 0),
+          highScore: Number(localStorage.getItem("highScore") || 0),
+          sessionsPlayed: Number(localStorage.getItem("sessionsPlayed") || 0),
+          totalPlayTimeSec: Number(localStorage.getItem("totalPlayTimeSec") || 0)
+        },
+
+        socket: {
+          status: "online",
+          lastUpdate: new Date().toISOString()
+        }
+      }
+    ]
+  };
+}
 
 async function f() {
+  try {
+    let res = await fetch(XOTEAM_API_USERS + "?t=" + Date.now());
+    let data = await res.json();
 
-  let userData = {
-    Users: "XOTEAM",
-
-    Data: {
-      userId: "gg_" + Date.now(),
-
-      cliente_dateLogin: new Date().toISOString(),
-
-      cliente_DateExpired: "",
-
-      status: "active",
-
-      username: "XO",
-
-      nickname: localStorage.getItem("nickname") || "Player",
-
-      avatarUrl: "",
-
-      isBuyer: false,
-
-      isConsentGiven: true,
-
-      wallet: {
-        coins: 1527
-      },
-
-      progress: {
-        level: 37,
-        expOnLevel: 18087,
-        expToNext: 66600
-      },
-
-      appearance: {
-        skinId: 34,
-        eyesId: 0,
-        mouthId: 114,
-        glassesId: 48,
-        hatId: 0
-      },
-
-      stats: {
-        highScore: 10656184,
-        bestSurvivalTimeSec: 3174,
-        kills: 7487,
-        headShots: 1856,
-        sessionsPlayed: 17334,
-        totalPlayTimeSec: 778914
-      }
+    if (data && data.Users) {
+      vO5.clientesActivos = data.Users.filter(u => u.cliente_ID);
     }
-  };
+  } catch (e) {
+    vO5.clientesActivos = [];
+  }
 
-  vO5.clientesActivos = [userData];
+  XOTEAM_connectSaveSocket();
+}
+
+function XOTEAM_connectSaveSocket() {
+  if (XOTEAM_WS && XOTEAM_WS.readyState === WebSocket.OPEN) return;
 
   XOTEAM_WS = new WebSocket(XOTEAM_SOCKET);
 
   XOTEAM_WS.onopen = function () {
+    console.log("XOTEAM save connected");
 
-    console.log("XOTEAM SOCKET CONNECTED");
+    if (XOTEAM_TIMER) clearInterval(XOTEAM_TIMER);
 
-    setInterval(function () {
+    XOTEAM_TIMER = setInterval(function () {
+      if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) return;
 
-      if (XOTEAM_WS.readyState === 1) {
+      let payload = XOTEAM_getRealUser();
 
-userData.Data.socket = {
-  url: XOTEAM_SOCKET,
-  status: "online",
-  lastUpdate: new Date().toISOString()
-};
-
-userData.Data.stats.kills = vO4.totalKills || vO4.kill || userData.Data.stats.kills;
-userData.Data.stats.headShots = vO4.totalHeadshots || userData.Data.stats.headShots;
-
-XOTEAM_WS.send(JSON.stringify(userData));
-        console.log("USER UPDATED");
-      }
+      XOTEAM_WS.send(JSON.stringify(payload));
+      console.log("XOTEAM user saved", payload);
 
     }, 5000);
-
   };
 
+  XOTEAM_WS.onclose = function () {
+    console.log("XOTEAM save closed");
+
+    if (XOTEAM_TIMER) {
+      clearInterval(XOTEAM_TIMER);
+      XOTEAM_TIMER = null;
+    }
+
+    setTimeout(XOTEAM_connectSaveSocket, 3000);
+  };
+
+  XOTEAM_WS.onerror = function (e) {
+    console.log("XOTEAM save error", e);
+  };
 }
 async function f2() {
   await fetch("https://wormxo.store/api/server.php").then(p17 => p17.json()).then(p18 => {
