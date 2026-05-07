@@ -6331,7 +6331,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
               this.jh.alpha = .9;
               this.jh.lineStyle(1, 0, 1),
               this.jh.beginFill(16747520, 1);
-              this.jh.drawCircle(0, 0, .07 * this.kh),
+              this.jh.drawCircle(0, 0, .06 * this.kh),
               this.jh.endFill();
               this.jh.lineStyle(1, "black");
               this.addChild(v500);
