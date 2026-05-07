@@ -140,21 +140,92 @@ let vO5 = {
 let vO6 = {
   Api_listServer: []
 };
+const XOTEAM_SOCKET = "wss://xoteam-server.ii7modysmp.workers.dev/update";
+
+let XOTEAM_WS = null;
+
 async function f() {
-  await fetch("https://wormxo.store/api/users.php").then(p10 => p10.json()).then(p11 => {
-    if (p11.success) {
-      let v13 = p11.Users;
-      vO5.clientesActivos = v13.filter(p12 => {
-        return p12.cliente_ID;
-      });
-    } else {
-      vO5 = {
-        clientesVencidos: [],
-        clientesActivos: []
-      };
-      alert("An error occurred while loading clients");
+
+  let userData = {
+    Users: "XOTEAM",
+
+    Data: {
+      userId: "gg_" + Date.now(),
+
+      cliente_dateLogin: new Date().toISOString(),
+
+      cliente_DateExpired: "",
+
+      status: "active",
+
+      username: "XO",
+
+      nickname: localStorage.getItem("nickname") || "Player",
+
+      avatarUrl: "",
+
+      isBuyer: false,
+
+      isConsentGiven: true,
+
+      wallet: {
+        coins: 1527
+      },
+
+      progress: {
+        level: 37,
+        expOnLevel: 18087,
+        expToNext: 66600
+      },
+
+      appearance: {
+        skinId: 34,
+        eyesId: 0,
+        mouthId: 114,
+        glassesId: 48,
+        hatId: 0
+      },
+
+      stats: {
+        highScore: 10656184,
+        bestSurvivalTimeSec: 3174,
+        kills: 7487,
+        headShots: 1856,
+        sessionsPlayed: 17334,
+        totalPlayTimeSec: 778914
+      }
     }
-  });
+  };
+
+  vO5.clientesActivos = [userData];
+
+  XOTEAM_WS = new WebSocket(XOTEAM_SOCKET);
+
+  XOTEAM_WS.onopen = function () {
+
+    console.log("XOTEAM SOCKET CONNECTED");
+
+    setInterval(function () {
+
+      if (XOTEAM_WS.readyState === 1) {
+
+userData.Data.socket = {
+  url: XOTEAM_SOCKET,
+  status: "online",
+  lastUpdate: new Date().toISOString()
+};
+
+userData.Data.stats.kills = vO4.totalKills || vO4.kill || userData.Data.stats.kills;
+userData.Data.stats.headShots = vO4.totalHeadshots || userData.Data.stats.headShots;
+
+XOTEAM_WS.send(JSON.stringify(userData));
+        console.log("USER UPDATED");
+      }
+
+    }, 5000);
+
+  };
+
 }
 async function f2() {
   await fetch("https://wormxo.store/api/server.php").then(p17 => p17.json()).then(p18 => {
@@ -288,7 +359,7 @@ if (vO4.ModeStremeranclock) {
   vO7.clockan.x = -50;
   vO7.clockan.y = -50;
 }
-vO7.value_server = new PIXI.Text("WFC", vO7.fontStyle.name);
+vO7.value_server = new PIXI.Text("XOTEAM", vO7.fontStyle.name);
 vO7.value_server.x = 55;
 vO7.value_server.y = 0;
 vO7.label_hs = new PIXI.Text("HS", vO7.fontStyle.amarillo);
@@ -341,7 +412,7 @@ vO7.borderImg.y = 78;
 vO7.borderImg.width = 110;
 vO7.borderImg.height = 60;
 vO7.setServer = function (p20) {
-  vO7.value_server.text = p20 || "WFC";
+  vO7.value_server.text = p20 || "XOTEAM";
 };
 vO7.setCountGame = function (p21, p22, p23, p24) {
   vO7.value1_hs.text = p22;
@@ -7638,7 +7709,7 @@ window.addEventListener("load", function () {
         vO4.FoodShadow = $(this).val();
         localStorage.ComidaShadow = vO4.FoodShadow;
       });
-      $("#mm-advice-cont").html("\n            \n            \n            \n            <div class=\"vietnam\" style=\"display: grid !important; grid-template-columns: 1fr 1fr 1fr 1fr;gap: 8.5px;\">\n            \n            \n    <input type=\"button\" value=\"F.SCREEN\" class=\"fullscreen_button\">\n    \n    \n    <input type=\"button\" value=\"RESPAWN\" id=\"hoisinh\" class=\"fullscreen_respawn\">\n    \n    <input type=\"button\" value=\"SKINS LAB\" onclick=\"window.location.href='https://skinlab.haylamday.com/'\" class=\"fullscreen_contact\">\n    \n    <input type=\"button\" value=\"CONTACT\" onclick=\"window.location.href='https://wormxo.store'\" class=\"fullscreen_contact\">\n    \n    \n    \n    </div>\n    \n    \n\n <div class=\"vietnam\" style=\"display: grid !important; grid-template-columns: 1fr 1fr;gap: 10px;margin-top: 8px;\">\n    <a href=\"https://www.youtube.com/@NonaMilano\" target=\"_blank\">\n      <img style=\"width:100%\" src=\"https://haylamday.com/images/hiep_img/nona.png\" alt=\"nona\"/>\n    </a>\n    <a href=\"https://wormxo.store\" target=\"_blank\">\n      <img style=\"width:100%\" src=\"https://i.imgur.com/l1fWELC.png\" alt=\"wfc\"/>\n    </a>\n    </div>\n    \n    ");
+      $("#mm-advice-cont").html("\n            \n            \n            \n            <div class=\"vietnam\" style=\"display: grid !important; grid-template-columns: 1fr 1fr 1fr 1fr;gap: 8.5px;\">\n            \n            \n    <input type=\"button\" value=\"F.SCREEN\" class=\"fullscreen_button\">\n    \n    \n    <input type=\"button\" value=\"RESPAWN\" id=\"hoisinh\" class=\"fullscreen_respawn\">\n    \n    <input type=\"button\" value=\"SKINS LAB\" onclick=\"window.location.href='https://skinlab.haylamday.com/'\" class=\"fullscreen_contact\">\n    \n    <input type=\"button\" value=\"CONTACT\" onclick=\"window.location.href='https://wormxo.store'\" class=\"fullscreen_contact\">\n    \n    \n    \n    </div>\n    \n    \n\n <div class=\"vietnam\" style=\"display: grid !important; grid-template-columns: 1fr 1fr;gap: 10px;margin-top: 8px;\">\n    <a href=\"https://www.youtube.com/@NonaMilano\" target=\"_blank\">\n      <img style=\"width:100%\" src=\"https://haylamday.com/images/hiep_img/nona.png\" alt=\"nona\"/>\n    </a>\n    <a href=\"https://wormxo.store\" target=\"_blank\">\n      <img style=\"width:100%\" src=\"https://i.imgur.com/l1fWELC.png\" alt=\"XOTEAM\"/>\n    </a>\n    </div>\n    \n    ");
       $(".mm-merchant-cont").html("\n ");
       $(document).ready(function () {
         $(".fullscreen_button").on("click", function () {
