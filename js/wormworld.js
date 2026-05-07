@@ -6329,7 +6329,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
               this.jh = new vF4.Graphics();
               this.jh.zIndex = 2;
               this.jh.alpha = .9;
-              this.jh.lineStyle(1, 0, 1),
+              this.jh.lineStyle(1, 0, 0.5),
               this.jh.beginFill(16747520, 1);
               this.jh.drawCircle(0, 0, .1 * this.kh),
               this.jh.endFill();
