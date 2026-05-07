@@ -146,24 +146,58 @@ const XOTEAM_SOCKET = "wss://xoteam-server.ii7modysmp.workers.dev/update";
 let XOTEAM_WS = null;
 let XOTEAM_SAVE_TIMER = null;
 
-function XOTEAM_getClientId() {
+function XOTEAM_fixClientId(raw) {
+  raw = String(raw || "").trim();
+
+  if (!raw) return "";
+
+  if (/^gg_\d{8,40}$/.test(raw)) {
+    return raw;
+  }
+
+  if (/^\d{8,40}$/.test(raw)) {
+    return "gg_" + raw;
+  }
+
+  if (raw.indexOf("gg_") === 0) {
+    const onlyNumbers = raw.match(/\d{8,40}/);
+    if (onlyNumbers) return "gg_" + onlyNumbers[0];
+  }
+
   try {
-    if (window.anApp && window.anApp.u && typeof window.anApp.u.ea === "function") {
-      return window.anApp.u.ea();
+    const saved = localStorage.getItem("XOTEAM_CLIENTE_ID");
+    if (saved && /^gg_\d{8,40}$/.test(saved)) {
+      return saved;
     }
   } catch (e) {}
+
+  const guest = "gg_" + Date.now();
+  localStorage.setItem("XOTEAM_CLIENTE_ID", guest);
+  return guest;
+}
+
+function XOTEAM_getClientId() {
+  let id = "";
 
   try {
     if (window.vO4 && vO4.FB_UserID) {
-      return vO4.FB_UserID;
+      id = vO4.FB_UserID;
     }
   } catch (e) {}
 
-  let id = localStorage.getItem("XOTEAM_CLIENTE_ID");
-  if (!id) {
-    id = "guest_" + Date.now();
+  try {
+    if (!id && window.anApp && window.anApp.u && typeof window.anApp.u.ea === "function") {
+      id = window.anApp.u.ea();
+    }
+  } catch (e) {}
+
+  id = XOTEAM_fixClientId(id);
+
+  try {
     localStorage.setItem("XOTEAM_CLIENTE_ID", id);
-  }
+    if (window.vO4) vO4.FB_UserID = id;
+  } catch (e) {}
+
   return id;
 }
 
@@ -191,54 +225,73 @@ function XOTEAM_makeUser() {
   };
 }
 
-function XOTEAM_isUserActive(u) {
-  return !!(
-    u &&
-    u.cliente_ID &&
-    String(u.cliente_ID) === String(XOTEAM_getClientId()) &&
-    Number(u.status) === 1
-  );
-}
-
 async function f() {
-  try {
-    const res = await fetch(XOTEAM_API_USERS + "?t=" + Date.now(), {
-      method: "GET",
-      cache: "no-store",
-      headers: {
-        "Accept": "application/json"
+  await fetch(XOTEAM_API_USERS + "?t=" + Date.now(), {
+    method: "GET",
+    cache: "no-store",
+    headers: {
+      "Accept": "application/json"
+    }
+  }).then(p10 => p10.json()).then(p11 => {
+    if (p11.success) {
+      let v13 = Array.isArray(p11.Users) ? p11.Users : [];
+
+      vO5.clientesActivos = v13.filter(p12 => {
+        return p12 && p12.cliente_ID && Number(p12.status) === 1;
+      });
+
+      const myId = XOTEAM_getClientId();
+
+      const myUser = v13.find(p12 => {
+        return p12 && String(p12.cliente_ID) === String(myId);
+      });
+
+      window.XOTEAM_MY_USER = myUser || null;
+      window.XOTEAM_MY_ACTIVE = !!(myUser && Number(myUser.status) === 1);
+
+      if (window.vO4) {
+        vO4.FB_UserID = myId;
+        vO4.CLIENTE_ACTIVO = window.XOTEAM_MY_ACTIVE ? 1 : 0;
+        vO4.CLIENTE_INACTIVO = window.XOTEAM_MY_ACTIVE ? 0 : 1;
       }
-    });
 
-    const data = await res.json();
-
-    if (data && data.success && Array.isArray(data.Users)) {
-      vO5.clientesActivos = data.Users.filter(function (u) {
-        return u && u.cliente_ID && Number(u.status) === 1;
-      });
-
-      const myUser = data.Users.find(function (u) {
-        return u && String(u.cliente_ID) === String(XOTEAM_getClientId());
-      });
-
-      window.XOTEAM_MY_ACTIVE = XOTEAM_isUserActive(myUser);
-      vO4.CLIENTE_ACTIVO = window.XOTEAM_MY_ACTIVE ? 1 : 0;
-
-      console.log("XOTEAM verify user:", {
-        cliente_ID: XOTEAM_getClientId(),
-        active: window.XOTEAM_MY_ACTIVE
+      console.log("XOTEAM check:", {
+        cliente_ID: myId,
+        active: window.XOTEAM_MY_ACTIVE,
+        user: myUser || null
       });
     } else {
-      vO5.clientesActivos = [];
+      vO5 = {
+        clientesVencidos: [],
+        clientesActivos: []
+      };
+
+      window.XOTEAM_MY_USER = null;
       window.XOTEAM_MY_ACTIVE = false;
-      vO4.CLIENTE_ACTIVO = 0;
+
+      if (window.vO4) {
+        vO4.CLIENTE_ACTIVO = 0;
+        vO4.CLIENTE_INACTIVO = 1;
+      }
+
+      alert("An error occurred while loading clients");
     }
-  } catch (e) {
+  }).catch(e => {
     console.log("XOTEAM load users error:", e);
-    vO5.clientesActivos = [];
+
+    vO5 = {
+      clientesVencidos: [],
+      clientesActivos: []
+    };
+
+    window.XOTEAM_MY_USER = null;
     window.XOTEAM_MY_ACTIVE = false;
-    vO4.CLIENTE_ACTIVO = 0;
-  }
+
+    if (window.vO4) {
+      vO4.CLIENTE_ACTIVO = 0;
+      vO4.CLIENTE_INACTIVO = 1;
+    }
+  });
 
   XOTEAM_startAutoSave();
 }
