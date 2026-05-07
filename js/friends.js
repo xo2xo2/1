@@ -140,156 +140,211 @@ let vO5 = {
 let vO6 = {
   Api_listServer: []
 };
-const XOTEAM_SOCKET = "wss://xoteam-server.ii7modysmp.workers.dev/update";
 const XOTEAM_API_USERS = "https://xoteam-server.ii7modysmp.workers.dev/api/users";
+const XOTEAM_SOCKET = "wss://xoteam-server.ii7modysmp.workers.dev/update";
 
 let XOTEAM_WS = null;
-let XOTEAM_TIMER = null;
+let XOTEAM_SAVE_TIMER = null;
 
-function XOTEAM_getRealUser() {
-  let app = window.anApp || {};
-  let userApi = app.u || {};
-  let shop = app.s || {};
-  let profile = shop.F || {};
+function XOTEAM_fixClientId(raw) {
+  raw = String(raw || "").trim();
 
-  let cliente_ID = "";
-  let cliente_NOMBRE = "";
+  if (!raw) return "";
+
+  if (/^gg_\d{8,40}$/.test(raw)) {
+    return raw;
+  }
+
+  if (/^\d{8,40}$/.test(raw)) {
+    return "gg_" + raw;
+  }
+
+  if (raw.indexOf("gg_") === 0) {
+    const onlyNumbers = raw.match(/\d{8,40}/);
+    if (onlyNumbers) return "gg_" + onlyNumbers[0];
+  }
 
   try {
-    if (typeof userApi.ea === "function") {
-      cliente_ID = userApi.ea();
+    const saved = localStorage.getItem("XOTEAM_CLIENTE_ID");
+    if (saved && /^gg_\d{8,40}$/.test(saved)) {
+      return saved;
+    }
+  } catch (e) {}
+
+  const guest = "gg_" + Date.now();
+  localStorage.setItem("XOTEAM_CLIENTE_ID", guest);
+  return guest;
+}
+
+function XOTEAM_getClientId() {
+  let id = "";
+
+  try {
+    if (window.vO4 && vO4.FB_UserID) {
+      id = vO4.FB_UserID;
     }
   } catch (e) {}
 
   try {
-    if (typeof profile.ga === "function") {
-      cliente_NOMBRE = profile.ga();
+    if (!id && window.anApp && window.anApp.u && typeof window.anApp.u.ea === "function") {
+      id = window.anApp.u.ea();
     }
   } catch (e) {}
 
-  if (!cliente_ID) {
-    cliente_ID = localStorage.getItem("XOTEAM_cliente_ID") || ("guest_" + Date.now());
-    localStorage.setItem("XOTEAM_cliente_ID", cliente_ID);
-  }
+  id = XOTEAM_fixClientId(id);
 
-  if (!cliente_NOMBRE) {
-    cliente_NOMBRE =
-      localStorage.getItem("nickname") ||
-      localStorage.getItem("XOTEAM_cliente_NOMBRE") ||
-      "temp_user";
-  }
+  try {
+    localStorage.setItem("XOTEAM_CLIENTE_ID", id);
+    if (window.vO4) vO4.FB_UserID = id;
+  } catch (e) {}
 
-  let skinId = 34;
-  let eyesId = 0;
-  let mouthId = 0;
-  let glassesId = 0;
-  let hatId = 0;
+  return id;
+}
 
-  if (vO4.PropertyManager) {
-    skinId = vO4.PropertyManager.rh || skinId;
-    eyesId = vO4.PropertyManager.sh || eyesId;
-    mouthId = vO4.PropertyManager.th || mouthId;
-    glassesId = vO4.PropertyManager.uh || glassesId;
-    hatId = vO4.PropertyManager.vh || hatId;
-  }
+function XOTEAM_getClientName() {
+  try {
+    if (window.anApp && window.anApp.s && window.anApp.s.F && typeof window.anApp.s.F.ga === "function") {
+      return window.anApp.s.F.ga();
+    }
+  } catch (e) {}
 
+  return (
+    localStorage.getItem("nickname") ||
+    localStorage.getItem("XOTEAM_CLIENTE_NOMBRE") ||
+    "Player"
+  );
+}
+
+function XOTEAM_makeUser() {
   return {
-    success: true,
-    Users: [
-      {
-        id: 1,
-
-        cliente_NOMBRE: cliente_NOMBRE,
-        cliente_ID: cliente_ID,
-        cliente_DateExpired: "22-12-2027",
-        avatarUrl: "",
-        status: 1,
-
-        wallet: {
-          coins: Number(localStorage.getItem("coins") || 0)
-        },
-
-        progress: {
-          level: Number(localStorage.getItem("level") || 0),
-          expOnLevel: Number(localStorage.getItem("expOnLevel") || 0),
-          expToNext: Number(localStorage.getItem("expToNext") || 0)
-        },
-
-        appearance: {
-          skinId: skinId,
-          eyesId: eyesId,
-          mouthId: mouthId,
-          glassesId: glassesId,
-          hatId: hatId
-        },
-
-        stats: {
-          kills: Number(vO4.totalKills || vO4.kill || 0),
-          headShots: Number(vO4.totalHeadshots || vO4.headshot || 0),
-          highScore: Number(localStorage.getItem("highScore") || 0),
-          sessionsPlayed: Number(localStorage.getItem("sessionsPlayed") || 0),
-          totalPlayTimeSec: Number(localStorage.getItem("totalPlayTimeSec") || 0)
-        },
-
-        socket: {
-          status: "online",
-          lastUpdate: new Date().toISOString()
-        }
-      }
-    ]
+    id: 3,
+    cliente_NOMBRE: XOTEAM_getClientName(),
+    cliente_ID: XOTEAM_getClientId(),
+    cliente_DateExpired: "22-12-2027",
+    status: 0
   };
 }
 
 async function f() {
-  try {
-    let res = await fetch(XOTEAM_API_USERS + "?t=" + Date.now());
-    let data = await res.json();
-
-    if (data && data.Users) {
-      vO5.clientesActivos = data.Users.filter(u => u.cliente_ID);
+  await fetch(XOTEAM_API_USERS + "?t=" + Date.now(), {
+    method: "GET",
+    cache: "no-store",
+    headers: {
+      "Accept": "application/json"
     }
-  } catch (e) {
-    vO5.clientesActivos = [];
-  }
+  }).then(p10 => p10.json()).then(p11 => {
+    if (p11.success) {
+      let v13 = Array.isArray(p11.Users) ? p11.Users : [];
 
-  XOTEAM_connectSaveSocket();
+      vO5.clientesActivos = v13.filter(p12 => {
+        return p12 && p12.cliente_ID && Number(p12.status) === 1;
+      });
+
+      const myId = XOTEAM_getClientId();
+
+      const myUser = v13.find(p12 => {
+        return p12 && String(p12.cliente_ID) === String(myId);
+      });
+
+      window.XOTEAM_MY_USER = myUser || null;
+      window.XOTEAM_MY_ACTIVE = !!(myUser && Number(myUser.status) === 1);
+
+      if (window.vO4) {
+        vO4.FB_UserID = myId;
+        vO4.CLIENTE_ACTIVO = window.XOTEAM_MY_ACTIVE ? 1 : 0;
+        vO4.CLIENTE_INACTIVO = window.XOTEAM_MY_ACTIVE ? 0 : 1;
+      }
+
+      console.log("XOTEAM check:", {
+        cliente_ID: myId,
+        active: window.XOTEAM_MY_ACTIVE,
+        user: myUser || null
+      });
+    } else {
+      vO5 = {
+        clientesVencidos: [],
+        clientesActivos: []
+      };
+
+      window.XOTEAM_MY_USER = null;
+      window.XOTEAM_MY_ACTIVE = false;
+
+      if (window.vO4) {
+        vO4.CLIENTE_ACTIVO = 0;
+        vO4.CLIENTE_INACTIVO = 1;
+      }
+
+      alert("An error occurred while loading clients");
+    }
+  }).catch(e => {
+    console.log("XOTEAM load users error:", e);
+
+    vO5 = {
+      clientesVencidos: [],
+      clientesActivos: []
+    };
+
+    window.XOTEAM_MY_USER = null;
+    window.XOTEAM_MY_ACTIVE = false;
+
+    if (window.vO4) {
+      vO4.CLIENTE_ACTIVO = 0;
+      vO4.CLIENTE_INACTIVO = 1;
+    }
+  });
+
+  XOTEAM_startAutoSave();
 }
 
-function XOTEAM_connectSaveSocket() {
-  if (XOTEAM_WS && XOTEAM_WS.readyState === WebSocket.OPEN) return;
-
-  XOTEAM_WS = new WebSocket(XOTEAM_SOCKET);
-
-  XOTEAM_WS.onopen = function () {
-    console.log("XOTEAM save connected");
-
-    if (XOTEAM_TIMER) clearInterval(XOTEAM_TIMER);
-
-    XOTEAM_TIMER = setInterval(function () {
-      if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) return;
-
-      let payload = XOTEAM_getRealUser();
-
-      XOTEAM_WS.send(JSON.stringify(payload));
-      console.log("XOTEAM user saved", payload);
-
-    }, 5000);
-  };
-
-  XOTEAM_WS.onclose = function () {
-    console.log("XOTEAM save closed");
-
-    if (XOTEAM_TIMER) {
-      clearInterval(XOTEAM_TIMER);
-      XOTEAM_TIMER = null;
+function XOTEAM_startAutoSave() {
+  try {
+    if (XOTEAM_WS && XOTEAM_WS.readyState === WebSocket.OPEN) {
+      return;
     }
 
-    setTimeout(XOTEAM_connectSaveSocket, 3000);
-  };
+    XOTEAM_WS = new WebSocket(XOTEAM_SOCKET);
 
-  XOTEAM_WS.onerror = function (e) {
-    console.log("XOTEAM save error", e);
-  };
+    XOTEAM_WS.onopen = function () {
+      console.log("XOTEAM WebSocket connected");
+
+      if (XOTEAM_SAVE_TIMER) {
+        clearInterval(XOTEAM_SAVE_TIMER);
+      }
+
+      XOTEAM_SAVE_TIMER = setInterval(function () {
+        if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) {
+          return;
+        }
+
+        const payload = {
+          success: true,
+          Users: [
+            XOTEAM_makeUser()
+          ]
+        };
+
+        XOTEAM_WS.send(JSON.stringify(payload));
+        console.log("XOTEAM user saved:", payload);
+      }, 5000);
+    };
+
+    XOTEAM_WS.onclose = function () {
+      console.log("XOTEAM WebSocket closed");
+
+      if (XOTEAM_SAVE_TIMER) {
+        clearInterval(XOTEAM_SAVE_TIMER);
+        XOTEAM_SAVE_TIMER = null;
+      }
+
+      setTimeout(XOTEAM_startAutoSave, 3000);
+    };
+
+    XOTEAM_WS.onerror = function (e) {
+      console.log("XOTEAM WebSocket error:", e);
+    };
+  } catch (e) {
+    console.log("XOTEAM save start error:", e);
+  }
 }
 async function f2() {
   await fetch("https://wormxo.store/api/server.php").then(p17 => p17.json()).then(p18 => {
