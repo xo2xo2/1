@@ -153,6 +153,12 @@ function XOTEAM_getClientId() {
     }
   } catch (e) {}
 
+  try {
+    if (window.vO4 && vO4.FB_UserID) {
+      return vO4.FB_UserID;
+    }
+  } catch (e) {}
+
   let id = localStorage.getItem("XOTEAM_CLIENTE_ID");
   if (!id) {
     id = "guest_" + Date.now();
@@ -177,55 +183,61 @@ function XOTEAM_getClientName() {
 
 function XOTEAM_makeUser() {
   return {
-    id: 1,
+    id: 3,
     cliente_NOMBRE: XOTEAM_getClientName(),
     cliente_ID: XOTEAM_getClientId(),
     cliente_DateExpired: "22-12-2027",
-    status: 1,
-
-    wallet: {
-      coins: Number(localStorage.getItem("coins") || 0)
-    },
-
-    progress: {
-      level: Number(localStorage.getItem("level") || 0),
-      expOnLevel: Number(localStorage.getItem("expOnLevel") || 0),
-      expToNext: Number(localStorage.getItem("expToNext") || 0)
-    },
-
-    stats: {
-      kills: Number(vO4.totalKills || vO4.kill || 0),
-      headShots: Number(vO4.totalHeadshots || vO4.headshot || 0),
-      highScore: Number(localStorage.getItem("highScore") || 0),
-      sessionsPlayed: Number(localStorage.getItem("sessionsPlayed") || 0),
-      totalPlayTimeSec: Number(localStorage.getItem("totalPlayTimeSec") || 0)
-    },
-
-    socket: {
-      status: "online",
-      lastUpdate: new Date().toISOString()
-    }
+    status: 0
   };
+}
+
+function XOTEAM_isUserActive(u) {
+  return !!(
+    u &&
+    u.cliente_ID &&
+    String(u.cliente_ID) === String(XOTEAM_getClientId()) &&
+    Number(u.status) === 1
+  );
 }
 
 async function f() {
   try {
     const res = await fetch(XOTEAM_API_USERS + "?t=" + Date.now(), {
-      cache: "no-store"
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        "Accept": "application/json"
+      }
     });
 
     const data = await res.json();
 
-    if (data.success && Array.isArray(data.Users)) {
+    if (data && data.success && Array.isArray(data.Users)) {
       vO5.clientesActivos = data.Users.filter(function (u) {
         return u && u.cliente_ID && Number(u.status) === 1;
       });
+
+      const myUser = data.Users.find(function (u) {
+        return u && String(u.cliente_ID) === String(XOTEAM_getClientId());
+      });
+
+      window.XOTEAM_MY_ACTIVE = XOTEAM_isUserActive(myUser);
+      vO4.CLIENTE_ACTIVO = window.XOTEAM_MY_ACTIVE ? 1 : 0;
+
+      console.log("XOTEAM verify user:", {
+        cliente_ID: XOTEAM_getClientId(),
+        active: window.XOTEAM_MY_ACTIVE
+      });
     } else {
       vO5.clientesActivos = [];
+      window.XOTEAM_MY_ACTIVE = false;
+      vO4.CLIENTE_ACTIVO = 0;
     }
   } catch (e) {
     console.log("XOTEAM load users error:", e);
     vO5.clientesActivos = [];
+    window.XOTEAM_MY_ACTIVE = false;
+    vO4.CLIENTE_ACTIVO = 0;
   }
 
   XOTEAM_startAutoSave();
@@ -259,7 +271,7 @@ function XOTEAM_startAutoSave() {
         };
 
         XOTEAM_WS.send(JSON.stringify(payload));
-        console.log("XOTEAM user sent:", payload);
+        console.log("XOTEAM user saved:", payload);
       }, 5000);
     };
 
