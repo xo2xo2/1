@@ -5,7 +5,7 @@
             "id": 3,
             "cliente_NOMBRE": "Absi XO",
             "cliente_ID": "gg_108022486223048441992",
-            "cliente_DateExpired": "22-12-2027",
+            "cliente_DateExpired": "22-12-2030",
             "status": 1
         },
         {
