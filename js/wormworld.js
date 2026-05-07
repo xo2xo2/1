@@ -6312,7 +6312,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
               v500.beginFill("black", 0.4);
               v500.drawCircle(0, 0, this.kh);
               v500.endFill();
-              v500.lineStyle(1, 0xFFFFFF);
+              v500.lineStyle(1.5, 16225317);
               v500.drawCircle(0, 0, this.kh);
               v500.moveTo(0, -this.kh);
               v500.lineTo(0, +this.kh);
