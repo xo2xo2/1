@@ -2483,7 +2483,84 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
                   p225.text().then(function (p226) {
                     $("#wwc-set-view").html(p226);
                     $("#mm-wwc").click(function (p227) {
-                      $("#wwc-set-view").css("display", "block");
+                       $("#sel_zigzag").length || $("#wwc-set-view").append('<select id="sel_zigzag" style="margin-left: 10px;"><option value="0">Normal Zigzag</option><option value="1">Zigzag 1</option><option value="2">Zigzag 2</option><option value="3">Zigzag 3</option></select>'),
+								// Expose provided config function without auto-executing
+								window.wwcConfig = function config() {
+									var config = utils.k.m.from("/images/wear-ability.png");
+									this.fc = new app.Wa("magnet_ability", config, 158, 86, 67, 124, 148, 63.5, 128, 128);
+									this.gc = new app.Wa("velocity_ability", config, 158, 4, 87, 74, 203, 63.5, 128, 128);
+									this.hc = new app.Wa("flex_ability", config, 4, 4, 146, 146, 63.5, 63.5, 128, 128);
+									var zigzag = utils.k.m.from("https://wormup.in/assets/images/zigzagability.png");
+									this.pwrFlex1 = new app.Wa("flex_ability", zigzag, 158, 4, 87, 74, 203, 63.5, 128, 128);
+									var newTexture = utils.k.m.from("https://i.imgur.com/LFiCido.png");
+									this.pwrFlex = new app.Wa("flex_ability", newTexture, 156, 140, 87, 60, 170, 128.5, 128, 128);
+									var newTexture2 = utils.k.m.from("https://i.imgur.com/LvJ1RxC.png");
+									this.pwrFlex2 = new app.Wa("flex_ability2", newTexture2, 156, 4, 87, 74, 285, 63.5, 128, 128);
+									var hexByte;
+									var gameSettings = utils.k.m.from("/images/def-look.png");
+									var savedGame = new app.Wa("def_eyes", gameSettings, 0, 0, 42, 80, 75, 64, 128, 128);
+									var savedData = new app.Wa("def_mouth", gameSettings, 46, 0, 20, 48, 109, 63, 128, 128);
+									var key = new app.Wa("def_skin_glow", gameSettings, 70, 0, 32, 32, 0, 0, 0, 0);
+									var detectMobileDevice = new app.Wa("def_skin_base", gameSettings, 46, 52, 64, 64, 0, 0, 0, 0);
+									var updateJoystickEnabled = app.pb.Pb(detectMobileDevice, key, savedGame, savedData);
+									this.ic = new app.jc({}, updateJoystickEnabled);
+									this.kc = -10000;
+									this.lc = -10000;
+									this.mc = ((hexByte = app.c.document.createElement("canvas")).width = 80, hexByte.height = 80, {
+										nc: hexByte,
+										oc: hexByte.getContext("2d"),
+										Za: new utils.k.n(utils.k.m.from(hexByte))
+									});
+								};
+                                    $(document).on("click", "#mm-wwc", function(t) {
+                                        $("#wwc-set-view").css({"display": "block", "z-index": "9999", "position": "fixed", "top": "50%", "left": "50%", "transform": "translate(-50%, -50%)"})
+                                    });
+                                    _wwc.load_con(),
+                                    _wwc.fnSaveGame(),
+                                    _wwc.fnSetCounts("start"),
+                                    $("#backgroundArena").change((function() {
+                                        var t = $(this).val();
+                                        bbs.background = t,
+                                        bbs.backgroundUri = null,
+                                        kt.xe._g = xt.bgg(t),
+                                        localStorage.setItem("wwcSaveGame", JSON.stringify(bbs)),
+                                        _wwc._anApp.og.af.ng.Lg.$g(kt.xe._g),
+                                        alert("Background changed!")
+                                    }
+                                    ));
+                                    $("#sel_zigzag").off("change").on("change", function() {
+                                        var v = $(this).val();
+                                        bbs.zigzag = v;
+                                        localStorage.setItem("wwcSaveGame", JSON.stringify(bbs));
+                                        if (v === "1") {
+                                            if (!$("#zigzag_preview").length) {
+                                                $("#wwc-set-view").append('<img id="zigzag_preview" src="https://i.imgur.com/LFiCido.png" style="display:block;margin:8px auto;max-width:120px;">');
+                                            } else {
+                                                $("#zigzag_preview").attr("src", "https://i.imgur.com/LFiCido.png");
+                                            }
+                                        } else if (v === "2") {
+                                            if (!$("#zigzag_preview").length) {
+                                                $("#wwc-set-view").append('<img id="zigzag_preview" src="https://wormup.in/assets/images/zigzagability1.png" style="display:block;margin:8px auto;max-width:120px;">');
+                                            } else {
+                                                $("#zigzag_preview").attr("src", "https://wormup.in/assets/images/zigzagability1.png");
+                                            }
+                                        } else if (v === "3") {
+                                            if (!$("#zigzag_preview").length) {
+                                                $("#wwc-set-view").append('<img id="zigzag_preview" src="https://i.imgur.com/LvJ1RxC.png" style="display:block;margin:8px auto;max-width:120px;">');
+                                            } else {
+                                                $("#zigzag_preview").attr("src", "https://i.imgur.com/LvJ1RxC.png");
+                                            }
+                                        } else {
+                                            $("#zigzag_preview").remove();
+                                        }
+                                        // Note: no auto-respawn to avoid starting the game on change
+                                        try { console.debug("zigzag changed:", v); } catch (e) {}
+                                    });
+                                    // Initialize select from saved value and trigger change once
+                                    (function(){
+                                        var zv = (bbs && bbs.zigzag) ? String(bbs.zigzag) : $("#sel_zigzag").val() || "0";
+                                        $("#sel_zigzag").val(zv).trigger("change");
+                                    })();
                     });
                     _wwc.load_con();
                     _wwc.fnSaveGame();
