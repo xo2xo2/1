@@ -3,7 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Wormxo - Connect</title>
+<title>WormXO - Connect | تجربة لعب أفضل</title>
+
+<!-- إضافة صورة الموقع للتبويب (favicon) وللبحث / مشاركة السوشيال ميديا -->
+<link rel="icon" type="image/png" href="https://wormxo.store/image/wxo.png">
+<link rel="apple-touch-icon" href="https://wormxo.store/image/wxo.png">
+<meta property="og:title" content="WormXO - Connect | تجربة لعب أفضل">
+<meta property="og:description" content="أفضل إضافة للعبة wormate.io - سكنات حصرية وأدوات تسريع وتحكم، اتصال فائق الثبات ومجاني بالكامل.">
+<meta property="og:image" content="https://wormxo.store/image/wxo.png">
+<meta name="keywords"
+ content="wormxo, wormxo.io, WormXO, wormmate.io,WormXO Connect, snake game, worm game, mmo, multiplayer, online game" />
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://wormxo.store">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wormxo.store/image/wxo.png">
 
 <style>
   * {
@@ -80,7 +95,6 @@
     color: white;
   }
 
-  /* زر الترجمة */
   .lang-btn {
     background: #ff7a00;
     color: white;
@@ -125,6 +139,24 @@
 
   .title span {
     color: #222;
+  }
+
+  /* صورة الموقع المضافة */
+  .website-image {
+    margin: 25px auto 20px;
+    text-align: center;
+  }
+  .website-image img {
+    max-width: 280px;
+    width: 80%;
+    border-radius: 32px;
+    box-shadow: 0 20px 30px rgba(0,0,0,0.15);
+    border: 3px solid #ff9900;
+    background: white;
+    transition: transform 0.2s;
+  }
+  .website-image img:hover {
+    transform: scale(1.02);
   }
 
   .badge {
@@ -234,6 +266,9 @@
       width: 100%;
       text-align: center;
     }
+    .website-image img {
+      max-width: 200px;
+    }
   }
 </style>
 </head>
@@ -242,8 +277,8 @@
 
 <header class="header">
   <div class="logo">
-    <img src="https://wormxo.store/image/wxo.png" alt="شعار WormXO Connect">
-    <h1>Worm<span>XO Connect</span></h1>
+    <img src="https://wormxo.store/image/wxo.png" alt="شعار WormXO - Connect">
+    <h1>WormXO - <span>Connect</span></h1>
   </div>
   <nav class="nav">
     <a href="#" id="home-link">الرئيسية</a>
@@ -257,7 +292,13 @@
 <section class="hero">
   <div class="card">
     <div class="badge" id="badge-text">⚡ أقوى إضافة لـ wormate.io ⚡</div>
-    <h1 class="title">Worm<span>XO Connect</span></h1>
+    <h1 class="title">WormXO - <span>Connect</span></h1>
+    
+    <!-- صورة الموقع المطلوبة -->
+    <div class="website-image">
+      <img src="https://wormxo.store/image/wxo.png" alt="WormXO Connect - تجربة لعب أفضل">
+    </div>
+
     <p class="sub" id="sub-text">✨ إضافة WormXO تتيح لك أدوات للعبة wormate.io لتحسين جودة اللعب وهناك بعض المميزات ✨</p>
 
     <div class="buttons">
@@ -291,11 +332,11 @@
 </section>
 
 <footer class="footer">
-  <span id="footer-text">© 2026 <strong style="color:#ff7a00">WormXO Connect</strong> — كل الحقوق محفوظة.<br>🚀 أضفنا مميزات خرافية لعبة wormate.io – جربها وادعيلي</span>
+  <span id="footer-text">© 2026 <strong style="color:#ff7a00">WormXO - Connect</strong> — كل الحقوق محفوظة.<br>🚀 أضفنا مميزات خرافية لعبة wormate.io – جربها وادعيلي</span>
 </footer>
 
 <script>
-  // تعريف النصوص للغتين
+  // التعريفات للغتين
   const translations = {
     ar: {
       home: "الرئيسية",
@@ -316,7 +357,7 @@
       feature4Desc: "كمبيوتر – لاب توب – جوال – تابلت. الكل يقدر يستخدم الإضافة بسهولة.",
       feature5Title: "🎁 مجاني + تحديثات للأبد",
       feature5Desc: "الإضافة مجانية 100% واحنا بنطورها باستمرار عشان تفضل أحسن واحدة.",
-      footer: "© 2026 <strong style='color:#ff7a00'>WormXO Connect</strong> — كل الحقوق محفوظة.<br>🚀 أضفنا مميزات خرافية لعبة wormate.io – جربها وادعيلي"
+      footer: "© 2026 <strong style='color:#ff7a00'>WormXO - Connect</strong> — كل الحقوق محفوظة.<br>🚀 أضفنا مميزات خرافية لعبة wormate.io – جربها وادعيلي"
     },
     en: {
       home: "Home",
@@ -337,28 +378,24 @@
       feature4Desc: "PC – Laptop – Mobile – Tablet. Everyone can use the addon easily.",
       feature5Title: "🎁 Free + Lifetime Updates",
       feature5Desc: "100% free addon and we constantly update it to keep it the best.",
-      footer: "© 2026 <strong style='color:#ff7a00'>WormXO Connect</strong> — All Rights Reserved.<br>🚀 We added amazing features for wormate.io – try it and thank me later"
+      footer: "© 2026 <strong style='color:#ff7a00'>WormXO - Connect</strong> — All Rights Reserved.<br>🚀 We added amazing features for wormate.io – try it and thank me later"
     }
   };
 
-  let currentLang = "ar"; // اللغة الافتراضية
+  let currentLang = "ar";
 
   function setLanguage(lang) {
     currentLang = lang;
     const t = translations[lang];
 
-    // تحديث روابط الناف بار
     document.getElementById("home-link").innerText = t.home;
     document.getElementById("skins-link").innerText = t.skinsNav;
     document.getElementById("download-link").innerText = t.downloadNav;
     document.getElementById("discord-link").innerText = t.discordNav;
-
-    // تحديث باقي العناصر
     document.getElementById("badge-text").innerText = t.badge;
     document.getElementById("sub-text").innerText = t.sub;
     document.getElementById("download-btn-text").innerText = t.downloadBtn;
     document.getElementById("skins-btn-text").innerText = t.skinsBtn;
-
     document.getElementById("feature1-title").innerText = t.feature1Title;
     document.getElementById("feature1-desc").innerText = t.feature1Desc;
     document.getElementById("feature2-title").innerText = t.feature2Title;
@@ -369,15 +406,12 @@
     document.getElementById("feature4-desc").innerText = t.feature4Desc;
     document.getElementById("feature5-title").innerText = t.feature5Title;
     document.getElementById("feature5-desc").innerText = t.feature5Desc;
-
     document.getElementById("footer-text").innerHTML = t.footer;
 
-    // تغيير اتجاه الصفحة إذا كانت انجليزية إلى اليسار
     if (lang === "en") {
       document.documentElement.setAttribute("dir", "ltr");
       document.documentElement.setAttribute("lang", "en");
       document.querySelector(".features").style.textAlign = "left";
-      // عكس border-right إلى border-left للميزات
       document.querySelectorAll(".feature-card").forEach(card => {
         card.style.borderRight = "none";
         card.style.borderLeft = "5px solid #ff7a00";
@@ -392,7 +426,6 @@
       });
     }
 
-    // تغيير نص الزر
     const btn = document.getElementById("translate-btn");
     if (lang === "ar") {
       btn.innerHTML = "🇬🇧 English";
@@ -400,11 +433,9 @@
       btn.innerHTML = "🇸🇦 العربية";
     }
 
-    // حفظ اللغة في localStorage
     localStorage.setItem("wormxo_lang", lang);
   }
 
-  // تبديل اللغة
   function toggleLanguage() {
     if (currentLang === "ar") {
       setLanguage("en");
@@ -413,15 +444,13 @@
     }
   }
 
-  // استرجاع اللغة المحفوظة
   const savedLang = localStorage.getItem("wormxo_lang");
   if (savedLang && (savedLang === "ar" || savedLang === "en")) {
     setLanguage(savedLang);
   } else {
-    setLanguage("ar"); // العربية افتراضياً
+    setLanguage("ar");
   }
 
-  // ربط الزر
   document.getElementById("translate-btn").addEventListener("click", toggleLanguage);
 </script>
 
