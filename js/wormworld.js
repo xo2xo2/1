@@ -11746,7 +11746,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
   `);
       $(".mm-merchant-cont").css("top", "-10px");
     }, 4500);
-    $(".description-text").css("height", "300px");
+    $(".description-text").css("height", "270px");
     $("#stretch-box").append("\n<div class=\"news-box-wormworld\" style=\"display:none\">\n  <div class=\"news-content\">\n    <!-- Content will be dynamically loaded here -->\n  </div>\n  <div class=\"news-button\">\n    <input type=\"checkbox\" id=\"news-checkbox\" style=\"cursor: pointer;\">\n    <label for=\"news-checkbox\" style=\"font-size: 12px; color: #555; cursor: pointer;\">\n      Do not show again\n    </label>\n    <button id=\"close-news-button\" class=\"close-button\">\n      Close\n    </button>\n  </div>\n</div>\n");
     var vLS001f3f = "#001f3f";
     var v_0x50a0ac = function f222(p1093) {
