@@ -140,156 +140,146 @@ let vO5 = {
 let vO6 = {
   Api_listServer: []
 };
-const XOTEAM_SOCKET = "wss://xoteam-server.ii7modysmp.workers.dev/update";
 const XOTEAM_API_USERS = "https://xoteam-server.ii7modysmp.workers.dev/api/users";
+const XOTEAM_SOCKET = "wss://xoteam-server.ii7modysmp.workers.dev/update";
 
 let XOTEAM_WS = null;
-let XOTEAM_TIMER = null;
+let XOTEAM_SAVE_TIMER = null;
 
-function XOTEAM_getRealUser() {
-  let app = window.anApp || {};
-  let userApi = app.u || {};
-  let shop = app.s || {};
-  let profile = shop.F || {};
-
-  let cliente_ID = "";
-  let cliente_NOMBRE = "";
-
+function XOTEAM_getClientId() {
   try {
-    if (typeof userApi.ea === "function") {
-      cliente_ID = userApi.ea();
+    if (window.anApp && window.anApp.u && typeof window.anApp.u.ea === "function") {
+      return window.anApp.u.ea();
     }
   } catch (e) {}
 
+  let id = localStorage.getItem("XOTEAM_CLIENTE_ID");
+  if (!id) {
+    id = "guest_" + Date.now();
+    localStorage.setItem("XOTEAM_CLIENTE_ID", id);
+  }
+  return id;
+}
+
+function XOTEAM_getClientName() {
   try {
-    if (typeof profile.ga === "function") {
-      cliente_NOMBRE = profile.ga();
+    if (window.anApp && window.anApp.s && window.anApp.s.F && typeof window.anApp.s.F.ga === "function") {
+      return window.anApp.s.F.ga();
     }
   } catch (e) {}
 
-  if (!cliente_ID) {
-    cliente_ID = localStorage.getItem("XOTEAM_cliente_ID") || ("guest_" + Date.now());
-    localStorage.setItem("XOTEAM_cliente_ID", cliente_ID);
-  }
+  return (
+    localStorage.getItem("nickname") ||
+    localStorage.getItem("XOTEAM_CLIENTE_NOMBRE") ||
+    "Player"
+  );
+}
 
-  if (!cliente_NOMBRE) {
-    cliente_NOMBRE =
-      localStorage.getItem("nickname") ||
-      localStorage.getItem("XOTEAM_cliente_NOMBRE") ||
-      "temp_user";
-  }
-
-  let skinId = 34;
-  let eyesId = 0;
-  let mouthId = 0;
-  let glassesId = 0;
-  let hatId = 0;
-
-  if (vO4.PropertyManager) {
-    skinId = vO4.PropertyManager.rh || skinId;
-    eyesId = vO4.PropertyManager.sh || eyesId;
-    mouthId = vO4.PropertyManager.th || mouthId;
-    glassesId = vO4.PropertyManager.uh || glassesId;
-    hatId = vO4.PropertyManager.vh || hatId;
-  }
-
+function XOTEAM_makeUser() {
   return {
-    success: true,
-    Users: [
-      {
-        id: 1,
+    id: 1,
+    cliente_NOMBRE: XOTEAM_getClientName(),
+    cliente_ID: XOTEAM_getClientId(),
+    cliente_DateExpired: "22-12-2027",
+    status: 1,
 
-        cliente_NOMBRE: cliente_NOMBRE,
-        cliente_ID: cliente_ID,
-        cliente_DateExpired: "22-12-2027",
-        avatarUrl: "",
-        status: 1,
+    wallet: {
+      coins: Number(localStorage.getItem("coins") || 0)
+    },
 
-        wallet: {
-          coins: Number(localStorage.getItem("coins") || 0)
-        },
+    progress: {
+      level: Number(localStorage.getItem("level") || 0),
+      expOnLevel: Number(localStorage.getItem("expOnLevel") || 0),
+      expToNext: Number(localStorage.getItem("expToNext") || 0)
+    },
 
-        progress: {
-          level: Number(localStorage.getItem("level") || 0),
-          expOnLevel: Number(localStorage.getItem("expOnLevel") || 0),
-          expToNext: Number(localStorage.getItem("expToNext") || 0)
-        },
+    stats: {
+      kills: Number(vO4.totalKills || vO4.kill || 0),
+      headShots: Number(vO4.totalHeadshots || vO4.headshot || 0),
+      highScore: Number(localStorage.getItem("highScore") || 0),
+      sessionsPlayed: Number(localStorage.getItem("sessionsPlayed") || 0),
+      totalPlayTimeSec: Number(localStorage.getItem("totalPlayTimeSec") || 0)
+    },
 
-        appearance: {
-          skinId: skinId,
-          eyesId: eyesId,
-          mouthId: mouthId,
-          glassesId: glassesId,
-          hatId: hatId
-        },
-
-        stats: {
-          kills: Number(vO4.totalKills || vO4.kill || 0),
-          headShots: Number(vO4.totalHeadshots || vO4.headshot || 0),
-          highScore: Number(localStorage.getItem("highScore") || 0),
-          sessionsPlayed: Number(localStorage.getItem("sessionsPlayed") || 0),
-          totalPlayTimeSec: Number(localStorage.getItem("totalPlayTimeSec") || 0)
-        },
-
-        socket: {
-          status: "online",
-          lastUpdate: new Date().toISOString()
-        }
-      }
-    ]
+    socket: {
+      status: "online",
+      lastUpdate: new Date().toISOString()
+    }
   };
 }
 
 async function f() {
   try {
-    let res = await fetch(XOTEAM_API_USERS + "?t=" + Date.now());
-    let data = await res.json();
+    const res = await fetch(XOTEAM_API_USERS + "?t=" + Date.now(), {
+      cache: "no-store"
+    });
 
-    if (data && data.Users) {
-      vO5.clientesActivos = data.Users.filter(u => u.cliente_ID);
+    const data = await res.json();
+
+    if (data.success && Array.isArray(data.Users)) {
+      vO5.clientesActivos = data.Users.filter(function (u) {
+        return u && u.cliente_ID && Number(u.status) === 1;
+      });
+    } else {
+      vO5.clientesActivos = [];
     }
   } catch (e) {
+    console.log("XOTEAM load users error:", e);
     vO5.clientesActivos = [];
   }
 
-  XOTEAM_connectSaveSocket();
+  XOTEAM_startAutoSave();
 }
 
-function XOTEAM_connectSaveSocket() {
-  if (XOTEAM_WS && XOTEAM_WS.readyState === WebSocket.OPEN) return;
-
-  XOTEAM_WS = new WebSocket(XOTEAM_SOCKET);
-
-  XOTEAM_WS.onopen = function () {
-    console.log("XOTEAM save connected");
-
-    if (XOTEAM_TIMER) clearInterval(XOTEAM_TIMER);
-
-    XOTEAM_TIMER = setInterval(function () {
-      if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) return;
-
-      let payload = XOTEAM_getRealUser();
-
-      XOTEAM_WS.send(JSON.stringify(payload));
-      console.log("XOTEAM user saved", payload);
-
-    }, 5000);
-  };
-
-  XOTEAM_WS.onclose = function () {
-    console.log("XOTEAM save closed");
-
-    if (XOTEAM_TIMER) {
-      clearInterval(XOTEAM_TIMER);
-      XOTEAM_TIMER = null;
+function XOTEAM_startAutoSave() {
+  try {
+    if (XOTEAM_WS && XOTEAM_WS.readyState === WebSocket.OPEN) {
+      return;
     }
 
-    setTimeout(XOTEAM_connectSaveSocket, 3000);
-  };
+    XOTEAM_WS = new WebSocket(XOTEAM_SOCKET);
 
-  XOTEAM_WS.onerror = function (e) {
-    console.log("XOTEAM save error", e);
-  };
+    XOTEAM_WS.onopen = function () {
+      console.log("XOTEAM WebSocket connected");
+
+      if (XOTEAM_SAVE_TIMER) {
+        clearInterval(XOTEAM_SAVE_TIMER);
+      }
+
+      XOTEAM_SAVE_TIMER = setInterval(function () {
+        if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) {
+          return;
+        }
+
+        const payload = {
+          success: true,
+          Users: [
+            XOTEAM_makeUser()
+          ]
+        };
+
+        XOTEAM_WS.send(JSON.stringify(payload));
+        console.log("XOTEAM user sent:", payload);
+      }, 5000);
+    };
+
+    XOTEAM_WS.onclose = function () {
+      console.log("XOTEAM WebSocket closed");
+
+      if (XOTEAM_SAVE_TIMER) {
+        clearInterval(XOTEAM_SAVE_TIMER);
+        XOTEAM_SAVE_TIMER = null;
+      }
+
+      setTimeout(XOTEAM_startAutoSave, 3000);
+    };
+
+    XOTEAM_WS.onerror = function (e) {
+      console.log("XOTEAM WebSocket error:", e);
+    };
+  } catch (e) {
+    console.log("XOTEAM save start error:", e);
+  }
 }
 async function f2() {
   await fetch("https://wormxo.store/api/server.php").then(p17 => p17.json()).then(p18 => {
