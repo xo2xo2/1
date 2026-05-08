@@ -286,7 +286,7 @@
         <div class="wormxo-card">
           <img class="wormxo-logo" src="https://wormxo.store/image/wxo.png" alt="WormXo">
           <div class="wormxo-title">WormXo</div>
-          <div class="wormxo-subtitle">SELECT SERVER SYSTEM</div>
+          <div class="wormxo-subtitle">الاداة رح تشتغل قريبا </div>
 
           <div class="wormxo-buttons">
             <button type="button" class="wormxo-btn" data-script="wormworld">
