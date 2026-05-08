@@ -292,7 +292,7 @@
             <button type="button" class="wormxo-btn" data-script="wormworld">
               WORM WORLD
             </button>
-            <button type="button" class="wormxo-btn" data-script="timmap">
+            <button type="button" class="wormxo-btn" data-script="متوقف">
               TIM MAP
             </button>
           </div>
