@@ -4766,490 +4766,466 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
           }();
           return f129;
         }();
-        vO37._a = function () {
-          function f135() {
-            var v336 = vF4.BaseTexture.from("/images/wear-ability.png");
-            for (var v337 = 1; v337 < 10; v337++) {
-              this["vb" + v337] = new vO37.la("emoji_" + v337, v336, 4, 4, 146, 146, 63.5, 63.5, 128, 128);
+        n._a = function () {
+          function t() {
+            
+            for (var t = _.BaseTexture.from("/images/wear-ability.png"), e = 1; e < 10; e++) {
+              this["vb" + e] = new vO37.la("emoji_" + e, t, 4, 4, 146, 146, 63.5, 63.5, 128, 128);
             }
-            this.wb = new vO37.la("magnet_ability", v336, 158, 86, 67, 124, 148, 63.5, 128, 128);
-            this.xb = new vO37.la("velocity_ability", v336, 158, 4, 87, 74, 203, 63.5, 128, 128);
-            this.yb = new vO37.la("flex_ability", v336, 4, 4, 146, 146, 63.5, 63.5, 128, 128);
-            var v337 = vF4.BaseTexture.from("/images/def-look.png");
-            var v338 = new vO37.la("def_eyes", v337, 0, 0, 42, 80, 75, 64, 128, 128);
-            var v339 = new vO37.la("def_mouth", v337, 46, 0, 20, 48, 109, 63, 128, 128);
-            var v340 = new vO37.la("def_skin_glow", v337, 70, 0, 32, 32, 0, 0, 0, 0);
-            var v341 = new vO37.la("def_skin_base", v337, 46, 52, 64, 64, 0, 0, 0, 0);
-            var v342 = vO37.Ga.eb(v341, v340, v338, v339);
-            _wwc.mySkin = v342;
-            this.zb = new vO37.Ab({}, v342);
-            this.Bb = -10000;
-            this.Cb = -10000;
-            this.Db = function () {
-              var v343 = window.document.createElement("canvas");
-              v343.width = 80;
-              v343.height = 80;
-              return {
-                Eb: v343,
-                Fb: v343.getContext("2d"),
-                oa: new vF4.Texture(vF4.BaseTexture.from(v343))
-              };
-            }();
-            this.Gb = null;
-            this.Hb = [];
-          }
-          f135.$a = vO37.la.Ca();
-          f135.prototype.ha = function () {};
-          f135.prototype.Ib = function (p506, p507, p508) {
-            var vThis42 = this;
-            var v344 = this.zb.Jb();
-            if (v344 > 0 && Date.now() - this.Bb < 1200000) {
-              if (p506 != null) {
-                p506();
-              }
-              return;
-            }
-            if (this.Gb != null && !this.Gb.Kb()) {
-              if (Date.now() - this.Bb < 300000) {
-                if (p506 != null) {
-                  p506();
-                }
-                return;
-              }
-              this.Gb.Lb();
-              this.Gb = null;
-            }
-            var v345 = new vO37.Mb(v344);
-            v345.Nb(function (p509, p510) {
-              if (v345 === vThis42.Gb && p508 != null) {
-                p508(p509, p510);
-              }
-            });
-            v345.Ob(function (p511) {
-              if (v345 === vThis42.Gb && p507 != null) {
-                p507(p511);
-              }
-            });
-            v345.Pb(function () {
-              if (v345 === vThis42.Gb && p507 != null) {
-                p507(new Error());
-              }
-            });
-            v345.Qb(function () {
-              if (v345 === vThis42.Gb && p506 != null) {
-                p506();
-              }
-            });
-            v345.Rb(function (p512) {
-              if (v345 === vThis42.Gb) {
-                vThis42.Cb = Date.now();
-                vThis42.Gb = null;
-                vThis42.Sb();
-                vThis42.zb.Ub().Fa();
-                vThis42.zb = p512;
-                if (p506 != null) {
-                  p506();
-                }
-                vThis42.Tb();
-                return;
-              }
-              try {
-                p512.Ub().Fa();
-              } catch (e30) {}
-            });
-            v345.Vb();
-            this.Bb = Date.now();
-            this.Gb = v345;
-          };
-          f135.prototype.Sb = function () {};
-          f135.prototype.Wb = function () {
-            return this.zb.Jb() > 0;
-          };
-          f135.prototype.Xb = function () {
-            return this.zb.Yb();
-          };
-          f135.prototype.Zb = function () {
-            return this.Db;
-          };
-          f135.prototype.$b = function (p513) {
-            this.Hb.push(p513);
-          };
-          f135.prototype.Tb = function () {
-            for (var vLN036 = 0; vLN036 < this.Hb.length; vLN036++) {
-              this.Hb[vLN036]();
-            }
-          };
-          f135.prototype.Ub = function () {
-            return this.zb.Ub();
-          };
-          return f135;
-        }();
-        vO37._b = function () {
-          function f136(p514) {
-            this.ac = p514;
-          }
-          f136.prototype.bc = function (p515) {
-            return this.ac[p515];
-          };
-          f136.cc = function () {
-            function f137() {
-              this.dc = [];
-            }
-            f137.prototype.ec = function (p516, p517) {
-              for (var vLN037 = 0; vLN037 < this.dc.length; vLN037++) {
-                if (this.dc[vLN037].fc === p516) {
-                  throw new Error();
-                }
-              }
-              this.dc.push(new f136.gc(p516, p517));
-              return this;
-            };
-            f137.prototype.hc = function () {
-              var vLN038 = 0;
-              for (var vLN039 = 0; vLN039 < this.dc.length; vLN039++) {
-                vLN038 += this.dc[vLN039].ic;
-              }
-              var vO51 = {};
-              var vLN040 = 0;
-              for (var vLN041 = 0; vLN041 < this.dc.length; vLN041++) {
-                var v346 = this.dc[vLN041];
-                v346.ic = v346.ic / vLN038;
-                v346.jc = vLN040;
-                v346.kc = vLN040 + v346.ic;
-                vLN040 = v346.kc;
-                vO51[v346.fc] = v346;
-              }
-              return new f136(vO51);
-            };
-            return f137;
-          }();
-          f136.gc = function () {
-            function f138(p518, p519) {
-              this.fc = p518;
-              this.ic = p519;
-              this.jc = 0;
-              this.kc = 0;
-            }
-            f138.prototype.lc = function (p520) {
-              return this.jc + (this.kc - this.jc) * p520;
-            };
-            return f138;
-          }();
-          return f136;
-        }();
-        vO37.WormSpriteTree = function () {
-          function f139() {
-            this.nc = new vF4.Container();
-            this.nc.sortableChildren = true;
-            this.oc = new vF5();
-            this.oc.zIndex = vLN0001 * ((vLN797 + 1) * 2 + 1 + 3);
-            this.pc = 0;
-            this.qc = new Array(vLN797);
-            this.qc[0] = this.rc(0, new vO37.sc(), new vO37.sc());
-            for (var vLN16 = 1; vLN16 < vLN797; vLN16++) {
-              this.qc[vLN16] = this.rc(vLN16, new vO37.sc(), new vO37.sc());
-            }
-            this.tc = 0;
-            this.uc = 0;
-            this.vc = 0;
-          }
-          var vLN0001 = 0.001;
-          var vLN797 = 797;
-          var vLN314159 = 3.14159;
-          var v347 = -0.06640625;
-          var vLN084375 = 0.84375;
-          var vLN02578125 = 0.2578125;
-          var v348 = -0.03515625;
-          var v349 = -0.0625;
-          var vLN05625 = 0.5625;
-          var v350 = v347 * 3 + vLN084375;
-          var v351 = vLN02578125 - v347 * 3;
-          var v352 = v347 + v348;
-          var vLN0375 = 0.375;
-          var vLN075 = 0.75;
-          var v353 = v349 + v349;
-          var v354 = v348 * 3 + vLN02578125;
-          var v355 = vLN084375 - v348 * 3;
-          var v356 = v348 + v347;
-          f139.wc = vLN797;
-          f139.prototype.rc = function (p521, p522, p523) {
-            var v357 = new vF6(p522, p523);
-            p522.xc.zIndex = vLN0001 * ((vLN797 - p521) * 2 + 1 + 3);
-            p523.xc.zIndex = vLN0001 * ((vLN797 - p521) * 2 - 2 + 3);
-            return v357;
-          };
-          f139.prototype.yc = function (p524, p525, p526, p527, p528, p529, p530, p531) {
-            var v358 = p526.ub;
-            var v359 = p524 === vO37.Ac.zc ? p525.rb.vb : p526.vb;
-            if (v358.length > 0 && v359.length > 0) {
-              for (var vLN042 = 0; vLN042 < this.qc.length; vLN042++) {
-                this.qc[vLN042].Cc.Bc(v358[vLN042 % v358.length], vLN042 % v358.length, vLN042);
-                this.qc[vLN042].Dc.Bc(vLN042 == 0 && p526.vbb ? p526.vbb : v359[vLN042 % v359.length], vLN042 % v358.length, vLN042);
-                this.qc[vLN042].Cc.Ec(p531);
-                this.qc[vLN042].Dc.Ec(p531);
-              }
-            }
-            this.oc.yc(p527, p528, p529, p530);
-          };
-          var vF5 = function () {
-            var v360 = vO39.M(vF4.Container, function () {
-              vF4.Container.call(this);
-              this.sortableChildren = true;
-              this.Fc = [];
-              this.Gc = [];
-              this.Hc = [];
-              this.Ic = [];
-              this.Jc = new vF4.Container();
-              this.Kc = [];
-              this.message = new vF4.Container();
-              for (var vLN043 = 0; vLN043 < 4; vLN043++) {
-                var v361 = new vO37.sc();
-                v361.Bc(f121().Lc.wb);
-                this.Jc.addChild(v361.xc);
-                this.Kc.push(v361);
-              }
-              this.message.zIndex = 0.0012;
-              this.addChild(this.message);
-              this.VcUn();
-              this.Jc.zIndex = 0.0011;
-              this.addChild(this.Jc);
-              this.Mc();
-              this.Nc = new vO37.sc();
-              this.Nc.Bc(f121().Lc.xb);
-              this.Nc.xc.zIndex = 0.001;
-              this.addChild(this.Nc.xc);
-              this.Oc();
-            });
-            v360.prototype.yc = function (p532, p533, p534, p535) {
-              this.Pc(0.002, this.Fc, p532.ub);
-              this.Pc(0.003, this.Gc, p533.ub);
-              this.Pc(0.004, this.Ic, p535.ub);
-              this.Pc(0.005, this.Hc, p534.ub);
-            };
-            v360.prototype.Pc = function (p536, p537, p538) {
-              while (p538.length > p537.length) {
-                var v362 = new vO37.sc();
-                p537.push(v362);
-                this.addChild(v362.Qc());
-              }
-              while (p538.length < p537.length) {
-                p537.pop().Rc();
-              }
-              var vP536 = p536;
-              for (var vLN044 = 0; vLN044 < p538.length; vLN044++) {
-                vP536 += 0.0001;
-                var v363 = p537[vLN044];
-                v363.Bc(p538[vLN044]);
-                v363.xc.zIndex = vP536;
-              }
-            };
-            v360.prototype.Sc = function (p539, p540, p541, p542) {
-              this.visible = true;
-              this.position.set(p539, p540);
-              this.rotation = p542;
-              for (var vLN045 = 0; vLN045 < this.Fc.length; vLN045++) {
-                this.Fc[vLN045].Tc(p541);
-              }
-              for (var vLN046 = 0; vLN046 < this.Gc.length; vLN046++) {
-                this.Gc[vLN046].Tc(p541);
-              }
-              for (var vLN047 = 0; vLN047 < this.Hc.length; vLN047++) {
-                this.Hc[vLN047].Tc(p541);
-              }
-              for (var vLN048 = 0; vLN048 < this.Ic.length; vLN048++) {
-                this.Ic[vLN048].Tc(p541);
-              }
-            };
-            v360.prototype.Uc = function () {
-              this.visible = false;
-            };
-            v360.prototype.VcAc = function (p543, p544, p545, p546, p547) {
-              this.message.visible = true;
-              this.Mc2.Tc(p544);
-            };
-            v360.prototype.VcUn = function () {
-              this.message.visible = false;
-            };
-            v360.prototype.Vc = function (p548, p549, p550, p551) {
-              this.Jc.visible = true;
-              var v364 = p550 / 1000;
-              var v365 = 1 / this.Kc.length;
-              for (var vLN049 = 0; vLN049 < this.Kc.length; vLN049++) {
-                var v366 = 1 - (v364 + v365 * vLN049) % 1;
-                this.Kc[vLN049].xc.alpha = 1 - v366;
-                this.Kc[vLN049].Tc(p549 * (0.5 + v366 * 4.5));
-              }
-            };
-            v360.prototype.Mc = function () {
-              this.Jc.visible = false;
-            };
-            v360.prototype.Wc = function (p552, p553, p554, p555) {
-              this.Nc.xc.visible = true;
-              this.Nc.xc.alpha = vO39.Q(this.Nc.xc.alpha, p552.Xc ? 0.9 : 0.2, p555, 0.0025);
-              this.Nc.Tc(p553);
-            };
-            v360.prototype.WXX = function (p556, p557, p558, p559) {
-              this.Nc.xc.visible = true;
-              this.Nc.xc.alpha = vO39.Q(this.Nc.xc.alpha, p556.Xc ? 0.9 : 0.2, p559, 0.0025);
-              this.Nc.Tc(p557);
-            };
-            v360.prototype.Oc = function () {
-              this.Nc.xc.visible = false;
-            };
-            return v360;
-          }();
-          f139.prototype.Yc = function (p560) {
-            return this.uc + this.vc * Math.sin(p560 * vLN314159 - this.tc);
-          };
-          f139.prototype.Zc = function (p561, p562, p563, p564) {
-            var v367 = p561.$c * 2;
-            var v368 = p561._c;
-            var v369 = p561.ad;
-            var v370 = v369 * 4 - 3;
-            var vV370 = v370;
-            this.tc = p562 / 400 * Math.PI;
-            this.uc = v367 * 1.5;
-            this.vc = v367 * 0.15 * p561.bd;
-            var v371;
-            var v372;
-            var v373;
-            var v374;
-            var v375;
-            var v376;
-            var v377;
-            var v378;
-            v372 = v368[0];
-            v376 = v368[1];
-            if (p564(v372, v376)) {
-              v373 = v368[2];
-              v377 = v368[3];
-              v374 = v368[4];
-              v378 = v368[5];
-              var v379 = Math.atan2(v378 + v376 * 2 - v377 * 3, v374 + v372 * 2 - v373 * 3);
-              this.oc.Sc(v372, v376, v367, v379);
-              this.qc[0].Sc(v372, v376, v367, this.Yc(0), v379);
-              this.qc[1].Sc(v350 * v372 + v351 * v373 + v352 * v374, v350 * v376 + v351 * v377 + v352 * v378, v367, this.Yc(1), vF6.cd(this.qc[0], this.qc[2]));
-              this.qc[2].Sc(vLN0375 * v372 + vLN075 * v373 + v353 * v374, vLN0375 * v376 + vLN075 * v377 + v353 * v378, v367, this.Yc(2), vF6.cd(this.qc[1], this.qc[3]));
-              this.qc[3].Sc(v354 * v372 + v355 * v373 + v356 * v374, v354 * v376 + v355 * v377 + v356 * v378, v367, this.Yc(3), vF6.cd(this.qc[2], this.qc[4]));
-            } else {
-              this.oc.Uc();
-              this.qc[0].Uc();
-              this.qc[1].Uc();
-              this.qc[2].Uc();
-              this.qc[3].Uc();
-            }
-            var vLN4 = 4;
-            var vLN22 = 2;
-            var v380 = v369 * 2 - 4;
-            while (vLN22 < v380) {
-              v372 = v368[vLN22];
-              v376 = v368[vLN22 + 1];
-              if (p564(v372, v376)) {
-                v371 = v368[vLN22 - 2];
-                v375 = v368[vLN22 - 1];
-                v373 = v368[vLN22 + 2];
-                v377 = v368[vLN22 + 3];
-                v374 = v368[vLN22 + 4];
-                v378 = v368[vLN22 + 5];
-                this.qc[vLN4].Sc(v372, v376, v367, this.Yc(vLN4), vF6.cd(this.qc[vLN4 - 1], this.qc[vLN4 + 1]));
-                vLN4++;
-                this.qc[vLN4].Sc(v347 * v371 + vLN084375 * v372 + vLN02578125 * v373 + v348 * v374, v347 * v375 + vLN084375 * v376 + vLN02578125 * v377 + v348 * v378, v367, this.Yc(vLN4), vF6.cd(this.qc[vLN4 - 1], this.qc[vLN4 + 1]));
-                vLN4++;
-                this.qc[vLN4].Sc(v349 * v371 + vLN05625 * v372 + vLN05625 * v373 + v349 * v374, v349 * v375 + vLN05625 * v376 + vLN05625 * v377 + v349 * v378, v367, this.Yc(vLN4), vF6.cd(this.qc[vLN4 - 1], this.qc[vLN4 + 1]));
-                vLN4++;
-                this.qc[vLN4].Sc(v348 * v371 + vLN02578125 * v372 + vLN084375 * v373 + v347 * v374, v348 * v375 + vLN02578125 * v376 + vLN084375 * v377 + v347 * v378, v367, this.Yc(vLN4), vF6.cd(this.qc[vLN4 - 1], this.qc[vLN4 + 1]));
-                vLN4++;
-              } else {
-                this.qc[vLN4].Uc();
-                vLN4++;
-                this.qc[vLN4].Uc();
-                vLN4++;
-                this.qc[vLN4].Uc();
-                vLN4++;
-                this.qc[vLN4].Uc();
-                vLN4++;
-              }
-              vLN22 += 2;
-            }
-            v372 = v368[v369 * 2 - 4];
-            v376 = v368[v369 * 2 - 3];
-            if (p564(v372, v376)) {
-              v371 = v368[v369 * 2 - 6];
-              v375 = v368[v369 * 2 - 5];
-              v373 = v368[v369 * 2 - 2];
-              v377 = v368[v369 * 2 - 1];
-              this.qc[v370 - 5].Sc(v372, v376, v367, this.Yc(v370 - 5), vF6.cd(this.qc[v370 - 6], this.qc[v370 - 4]));
-              this.qc[v370 - 4].Sc(v356 * v371 + v355 * v372 + v354 * v373, v356 * v375 + v355 * v376 + v354 * v377, v367, this.Yc(v370 - 4), vF6.cd(this.qc[v370 - 5], this.qc[v370 - 3]));
-              this.qc[v370 - 3].Sc(v353 * v371 + vLN075 * v372 + vLN0375 * v373, v353 * v375 + vLN075 * v376 + vLN0375 * v377, v367, this.Yc(v370 - 3), vF6.cd(this.qc[v370 - 4], this.qc[v370 - 2]));
-              this.qc[v370 - 2].Sc(v352 * v371 + v351 * v372 + v350 * v373, v352 * v375 + v351 * v376 + v350 * v377, v367, this.Yc(v370 - 2), vF6.cd(this.qc[v370 - 3], this.qc[v370 - 1]));
-              this.qc[v370 - 1].Sc(v373, v377, v367, this.Yc(v370 - 1), vF6.cd(this.qc[v370 - 2], this.qc[v370 - 1]));
-            } else {
-              this.qc[v370 - 5].Uc();
-              this.qc[v370 - 4].Uc();
-              this.qc[v370 - 3].Uc();
-              this.qc[v370 - 2].Uc();
-              this.qc[v370 - 1].Uc();
-            }
-            if (this.pc === 0 && vV370 > 0) {
-              this.nc.addChild(this.oc);
-            }
-            if (this.pc > 0 && vV370 === 0) {
-              vO39.U(this.oc);
-            }
-            while (this.pc < vV370) {
-              this.nc.addChild(this.qc[this.pc].Cc.Qc());
-              this.nc.addChild(this.qc[this.pc].Dc.Qc());
-              this.pc += 1;
-            }
-            while (this.pc > vV370) {
-              this.pc -= 1;
-              this.qc[this.pc].Dc.Rc();
-              this.qc[this.pc].Cc.Rc();
-            }
-            var v381 = p561.dd[vO37.fd.ed];
-            if (this.qc[0].gd() && v381 && v381.hd) {
-              this.oc.Vc(p561, v367, p562, p563);
-            } else {
-              this.oc.Mc();
-            }
-            var v382 = p561.dd[vO37.fd.jd];
-            if (this.qc[0].gd() && v382 && v382.hd) {
-              this.oc.Wc(p561, v367, p562, p563);
-            } else {
-              this.oc.Oc();
-            }
-            movimentaLinha();
-          };
-          var vF6 = function () {
-            function f140(p565, p566) {
-              this.Cc = p565;
-              this.Cc.kd(false);
-              this.Dc = p566;
-              this.Dc.kd(false);
-              this.ev = null;
-            }
-            f140.prototype.Sc = function (p567, p568, p569, p570, p571) {
-              this.Cc.kd(true);
-              this.Cc.ld(p567, p568);
-              this.Cc.Tc(p569);
-              this.Cc.md(p571);
-              this.Dc.kd(true);
-              this.Dc.ld(p567, p568);
-              this.Dc.Tc(p570);
-              this.Dc.md(p571);
-            };
-            f140.prototype.Uc = function () {
-              this.Cc.kd(false);
-              this.Dc.kd(false);
-            };
-            f140.prototype.gd = function () {
-              return this.Cc.gd();
-            };
-            f140.cd = function (p572, p573) {
-              return Math.atan2(p572.Cc.xc.position.y - p573.Cc.xc.position.y, p572.Cc.xc.position.x - p573.Cc.xc.position.x);
-            };
-            return f140;
-          }();
+            this.wb = new n.la("magnet_ability", t, 158, 86, 67, 124, 148, 63.5, 128, 128);
+            this.xb = new n.la("velocity_ability", t, 158, 4, 87, 74, 203, 63.5, 128, 128);
+            this.yb = new n.la("flex_ability", t, 4, 4, 146, 146, 63.5, 63.5, 128, 128);
+            var zigzag = _.BaseTexture.from("https://wormup.in/assets/images/zigzagability.png");
+            var pwrFlex1 = new n.la("flex_ability", zigzag, 158,4,87,74,203,63.5,128,128);
+            var zigzag2 = _.BaseTexture.from("https://wormup.in/assets/images/zigzagability1.png");
+            var pwrFlex3 = new n.la("flex_ability3", zigzag2, 158,4,87,74,203,63.5,128,128);
+            var o = _.BaseTexture.from("https://i.imgur.com/LFiCido.png");
+            v
+            this.pwrFlex = new n.la("flex_ability",o,156,140,87,60,170,128.5,128,128);
+            var o2 = _.BaseTexture.from("https://i.imgur.com/LvJ1RxC.png");
+            this.pwrFlex2 = new n.la("flex_ability2",o2,156,4,87,74,285,63.5,128,128);
+            var i, r = new n.la("def_eyes",e,0,0,42,80,75,64,128,128), s = new n.la("def_mouth",e,46,0,20,48,109,63,128,128), a = new n.la("def_skin_glow",e,70,0,32,32,0,0,0,0), c = new n.la("def_skin_base",e,46,52,64,64,0,0,0,0), l = n.Ga.eb(c, a, r, s);
+
+            
+           _wwc.mySkin = l,
+                            this.zb = new n.Ab({},l),
+                            this.Bb = -1e4,
+                            this.Cb = -1e4,
+                            this.Db = ((i = window.document.createElement("canvas")).width = 80,
+                            i.height = 80,
+                            {
+                                Eb: i,
+                                Fb: i.getContext("2d"),
+                                oa: new _.Texture(_.BaseTexture.from(i))
+                            }),
+                            this.Gb = null,
+                            this.Hb = []
+                        }
+                        return t.$a = n.la.Ca(),
+                        t.prototype.ha = function() {}
+                        ,
+                        t.prototype.Ib = function(t, e, o) {
+                            var i = this
+                              , r = this.zb.Jb();
+                            if (r > 0 && Date.now() - this.Bb < 12e5)
+                                null != t && t();
+                            else {
+                                if (null != this.Gb && !this.Gb.Kb()) {
+                                    if (Date.now() - this.Bb < 3e5)
+                                        return void (null != t && t());
+                                    this.Gb.Lb(),
+                                    this.Gb = null
+                                }
+                                var s = new n.Mb(r);
+                                s.Nb((function(t, e) {
+                                    s === i.Gb && null != o && o(t, e)
+                                }
+                                )),
+                                s.Ob((function(t) {
+                                    s === i.Gb && null != e && e(t)
+                                }
+                                )),
+                                s.Pb((function() {
+                                    s === i.Gb && null != e && e(new Error)
+                                }
+                                )),
+                                s.Qb((function() {
+                                    s === i.Gb && null != t && t()
+                                }
+                                )),
+                                s.Rb((function(e) {
+                                    if (s === i.Gb)
+                                        return i.Cb = Date.now(),
+                                        i.Gb = null,
+                                        i.Sb(),
+                                        i.zb.Ub().Fa(),
+                                        i.zb = e,
+                                        null != t && t(),
+                                        void i.Tb();
+                                    try {
+                                        e.Ub().Fa()
+                                    } catch (t) {}
+                                }
+                                )),
+                                s.Vb(),
+                                this.Bb = Date.now(),
+                                this.Gb = s
+                            }
+                        }
+                        ,
+                        t.prototype.Sb = function() {}
+                        ,
+                        t.prototype.Wb = function() {
+                            return this.zb.Jb() > 0
+                        }
+                        ,
+                        t.prototype.Xb = function() {
+                            return this.zb.Yb()
+                        }
+                        ,
+                        t.prototype.Zb = function() {
+                            return this.Db
+                        }
+                        ,
+                        t.prototype.$b = function(t) {
+                            this.Hb.push(t)
+                        }
+                        ,
+                        t.prototype.Tb = function() {
+                            for (var t = 0; t < this.Hb.length; t++)
+                                this.Hb[t]()
+                        }
+                        ,
+                        t.prototype.Ub = function() {
+                            return this.zb.Ub()
+                        }
+                        ,
+                        t
+                    }(),
+                    n._b = function() {
+                        function t(t) {
+                            this.ac = t
+                        }
+                        return t.prototype.bc = function(t) {
+                            return this.ac[t]
+                        }
+                        ,
+                        t.cc = function() {
+                            function e() {
+                                this.dc = []
+                            }
+                            return e.prototype.ec = function(e, n) {
+                                for (var o = 0; o < this.dc.length; o++)
+                                    if (this.dc[o].fc === e)
+                                        throw new Error;
+                                return this.dc.push(new t.gc(e,n)),
+                                this
+                            }
+                            ,
+                            e.prototype.hc = function() {
+                                for (var e = 0, n = 0; n < this.dc.length; n++)
+                                    e += this.dc[n].ic;
+                                for (var o = {}, i = 0, r = 0; r < this.dc.length; r++) {
+                                    var s = this.dc[r];
+                                    s.ic = s.ic / e,
+                                    s.jc = i,
+                                    s.kc = i + s.ic,
+                                    i = s.kc,
+                                    o[s.fc] = s
+                                }
+                                return new t(o)
+                            }
+                            ,
+                            e
+                        }(),
+                        t.gc = function() {
+                            function t(t, e) {
+                                this.fc = t,
+                                this.ic = e,
+                                this.jc = 0,
+                                this.kc = 0
+                            }
+                            return t.prototype.lc = function(t) {
+                                return this.jc + (this.kc - this.jc) * t
+                            }
+                            ,
+                            t
+                        }(),
+                        t
+                    }(),
+                    n.WormSpriteTree = function() {
+                        function e() {
+                            this.nc = new _.Container,
+                            this.nc.sortableChildren = !0,
+                            this.oc = new x,
+                            this.oc.zIndex = o * (2 * (r + 1) + 1 + 3),
+                            this.pc = 0,
+                            this.qc = new Array(r),
+                            this.qc[0] = this.rc(0, new n.sc, new n.sc);
+                            for (var t = 1; t < r; t++)
+                                this.qc[t] = this.rc(t, new n.sc, new n.sc);
+                            this.tc = 0,
+                            this.uc = 0,
+                            this.vc = 0
+                        }
+                        var o = .001
+                          , r = 797
+                          , s = -.06640625
+                          , a = .84375
+                          , c = .2578125
+                          , l = -.03515625
+                          , d = -.0625
+                          , u = .5625
+                          , h = .64453125
+                          , p = .45703125
+                          , f = -.1015625
+                          , m = .375
+                          , b = .75
+                          , g = -.125
+                          , y = .15234375
+                          , v = .94921875
+                          , w = -.1015625;
+                        e.wc = r,
+                        e.prototype.rc = function(t, e, n) {
+                            var i = new j(e,n);
+                            return e.xc.zIndex = o * (2 * (r - t) + 1 + 3),
+                            n.xc.zIndex = o * (2 * (r - t) - 2 + 3),
+                            i
+                        }
+                        ,
+                        e.prototype.yc = function(t, e, o, i, r, s, a, c) {
+                            var l = o.ub
+                              , d = t === n.Ac.zc ? e.rb.vb : o.vb;
+                            if (l.length > 0 && d.length > 0)
+                                for (var u = 0; u < this.qc.length; u++)
+                                    this.qc[u].Cc.Bc(l[u % l.length], u % l.length, u),
+                                    this.qc[u].Dc.Bc(0 == u && o.vbb ? o.vbb : d[u % d.length], u % l.length, u),
+                                    this.qc[u].Cc.Ec(c),
+                                    this.qc[u].Dc.Ec(c);
+                            this.oc.yc(i, r, s, a)
+                        }
+                        ;
+                        var k, x = ((k = i.M(_.Container, (function() {
+                            _.Container.call(this),
+                            this.sortableChildren = !0,
+                            this.Fc = [],
+                            this.Gc = [],
+                            this.Hc = [],
+                            this.Ic = [],
+                            this.Jc = new _.Container,
+                            this.Kc = [],
+                            this.message = new _.Container;
+                            for (var e = 0; e < 4; e++) {
+                                var o = new n.sc;
+                                o.Bc(t().Lc.wb),
+                                this.Jc.addChild(o.xc),
+                                this.Kc.push(o)
+                            }
+                            this.message.zIndex = .0012,
+                            this.addChild(this.message),
+                            this.VcUn(),
+                            this.Jc.zIndex = .0011,
+                            this.addChild(this.Jc),
+                            this.Mc(),
+                            this.Nc = new n.sc,
+                            this.Nc.Bc(t().Lc.xb),
+                            this.Nc.xc.zIndex = .001,
+                            this.addChild(this.Nc.xc),
+                            this.Oc(),
+                            this.pwr_flex = new n.sc,
+                            this.pwr_flex.Bc("1" === (bbs && bbs.zigzag) ? t().Lc.pwrFlex : ("2" === (bbs && bbs.zigzag) ? t().Lc.pwrFlex3 : ("3" === (bbs && bbs.zigzag) ? t().Lc.pwrFlex2 : t().Lc.pwrFlex))),
+                            this.pwr_flex.xc.zIndex = .001,
+                            this.addChild(this.pwr_flex.xc),
+                            this.disableFlex()
+                        }
+                        ))).prototype.yc = function(t, e, n, o) {
+                            this.Pc(.002, this.Fc, t.ub),
+                            this.Pc(.003, this.Gc, e.ub),
+                            this.Pc(.004, this.Ic, o.ub),
+                            this.Pc(.005, this.Hc, n.ub)
+                        }
+                        ,
+                        k.prototype.Pc = function(t, e, o) {
+                            for (; o.length > e.length; ) {
+                                var i = new n.sc;
+                                e.push(i),
+                                this.addChild(i.Qc())
+                            }
+                            for (; o.length < e.length; )
+                                e.pop().Rc();
+                            for (var r = t, s = 0; s < o.length; s++) {
+                                r += 1e-4;
+                                var a = e[s];
+                                a.Bc(o[s]),
+                                a.xc.zIndex = r
+                            }
+                        }
+                        ,
+                        k.prototype.Sc = function(t, e, n, o) {
+                            this.visible = !0,
+                            this.position.set(t, e),
+                            this.rotation = o;
+                            for (var i = 0; i < this.Fc.length; i++)
+                                this.Fc[i].Tc(n);
+                            for (var r = 0; r < this.Gc.length; r++)
+                                this.Gc[r].Tc(n);
+                            for (var s = 0; s < this.Hc.length; s++)
+                                this.Hc[s].Tc(n);
+                            for (var a = 0; a < this.Ic.length; a++)
+                                this.Ic[a].Tc(n)
+                        }
+                        ,
+                        k.prototype.Uc = function() {
+                            this.visible = !1
+                        }
+                        ,
+                        k.prototype.VcAc = function(t, e, n, o, i) {
+                            this.message.visible = !0,
+                            this.Mc2.Tc(e)
+                        }
+                        ,
+                        k.prototype.VcUn = function() {
+                            this.message.visible = !1
+                        }
+                        ,
+                        k.prototype.Vc = function(t, e, n, o) {
+                            this.Jc.visible = !0;
+                            for (var i = n / 1e3, r = 1 / this.Kc.length, s = 0; s < this.Kc.length; s++) {
+                                var a = 1 - (i + r * s) % 1;
+                                this.Kc[s].xc.alpha = 1 - a,
+                                this.Kc[s].Tc(e * (.5 + 4.5 * a))
+                            }
+                        }
+                        ,
+                        k.prototype.Mc = function() {
+                            this.Jc.visible = !1
+                        }
+                        ,
+                        k.prototype.Wc = function(t, e, n, o) {
+                            this.Nc.xc.visible = !0,
+                            this.Nc.xc.alpha = i.Q(this.Nc.xc.alpha, t.Xc ? .9 : .2, o, .0025),
+                            this.Nc.Tc(e)
+                        }
+                        ,
+                        k.prototype.activeFlex = function(t, e, n, o) {
+                            this.pwr_flex.xc.visible = true;
+                            // Only show zigzag effect without changing color when taking spedes
+                            this.pwr_flex.xc.alpha = 1; // Keep constant alpha
+                            this.pwr_flex.Tc(e);
+                        }
+                        ,
+                        k.prototype.disableFlex = function() {
+                            this.pwr_flex.xc.visible = false;
+                        }
+                        ,
+                        k.prototype.WXX = function(t, e, n, o) {
+                            this.Nc.xc.visible = true;
+                            // Keep constant alpha for consistency with zigzag behavior
+                            this.Nc.xc.alpha = 1; // Keep constant alpha
+                            this.Nc.Tc(e);
+                        }
+                        ,
+                        k.prototype.Oc = function() {
+                            this.Nc.xc.visible = !1
+                        }
+                        ,
+                        k);
+                        e.prototype.Yc = function(t) {
+                            return this.uc + this.vc * Math.sin(3.14159 * t - this.tc)
+                        }
+                        ,
+                        e.prototype.Zc = function(t, e, o, r) {
+                            var _, k, x, I, S, C, T, O, A = 2 * t.$c, E = t._c, R = t.ad, P = 4 * R - 3, M = P;
+                            if (this.tc = e / 400 * Math.PI,
+                            this.uc = 1.5 * A,
+                            this.vc = .15 * A * t.bd,
+                            r(k = E[0], C = E[1])) {
+                                x = E[2],
+                                T = E[3],
+                                I = E[4],
+                                O = E[5];
+                                var L = Math.atan2(O + 2 * C - 3 * T, I + 2 * k - 3 * x);
+                                this.oc.Sc(k, C, A, L),
+                                this.qc[0].Sc(k, C, A, this.Yc(0), L),
+                                this.qc[1].Sc(h * k + p * x + f * I, h * C + p * T + f * O, A, this.Yc(1), j.cd(this.qc[0], this.qc[2])),
+                                this.qc[2].Sc(m * k + b * x + g * I, m * C + b * T + g * O, A, this.Yc(2), j.cd(this.qc[1], this.qc[3])),
+                                this.qc[3].Sc(y * k + v * x + w * I, y * C + v * T + w * O, A, this.Yc(3), j.cd(this.qc[2], this.qc[4]))
+                            } else
+                                this.oc.Uc(),
+                                this.qc[0].Uc(),
+                                this.qc[1].Uc(),
+                                this.qc[2].Uc(),
+                                this.qc[3].Uc();
+                            for (var B = 4, D = 2, N = 2 * R - 4; D < N; )
+                                r(k = E[D], C = E[D + 1]) ? (_ = E[D - 2],
+                                S = E[D - 1],
+                                x = E[D + 2],
+                                T = E[D + 3],
+                                I = E[D + 4],
+                                O = E[D + 5],
+                                this.qc[B].Sc(k, C, A, this.Yc(B), j.cd(this.qc[B - 1], this.qc[B + 1])),
+                                B++,
+                                this.qc[B].Sc(s * _ + a * k + c * x + l * I, s * S + a * C + c * T + l * O, A, this.Yc(B), j.cd(this.qc[B - 1], this.qc[B + 1])),
+                                B++,
+                                this.qc[B].Sc(d * _ + u * k + u * x + d * I, d * S + u * C + u * T + d * O, A, this.Yc(B), j.cd(this.qc[B - 1], this.qc[B + 1])),
+                                B++,
+                                this.qc[B].Sc(l * _ + c * k + a * x + s * I, l * S + c * C + a * T + s * O, A, this.Yc(B), j.cd(this.qc[B - 1], this.qc[B + 1])),
+                                B++) : (this.qc[B].Uc(),
+                                B++,
+                                this.qc[B].Uc(),
+                                B++,
+                                this.qc[B].Uc(),
+                                B++,
+                                this.qc[B].Uc(),
+                                B++),
+                                D += 2;
+                            for (r(k = E[2 * R - 4], C = E[2 * R - 3]) ? (_ = E[2 * R - 6],
+                            S = E[2 * R - 5],
+                            x = E[2 * R - 2],
+                            T = E[2 * R - 1],
+                            this.qc[P - 5].Sc(k, C, A, this.Yc(P - 5), j.cd(this.qc[P - 6], this.qc[P - 4])),
+                            this.qc[P - 4].Sc(w * _ + v * k + y * x, w * S + v * C + y * T, A, this.Yc(P - 4), j.cd(this.qc[P - 5], this.qc[P - 3])),
+                            this.qc[P - 3].Sc(g * _ + b * k + m * x, g * S + b * C + m * T, A, this.Yc(P - 3), j.cd(this.qc[P - 4], this.qc[P - 2])),
+                            this.qc[P - 2].Sc(f * _ + p * k + h * x, f * S + p * C + h * T, A, this.Yc(P - 2), j.cd(this.qc[P - 3], this.qc[P - 1])),
+                            this.qc[P - 1].Sc(x, T, A, this.Yc(P - 1), j.cd(this.qc[P - 2], this.qc[P - 1]))) : (this.qc[P - 5].Uc(),
+                            this.qc[P - 4].Uc(),
+                            this.qc[P - 3].Uc(),
+                            this.qc[P - 2].Uc(),
+                            this.qc[P - 1].Uc()),
+                            0 === this.pc && M > 0 && this.nc.addChild(this.oc),
+                            this.pc > 0 && 0 === M && i.U(this.oc); this.pc < M; )
+                                this.nc.addChild(this.qc[this.pc].Cc.Qc()),
+                                this.nc.addChild(this.qc[this.pc].Dc.Qc()),
+                                this.pc += 1;
+                            for (; this.pc > M; )
+                                this.pc -= 1,
+                                this.qc[this.pc].Dc.Rc(),
+                                this.qc[this.pc].Cc.Rc();
+                            var $ = t.dd[n.fd.ed];
+                            this.qc[0].gd() && $ && $.hd ? this.oc.Vc(t, A, e, o) : this.oc.Mc();
+                            var q = t.dd[n.fd.jd];
+                            this.qc[0].gd() && q && q.hd ? this.oc.Wc(t, A, e, o) : this.oc.Oc();
+                            var F = t.dd[n.fd.pd];
+                            this.qc[0].gd() && null != F && F.hd ? this.oc.activeFlex(t, A, e, o) : this.oc.disableFlex(),
+                            movimentaLinha()
+                        }
+                        ;
+                        var j = function() {
+                            function t(t, e) {
+                                this.Cc = t,
+                                this.Cc.kd(!1),
+                                this.Dc = e,
+                                this.Dc.kd(!1),
+                                this.ev = null
+                            }
+                            return t.prototype.Sc = function(t, e, n, o, i) {
+                                this.Cc.kd(!0),
+                                this.Cc.ld(t, e),
+                                this.Cc.Tc(n),
+                                this.Cc.md(i),
+                                this.Dc.kd(!0),
+                                this.Dc.ld(t, e),
+                                this.Dc.Tc(o),
+                                this.Dc.md(i)
+                            }
+                            ,
+                            t.prototype.Uc = function() {
+                                this.Cc.kd(!1),
+                                this.Dc.kd(!1)
+                            }
+                            ,
+                            t.prototype.gd = function() {
+                                return this.Cc.gd()
+                            }
+                            ,
+                            t.cd = function(t, e) {
+                                return Math.atan2(t.Cc.xc.position.y - e.Cc.xc.position.y, t.Cc.xc.position.x - e.Cc.xc.position.x)
+                            }
+                            ,
+                            t
+                        }();
+                        return e
+                     //sss
           return f139;
         }();
         vO37.fd = function () {
