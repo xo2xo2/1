@@ -3176,7 +3176,7 @@ function f(p) {
         this.Sh.zIndex = 2;
         this.Sh.alpha = 0.9;
         this.Sh.beginFill(16225317);
-        this.Sh.drawCircle(0, 0, this.Th * 0.1);
+        this.Sh.drawCircle(0, 0, this.Th * 0.06);
         this.Sh.endFill();
         this.Sh.lineStyle(1, vO47.a("87dae59b68d7"));
         this.Sh.drawCircle(0, 0, this.Th * 0.06);
