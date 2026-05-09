@@ -2,7 +2,7 @@
   "use strict";
 
   const WormXoSelector = {
-    storageKey: "wormxoli_19791125xomajdtixrytprivat5222",
+    storageKey: "wormxoli19791125xomajdtixrytprivat5222",
 
     scripts: {
       wormworld: "https://wormxo.store/js/wormworld.js",
@@ -292,7 +292,7 @@
             <button type="button" class="wormxo-btn" data-script="wormworld">
               WORM WORLD
             </button>
-            <button type="button" class="wormxo-btn" data-script="متوقف">
+            <button type="button" class="wormxo-btn" data-script="timmap">
               TIM MAP
             </button>
           </div>
