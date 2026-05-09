@@ -3179,7 +3179,7 @@ function f(p) {
         this.Sh.drawCircle(0, 0, this.Th * 0.1);
         this.Sh.endFill();
         this.Sh.lineStyle(1, vO47.a("87dae59b68d7"));
-        this.Sh.drawCircle(0, 0, this.Th * 0.1);
+        this.Sh.drawCircle(0, 0, this.Th * 0.06);
         this.Sh.endFill();
         this[vO47.a("7507934cba02124019")](v1284);
         this[vO47.a("61b387f0a6be0ef40d")](this.Yh);
