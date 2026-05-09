@@ -8397,11 +8397,11 @@ window.addEventListener("load", function () {
         f112();
       }
     }
-    if (!Number.prototype.dotFormat) {
-      Number.prototype.dotFormat = function () {
-        return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-      };
-    }
+    if (typeof Number.prototype.dotFormat !== "function") {
+  Number.prototype.dotFormat = function () {
+    return Number(this).toLocaleString("de-DE");
+  };
+}
     if (!Number.prototype.customFormat) {
       Number.prototype.customFormat = function () {
         if (this >= 1000000) {
