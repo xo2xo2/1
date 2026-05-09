@@ -11276,3 +11276,310 @@ function f(p) {
     };
   });
 })();
+
+
+
+// ========== أضافه خطوط الرقيقه لجلد الثعبان xo dark ==========
+(function() {
+  let snakeLinesEnabled = false;
+  let linesContainer = null;
+  let linesGraphics = null;
+
+  // Initialize the lines graphics container
+  function initLinesGraphics() {
+    if (linesContainer) return true;
+
+    try {
+      // Find the render container - try multiple paths
+      let renderContainer = null;
+      
+      if (window._wwc && window._wwc._anApp && window._wwc._anApp.og && 
+          window._wwc._anApp.og.af && window._wwc._anApp.og.af.ng && 
+          window._wwc._anApp.og.af.ng.Qg) {
+        renderContainer = window._wwc._anApp.og.af.ng.Qg; // Snake container
+      } else if (window._1f8817 && window._1f8817.og && window._1f8817.og.af && 
+                 window._1f8817.og.af.ng && window._1f8817.og.af.ng.Qg) {
+        renderContainer = window._1f8817.og.af.ng.Qg;
+      }
+      
+      if (!renderContainer) {
+        console.log('Render container not found');
+        return false;
+      }
+
+      // Create container for lines
+      linesContainer = new PIXI.Container();
+      linesGraphics = new PIXI.Graphics();
+      linesContainer.addChild(linesGraphics);
+      linesContainer.zIndex = 9999; // Render on top
+      renderContainer.addChild(linesContainer);
+      
+      console.log('Lines graphics initialized successfully');
+      return true;
+    } catch (e) {
+      console.error('Failed to init lines graphics:', e);
+      return false;
+    }
+  }
+
+  // Draw horizontal lines on snake body
+  function drawSnakeLines() {
+    if (!snakeLinesEnabled || !linesGraphics) return;
+
+    try {
+      linesGraphics.clear();
+
+      // Get the game instance
+      const gameInstance = window._wwc?._anApp?.dh || window._1f8817?.dh;
+      if (!gameInstance || !gameInstance.Fh) return;
+
+      // Set line style
+      linesGraphics.lineStyle(0.2, 0xFFFFFF, 0.9); // White lines, thicker and more opaque
+
+      // Iterate through all players/snakes
+      for (const playerId in gameInstance.Fh) {
+        const worm = gameInstance.Fh[playerId];
+        if (!worm || !worm.xi || !worm.Eh) continue;
+        if (!worm.wi) continue; // Skip dead worms
+
+        // Get snake body positions from _c array (interpolated positions)
+        const positions = worm._c;
+        const segmentCount = worm.ad; // actual segment count
+        const radius = worm.$c || 10; // segment radius
+
+        if (!positions || segmentCount < 2) continue;
+
+        // Draw lines on each body segment
+        const spacing = 1; // Draw a line every 3 segments
+        
+        for (let i = 0; i < segmentCount - 1; i += spacing) {
+          const x1 = positions[i * 2];
+          const y1 = positions[i * 2 + 1];
+          const x2 = positions[(i + 1) * 2];
+          const y2 = positions[(i + 1) * 2 + 1];
+
+          // Calculate perpendicular direction
+          const dx = x2 - x1;
+          const dy = y2 - y1;
+          const length = Math.sqrt(dx * dx + dy * dy);
+          
+          if (length === 0) continue;
+
+          // Normalized perpendicular vector
+          const perpX = -dy / length;
+          const perpY = dx / length;
+
+          // Draw horizontal line across the segment
+          const lineLength = radius * 2; // Line extends across body width
+          const startX = x1 + perpX * lineLength;
+          const startY = y1 + perpY * lineLength;
+          const endX = x1 - perpX * lineLength;
+          const endY = y1 - perpY * lineLength;
+
+          linesGraphics.moveTo(startX, startY);
+          linesGraphics.lineTo(endX, endY);
+        }
+      }
+    } catch (e) {
+      console.error('Error drawing snake lines:', e);
+    }
+  }
+
+  // Toggle lines on/off
+  function toggleSnakeLines() {
+    snakeLinesEnabled = !snakeLinesEnabled;
+    
+    if (snakeLinesEnabled) {
+      if (!initLinesGraphics()) {
+        console.log('❌ Failed to initialize lines graphics');
+        snakeLinesEnabled = false;
+        return;
+      }
+      console.log('✅ Snake body lines ENABLED');
+      linesContainer.visible = true;
+    } else {
+      console.log('❌ Snake body lines DISABLED');
+      if (linesContainer) {
+        linesContainer.visible = false;
+      }
+      if (linesGraphics) {
+        linesGraphics.clear();
+      }
+    }
+  }
+
+  // Render loop - update lines every frame
+  function updateLines() {
+    if (snakeLinesEnabled) {
+      drawSnakeLines();
+    }
+    requestAnimationFrame(updateLines);
+  }
+
+  // Initialize the system
+  function init() {
+    if (typeof PIXI === 'undefined') {
+      console.log('Waiting for PIXI...');
+      setTimeout(init, 1000);
+      return;
+    }
+    
+    if (!window._wwc && !window._1f8817) {
+      console.log('Waiting for game to load...');
+      setTimeout(init, 1000);
+      return;
+    }
+    
+    updateLines();
+    console.log('🐍 Snake lines system initialized. Press N to toggle.');
+  }
+
+  // Start initialization
+  setTimeout(init, 3000);
+
+  // Keyboard handler for 'N' key
+  document.addEventListener('keydown', function(e) {
+    // Check for 'N' key (keyCode 78)
+    if (e.keyCode === 78 || e.key === 'l' || e.key === 'L') {
+      // Ignore if typing in input fields......
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+      }
+      
+      e.preventDefault();
+      toggleSnakeLines();
+    }
+  });
+
+  // Expose toggle function globally (optional)
+  window.toggleSnakeLines = toggleSnakeLines;
+})();
+
+// Fix settings button click handler
+document.addEventListener('DOMContentLoaded', function() {
+  // Periodic memory cleanup every 30 seconds
+  setInterval(cleanupBackgroundMemory, 30000);
+  
+  // Settings panel interactive features....
+  setTimeout(() => {
+    const copyBtn = document.querySelector('#mm-wwc-close').parentElement.querySelector('button[onclick*="clipboard"]');
+    const idInput = document.getElementById('wormate_id');
+    const clearBtn = document.querySelector('button[onclick*="fileSkin.value"]');
+    const fileInput = document.getElementById('fileSkin');
+   
+    
+    });
+
+    
+
+})();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
