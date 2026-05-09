@@ -98,7 +98,7 @@ button#op_tmw, button#btn_crsw {
 	background-color: rgba(0,0,0,0.4); 
 } 
 #modal_tmw .modal-content { 
-	background-image: linear-gradient(#22ffcd, #cb5dc5);
+	background-image: linear-gradient(#22ffcd, #000000);
     font-weight: bold;
     color: white;
     border-color: #ffffff;
@@ -186,16 +186,7 @@ button#btn_copy, button#btn_clear_file {
 
     
 }
-#game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats {
- width: 407px;
-}
-#game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats .controls #final-continue {
- background-color: #f7941d;
-}
-#game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats .controls #final-continue:hover
-{
- background-color: #f7951dcc
-}
+
 #game-wrap #game-cont #stretch-box #main-menu-view #mm-line-center .column-left .description-text * {
     font-size: 15px;
 }
