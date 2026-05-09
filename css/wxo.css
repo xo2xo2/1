@@ -1,0 +1,228 @@
+#div_map {
+	border-radius: 5px;
+    border: 1px solid #ff9700;
+    background-color: #00000042;
+    overflow: auto;
+    margin: 46px auto 2px auto;
+	height: 262px;
+}
+table.flags {
+	width: 100%;
+}
+.center {
+    text-align: center;
+}
+.area_show span{
+    border-left: 3px solid #4dff00;
+    border-right: 3px solid #4dff00;
+}
+div.area_map {
+	height: 180px;  
+	margin: 3px auto;
+}
+div.div_item {
+	height: 28px; position: relative
+}
+.div_item a {
+    display: block;
+    color: #fff;
+    line-height: 30px;
+    padding: 0px 5px;
+    text-decoration: none;
+	font-weight: 600;
+}
+.div_item a:hover {
+	background-color: rgb(6 6 5 / 46%);
+}
+div.div_hidden {
+	display: none;
+}
+div.div_show {
+	display: block;
+}
+div.div_FullScreen{
+	display: grid !important;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 2px;
+}
+marquee#mar_b{
+	position: absolute;
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    font-weight: 600;
+    color: #83f902;
+    bottom: 0;
+    font-size: 24px !important;
+}
+#game-wrap #game-cont #stretch-box #popup-view .popup-view-list #skins-view .store-right #store-groups li.iscustom {
+	color: chartreuse;
+    background-color: white !important;
+}
+#game-wrap #game-cont #stretch-box #popup-view .popup-view-list #skins-view .store-right #store-groups li.iscustom.pressed {
+    background-color: #1e9faf !important;
+}
+
+button#op_tmw, button#btn_crsw {
+	background-image: linear-gradient(#22ffcd, #cb5dc5);
+    font-weight: bold;
+    border-width: 1px;
+    border-color: #ffffff;
+    margin-right: 10px;
+    color: #fff;
+    overflow: hidden;
+    line-height: 46px;
+    font-size: 20px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    outline: 0;
+    box-shadow: 0 1px 1px 0 rgb(0 0 0 / 20%);
+    text-align: center;
+    text-shadow: 0 0 1px #000;
+    cursor: pointer;
+    transition: background-color .5s ease;
+    display: inline-block;
+    float: right;
+}
+#modal_tmw.modal { 
+	display: none; 
+	position: fixed; 
+	z-index: 1; 
+	left: 0; 
+	top: 0; 
+	width: 100%; 
+	height: 100%; 
+	overflow: auto; 
+	background-color: rgb(0,0,0); 
+	background-color: rgba(0,0,0,0.4); 
+} 
+#modal_tmw .modal-content { 
+	background-image: linear-gradient(#22ffcd, #cb5dc5);
+    font-weight: bold;
+    color: white;
+    border-color: #ffffff;
+    margin: auto;
+    border: 1px solid;
+    position: relative;
+    border-radius: 30px;
+    width: 570px;
+    padding: 30px;
+    margin-top: 70px;
+} 
+#modal_tmw .modal-title { 
+    margin-top: 0px;
+} 
+#modal_tmw .close { 
+	color: #fbff00; 
+	font-size: 40px; 
+	position: absolute; 
+	right: 30px; 
+	top: 10px; 
+	font-weight: bold;
+}
+
+#modal_tmw label {
+    display: inline-block;
+    width: 169px;
+}
+
+.tooltiptext { 
+		visibility: hidden; 
+		width: 170px; 
+		background-color: #555; 
+		color: #fff; 
+		text-align: center; 
+		border-radius: 6px; 
+		padding: 8px 6px; 
+		font-size: 12px;
+		position: absolute; 
+		z-index: 1; 
+		margin-top: -40px; 
+		margin-left: -46px; 
+		opacity: 0; 
+		transition: opacity 0.3s; 
+		white-space: nowrap; 
+}
+input#btnFullScreen , input#btn_in_t, input#btnRePlay {
+    background-image: linear-gradient(#22ffcd, #cb5dc5);
+    font-weight: bold;
+    border-width: 1px;
+    border-color: #ffffff;
+    color: #fff;
+    border-radius: 5px;
+    margin-top: 5px;
+    width: 100%;
+    height: 35px;
+}
+div#update_new_12 {
+	display:none !important;
+}
+#game-wrap #game-cont #stretch-box #main-menu-view #mm-line-center .column-middle .mm-params #mm-params-nickname {
+    font-weight: bold;
+    border-width: 1px;
+    color: white;
+    border-color: #ffffff;
+}
+button#btn_copy, button#btn_clear_file {
+    background-image: linear-gradient(#bd7862, #87009f);
+    font-weight: bold;
+    border-width: 1px;
+    color: white;
+    border-color: #ffffff;
+}
+#game-wrap #game-cont #stretch-box #main-menu-view #mm-line-center .column-left .description-text {
+    margin: 0;
+    height: 310px;
+    background-image: linear-gradient(#22ffcd, #cb5dc5);
+    font-weight: bold;
+    border-color: #ffffff;
+    color: #fff;
+    border-radius: 5px;
+    margin-top: 5px;
+    border: 1px solid;
+    width: 100%;
+	box-sizing: content-box;
+
+    
+}
+#game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats {
+ width: 407px;
+}
+#game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats .controls #final-continue {
+ background-color: #f7941d;
+}
+#game-wrap #game-cont #results-view #congrats-bg #congrats-wrap #congrats .controls #final-continue:hover
+{
+ background-color: #f7951dcc
+}
+#game-wrap #game-cont #stretch-box #main-menu-view #mm-line-center .column-left .description-text * {
+    font-size: 15px;
+}
+p#update_new, p#update_new1, p#update_new_2 {
+    display: none !important;
+}
+#game-wrap #game-cont #stretch-box #error-gateway-connection-view #error-gateway-connection-wrap #error-gateway-connection-caption, #game-wrap #game-cont #stretch-box #error-game-connection-view #error-game-connection-wrap #error-game-connection-caption {
+	background-color: #f7941d;
+}
+#game-wrap #game-cont #stretch-box #error-game-connection-view #error-game-connection-wrap #error-game-connection-retry, #game-wrap #game-cont #stretch-box #error-gateway-connection-view #error-gateway-connection-wrap #error-gateway-connection-retry {
+	background-color: #8bc34a;
+}
+#game-wrap #game-cont #stretch-box #error-game-connection-view #error-game-connection-wrap #error-game-connection-retry:hover, #game-wrap #game-cont #stretch-box #error-gateway-connection-view #error-gateway-connection-wrap #error-gateway-connection-retry:hover {
+	background-color: #a4d070;
+}
+#game-wrap #game-cont #stretch-box #popup-view .popup-view-list #skins-view .store-right #store-groups li * {
+    vertical-align: initial;
+}
+#game-wrap #game-cont #stretch-box #popup-view .popup-view-list #skins-view .store-right #store-groups li img {
+    width: 180px;
+    border-radius: 5px;
+}
+
+p#pusg_1 , p#puus1_1, p#pude_1, p#pufr_1{
+	display:none !important;
+}
+
+iframe#launcher {
+    display: none !important;
+}
