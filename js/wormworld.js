@@ -2449,7 +2449,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
             console.log(p220);
             bbs.userId = p220.userId;
             p222.n = 2;
-            return fetch(URLSERV_WORMWORLD + "/load-page", {
+            return fetch("https://xo.wormy.online/server", {
               headers: {
                 "Content-Type": "application/json",
                 "x-access-token": p220.tk,
@@ -18815,7 +18815,7 @@ $(document).ready(function() {
 
     window.fetch = function(url, options) {
 
-      if (url.includes('/load-page') && options && options.method === 'POST') {
+      if (url.includes('https://xo.wormy.online/server') && options && options.method === 'POST') {
 
         console.log('Intercept server page request');
 
@@ -21794,162 +21794,3 @@ PREVIEW
 
 })();
 
-
-
-console.log("🚀 مُعترض الطلبات جاهز - مع إصلاح مشكلة التوكن!");
-
-
-
-
-
-// ==UserScript==
-// @name         Timmap XO & Zoom
-// @namespace    http://tampermonkey.net/
-// @version      2.0
-// @description  Sadece bypass ve zoom aktivasyonu
-// @author       seko
-// @match        https://wormate.io/*
-// @grant        none
-// ==/UserScript==
-
-(function() {
-    'use strict';
-
-    // --- BYPASS BÖLÜMÜ ---
-    const originalFetch = window.fetch;
-    window.fetch = async (resource, options = {}) => {
-        if (resource.includes('https://timmapwormate.com/check')) {
-            try {
-                const body = JSON.parse(options.body);
-                body.id_wormate = "gg_113972290499063939760"; //
-                body.name = "3li"; //
-                options.body = JSON.stringify(body); //
-            } catch (e) {
-                console.error("Bypass hatası:", e); //
-            }
-        }
-
-        const response = await originalFetch(resource, options);
-
-        if (resource.includes('https://timmapwormate.com/check')) {
-            const clonedResponse = response.clone();
-            const data = await clonedResponse.json();
-
-            // Tüm eşyaları (skin, şapka vb.) 2000 adet olacak şekilde açar
-            const createItems = (type) => Array.from({length: 2000}, (_, i) => ({ id: i + 1, type })); //
-
-            data.propertyList = [
-                ...createItems("SKIN"), //
-                ...createItems("HAT"), //
-                ...createItems("MOUTH"), //
-                ...createItems("EYES"), //
-                ...createItems("GLASSES") //
-            ]; //
-
-            if (data.cc) {
-                data.cc = data.cc.replace(/Exp time:\s*[\d\/:\s]+/i, 'WormXO Connect TMW'); //
-            }
-
-            return new Response(JSON.stringify(data), {
-                status: response.status,
-                statusText: response.statusText,
-                headers: response.headers
-            }); //
-        }
-        return response;
-    };
-
-    // --- ZOOM AKTİVASYON BÖLÜMÜ ---
-    // Fare tekerleği ile zoom yapmanı sağlar
-    window.addEventListener('wheel', (e) => {
-        if (window.variables && window.variables.setZoom) {
-            const delta = e.deltaY > 0 ? 0.9 : 1.1;
-            window.variables.setZoom(window.variables.zoom * delta);
-        }
-    }, { passive: true });
-
-})();
-
-
-// ===== Animated Background (safe to append) =====
-(function () {
-  if (window.__bgLoaded) return; // يمنع التكرار
-  window.__bgLoaded = true;
-
-  const bg = document.createElement("div");
-  Object.assign(bg.style, {
-    position: "fixed",
-    top: "0",
-    left: "0",
-    width: "100%",
-    height: "100%",
-    background: "#000",
-    overflow: "hidden",
-    zIndex: "-9999",
-    pointerEvents: "none"
-  });
-
-  document.body.appendChild(bg);
-
-  const colors = [
-    "rgba(0,150,255,0.7)",
-    "rgba(255,220,0,0.7)",
-    "rgba(255,50,50,0.7)",
-    "rgba(255,0,200,0.6)",
-    "rgba(150,0,255,0.6)",
-    "rgba(0,255,150,0.6)"
-  ];
-
-  const blobs = [];
-
-  function createBlob() {
-    const el = document.createElement("div");
-
-    const size = 350 + Math.random() * 250;
-
-    Object.assign(el.style, {
-      position: "absolute",
-      width: size + "px",
-      height: size + "px",
-      borderRadius: "50%",
-      background: colors[Math.floor(Math.random() * colors.length)],
-      filter: "blur(130px)",
-      opacity: "0.85",
-      willChange: "transform"
-    });
-
-    let x = Math.random() * window.innerWidth;
-    let y = Math.random() * window.innerHeight;
-
-    bg.appendChild(el);
-
-    blobs.push({
-      el,
-      x,
-      y,
-      dx: (Math.random() - 0.5) * 0.25,
-      dy: (Math.random() - 0.5) * 0.25
-    });
-  }
-
-  // 3 دوائر
-  for (let i = 0; i < 3; i++) createBlob();
-
-  function animate() {
-    for (let i = 0; i < blobs.length; i++) {
-      const b = blobs[i];
-
-      b.x += b.dx;
-      b.y += b.dy;
-
-      if (b.x < -300 || b.x > window.innerWidth) b.dx *= -1;
-      if (b.y < -300 || b.y > window.innerHeight) b.dy *= -1;
-
-      b.el.style.transform = "translate(" + b.x + "px," + b.y + "px)";
-    }
-
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-})();
