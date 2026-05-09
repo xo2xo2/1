@@ -8413,6 +8413,7 @@ function customFormat(num) {
     } else {
         return dotFormat(num);
     }
+  };
 }
     setTimeout(function () {
       var vA17 = ["fuck you", "Ä‘á»‹t", "cÃ¡i lá»“n", "chÃ³", "Ä‘Ã©o", "lá»“n", "Ä‘Ã©o", "Ä‘á»‹t", "vÃ£i lá»“n", "cáº·c"];
