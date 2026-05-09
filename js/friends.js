@@ -8386,10 +8386,7 @@ window.addEventListener("load", function () {
         $("#contadorKill_12").show();
         vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
       }
-      if (p619 === "closed") {
-        vO2 = {};
-      }
-      if (p619 === "cerrar") {
+        if (p619 === "cerrar") {
         vO4.kill = 0;
         vO4.headshot = 0;
         vO4.totalKills = 0;
@@ -8397,24 +8394,20 @@ window.addEventListener("load", function () {
         f112();
       }
     }
-function dotFormat(num) {
-    return Number(num)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
 
-function customFormat(num) {
-    num = Number(num);
+    Number.prototype.dotFormat = function () {
+      return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };
 
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + "M🍰";
-    } else if (num >= 100000) {
-        return (num / 1000).toFixed(0) + "k🍰";
-    } else {
-        return dotFormat(num);
-    }
-  };
-}
+    Number.prototype.customFormat = function () {
+      if (this >= 1000000) {
+        return (this / 1000000).toFixed(1) + "M🍰";
+      } else if (this >= 100000) {
+        return (this / 1000).toFixed(0) + "k🍰";
+      } else {
+        return this.dotFormat();
+      }
+    };
     setTimeout(function () {
       var vA17 = ["fuck you", "Ä‘á»‹t", "cÃ¡i lá»“n", "chÃ³", "Ä‘Ã©o", "lá»“n", "Ä‘Ã©o", "Ä‘á»‹t", "vÃ£i lá»“n", "cáº·c"];
       const v600 = document.getElementById("mm-params-nickname");
