@@ -8696,9 +8696,9 @@ function f(p) {
                 $("#port_id_s").val(v1879);
                 $("#port_name_s").val(vVF36);
                 vO50.pi = v1879;
-                vO50.pn = vVF36;
+                vO50.pn = vVF36;  
                 localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Map: " + vVF36;
+                v1028.text = "Wxo: " + vVF36;
                 vO75.Mh.Dq(v1879, v1872);
               } else {
                 $("#port_id_s").val($("#port_id").val());
@@ -8706,7 +8706,7 @@ function f(p) {
                 vO50.pi = $("#port_id").val();
                 vO50.pn = $("#port_name").val();
                 localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Map: " + $("#port_name").val();
+                v1028.text = "Wxo: " + $("#port_name").val();
                 vO75.Mh.Dq($("#port_id").val(), v1872);
               }
             }
@@ -8735,7 +8735,7 @@ function f(p) {
                 vO50.pi = v1883;
                 vO50.pn = vVF362;
                 localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Map: " + vVF362;
+                v1028.text = "Wxo: " + vVF362;
                 vO75.Mh.Eq(v1883, v1880, v1881);
               } else {
                 $("#port_id_s").val($("#port_id").val());
@@ -8743,7 +8743,7 @@ function f(p) {
                 vO50.pi = $("#port_id").val();
                 vO50.pn = $("#port_name").val();
                 localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Map: " + $("#port_name").val();
+                v1028.text = "Wxo: " + $("#port_name").val();
                 vO75.Mh.Eq($("#port_id").val(), v1880, v1881);
               }
             }
