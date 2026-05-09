@@ -8380,20 +8380,22 @@ window.addEventListener("load", function () {
         f112();
         vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
       }
+
       if (p619 === "open") {
         vO4.kill = 0;
         vO4.headshot = 0;
         $("#contadorKill_12").show();
         vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
       }
-        if (p619 === "cerrar") {
-          vO4.kill = 0;
-          vO4.headshot = 0;
-          vO4.totalKills = 0;
-          vO4.totalHeadshots = 0;
-          f112();
-        }
-    };
+
+      if (p619 === "cerrar") {
+        vO4.kill = 0;
+        vO4.headshot = 0;
+        vO4.totalKills = 0;
+        vO4.totalHeadshots = 0;
+        f112();
+      }
+    }
 
     Number.prototype.dotFormat = function () {
       return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
