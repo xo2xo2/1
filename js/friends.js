@@ -2875,7 +2875,7 @@ window.addEventListener("load", function () {
           this.Sf.alpha = 0.55;
           this.Jf.zIndex = 2;
           this.Jf.alpha = 0.9;
-          this.Jf.beginFill(16711680);
+          this.Jf.beginFill(0xFFFFFF);
           this.Jf.drawCircle(0, 0, this.Kf * 0.12);
           this.Jf.endFill();
           this.Jf.lineStyle(1, "black");
