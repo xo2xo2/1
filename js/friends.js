@@ -8843,4 +8843,70 @@ document.addEventListener("contextmenu", function (p638) {
   v625.textContent = "\n        (function() {\n            var preventDebugging = setInterval(function() {\n                if (window.console) {\n                    console.log = function() {}; \n                    console.debug = function() {}; \n                    console.error = function() {}; \n                    console.info = function() {};  \n                }\n            }, 1000);\n        })();\n    ";
   document.head.appendChild(v625);
 })();
-console.log("%cDeveloper XO team", "color: #FF7F00; font-size: 18px; font-weight: bold;");
+console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
+
+
+
+/* XOTEAM FIX REGISTRY + 11 PIECES */
+(function () {
+  const NEW_REGISTRY = "https://wm.wormy.online/registry";
+
+  function fixRegistryData(data) {
+    if (!data || typeof data !== "object") return data;
+
+    data.textureDict = data.textureDict || {};
+    data.regionDict = data.regionDict || {};
+    data.skinArrayDict = data.skinArrayDict || [];
+    data.visibleSkin = data.visibleSkin || [];
+
+    data.skinArrayDict.forEach(function (skin) {
+      if (!skin || !Array.isArray(skin.base)) return;
+
+      // يخلي glow نفس عدد القطع حتى 11 ما يكسر
+      if (!Array.isArray(skin.glow)) skin.glow = [];
+      while (skin.glow.length < skin.base.length) skin.glow.push("a_white");
+      if (skin.glow.length > skin.base.length) skin.glow = skin.glow.slice(0, skin.base.length);
+
+      // يتأكد كل base موجود بالـ regionDict
+      skin.base = skin.base.filter(function (r) {
+        return data.regionDict && data.regionDict[r];
+      });
+    });
+
+    return data;
+  }
+
+  async function getRegistry() {
+    const res = await fetch(NEW_REGISTRY + "?t=" + Date.now(), { cache: "no-store" });
+    const json = await res.json();
+    return fixRegistryData(json);
+  }
+
+  if (window.$ && $.get) {
+    const oldGet = $.get;
+
+    $.get = function (url, cb) {
+      const u = String(url || "");
+
+      if (u.includes("/dynamic/assets/revision.json")) {
+        getRegistry().then(function (reg) {
+          cb && cb(Number(reg.revision || Date.now()));
+        }).catch(function () {
+          oldGet.apply($, arguments);
+        });
+        return;
+      }
+
+      if (u.includes("/dynamic/assets/registry.json")) {
+        getRegistry().then(function (reg) {
+          cb && cb(reg);
+        }).catch(function () {
+          oldGet.apply($, arguments);
+        });
+        return;
+      }
+
+      return oldGet.apply($, arguments);
+    };
+  }
+})();
