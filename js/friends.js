@@ -8387,13 +8387,13 @@ window.addEventListener("load", function () {
         vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
       }
         if (p619 === "cerrar") {
-        vO4.kill = 0;
-        vO4.headshot = 0;
-        vO4.totalKills = 0;
-        vO4.totalHeadshots = 0;
-        f112();
-      }
-    }
+          vO4.kill = 0;
+          vO4.headshot = 0;
+          vO4.totalKills = 0;
+          vO4.totalHeadshots = 0;
+          f112();
+        }
+    };
 
     Number.prototype.dotFormat = function () {
       return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
