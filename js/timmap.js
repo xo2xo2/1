@@ -11293,10 +11293,10 @@ function f(p) {
       // Find the render container - try multiple paths
       let renderContainer = null;
       
-      if (window._wwc && window._wwc._anApp && window._wwc._anApp.og && 
-          window._wwc._anApp.og.af && window._wwc._anApp.og.af.ng && 
-          window._wwc._anApp.og.af.ng.Qg) {
-        renderContainer = window._wwc._anApp.og.af.ng.Qg; // Snake container
+      if (window._tmw && window._tmw._anApp && window._tmw._anApp.og && 
+          window._tmw._anApp.og.af && window._tmw._anApp.og.af.ng && 
+          window._tmw._anApp.og.af.ng.Qg) {
+        renderContainer = window._tmw._anApp.og.af.ng.Qg; // Snake container
       } else if (window._1f8817 && window._1f8817.og && window._1f8817.og.af && 
                  window._1f8817.og.af.ng && window._1f8817.og.af.ng.Qg) {
         renderContainer = window._1f8817.og.af.ng.Qg;
@@ -11330,7 +11330,7 @@ function f(p) {
       linesGraphics.clear();
 
       // Get the game instance
-      const gameInstance = window._wwc?._anApp?.dh || window._1f8817?.dh;
+      const gameInstance = window._tmw?._anApp?.dh || window._1f8817?.dh;
       if (!gameInstance || !gameInstance.Fh) return;
 
       // Set line style
@@ -11424,7 +11424,7 @@ function f(p) {
       return;
     }
     
-    if (!window._wwc && !window._1f8817) {
+    if (!window._tmw && !window._1f8817) {
       console.log('Waiting for game to load...');
       setTimeout(init, 1000);
       return;
@@ -11462,7 +11462,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Settings panel interactive features....
   setTimeout(() => {
-    const copyBtn = document.querySelector('#mm-wwc-close').parentElement.querySelector('button[onclick*="clipboard"]');
+    const copyBtn = document.querySelector('#mm-tmw-close').parentElement.querySelector('button[onclick*="clipboard"]');
     const idInput = document.getElementById('wormate_id');
     const clearBtn = document.querySelector('button[onclick*="fileSkin.value"]');
     const fileInput = document.getElementById('fileSkin');
