@@ -8843,55 +8843,84 @@ document.addEventListener("contextmenu", function (p638) {
   v625.textContent = "\n        (function() {\n            var preventDebugging = setInterval(function() {\n                if (window.console) {\n                    console.log = function() {}; \n                    console.debug = function() {}; \n                    console.error = function() {}; \n                    console.info = function() {};  \n                }\n            }, 1000);\n        })();\n    ";
   document.head.appendChild(v625);
 })();
-console.log("%cDeveloper XO 4", "color: #FF7F00; font-size: 18px; font-weight: bold;");
+console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
 
 
 
-/* XOTEAM FIX REGISTRY + 9/10/11 PIECES - ضعه بنهاية friends.js إذا السكن لا يحمل */
+/* XOTEAM SAFE FIX - لا يخفي السكنات */
 (function () {
-  const NEW_REGISTRY = "https://wm.wormy.online/registry";
+  const CUSTOM_SKINS_URL = "https://wm.wormy.online/skins";
 
-  function fixRegistryData(data) {
-    if (!data || typeof data !== "object") return data;
-    data.textureDict = data.textureDict || {};
-    data.regionDict = data.regionDict || {};
-    data.skinArrayDict = Array.isArray(data.skinArrayDict) ? data.skinArrayDict : [];
-    data.visibleSkin = Array.isArray(data.visibleSkin) ? data.visibleSkin : [];
+  function mergeRegistry(base, extra) {
+    if (!base || !extra) return base;
 
-    data.skinArrayDict.forEach(function (skin) {
-      if (!skin || !Array.isArray(skin.base)) return;
-      if (!Array.isArray(skin.glow)) skin.glow = [];
-      while (skin.glow.length < skin.base.length) skin.glow.push("a_white");
-      if (skin.glow.length > skin.base.length) skin.glow = skin.glow.slice(0, skin.base.length);
-      skin.base = skin.base.filter(function (r) {
-        return data.regionDict && data.regionDict[r];
-      });
+    base.visibleSkin = extra.visibleSkin || base.visibleSkin || [];
+
+    Object.keys(extra).forEach(function (key) {
+      if (key === "visibleSkin" || key === "propertyList") return;
+
+      if (Array.isArray(extra[key])) {
+        base[key] = Array.isArray(base[key]) ? base[key].concat(extra[key]) : extra[key];
+      } else if (extra[key] && typeof extra[key] === "object") {
+        base[key] = Object.assign(base[key] || {}, extra[key]);
+      }
     });
-    return data;
+
+    if (Array.isArray(base.skinArrayDict)) {
+      base.skinArrayDict.forEach(function (skin) {
+        if (!skin || !Array.isArray(skin.base)) return;
+        if (!Array.isArray(skin.glow)) skin.glow = [];
+        while (skin.glow.length < skin.base.length) skin.glow.push("a_white");
+        if (skin.glow.length > skin.base.length) skin.glow = skin.glow.slice(0, skin.base.length);
+      });
+    }
+
+    return base;
   }
 
-  async function getRegistry() {
-    const res = await fetch(NEW_REGISTRY + "?t=" + Date.now(), { cache: "no-store" });
-    const json = await res.json();
-    return fixRegistryData(json);
-  }
+  function patchApp() {
+    if (!window.anApp || !window.anApp.p || window.__XOTEAM_SAFE_PATCHED__) {
+      return false;
+    }
 
-  if (window.$ && $.get && !window.__XOTEAM_REGISTRY_PATCHED__) {
-    window.__XOTEAM_REGISTRY_PATCHED__ = true;
-    const oldGet = $.get;
-    $.get = function (url, cb) {
-      const u = String(url || "");
-      if (u.includes("/dynamic/assets/revision.json")) {
-        getRegistry().then(function (reg) { cb && cb(Number(reg.revision || Date.now())); })
-          .catch(function () { oldGet.apply($, arguments); });
-        return;
-      }
-      if (u.includes("/dynamic/assets/registry.json")) {
-        getRegistry().then(function (reg) { cb && cb(reg); })
-          .catch(function () { oldGet.apply($, arguments); });
-        return;
-      }
-      return oldGet.apply($, arguments);
+    window.__XOTEAM_SAFE_PATCHED__ = true;
+
+    window.anApp.p.Bc = function () {
+      var loader = window.anApp.p;
+
+      $.get("https://resources.wormate.io/dynamic/assets/registry.json", function (baseRegistry) {
+        $.ajax({
+          url: CUSTOM_SKINS_URL + "?t=" + Date.now(),
+          method: "GET",
+          dataType: "json",
+          cache: false,
+          success: function (customRegistry) {
+            try {
+              var finalRegistry = mergeRegistry(baseRegistry, customRegistry);
+              vO4.visibleSkin = finalRegistry.visibleSkin || [];
+              vO4.pL = customRegistry.propertyList || [];
+              vO4.idSkin = finalRegistry.skinArrayDict || [];
+              loader.Cc(finalRegistry);
+            } catch (e) {
+              console.log("XOTEAM merge error:", e);
+              loader.Cc(baseRegistry);
+            }
+          },
+          error: function () {
+            loader.Cc(baseRegistry);
+          }
+        });
+      });
     };
+
+    try {
+      window.anApp.p.L();
+    } catch (e) {}
+
+    return true;
   }
+
+  var timer = setInterval(function () {
+    if (patchApp()) clearInterval(timer);
+  }, 500);
 })();
