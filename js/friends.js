@@ -8397,22 +8397,23 @@ window.addEventListener("load", function () {
         f112();
       }
     }
-    if (typeof Number.prototype.dotFormat !== "function") {
-  Number.prototype.dotFormat = function () {
-    return Number(this).toLocaleString("de-DE");
-  };
+function dotFormat(num) {
+    return Number(num)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
-    if (!Number.prototype.customFormat) {
-      Number.prototype.customFormat = function () {
-        if (this >= 1000000) {
-          return (this / 1000000).toFixed(1) + "MðŸ°";
-        } else if (this >= 100000) {
-          return (this / 1000).toFixed(0) + "kðŸ°";
-        } else {
-          return this.dotFormat();
-        }
-      };
+
+function customFormat(num) {
+    num = Number(num);
+
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + "M🍰";
+    } else if (num >= 100000) {
+        return (num / 1000).toFixed(0) + "k🍰";
+    } else {
+        return dotFormat(num);
     }
+}
     setTimeout(function () {
       var vA17 = ["fuck you", "Ä‘á»‹t", "cÃ¡i lá»“n", "chÃ³", "Ä‘Ã©o", "lá»“n", "Ä‘Ã©o", "Ä‘á»‹t", "vÃ£i lá»“n", "cáº·c"];
       const v600 = document.getElementById("mm-params-nickname");
