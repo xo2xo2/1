@@ -8847,35 +8847,137 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
 
 
 
-/* XOTEAM SAFE FIX - لا يخفي السكنات */
+/* XOTEAM SAFE FIX - يحافظ على الأكل والأدوات ويضيف السكنات بدون تخريب */
 (function () {
+  const BASE_REGISTRY_URL = "https://resources.wormate.io/dynamic/assets/registry.json";
   const CUSTOM_SKINS_URL = "https://wm.wormy.online/skins";
+
+  function isObject(v) {
+    return v && typeof v === "object" && !Array.isArray(v);
+  }
+
+  function fixSkinGlow(registry) {
+    if (!registry || !Array.isArray(registry.skinArrayDict)) return registry;
+
+    registry.skinArrayDict.forEach(function (skin) {
+      if (!skin || !Array.isArray(skin.base)) return;
+
+      if (!Array.isArray(skin.glow)) skin.glow = [];
+
+      while (skin.glow.length < skin.base.length) {
+        skin.glow.push("a_white");
+      }
+
+      if (skin.glow.length > skin.base.length) {
+        skin.glow = skin.glow.slice(0, skin.base.length);
+      }
+    });
+
+    return registry;
+  }
+
+  function mergeArrayById(baseArr, extraArr) {
+    baseArr = Array.isArray(baseArr) ? baseArr.slice() : [];
+    extraArr = Array.isArray(extraArr) ? extraArr : [];
+
+    const used = {};
+    baseArr.forEach(function (item) {
+      if (item && item.id !== undefined) used[String(item.id)] = true;
+    });
+
+    extraArr.forEach(function (item) {
+      if (!item) return;
+
+      if (item.id !== undefined) {
+        const id = String(item.id);
+
+        for (let i = 0; i < baseArr.length; i++) {
+          if (baseArr[i] && String(baseArr[i].id) === id) {
+            baseArr[i] = Object.assign({}, baseArr[i], item);
+            used[id] = true;
+            return;
+          }
+        }
+
+        if (!used[id]) {
+          baseArr.push(item);
+          used[id] = true;
+        }
+      } else {
+        baseArr.push(item);
+      }
+    });
+
+    return baseArr;
+  }
 
   function mergeRegistry(base, extra) {
     if (!base || !extra) return base;
 
-    base.visibleSkin = extra.visibleSkin || base.visibleSkin || [];
+    // مهم جداً: نحفظ ملفات الأكل والأدوات الأصلية حتى ما تطلع علامة ?
+    const safeOriginal = {
+      portionDict: base.portionDict,
+      portionUnknown: base.portionUnknown,
+      abilityDict: base.abilityDict,
+      abilityUnknown: base.abilityUnknown,
+      teamDict: base.teamDict
+    };
 
-    Object.keys(extra).forEach(function (key) {
-      if (key === "visibleSkin" || key === "propertyList") return;
+    base.textureDict = Object.assign(base.textureDict || {}, extra.textureDict || {});
+    base.regionDict = Object.assign(base.regionDict || {}, extra.regionDict || {});
+    base.colorDict = Object.assign(base.colorDict || {}, extra.colorDict || {});
 
-      if (Array.isArray(extra[key])) {
-        base[key] = Array.isArray(base[key]) ? base[key].concat(extra[key]) : extra[key];
-      } else if (extra[key] && typeof extra[key] === "object") {
+    base.skinArrayDict = mergeArrayById(base.skinArrayDict, extra.skinArrayDict);
+
+    if (Array.isArray(extra.visibleSkin)) {
+      base.visibleSkin = Array.from(new Set([...(base.visibleSkin || []), ...extra.visibleSkin]));
+    } else {
+      base.visibleSkin = base.visibleSkin || [];
+    }
+
+    // ندمج فقط إضافات السكنات الآمنة
+    ["eyesDict", "mouthDict", "glassesDict", "hatDict"].forEach(function (key) {
+      if (isObject(extra[key])) {
         base[key] = Object.assign(base[key] || {}, extra[key]);
       }
     });
 
-    if (Array.isArray(base.skinArrayDict)) {
-      base.skinArrayDict.forEach(function (skin) {
-        if (!skin || !Array.isArray(skin.base)) return;
-        if (!Array.isArray(skin.glow)) skin.glow = [];
-        while (skin.glow.length < skin.base.length) skin.glow.push("a_white");
-        if (skin.glow.length > skin.base.length) skin.glow = skin.glow.slice(0, skin.base.length);
-      });
-    }
+    [
+      "eyesVariantArray",
+      "mouthVariantArray",
+      "glassesVariantArray",
+      "hatVariantArray"
+    ].forEach(function (key) {
+      if (Array.isArray(extra[key])) {
+        base[key] = Array.isArray(base[key]) ? base[key].concat(extra[key]) : extra[key];
+      }
+    });
+
+    // رجّع الأصلي حتى الأكل والتسريع والدوران ما يصيرون ?
+    base.portionDict = safeOriginal.portionDict;
+    base.portionUnknown = safeOriginal.portionUnknown;
+    base.abilityDict = safeOriginal.abilityDict;
+    base.abilityUnknown = safeOriginal.abilityUnknown;
+    base.teamDict = safeOriginal.teamDict;
+
+    fixSkinGlow(base);
 
     return base;
+  }
+
+  function loadCustomRegistry(callback) {
+    $.ajax({
+      url: CUSTOM_SKINS_URL + "?t=" + Date.now(),
+      method: "GET",
+      dataType: "json",
+      cache: false,
+      success: function (customRegistry) {
+        callback(customRegistry || {});
+      },
+      error: function () {
+        callback({});
+      }
+    });
   }
 
   function patchApp() {
@@ -8888,28 +8990,25 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
     window.anApp.p.Bc = function () {
       var loader = window.anApp.p;
 
-      $.get("https://resources.wormate.io/dynamic/assets/registry.json", function (baseRegistry) {
-        $.ajax({
-          url: CUSTOM_SKINS_URL + "?t=" + Date.now(),
-          method: "GET",
-          dataType: "json",
-          cache: false,
-          success: function (customRegistry) {
-            try {
-              var finalRegistry = mergeRegistry(baseRegistry, customRegistry);
+      $.get(BASE_REGISTRY_URL + "?t=" + Date.now(), function (baseRegistry) {
+        loadCustomRegistry(function (customRegistry) {
+          try {
+            var finalRegistry = mergeRegistry(baseRegistry, customRegistry);
+
+            if (window.vO4) {
               vO4.visibleSkin = finalRegistry.visibleSkin || [];
               vO4.pL = customRegistry.propertyList || [];
               vO4.idSkin = finalRegistry.skinArrayDict || [];
-              loader.Cc(finalRegistry);
-            } catch (e) {
-              console.log("XOTEAM merge error:", e);
-              loader.Cc(baseRegistry);
             }
-          },
-          error: function () {
+
+            loader.Cc(finalRegistry);
+          } catch (e) {
+            console.log("XOTEAM SAFE FIX merge error:", e);
             loader.Cc(baseRegistry);
           }
         });
+      }).fail(function () {
+        console.log("XOTEAM SAFE FIX: base registry failed");
       });
     };
 
@@ -8921,6 +9020,8 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   }
 
   var timer = setInterval(function () {
-    if (patchApp()) clearInterval(timer);
+    if (patchApp()) {
+      clearInterval(timer);
+    }
   }, 500);
 })();
