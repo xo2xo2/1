@@ -8847,8 +8847,13 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
 
 
 
-/* XOTEAM SAFE FIX - يحافظ على الأكل والأدوات ويضيف السكنات بدون تخريب */
+/* XOTEAM SAFE FIX UPDATED - يحافظ على الأكل والأدوات ويضيف السكنات بدون تخريب
+   ضع هذا الكود في نهاية friends.js
+*/
 (function () {
+  if (window.__XOTEAM_SAFE_FIX_UPDATED__) return;
+  window.__XOTEAM_SAFE_FIX_UPDATED__ = true;
+
   const BASE_REGISTRY_URL = "https://resources.wormate.io/dynamic/assets/registry.json";
   const CUSTOM_SKINS_URL = "https://wm.wormy.online/skins";
 
@@ -8856,11 +8861,67 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
     return v && typeof v === "object" && !Array.isArray(v);
   }
 
+  function uniqueArray(arr) {
+    return Array.from(new Set((Array.isArray(arr) ? arr : []).map(function (x) {
+      return typeof x === "number" ? x : String(x);
+    })));
+  }
+
+  function normalizeVariantArray(arr) {
+    const out = [];
+    const seen = {};
+
+    (Array.isArray(arr) ? arr : []).forEach(function (item) {
+      if (!Array.isArray(item) || item.length === 0) return;
+      const key = JSON.stringify(item);
+      if (seen[key]) return;
+      seen[key] = true;
+      out.push(item);
+    });
+
+    return out;
+  }
+
+  function mergeArrayById(baseArr, extraArr) {
+    baseArr = Array.isArray(baseArr) ? baseArr.slice() : [];
+    extraArr = Array.isArray(extraArr) ? extraArr : [];
+
+    const indexById = {};
+    baseArr.forEach(function (item, index) {
+      if (item && item.id !== undefined) indexById[String(item.id)] = index;
+    });
+
+    extraArr.forEach(function (item) {
+      if (!item) return;
+
+      if (item.id !== undefined) {
+        const id = String(item.id);
+        if (indexById[id] !== undefined) {
+          baseArr[indexById[id]] = Object.assign({}, baseArr[indexById[id]], item);
+        } else {
+          indexById[id] = baseArr.length;
+          baseArr.push(item);
+        }
+      } else {
+        baseArr.push(item);
+      }
+    });
+
+    return baseArr;
+  }
+
   function fixSkinGlow(registry) {
     if (!registry || !Array.isArray(registry.skinArrayDict)) return registry;
 
     registry.skinArrayDict.forEach(function (skin) {
       if (!skin || !Array.isArray(skin.base)) return;
+
+      // حذف أي base غير موجود حتى ما يكسر تحميل السكن
+      if (registry.regionDict) {
+        skin.base = skin.base.filter(function (regionName) {
+          return !!registry.regionDict[regionName];
+        });
+      }
 
       if (!Array.isArray(skin.glow)) skin.glow = [];
 
@@ -8871,57 +8932,52 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
       if (skin.glow.length > skin.base.length) {
         skin.glow = skin.glow.slice(0, skin.base.length);
       }
+
+      skin.pieceCount = skin.base.length;
     });
 
     return registry;
   }
 
-  function mergeArrayById(baseArr, extraArr) {
-    baseArr = Array.isArray(baseArr) ? baseArr.slice() : [];
-    extraArr = Array.isArray(extraArr) ? extraArr : [];
-
-    const used = {};
-    baseArr.forEach(function (item) {
-      if (item && item.id !== undefined) used[String(item.id)] = true;
-    });
-
-    extraArr.forEach(function (item) {
-      if (!item) return;
-
-      if (item.id !== undefined) {
-        const id = String(item.id);
-
-        for (let i = 0; i < baseArr.length; i++) {
-          if (baseArr[i] && String(baseArr[i].id) === id) {
-            baseArr[i] = Object.assign({}, baseArr[i], item);
-            used[id] = true;
-            return;
-          }
-        }
-
-        if (!used[id]) {
-          baseArr.push(item);
-          used[id] = true;
-        }
-      } else {
-        baseArr.push(item);
-      }
-    });
-
-    return baseArr;
-  }
-
-  function mergeRegistry(base, extra) {
-    if (!base || !extra) return base;
-
-    // مهم جداً: نحفظ ملفات الأكل والأدوات الأصلية حتى ما تطلع علامة ?
-    const safeOriginal = {
+  function safeKeepOriginal(base) {
+    return {
       portionDict: base.portionDict,
       portionUnknown: base.portionUnknown,
       abilityDict: base.abilityDict,
       abilityUnknown: base.abilityUnknown,
-      teamDict: base.teamDict
+      teamDict: base.teamDict,
+      foodDict: base.foodDict,
+      foodUnknown: base.foodUnknown,
+      propertyList: base.propertyList
     };
+  }
+
+  function restoreOriginal(base, original) {
+    Object.keys(original).forEach(function (key) {
+      if (original[key] !== undefined) base[key] = original[key];
+    });
+  }
+
+  function mergeDict(base, extra, key) {
+    if (isObject(extra[key])) {
+      base[key] = Object.assign(base[key] || {}, extra[key]);
+    } else if (Array.isArray(extra[key])) {
+      base[key] = Object.assign(base[key] || {}, arrayToObject(extra[key]));
+    }
+  }
+
+  function arrayToObject(arr) {
+    const obj = {};
+    arr.forEach(function (item) {
+      if (item && item.id !== undefined) obj[String(item.id)] = item;
+    });
+    return obj;
+  }
+
+  function mergeRegistry(base, extra) {
+    if (!base || !extra) return base || extra || {};
+
+    const original = safeKeepOriginal(base);
 
     base.textureDict = Object.assign(base.textureDict || {}, extra.textureDict || {});
     base.regionDict = Object.assign(base.regionDict || {}, extra.regionDict || {});
@@ -8930,16 +8986,13 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
     base.skinArrayDict = mergeArrayById(base.skinArrayDict, extra.skinArrayDict);
 
     if (Array.isArray(extra.visibleSkin)) {
-      base.visibleSkin = Array.from(new Set([...(base.visibleSkin || []), ...extra.visibleSkin]));
+      base.visibleSkin = uniqueArray([].concat(base.visibleSkin || [], extra.visibleSkin || []));
     } else {
-      base.visibleSkin = base.visibleSkin || [];
+      base.visibleSkin = uniqueArray(base.visibleSkin || []);
     }
 
-    // ندمج فقط إضافات السكنات الآمنة
     ["eyesDict", "mouthDict", "glassesDict", "hatDict"].forEach(function (key) {
-      if (isObject(extra[key])) {
-        base[key] = Object.assign(base[key] || {}, extra[key]);
-      }
+      mergeDict(base, extra, key);
     });
 
     [
@@ -8949,35 +9002,37 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
       "hatVariantArray"
     ].forEach(function (key) {
       if (Array.isArray(extra[key])) {
-        base[key] = Array.isArray(base[key]) ? base[key].concat(extra[key]) : extra[key];
+        base[key] = normalizeVariantArray([].concat(base[key] || [], extra[key] || []));
       }
     });
 
-    // رجّع الأصلي حتى الأكل والتسريع والدوران ما يصيرون ?
-    base.portionDict = safeOriginal.portionDict;
-    base.portionUnknown = safeOriginal.portionUnknown;
-    base.abilityDict = safeOriginal.abilityDict;
-    base.abilityUnknown = safeOriginal.abilityUnknown;
-    base.teamDict = safeOriginal.teamDict;
+    if (Array.isArray(extra.skinGroupArrayDict)) {
+      base.skinGroupArrayDict = mergeArrayById(base.skinGroupArrayDict, extra.skinGroupArrayDict);
+    }
 
-    fixSkinGlow(base);
+    // مهم: رجّع عناصر اللعبة الأصلية حتى لا تختفي الأكل/الأدوات أو تطلع علامة ?
+    restoreOriginal(base, original);
 
-    return base;
+    return fixSkinGlow(base);
   }
 
-  function loadCustomRegistry(callback) {
-    $.ajax({
-      url: CUSTOM_SKINS_URL + "?t=" + Date.now(),
-      method: "GET",
-      dataType: "json",
-      cache: false,
-      success: function (customRegistry) {
-        callback(customRegistry || {});
-      },
-      error: function () {
-        callback({});
-      }
-    });
+  function loadJson(url, ok, fail) {
+    if (window.$ && $.ajax) {
+      $.ajax({
+        url: url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now(),
+        method: "GET",
+        dataType: "json",
+        cache: false,
+        success: function (data) { ok(data || {}); },
+        error: function () { if (fail) fail(); }
+      });
+      return;
+    }
+
+    fetch(url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) { ok(data || {}); })
+      .catch(function () { if (fail) fail(); });
   }
 
   function patchApp() {
@@ -8987,13 +9042,14 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
 
     window.__XOTEAM_SAFE_PATCHED__ = true;
 
-    window.anApp.p.Bc = function () {
-      var loader = window.anApp.p;
+    const loader = window.anApp.p;
+    const oldBc = loader.Bc;
 
-      $.get(BASE_REGISTRY_URL + "?t=" + Date.now(), function (baseRegistry) {
-        loadCustomRegistry(function (customRegistry) {
+    loader.Bc = function () {
+      loadJson(BASE_REGISTRY_URL, function (baseRegistry) {
+        loadJson(CUSTOM_SKINS_URL, function (customRegistry) {
           try {
-            var finalRegistry = mergeRegistry(baseRegistry, customRegistry);
+            const finalRegistry = mergeRegistry(baseRegistry, customRegistry);
 
             if (window.vO4) {
               vO4.visibleSkin = finalRegistry.visibleSkin || [];
@@ -9003,25 +9059,28 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
 
             loader.Cc(finalRegistry);
           } catch (e) {
-            console.log("XOTEAM SAFE FIX merge error:", e);
+            console.log("XOTEAM SAFE FIX UPDATED merge error:", e);
             loader.Cc(baseRegistry);
           }
+        }, function () {
+          loader.Cc(baseRegistry);
         });
-      }).fail(function () {
-        console.log("XOTEAM SAFE FIX: base registry failed");
+      }, function () {
+        console.log("XOTEAM SAFE FIX UPDATED: base registry failed");
+        if (typeof oldBc === "function") {
+          try { oldBc.call(loader); } catch (e) {}
+        }
       });
     };
 
     try {
-      window.anApp.p.L();
+      if (typeof loader.L === "function") loader.L();
     } catch (e) {}
 
     return true;
   }
 
-  var timer = setInterval(function () {
-    if (patchApp()) {
-      clearInterval(timer);
-    }
+  const timer = setInterval(function () {
+    if (patchApp()) clearInterval(timer);
   }, 500);
 })();
