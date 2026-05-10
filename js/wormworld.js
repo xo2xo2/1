@@ -582,8 +582,8 @@ var vLS1c45217fb5c792042bfe = "1c45217fb5c792042bfe0587f3d5249c";
       nome: "Sky Orange",
       uri: window.URL_CDN + "/backgrounds/bg_sky_4.png"
     }, {
-      nome: "WormXO ",
-      uri: window.from("https://wormxo.store/image/wxo.png")
+      nome: "Sky Write",
+      uri: window.URL_CDN + "/backgrounds/bg_sky_5.png"
     }, {
       nome: "Arena 1",
       uri: window.URL_CDN + "/backgrounds/arena01.png",
