@@ -347,7 +347,7 @@ function XOTEAM_startAutoSave() {
   }
 }
 async function f2() {
-  await fetch("https://wormxo.store/api/server.php").then(p17 => p17.json()).then(p18 => {
+  await fetch("https://haylamday.com/api/server.php").then(p17 => p17.json()).then(p18 => {
     if (p18.success) {
       let v25 = p18.servers;
       vO6.Api_listServer = v25.filter(p19 => {
