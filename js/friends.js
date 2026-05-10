@@ -516,155 +516,372 @@ vO7.containerCountInfo.addChild(vO7.label_kill);
 vO7.containerCountInfo.addChild(vO7.value1_kill);
 vO7.containerCountInfo.addChild(vO7.value2_kill);
 
-/* XOTEAM INTERNAL PIXI 131 SYSTEM */
+/* XOTEAM INTERNAL PIXI 131 SYSTEM - DEEP FIX */
 var XOTEAM_LOCAL_SKIN_MODE = {
-  enabled: false,
+  enabled: true,
   targetSkin: 131,
   currentTarget: null,
-  lastNickname: "",
+  currentTargetKey: "",
+  lastNickname: "NO TARGET",
   uiContainer: null,
-  uiName: null
+  uiName: null,
+  uiHint: null,
+  patched: false
 };
+
+function XOTEAM_131_getStage() {
+  try {
+    if (window.anApp && anApp.s && anApp.s.H && anApp.s.H.children) return anApp.s.H;
+  } catch (e) {}
+  try {
+    if (window.anApp && anApp.o && anApp.o.N && anApp.o.N.parent) return anApp.o.N.parent;
+  } catch (e) {}
+  try {
+    if (window.app && app.stage) return app.stage;
+  } catch (e) {}
+  try {
+    if (window.PIXI && PIXI.utils && PIXI.utils.TextureCache) {
+      var canvases = document.querySelectorAll("canvas");
+      if (canvases.length && window.anApp && anApp.s && anApp.s.aa) return anApp.s.aa;
+    }
+  } catch (e) {}
+  return null;
+}
+
+function XOTEAM_131_textStyle(size, color, stroke) {
+  return new PIXI.TextStyle({
+    align: "left",
+    fill: color || "#ffffff",
+    fontSize: size || 12,
+    fontFamily: "vuonghiep, Arial",
+    fontWeight: "bold",
+    stroke: stroke || "#000000",
+    strokeThickness: 3,
+    lineJoin: "round",
+    wordWrap: true
+  });
+}
 
 function XOTEAM_createPixiCard() {
   try {
+    if (!window.PIXI) return;
     if (XOTEAM_LOCAL_SKIN_MODE.uiContainer) return;
 
-    const container = new PIXI.Container();
+    var container = new PIXI.Container();
+    container.name = "XOTEAM_LOCAL_131_CARD";
+    container.zIndex = 999999;
+    container.visible = true;
 
-    const bg = new PIXI.Graphics();
-    bg.beginFill(0x000000, 0.55);
-    bg.drawRoundedRect(0, 0, 210, 58, 12);
+    var shadow = new PIXI.Graphics();
+    shadow.beginFill(0x000000, 0.36);
+    shadow.drawRoundedRect(5, 5, 238, 70, 14);
+    shadow.endFill();
+
+    var bg = new PIXI.Graphics();
+    bg.beginFill(0x070707, 0.78);
+    bg.drawRoundedRect(0, 0, 238, 70, 14);
     bg.endFill();
 
-    const border = new PIXI.Graphics();
-    border.lineStyle(2, 0xFFD700, 0.8);
-    border.drawRoundedRect(0, 0, 210, 58, 12);
+    var topLine = new PIXI.Graphics();
+    topLine.beginFill(0xffd43b, 1);
+    topLine.drawRoundedRect(0, 0, 238, 4, 4);
+    topLine.endFill();
 
-    const title = new PIXI.Text("LOCAL SKIN 131", new PIXI.TextStyle({
-      fill: "#FFD700",
-      fontSize: 12,
-      fontFamily: "Arial",
-      fontWeight: "bold"
-    }));
-
+    var title = new PIXI.Text("LOCAL CHANGE SKIN", XOTEAM_131_textStyle(11, "#ffd43b", "#000000"));
     title.x = 12;
-    title.y = 8;
+    title.y = 10;
 
-    const nickname = new PIXI.Text("NO TARGET", new PIXI.TextStyle({
-      fill: "#FFFFFF",
-      fontSize: 14,
+    var nameText = new PIXI.Text("NO TARGET", XOTEAM_131_textStyle(15, "#ffffff", "#000000"));
+    nameText.x = 12;
+    nameText.y = 30;
+
+    var hintText = new PIXI.Text("Press 8  →  Skin 131", XOTEAM_131_textStyle(10, "#9dff6a", "#000000"));
+    hintText.x = 12;
+    hintText.y = 51;
+
+    var keyBox = new PIXI.Graphics();
+    keyBox.beginFill(0xffd43b, 0.95);
+    keyBox.drawRoundedRect(190, 18, 34, 34, 8);
+    keyBox.endFill();
+
+    var keyText = new PIXI.Text("8", new PIXI.TextStyle({
+      fill: "#000000",
+      fontSize: 24,
       fontFamily: "Arial",
       fontWeight: "bold"
     }));
+    keyText.x = 200;
+    keyText.y = 20;
 
-    nickname.x = 12;
-    nickname.y = 28;
-
+    container.addChild(shadow);
     container.addChild(bg);
-    container.addChild(border);
+    container.addChild(topLine);
     container.addChild(title);
-    container.addChild(nickname);
-
-    container.x = window.innerWidth - 240;
-    container.y = window.innerHeight - 120;
+    container.addChild(nameText);
+    container.addChild(hintText);
+    container.addChild(keyBox);
+    container.addChild(keyText);
 
     XOTEAM_LOCAL_SKIN_MODE.uiContainer = container;
-    XOTEAM_LOCAL_SKIN_MODE.uiName = nickname;
+    XOTEAM_LOCAL_SKIN_MODE.uiName = nameText;
+    XOTEAM_LOCAL_SKIN_MODE.uiHint = hintText;
 
-    setInterval(function(){
+    function placeCard() {
       try {
-        container.x = window.innerWidth - 240;
-        container.y = window.innerHeight - 120;
-      } catch(e){}
-    }, 1000);
+        var w = window.innerWidth || 1280;
+        var h = window.innerHeight || 720;
+        container.x = Math.max(8, w - 260);
+        container.y = Math.max(8, h - 108);
+      } catch (e) {}
+    }
 
-    const addUI = function() {
+    function attachCard() {
       try {
-        if (window.app && app.stage && !container.parent) {
-          app.stage.addChild(container);
-        } else if (window.anApp && anApp.o && anApp.o.N && anApp.o.N.stage && !container.parent) {
-          anApp.o.N.stage.addChild(container);
+        var stage = XOTEAM_131_getStage();
+        if (stage && !container.parent && typeof stage.addChild === "function") {
+          stage.addChild(container);
+          placeCard();
         }
-      } catch(e){}
-    };
+      } catch (e) {}
+    }
 
-    addUI();
-    setInterval(addUI, 3000);
+    placeCard();
+    attachCard();
+    setInterval(function () {
+      placeCard();
+      attachCard();
+    }, 1000);
+  } catch (e) {
+    console.log("XOTEAM 131 card error:", e);
+  }
+}
 
-  } catch(e) {
-    console.log("XOTEAM PIXI CARD ERROR", e);
+function XOTEAM_131_getName(obj) {
+  try {
+    if (!obj) return "";
+    if (typeof obj.nickname === "string" && obj.nickname.trim()) return obj.nickname.trim();
+    if (typeof obj.name === "string" && obj.name.trim()) return obj.name.trim();
+    if (typeof obj.Lb === "string" && obj.Lb.trim()) return obj.Lb.trim();
+    if (obj.Mb && typeof obj.Mb.Lb === "string" && obj.Mb.Lb.trim()) return obj.Mb.Lb.trim();
+    if (obj.Mb && typeof obj.Mb.name === "string" && obj.Mb.name.trim()) return obj.Mb.name.trim();
+    if (obj.Db && typeof obj.Db.text === "string" && obj.Db.text.trim()) return obj.Db.text.trim();
+    if (obj.nameText && typeof obj.nameText.text === "string" && obj.nameText.text.trim()) return obj.nameText.text.trim();
+    if (typeof obj.ga === "function") {
+      var g = obj.ga();
+      if (typeof g === "string" && g.trim()) return g.trim();
+    }
+  } catch (e) {}
+  return "";
+}
+
+function XOTEAM_131_isPlayerLike(obj) {
+  try {
+    if (!obj || typeof obj !== "object") return false;
+    if (obj === window || obj === document) return false;
+    if (obj.children && obj.texture && obj.position) return false;
+    var hasName = !!XOTEAM_131_getName(obj);
+    var hasSkin =
+      obj.skinId !== undefined ||
+      obj.skin !== undefined ||
+      obj.skin_id !== undefined ||
+      obj.J !== undefined ||
+      obj.ia !== undefined ||
+      obj.Mb ||
+      obj.qb ||
+      obj.rb;
+    var hasPos =
+      (typeof obj.x === "number" && typeof obj.y === "number") ||
+      (typeof obj.Ob === "number" && typeof obj.Pb === "number") ||
+      (obj.position && typeof obj.position.x === "number");
+    return hasName && (hasSkin || hasPos);
+  } catch (e) {
+    return false;
+  }
+}
+
+function XOTEAM_131_collectFrom(root, out, limit) {
+  if (!root || typeof root !== "object" || out.length >= limit) return;
+  var seen = XOTEAM_131_collectFrom._seen || (XOTEAM_131_collectFrom._seen = new WeakSet());
+  if (seen.has(root)) return;
+  seen.add(root);
+
+  try {
+    if (XOTEAM_131_isPlayerLike(root)) out.push(root);
+  } catch (e) {}
+
+  try {
+    if (Array.isArray(root)) {
+      for (var i = 0; i < root.length && out.length < limit; i++) {
+        XOTEAM_131_collectFrom(root[i], out, limit);
+      }
+      return;
+    }
+
+    var keys = Object.keys(root);
+    for (var k = 0; k < keys.length && out.length < limit; k++) {
+      var key = keys[k];
+      if (key === "parent" || key === "texture" || key === "baseTexture" || key === "_events") continue;
+      var val = root[key];
+      if (val && typeof val === "object") {
+        XOTEAM_131_collectFrom(val, out, limit);
+      }
+    }
+  } catch (e) {}
+}
+
+function XOTEAM_131_getMySnake() {
+  try {
+    if (window.anApp && anApp.o && anApp.o.N) return anApp.o.N;
+  } catch (e) {}
+  return null;
+}
+
+function XOTEAM_131_distToMe(p) {
+  try {
+    var me = XOTEAM_131_getMySnake();
+    if (!me || !p) return 999999999;
+    var mx = Number(me.Ob || me.x || (me.position && me.position.x) || 0);
+    var my = Number(me.Pb || me.y || (me.position && me.position.y) || 0);
+    var px = Number(p.Ob || p.x || (p.position && p.position.x) || 0);
+    var py = Number(p.Pb || p.y || (p.position && p.position.y) || 0);
+    var dx = mx - px;
+    var dy = my - py;
+    return dx * dx + dy * dy;
+  } catch (e) {
+    return 999999999;
   }
 }
 
 function XOTEAM_scanPlayers() {
   try {
-    let bestName = "NO TARGET";
+    XOTEAM_131_collectFrom._seen = new WeakSet();
 
-    if (window.anApp && anApp.o && anApp.o.N && anApp.o.N.Bd) {
-      const list = anApp.o.N.Bd;
+    var roots = [];
+    try { if (window.anApp && anApp.o) roots.push(anApp.o); } catch (e) {}
+    try { if (window.anApp && anApp.s) roots.push(anApp.s); } catch (e) {}
+    try { if (window.vO2) roots.push(vO2); } catch (e) {}
 
-      for (let key in list) {
-        const p = list[key];
-        if (!p) continue;
+    var players = [];
+    for (var i = 0; i < roots.length; i++) {
+      XOTEAM_131_collectFrom(roots[i], players, 80);
+    }
 
-        if (p.nickname) {
-          bestName = p.nickname;
-          XOTEAM_LOCAL_SKIN_MODE.currentTarget = p;
-          break;
-        }
+    var best = null;
+    var bestDist = 999999999;
 
-        if (p.ga && typeof p.ga === "function") {
-          bestName = p.ga();
-          XOTEAM_LOCAL_SKIN_MODE.currentTarget = p;
-          break;
-        }
+    for (var j = 0; j < players.length; j++) {
+      var p = players[j];
+      if (p === XOTEAM_131_getMySnake()) continue;
+      var name = XOTEAM_131_getName(p);
+      if (!name || name === "Player" || name === XOTEAM_getClientName()) continue;
+      var d = XOTEAM_131_distToMe(p);
+      if (d < bestDist) {
+        bestDist = d;
+        best = p;
       }
     }
 
-    XOTEAM_LOCAL_SKIN_MODE.lastNickname = bestName;
-
-    if (XOTEAM_LOCAL_SKIN_MODE.uiName) {
-      XOTEAM_LOCAL_SKIN_MODE.uiName.text = bestName;
+    if (best) {
+      XOTEAM_LOCAL_SKIN_MODE.currentTarget = best;
+      XOTEAM_LOCAL_SKIN_MODE.lastNickname = XOTEAM_131_getName(best) || "TARGET";
+    } else {
+      XOTEAM_LOCAL_SKIN_MODE.currentTarget = null;
+      XOTEAM_LOCAL_SKIN_MODE.lastNickname = "NO TARGET";
     }
 
-  } catch(e){}
+    if (XOTEAM_LOCAL_SKIN_MODE.uiName) {
+      XOTEAM_LOCAL_SKIN_MODE.uiName.text = XOTEAM_LOCAL_SKIN_MODE.lastNickname;
+    }
+  } catch (e) {}
+}
+
+function XOTEAM_131_deepSet(obj, skinId, depth) {
+  if (!obj || typeof obj !== "object" || depth > 2) return;
+  try {
+    var fields = [
+      "skinId", "skin", "skin_id", "skinID", "J", "ia", "Da", "Sa", "Ta", "skinIndex",
+      "currentSkin", "desenId", "skinType"
+    ];
+
+    for (var i = 0; i < fields.length; i++) {
+      try {
+        if (fields[i] in obj) obj[fields[i]] = skinId;
+      } catch (e) {}
+    }
+
+    try { obj.idSkin = skinId; } catch (e) {}
+    try { obj.customSkinId = skinId; } catch (e) {}
+    try { obj.__XOTEAM_LOCAL_SKIN_131 = true; } catch (e) {}
+
+    if (typeof obj.I === "function") {
+      try { obj.I(skinId); } catch (e) {}
+    }
+    if (typeof obj.setSkin === "function") {
+      try { obj.setSkin(skinId); } catch (e) {}
+    }
+    if (typeof obj.updateSkin === "function") {
+      try { obj.updateSkin(skinId); } catch (e) {}
+    }
+
+    var keys = Object.keys(obj);
+    for (var k = 0; k < keys.length; k++) {
+      var key = keys[k];
+      if (key === "parent" || key === "children" || key === "texture" || key === "baseTexture") continue;
+      var val = obj[key];
+      if (val && typeof val === "object") {
+        XOTEAM_131_deepSet(val, skinId, depth + 1);
+      }
+    }
+  } catch (e) {}
 }
 
 function XOTEAM_apply131Skin() {
   try {
-    const target = XOTEAM_LOCAL_SKIN_MODE.currentTarget;
-    if (!target) return;
-
-    target.skinId = 131;
-    target.skin = 131;
-    target.J = 131;
-    target.skin_id = 131;
-
-    if (target.Mb) {
-      target.Mb.skinId = 131;
+    var target = XOTEAM_LOCAL_SKIN_MODE.currentTarget;
+    if (!target) {
+      if (XOTEAM_LOCAL_SKIN_MODE.uiHint) XOTEAM_LOCAL_SKIN_MODE.uiHint.text = "No player near you";
+      return;
     }
 
-    console.log("XOTEAM LOCAL 131 APPLIED");
-  } catch(e) {
-    console.log(e);
+    XOTEAM_131_deepSet(target, XOTEAM_LOCAL_SKIN_MODE.targetSkin, 0);
+
+    try {
+      if (target.Mb) XOTEAM_131_deepSet(target.Mb, XOTEAM_LOCAL_SKIN_MODE.targetSkin, 0);
+      if (target.qb) XOTEAM_131_deepSet(target.qb, XOTEAM_LOCAL_SKIN_MODE.targetSkin, 0);
+      if (target.rb) XOTEAM_131_deepSet(target.rb, XOTEAM_LOCAL_SKIN_MODE.targetSkin, 0);
+    } catch (e) {}
+
+    if (XOTEAM_LOCAL_SKIN_MODE.uiHint) {
+      XOTEAM_LOCAL_SKIN_MODE.uiHint.text = "Applied locally: skin 131";
+      setTimeout(function () {
+        if (XOTEAM_LOCAL_SKIN_MODE.uiHint) XOTEAM_LOCAL_SKIN_MODE.uiHint.text = "Press 8  →  Skin 131";
+      }, 1400);
+    }
+
+    console.log("XOTEAM 131 local applied to:", XOTEAM_LOCAL_SKIN_MODE.lastNickname, target);
+  } catch (e) {
+    console.log("XOTEAM apply 131 error:", e);
   }
 }
 
-document.addEventListener("keydown", function(e){
-  if (e.key === "8") {
-    XOTEAM_apply131Skin();
-  }
-});
+function XOTEAM_131_boot() {
+  if (XOTEAM_LOCAL_SKIN_MODE.patched) return;
+  XOTEAM_LOCAL_SKIN_MODE.patched = true;
 
-setTimeout(function(){
-  XOTEAM_createPixiCard();
+  document.addEventListener("keydown", function (e) {
+    if ((e.key === "8" || e.keyCode === 56 || e.code === "Digit8") && !e.repeat) {
+      XOTEAM_scanPlayers();
+      XOTEAM_apply131Skin();
+    }
+  }, true);
 
-  setInterval(function(){
+  setInterval(function () {
+    XOTEAM_createPixiCard();
     XOTEAM_scanPlayers();
   }, 500);
+}
 
-}, 4000);
+setTimeout(XOTEAM_131_boot, 2500);
 
 vO7.imgServerbase = PIXI.Texture.fromImage("https://i.imgur.com/EkbSd65.png");
 vO7.borderurl = PIXI.Texture.fromImage("https://i.imgur.com/wYJAfmO0.png");
