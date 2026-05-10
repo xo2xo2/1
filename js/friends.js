@@ -140,8 +140,8 @@ let vO5 = {
 let vO6 = {
   Api_listServer: []
 };
-const XOTEAM_API_USERS = "https://xoteam-server.ii7modysmp.workers.dev/api/users";
-const XOTEAM_SOCKET = "wss://xoteam-server.ii7modysmp.workers.dev/update";
+const XOTEAM_API_USERS = "https://jkr.wormy.online/api/users";
+const XOTEAM_SOCKET = "wss://jkr.wormy.online/update";
 
 let XOTEAM_WS = null;
 let XOTEAM_SAVE_TIMER = null;
