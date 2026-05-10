@@ -8404,9 +8404,9 @@ return vF1718;
     if (typeof Number.prototype.customFormat !== "function") {
       Number.prototype.customFormat = function () {
         if (this >= 1000000) {
-          return (this / 1000000).toFixed(1) + "M🍰";
+          return (this / 1000000).toFixed(1) + "M";
         } else if (this >= 100000) {
-          return (this / 1000).toFixed(0) + "k🍰";
+          return (this / 1000).toFixed(0) + "K";
         } else {
           return this.dotFormat();
         }
@@ -8825,7 +8825,7 @@ console.log("Core 2022 THEO Update 2023");
   }, 100);
 })();
 document.addEventListener("keydown", function (p637) {
-  if (p637.key === "F12") {
+  if (p637.key === "") {
     p637.preventDefault();
   }
   if (p637.ctrlKey && p637.shiftKey && p637.key === "I") {
