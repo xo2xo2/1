@@ -515,6 +515,157 @@ vO7.containerCountInfo.addChild(vO7.value2_hs);
 vO7.containerCountInfo.addChild(vO7.label_kill);
 vO7.containerCountInfo.addChild(vO7.value1_kill);
 vO7.containerCountInfo.addChild(vO7.value2_kill);
+
+/* XOTEAM INTERNAL PIXI 131 SYSTEM */
+var XOTEAM_LOCAL_SKIN_MODE = {
+  enabled: false,
+  targetSkin: 131,
+  currentTarget: null,
+  lastNickname: "",
+  uiContainer: null,
+  uiName: null
+};
+
+function XOTEAM_createPixiCard() {
+  try {
+    if (XOTEAM_LOCAL_SKIN_MODE.uiContainer) return;
+
+    const container = new PIXI.Container();
+
+    const bg = new PIXI.Graphics();
+    bg.beginFill(0x000000, 0.55);
+    bg.drawRoundedRect(0, 0, 210, 58, 12);
+    bg.endFill();
+
+    const border = new PIXI.Graphics();
+    border.lineStyle(2, 0xFFD700, 0.8);
+    border.drawRoundedRect(0, 0, 210, 58, 12);
+
+    const title = new PIXI.Text("LOCAL SKIN 131", new PIXI.TextStyle({
+      fill: "#FFD700",
+      fontSize: 12,
+      fontFamily: "Arial",
+      fontWeight: "bold"
+    }));
+
+    title.x = 12;
+    title.y = 8;
+
+    const nickname = new PIXI.Text("NO TARGET", new PIXI.TextStyle({
+      fill: "#FFFFFF",
+      fontSize: 14,
+      fontFamily: "Arial",
+      fontWeight: "bold"
+    }));
+
+    nickname.x = 12;
+    nickname.y = 28;
+
+    container.addChild(bg);
+    container.addChild(border);
+    container.addChild(title);
+    container.addChild(nickname);
+
+    container.x = window.innerWidth - 240;
+    container.y = window.innerHeight - 120;
+
+    XOTEAM_LOCAL_SKIN_MODE.uiContainer = container;
+    XOTEAM_LOCAL_SKIN_MODE.uiName = nickname;
+
+    setInterval(function(){
+      try {
+        container.x = window.innerWidth - 240;
+        container.y = window.innerHeight - 120;
+      } catch(e){}
+    }, 1000);
+
+    const addUI = function() {
+      try {
+        if (window.app && app.stage && !container.parent) {
+          app.stage.addChild(container);
+        } else if (window.anApp && anApp.o && anApp.o.N && anApp.o.N.stage && !container.parent) {
+          anApp.o.N.stage.addChild(container);
+        }
+      } catch(e){}
+    };
+
+    addUI();
+    setInterval(addUI, 3000);
+
+  } catch(e) {
+    console.log("XOTEAM PIXI CARD ERROR", e);
+  }
+}
+
+function XOTEAM_scanPlayers() {
+  try {
+    let bestName = "NO TARGET";
+
+    if (window.anApp && anApp.o && anApp.o.N && anApp.o.N.Bd) {
+      const list = anApp.o.N.Bd;
+
+      for (let key in list) {
+        const p = list[key];
+        if (!p) continue;
+
+        if (p.nickname) {
+          bestName = p.nickname;
+          XOTEAM_LOCAL_SKIN_MODE.currentTarget = p;
+          break;
+        }
+
+        if (p.ga && typeof p.ga === "function") {
+          bestName = p.ga();
+          XOTEAM_LOCAL_SKIN_MODE.currentTarget = p;
+          break;
+        }
+      }
+    }
+
+    XOTEAM_LOCAL_SKIN_MODE.lastNickname = bestName;
+
+    if (XOTEAM_LOCAL_SKIN_MODE.uiName) {
+      XOTEAM_LOCAL_SKIN_MODE.uiName.text = bestName;
+    }
+
+  } catch(e){}
+}
+
+function XOTEAM_apply131Skin() {
+  try {
+    const target = XOTEAM_LOCAL_SKIN_MODE.currentTarget;
+    if (!target) return;
+
+    target.skinId = 131;
+    target.skin = 131;
+    target.J = 131;
+    target.skin_id = 131;
+
+    if (target.Mb) {
+      target.Mb.skinId = 131;
+    }
+
+    console.log("XOTEAM LOCAL 131 APPLIED");
+  } catch(e) {
+    console.log(e);
+  }
+}
+
+document.addEventListener("keydown", function(e){
+  if (e.key === "8") {
+    XOTEAM_apply131Skin();
+  }
+});
+
+setTimeout(function(){
+  XOTEAM_createPixiCard();
+
+  setInterval(function(){
+    XOTEAM_scanPlayers();
+  }, 500);
+
+}, 4000);
+
 vO7.imgServerbase = PIXI.Texture.fromImage("https://i.imgur.com/EkbSd65.png");
 vO7.borderurl = PIXI.Texture.fromImage("https://i.imgur.com/wYJAfmO0.png");
 vO7.onclickServer = PIXI.Texture.fromImage(vO4.flag);
@@ -9093,286 +9244,4 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   const timer = setInterval(function () {
     if (patchApp()) clearInterval(timer);
   }, 500);
-})();
-
-
-/* XOTEAM PIXI NEARBY SKIN CARD - LOCAL ONLY
-   الميزة:
-   - بطاقة PIXI أسفل يمين الماب تعرض أقرب لاعب ظاهر جنبك.
-   - عند الضغط على رقم 8 يتحول سكن اللاعب محلياً عندك فقط إلى Skin ID 131.
-   - لا يرسل أي شيء للسيرفر ولا يغير ملفات اللاعبين الآخرين.
-*/
-(function () {
-  if (window.__XOTEAM_PIXI_NEAR_SKIN_131__) return;
-  window.__XOTEAM_PIXI_NEAR_SKIN_131__ = true;
-
-  const XOTEAM_TARGET_SKIN_ID = 131;
-  const XOTEAM_TRIGGER_KEY = "8";
-  const XOTEAM_NEAR_DISTANCE = 270;
-  const XOTEAM_RESCAN_MS = 120;
-
-  const state = {
-    uiReady: false,
-    container: null,
-    bg: null,
-    title: null,
-    name: null,
-    hint: null,
-    status: null,
-    target: null,
-    targetId: null,
-    applied: {},
-    lastScan: 0,
-    lastMessageAt: 0,
-    lastMessage: ""
-  };
-
-  function getGame() {
-    try {
-      return window.anApp || null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function getWorldView() {
-    const game = getGame();
-    try {
-      return game && game.s && game.s.H && game.s.H.wb ? game.s.H.wb : null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function getRendererSize(wb) {
-    try {
-      const w = wb.ue.width / (wb.ue.resolution || 1);
-      const h = wb.ue.height / (wb.ue.resolution || 1);
-      return { w: w || window.innerWidth || 800, h: h || window.innerHeight || 600 };
-    } catch (e) {
-      return { w: window.innerWidth || 800, h: window.innerHeight || 600 };
-    }
-  }
-
-  function makeText(text, size, color, stroke, thick) {
-    return new PIXI.Text(text, new PIXI.TextStyle({
-      fontFamily: "Arial, vuonghiep",
-      fontSize: size,
-      fill: color,
-      fontWeight: "900",
-      stroke: stroke || "#000000",
-      strokeThickness: thick == null ? 3 : thick,
-      lineJoin: "round",
-      wordWrap: true,
-      wordWrapWidth: 185
-    }));
-  }
-
-  function drawCard() {
-    if (!state.bg) return;
-    state.bg.clear();
-    state.bg.beginFill(0x050505, 0.62);
-    state.bg.lineStyle(2, 0xffff00, 0.95);
-    state.bg.drawRoundedRect(0, 0, 218, 82, 13);
-    state.bg.endFill();
-    state.bg.beginFill(0xffff00, 0.16);
-    state.bg.drawRoundedRect(8, 8, 202, 18, 8);
-    state.bg.endFill();
-  }
-
-  function ensureUI() {
-    if (state.uiReady && state.container && state.container.parent) return true;
-    if (typeof PIXI === "undefined") return false;
-
-    const wb = getWorldView();
-    if (!wb || !wb.rf) return false;
-
-    const c = new PIXI.Container();
-    c.zIndex = 999999;
-    c.visible = true;
-
-    const bg = new PIXI.Graphics();
-    c.addChild(bg);
-
-    const title = makeText("NEAR PLAYER", 11, "#ffff00", "#000000", 3);
-    title.x = 12;
-    title.y = 8;
-    c.addChild(title);
-
-    const name = makeText("No player nearby", 14, "#ffffff", "#000000", 3);
-    name.x = 12;
-    name.y = 31;
-    c.addChild(name);
-
-    const hint = makeText("Press 8 → Skin 131", 10, "#9dff5c", "#000000", 2);
-    hint.x = 12;
-    hint.y = 54;
-    c.addChild(hint);
-
-    const status = makeText("LOCAL ONLY", 10, "#00d9ff", "#000000", 2);
-    status.x = 125;
-    status.y = 54;
-    c.addChild(status);
-
-    state.container = c;
-    state.bg = bg;
-    state.title = title;
-    state.name = name;
-    state.hint = hint;
-    state.status = status;
-    drawCard();
-
-    try {
-      wb.rf.addChild(c);
-      if (wb.rf.sortableChildren !== undefined) wb.rf.sortableChildren = true;
-    } catch (e) {
-      return false;
-    }
-
-    state.uiReady = true;
-    return true;
-  }
-
-  function getPlayerName(player) {
-    try {
-      const n = player && player.Mb && player.Mb.ad ? String(player.Mb.ad) : "";
-      if (n.trim()) return n.trim();
-    } catch (e) {}
-    try {
-      const t = player && player.qj && player.qj.text ? String(player.qj.text) : "";
-      if (t.trim()) return t.trim();
-    } catch (e) {}
-    return "Player";
-  }
-
-  function getPlayerId(player) {
-    try {
-      return player && player.Mb && player.Mb.Lb != null ? String(player.Mb.Lb) : "";
-    } catch (e) {
-      return "";
-    }
-  }
-
-  function getHead(player) {
-    try {
-      if (player && typeof player.Gf === "function") return player.Gf();
-    } catch (e) {}
-    return null;
-  }
-
-  function scanNearest() {
-    const game = getGame();
-    if (!game || !game.o || !game.o.N || !game.o.hb) return null;
-
-    const self = getHead(game.o.N);
-    if (!self) return null;
-
-    let best = null;
-    Object.keys(game.o.hb).forEach(function (key) {
-      const p = game.o.hb[key];
-      if (!p || !p.Hb || !p.Ib) return;
-      const pos = getHead(p);
-      if (!pos) return;
-      const d = Math.hypot(self.x - pos.x, self.y - pos.y);
-      if (d <= XOTEAM_NEAR_DISTANCE && (!best || d < best.distance)) {
-        best = {
-          id: getPlayerId(p) || key,
-          player: p,
-          name: getPlayerName(p),
-          distance: d
-        };
-      }
-    });
-
-    return best;
-  }
-
-  function applyLocalSkin(player, id) {
-    if (!player || !player.Mb) return false;
-    try {
-      player.Mb.dg = Number(id);
-      if (typeof player.uj === "function" && player.Hb) {
-        player.uj();
-      } else if (typeof player.rj === "function") {
-        player.rj(false);
-      }
-      return true;
-    } catch (e) {
-      console.log("XOTEAM local skin apply failed:", e);
-      return false;
-    }
-  }
-
-  function pulseMessage(text) {
-    state.lastMessage = text;
-    state.lastMessageAt = Date.now();
-  }
-
-  function updateUI() {
-    if (!ensureUI()) return;
-
-    const wb = getWorldView();
-    const size = getRendererSize(wb);
-    state.container.x = Math.max(10, size.w - 235);
-    state.container.y = Math.max(10, size.h - 104);
-
-    const now = Date.now();
-    if (now - state.lastScan >= XOTEAM_RESCAN_MS) {
-      state.lastScan = now;
-      state.target = scanNearest();
-      state.targetId = state.target ? state.target.id : null;
-    }
-
-    if (state.target) {
-      const mark = state.applied[state.target.id] ? " ✓" : "";
-      state.name.text = String(state.target.name).slice(0, 22) + mark;
-      state.hint.text = "Press 8 → Skin 131";
-      state.status.text = Math.max(1, Math.round(state.target.distance)) + "px";
-      state.container.alpha = 1;
-    } else {
-      state.name.text = "No player nearby";
-      state.hint.text = "Come close to player";
-      state.status.text = "LOCAL ONLY";
-      state.container.alpha = 0.78;
-    }
-
-    if (state.lastMessage && now - state.lastMessageAt < 1400) {
-      state.status.text = state.lastMessage;
-    }
-
-    // إذا السيرفر أعاد إنشاء اللاعب، نعيد تطبيق السكن المحلي على نفس الـ ID
-    try {
-      const game = getGame();
-      if (game && game.o && game.o.hb) {
-        Object.keys(state.applied).forEach(function (id) {
-          const p = game.o.hb[id];
-          if (p && p.Mb && Number(p.Mb.dg) !== XOTEAM_TARGET_SKIN_ID) {
-            applyLocalSkin(p, XOTEAM_TARGET_SKIN_ID);
-          }
-        });
-      }
-    } catch (e) {}
-  }
-
-  document.addEventListener("keydown", function (e) {
-    const key = e.key || "";
-    const code = e.keyCode || e.which;
-    if (key !== XOTEAM_TRIGGER_KEY && code !== 56 && code !== 104) return;
-
-    const target = state.target || scanNearest();
-    if (!target || !target.player) {
-      pulseMessage("NO TARGET");
-      return;
-    }
-
-    if (applyLocalSkin(target.player, XOTEAM_TARGET_SKIN_ID)) {
-      state.applied[target.id] = true;
-      pulseMessage("DONE 131");
-      console.log("XOTEAM PIXI: local skin changed", target.name, target.id, XOTEAM_TARGET_SKIN_ID);
-    } else {
-      pulseMessage("FAILED");
-    }
-  }, true);
-
-  setInterval(updateUI, 60);
 })();
