@@ -543,165 +543,6 @@ vO7.setCountGame = function (p21, p22, p23, p24) {
   } else {}
   ;
 };
-
-/* XOTEAM TOP HEADSHOT - Local Top 5 داخل الماب */
-const XOTEAM_TOP_HEADSHOT_KEY = "XOTEAM_TOP_HEADSHOT_LOCAL_V1";
-
-vO7.fontStyle.topHeadTitle = new PIXI.TextStyle({
-  align: "left",
-  fill: "#ffff00",
-  fontSize: 12,
-  lineJoin: "round",
-  stroke: "#000000",
-  strokeThickness: 3,
-  whiteSpace: "normal",
-  fontFamily: "vuonghiep",
-  fontWeight: "bold",
-  wordWrap: true
-});
-
-vO7.fontStyle.topHeadRow = new PIXI.TextStyle({
-  align: "left",
-  fill: "#ffffff",
-  fontSize: 10,
-  lineJoin: "round",
-  stroke: "#000000",
-  strokeThickness: 2,
-  whiteSpace: "normal",
-  fontFamily: "vuonghiep",
-  fontWeight: "bold",
-  wordWrap: true
-});
-
-vO7.topHeadShotContainer = new PIXI.Container();
-vO7.topHeadShotContainer.x = -50;
-vO7.topHeadShotContainer.y = 150;
-vO7.topHeadShotTitle = new PIXI.Text("TOP HEADSHOT", vO7.fontStyle.topHeadTitle);
-vO7.topHeadShotTitle.x = 0;
-vO7.topHeadShotTitle.y = 0;
-vO7.topHeadShotContainer.addChild(vO7.topHeadShotTitle);
-vO7.topHeadShotRows = [];
-for (var XOTEAM_TOP_HS_I = 0; XOTEAM_TOP_HS_I < 5; XOTEAM_TOP_HS_I++) {
-  var XOTEAM_TOP_HS_ROW = new PIXI.Text((XOTEAM_TOP_HS_I + 1) + ". 0 HS - EMPTY", vO7.fontStyle.topHeadRow);
-  XOTEAM_TOP_HS_ROW.x = 0;
-  XOTEAM_TOP_HS_ROW.y = 17 + XOTEAM_TOP_HS_I * 14;
-  vO7.topHeadShotRows.push(XOTEAM_TOP_HS_ROW);
-  vO7.topHeadShotContainer.addChild(XOTEAM_TOP_HS_ROW);
-}
-
-function XOTEAM_topHeadShotRead() {
-  try {
-    var raw = localStorage.getItem(XOTEAM_TOP_HEADSHOT_KEY);
-    var list = raw ? JSON.parse(raw) : [];
-    return Array.isArray(list) ? list : [];
-  } catch (e) {
-    return [];
-  }
-}
-
-function XOTEAM_topHeadShotSave(list) {
-  try {
-    localStorage.setItem(XOTEAM_TOP_HEADSHOT_KEY, JSON.stringify(list || []));
-  } catch (e) {}
-}
-
-function XOTEAM_topHeadShotName() {
-  try {
-    if (typeof XOTEAM_getClientName === "function") {
-      var n1 = XOTEAM_getClientName();
-      if (n1) return String(n1).trim() || "Player";
-    }
-  } catch (e) {}
-  try {
-    var inputName = document.getElementById("mm-params-nickname");
-    if (inputName && inputName.value) return String(inputName.value).trim() || "Player";
-  } catch (e) {}
-  try {
-    return localStorage.getItem("nickname") || localStorage.getItem("XOTEAM_CLIENTE_NOMBRE") || "Player";
-  } catch (e) {
-    return "Player";
-  }
-}
-
-function XOTEAM_topHeadShotId() {
-  try {
-    if (typeof XOTEAM_getClientId === "function") {
-      var id1 = XOTEAM_getClientId();
-      if (id1) return String(id1);
-    }
-  } catch (e) {}
-  try {
-    if (vO4 && vO4.FB_UserID) return String(vO4.FB_UserID);
-  } catch (e) {}
-  try {
-    var saved = localStorage.getItem("XOTEAM_CLIENTE_ID");
-    if (saved) return String(saved);
-  } catch (e) {}
-  return "local_player";
-}
-
-function XOTEAM_topHeadShotSort(list) {
-  return (Array.isArray(list) ? list : []).filter(function (p) {
-    return p && Number(p.hs) > 0;
-  }).sort(function (a, b) {
-    var hsDiff = Number(b.hs || 0) - Number(a.hs || 0);
-    if (hsDiff !== 0) return hsDiff;
-    return Number(a.time || 0) - Number(b.time || 0);
-  }).slice(0, 5);
-}
-
-function XOTEAM_topHeadShotRender() {
-  if (!vO7 || !vO7.topHeadShotRows) return;
-  var list = XOTEAM_topHeadShotSort(XOTEAM_topHeadShotRead());
-  for (var i = 0; i < 5; i++) {
-    var row = vO7.topHeadShotRows[i];
-    if (!row) continue;
-    if (list[i]) {
-      var nm = String(list[i].name || "Player").replace(/\s+/g, " ").trim();
-      if (nm.length > 13) nm = nm.substring(0, 13) + "..";
-      row.text = (i + 1) + ". " + Number(list[i].hs || 0) + " HS - " + nm;
-    } else {
-      row.text = (i + 1) + ". 0 HS - EMPTY";
-    }
-  }
-}
-
-function XOTEAM_topHeadShotUpdate(currentHS) {
-  currentHS = Number(currentHS || 0);
-  var id = XOTEAM_topHeadShotId();
-  var list = XOTEAM_topHeadShotRead().filter(function (p) {
-    return p && String(p.id) !== String(id);
-  });
-
-  if (currentHS > 0) {
-    list.push({
-      id: id,
-      name: XOTEAM_topHeadShotName(),
-      hs: currentHS,
-      time: Date.now()
-    });
-  }
-
-  list = XOTEAM_topHeadShotSort(list);
-  XOTEAM_topHeadShotSave(list);
-  XOTEAM_topHeadShotRender();
-}
-
-function XOTEAM_topHeadShotRemoveCurrent() {
-  var id = XOTEAM_topHeadShotId();
-  var list = XOTEAM_topHeadShotRead().filter(function (p) {
-    return p && String(p.id) !== String(id);
-  });
-  XOTEAM_topHeadShotSave(list);
-  XOTEAM_topHeadShotRender();
-}
-
-function XOTEAM_topHeadShotClearAll() {
-  XOTEAM_topHeadShotSave([]);
-  XOTEAM_topHeadShotRender();
-}
-
-XOTEAM_topHeadShotRender();
 "use strict";
 var v26 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function (p25) {
   return typeof p25;
@@ -2937,10 +2778,6 @@ vF172.prototype.Se = function (p281) {
           return vO7.containerImgS.texture = PIXI.Texture.fromImage(vO4.flag);
         };
         this.tf.addChild(vO7.containerCountInfo);
-        if (vO7.topHeadShotContainer) {
-          this.tf.addChild(vO7.topHeadShotContainer);
-          XOTEAM_topHeadShotRender();
-        }
       };
       f64.prototype.Te = function (p294, p295) {
         var vF93 = f9();
@@ -8001,7 +7838,7 @@ return vF1718;
         vO4.FoodShadow = $(this).val();
         localStorage.ComidaShadow = vO4.FoodShadow;
       });
-      $("#mm-advice-cont").html("\n            \n            \n            \n            <div class=\"vietnam\" style=\"display: grid !important; grid-template-columns: 1fr 1fr 1fr 1fr;gap: 8.5px;\">\n            \n            \n    <input type=\"button\" value=\"F.SCREEN\" class=\"fullscreen_button\">\n    \n    \n    <input type=\"button\" value=\"RESPAWN\" id=\"hoisinh\" class=\"fullscreen_respawn\">\n    \n    <input type=\"button\" value=\"SKINS LAB\" onclick=\"window.location.href='https://skinlab.haylamday.com/'\" class=\"fullscreen_contact\">\n    \n    <input type=\"button\" value=\"CONTACT\" onclick=\"window.location.href='https://wormxo.store'\" class=\"fullscreen_contact\">\n    \n    \n    \n    </div>\n    \n    \n\n <div class=\"vietnam\" style=\"display: grid !important; grid-template-columns: 1fr 1fr;gap: 10px;margin-top: 8px;\">\n    <a href=\"https://www.youtube.com/@NonaMilano\" target=\"_blank\">\n      <img style=\"width:100%\" src=\"https://haylamday.com/images/hiep_img/nona.png\" alt=\"nona\"/>\n    </a>\n    <a href=\"https://wormxo.store\" target=\"_blank\">\n      <img style=\"width:100%\" src=\"https://i.imgur.com/l1fWELC.png\" alt=\"XOTEAM\"/>\n    </a>\n    </div>\n    \n    ");
+      $("#mm-advice-cont").html("\n            \n            \n            \n            <div class=\"vietnam\" style=\"display: grid !important; grid-template-columns: 1fr 1fr 1fr 1fr;gap: 8.5px;\">\n            \n            \n    <input type=\"button\" value=\"F.SCREEN\" class=\"fullscreen_button\">\n    \n    \n    <input type=\"button\" value=\"RESPAWN\" id=\"hoisinh\" class=\"fullscreen_respawn\">\n    \n    <input type=\"button\" value=\"SKINS LAB\" onclick=\"window.location.href='https://skinlab.haylamday.com/'\" class=\"fullscreen_contact\">\n    \n      \n    \n    \n    </div>\n    \n    \n\n <div class=\"vietnam\" style=\"display: grid !important; grid-template-columns: 1fr 1fr;gap: 10px;margin-top: 8px;\">\n    <a href=\"https://www.youtube.com/@NonaMilano\" target=\"_blank\">\n      <img style=\"width:100%\" src=\"https://haylamday.com/images/hiep_img/nona.png\" alt=\"nona\"/>\n    </a>\n    <a href=\"https://wormxo.store\" target=\"_blank\">\n      <img style=\"width:100%\" src=\"https://i.imgur.com/l1fWELC.png\" alt=\"XOTEAM\"/>\n    </a>\n    </div>\n    \n    ");
       $(".mm-merchant-cont").html("\n ");
       $(document).ready(function () {
         $(".fullscreen_button").on("click", function () {
@@ -8545,18 +8382,9 @@ return vF1718;
         vO4.totalHeadshots = vO4.totalHeadshots + (p620 ? 1 : 0);
         f112();
         vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
-
-        // TOP HEADSHOT: كل هيدشوت يرفع اللاعب بالتصنيف المحلي
-        if (p620 && typeof XOTEAM_topHeadShotUpdate === "function") {
-          XOTEAM_topHeadShotUpdate(vO4.headshot || 0);
-        }
       }
 
       if (p619 === "open") {
-        // بداية جولة جديدة: نزيل نتيجة الجولة القديمة من التوب ونبدأ من صفر
-        if (typeof XOTEAM_topHeadShotRemoveCurrent === "function") {
-          XOTEAM_topHeadShotRemoveCurrent();
-        }
         vO4.kill = 0;
         vO4.headshot = 0;
         $("#contadorKill_12").show();
@@ -8564,25 +8392,14 @@ return vF1718;
       }
 
       if (p619 === "closed") {
-        // نهاية الجولة/موت/انبلع: ينحذف اللاعب من Top HeadShot
-        if (typeof XOTEAM_topHeadShotRemoveCurrent === "function") {
-          XOTEAM_topHeadShotRemoveCurrent();
-        }
-        vO4.kill = 0;
-        vO4.headshot = 0;
         vO2 = {};
-        vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
       }
 
       if (p619 === "cerrar") {
-        // تصفير كامل يدوي: يصفر العدادات وينظف التوب المحلي
         vO4.kill = 0;
         vO4.headshot = 0;
         vO4.totalKills = 0;
         vO4.totalHeadshots = 0;
-        if (typeof XOTEAM_topHeadShotClearAll === "function") {
-          XOTEAM_topHeadShotClearAll();
-        }
         f112();
         vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
       }
@@ -9040,9 +8857,6 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
 
 
 
-/* XOTEAM SAFE FIX UPDATED - يحافظ على الأكل والأدوات ويضيف السكنات بدون تخريب
-   ضع هذا الكود في نهاية friends.js
-*/
 (function () {
   if (window.__XOTEAM_SAFE_FIX_UPDATED__) return;
   window.__XOTEAM_SAFE_FIX_UPDATED__ = true;
@@ -9109,7 +8923,6 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
     registry.skinArrayDict.forEach(function (skin) {
       if (!skin || !Array.isArray(skin.base)) return;
 
-      // حذف أي base غير موجود حتى ما يكسر تحميل السكن
       if (registry.regionDict) {
         skin.base = skin.base.filter(function (regionName) {
           return !!registry.regionDict[regionName];
@@ -9203,7 +9016,6 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
       base.skinGroupArrayDict = mergeArrayById(base.skinGroupArrayDict, extra.skinGroupArrayDict);
     }
 
-    // مهم: رجّع عناصر اللعبة الأصلية حتى لا تختفي الأكل/الأدوات أو تطلع علامة ?
     restoreOriginal(base, original);
 
     return fixSkinGlow(base);
@@ -9276,4 +9088,279 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   const timer = setInterval(function () {
     if (patchApp()) clearInterval(timer);
   }, 500);
+})();
+
+
+(function () {
+  if (window.__XOTEAM_PIXI_NEAR_SKIN_131__) return;
+  window.__XOTEAM_PIXI_NEAR_SKIN_131__ = true;
+
+  const XOTEAM_TARGET_SKIN_ID = 131;
+  const XOTEAM_TRIGGER_KEY = "8";
+  const XOTEAM_NEAR_DISTANCE = 270;
+  const XOTEAM_RESCAN_MS = 120;
+
+  const state = {
+    uiReady: false,
+    container: null,
+    bg: null,
+    title: null,
+    name: null,
+    hint: null,
+    status: null,
+    target: null,
+    targetId: null,
+    applied: {},
+    lastScan: 0,
+    lastMessageAt: 0,
+    lastMessage: ""
+  };
+
+  function getGame() {
+    try {
+      return window.anApp || null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function getWorldView() {
+    const game = getGame();
+    try {
+      return game && game.s && game.s.H && game.s.H.wb ? game.s.H.wb : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function getRendererSize(wb) {
+    try {
+      const w = wb.ue.width / (wb.ue.resolution || 1);
+      const h = wb.ue.height / (wb.ue.resolution || 1);
+      return { w: w || window.innerWidth || 800, h: h || window.innerHeight || 600 };
+    } catch (e) {
+      return { w: window.innerWidth || 800, h: window.innerHeight || 600 };
+    }
+  }
+
+  function makeText(text, size, color, stroke, thick) {
+    return new PIXI.Text(text, new PIXI.TextStyle({
+      fontFamily: "Arial, vuonghiep",
+      fontSize: size,
+      fill: color,
+      fontWeight: "900",
+      stroke: stroke || "#000000",
+      strokeThickness: thick == null ? 3 : thick,
+      lineJoin: "round",
+      wordWrap: true,
+      wordWrapWidth: 185
+    }));
+  }
+
+  function drawCard() {
+    if (!state.bg) return;
+    state.bg.clear();
+    state.bg.beginFill(0x050505, 0.62);
+    state.bg.lineStyle(2, 0xffff00, 0.95);
+    state.bg.drawRoundedRect(0, 0, 218, 82, 13);
+    state.bg.endFill();
+    state.bg.beginFill(0xffff00, 0.16);
+    state.bg.drawRoundedRect(8, 8, 202, 18, 8);
+    state.bg.endFill();
+  }
+
+  function ensureUI() {
+    if (state.uiReady && state.container && state.container.parent) return true;
+    if (typeof PIXI === "undefined") return false;
+
+    const wb = getWorldView();
+    if (!wb || !wb.rf) return false;
+
+    const c = new PIXI.Container();
+    c.zIndex = 999999;
+    c.visible = true;
+
+    const bg = new PIXI.Graphics();
+    c.addChild(bg);
+
+    const title = makeText("NEAR PLAYER", 11, "#ffff00", "#000000", 3);
+    title.x = 12;
+    title.y = 8;
+    c.addChild(title);
+
+    const name = makeText("No player nearby", 14, "#ffffff", "#000000", 3);
+    name.x = 12;
+    name.y = 31;
+    c.addChild(name);
+
+    const hint = makeText("Press 8 → Skin 131", 10, "#9dff5c", "#000000", 2);
+    hint.x = 12;
+    hint.y = 54;
+    c.addChild(hint);
+
+    const status = makeText("LOCAL ONLY", 10, "#00d9ff", "#000000", 2);
+    status.x = 125;
+    status.y = 54;
+    c.addChild(status);
+
+    state.container = c;
+    state.bg = bg;
+    state.title = title;
+    state.name = name;
+    state.hint = hint;
+    state.status = status;
+    drawCard();
+
+    try {
+      wb.rf.addChild(c);
+      if (wb.rf.sortableChildren !== undefined) wb.rf.sortableChildren = true;
+    } catch (e) {
+      return false;
+    }
+
+    state.uiReady = true;
+    return true;
+  }
+
+  function getPlayerName(player) {
+    try {
+      const n = player && player.Mb && player.Mb.ad ? String(player.Mb.ad) : "";
+      if (n.trim()) return n.trim();
+    } catch (e) {}
+    try {
+      const t = player && player.qj && player.qj.text ? String(player.qj.text) : "";
+      if (t.trim()) return t.trim();
+    } catch (e) {}
+    return "Player";
+  }
+
+  function getPlayerId(player) {
+    try {
+      return player && player.Mb && player.Mb.Lb != null ? String(player.Mb.Lb) : "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function getHead(player) {
+    try {
+      if (player && typeof player.Gf === "function") return player.Gf();
+    } catch (e) {}
+    return null;
+  }
+
+  function scanNearest() {
+    const game = getGame();
+    if (!game || !game.o || !game.o.N || !game.o.hb) return null;
+
+    const self = getHead(game.o.N);
+    if (!self) return null;
+
+    let best = null;
+    Object.keys(game.o.hb).forEach(function (key) {
+      const p = game.o.hb[key];
+      if (!p || !p.Hb || !p.Ib) return;
+      const pos = getHead(p);
+      if (!pos) return;
+      const d = Math.hypot(self.x - pos.x, self.y - pos.y);
+      if (d <= XOTEAM_NEAR_DISTANCE && (!best || d < best.distance)) {
+        best = {
+          id: getPlayerId(p) || key,
+          player: p,
+          name: getPlayerName(p),
+          distance: d
+        };
+      }
+    });
+
+    return best;
+  }
+
+  function applyLocalSkin(player, id) {
+    if (!player || !player.Mb) return false;
+    try {
+      player.Mb.dg = Number(id);
+      if (typeof player.uj === "function" && player.Hb) {
+        player.uj();
+      } else if (typeof player.rj === "function") {
+        player.rj(false);
+      }
+      return true;
+    } catch (e) {
+      console.log("XOTEAM local skin apply failed:", e);
+      return false;
+    }
+  }
+
+  function pulseMessage(text) {
+    state.lastMessage = text;
+    state.lastMessageAt = Date.now();
+  }
+
+  function updateUI() {
+    if (!ensureUI()) return;
+
+    const wb = getWorldView();
+    const size = getRendererSize(wb);
+    state.container.x = Math.max(10, size.w - 235);
+    state.container.y = Math.max(10, size.h - 104);
+
+    const now = Date.now();
+    if (now - state.lastScan >= XOTEAM_RESCAN_MS) {
+      state.lastScan = now;
+      state.target = scanNearest();
+      state.targetId = state.target ? state.target.id : null;
+    }
+
+    if (state.target) {
+      const mark = state.applied[state.target.id] ? " ✓" : "";
+      state.name.text = String(state.target.name).slice(0, 22) + mark;
+      state.hint.text = "Press 8 → Skin 131";
+      state.status.text = Math.max(1, Math.round(state.target.distance)) + "px";
+      state.container.alpha = 1;
+    } else {
+      state.name.text = "No player nearby";
+      state.hint.text = "Come close to player";
+      state.status.text = "LOCAL ONLY";
+      state.container.alpha = 0.78;
+    }
+
+    if (state.lastMessage && now - state.lastMessageAt < 1400) {
+      state.status.text = state.lastMessage;
+    }
+
+    try {
+      const game = getGame();
+      if (game && game.o && game.o.hb) {
+        Object.keys(state.applied).forEach(function (id) {
+          const p = game.o.hb[id];
+          if (p && p.Mb && Number(p.Mb.dg) !== XOTEAM_TARGET_SKIN_ID) {
+            applyLocalSkin(p, XOTEAM_TARGET_SKIN_ID);
+          }
+        });
+      }
+    } catch (e) {}
+  }
+
+  document.addEventListener("keydown", function (e) {
+    const key = e.key || "";
+    const code = e.keyCode || e.which;
+    if (key !== XOTEAM_TRIGGER_KEY && code !== 56 && code !== 104) return;
+
+    const target = state.target || scanNearest();
+    if (!target || !target.player) {
+      pulseMessage("NO TARGET");
+      return;
+    }
+
+    if (applyLocalSkin(target.player, XOTEAM_TARGET_SKIN_ID)) {
+      state.applied[target.id] = true;
+      pulseMessage("DONE 131");
+      console.log("XOTEAM PIXI: local skin changed", target.name, target.id, XOTEAM_TARGET_SKIN_ID);
+    } else {
+      pulseMessage("FAILED");
+    }
+  }, true);
+
+  setInterval(updateUI, 60);
 })();
