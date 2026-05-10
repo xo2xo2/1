@@ -12,30 +12,37 @@ const vO = {
       return p2;
     }
   },
-  testSkinMod: function (p3) {
-    return p3 >= 399 && p3 < 999;
-  },
-  testWear: function (p4) {
-    return p4 >= 399 && p4 < 999;
-  },
-  isNumberValid: function (p5) {
-    return p5 !== "" && p5 !== null && p5 !== undefined && !isNaN(p5);
-  },
-  validInput: function (p6) {
-  p6 = Number(p6);
-  if (!Number.isFinite(p6) || p6 <= 0) return 35;
-  return encodeURI(p6);
-}
-    try {
+testSkinMod: function (p3) {
+  return p3 >= 399 && p3 < 999;
+},
+
+testWear: function (p4) {
+  return p4 >= 399 && p4 < 999;
+},
+
+isNumberValid: function (p5) {
+  return p5 !== "" && p5 !== null && p5 !== undefined && !isNaN(p5);
+},
+
+validInput: function (p6) {
+  try {
+    p6 = Number(p6);
+
+    if (!Number.isFinite(p6) || p6 <= 0) {
       let v2 = $("#inputReplaceSkin").val();
-      return encodeURI(vO.isNumberValid(v2) ? v2 : 35);
-    } catch (e2) {
-      return encodeURI(35);
+      p6 = vO.isNumberValid(v2) ? Number(v2) : 35;
     }
+
+    return encodeURI(p6);
+
+  } catch (e2) {
+    return encodeURI(35);
+  }
   },
   aload: false,
   aId: 0
 };
+
 var v3 = localStorage.getItem("inputReplaceSkin");
 var v4 = null;
 var v5 = false;
