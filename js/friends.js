@@ -98,493 +98,6 @@ if (saveGameLocal && saveGameLocal !== "null") {
   }
 }
 vO4.loading = true;
-
-/* ==========================================================================
-   WORMATRIX FRIENDS CORE UI - merged from modern use-strict layout
-   الهدف:
-   - تنظيف طبقة الواجهة بدون لمس منطق اللعبة الحساس.
-   - تحسين شكل game-wrap والصفحة.
-   - إضافة واجهة سيرفرات منظمة من كود use strict بشكل آمن.
-   - إزالة الاعتماد على أي ميزة 131 أو بلوكات قديمة.
-   ========================================================================== */
-(function WMX_FRIENDS_CORE_UI() {
-  "use strict";
-
-  const WMX = {
-    logo: "https://wormy.wormatrix.fun/images/logo.png",
-    serverEndpoint: "https://wm.wormy.online/servers",
-    state: {
-      styled: false,
-      uiReady: false,
-      lastServers: []
-    }
-  };
-
-  function esc(v) {
-    return String(v == null ? "" : v)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  const FLAGS = {
-    lt: '<svg viewBox="0 0 60 38"><rect width="60" height="12.667" fill="#fdb913"/><rect y="12.667" width="60" height="12.666" fill="#006a44"/><rect y="25.333" width="60" height="12.667" fill="#c1272d"/></svg>',
-    ae: '<svg viewBox="0 0 60 38"><rect width="60" height="38" fill="#fff"/><rect width="15" height="38" fill="#d71920"/><rect x="15" width="45" height="12.666" fill="#00732f"/><rect x="15" y="25.333" width="45" height="12.667" fill="#000"/></svg>',
-    br: '<svg viewBox="0 0 60 38"><rect width="60" height="38" fill="#009b3a"/><path d="M30 4.3 56.5 19 30 33.7 3.5 19Z" fill="#ffdf00"/><circle cx="30" cy="19" r="9.2" fill="#002776"/></svg>',
-    us: '<svg viewBox="0 0 60 38"><rect width="60" height="38" fill="#b22234"/><g fill="#fff"><rect y="2.92" width="60" height="2.92"/><rect y="8.76" width="60" height="2.92"/><rect y="14.6" width="60" height="2.92"/><rect y="20.44" width="60" height="2.92"/><rect y="26.28" width="60" height="2.92"/><rect y="32.12" width="60" height="2.92"/></g><rect width="27.5" height="20.5" fill="#3c3b6e"/></svg>',
-    de: '<svg viewBox="0 0 60 38"><rect width="60" height="12.667" fill="#000"/><rect y="12.667" width="60" height="12.666" fill="#dd0000"/><rect y="25.333" width="60" height="12.667" fill="#ffce00"/></svg>',
-    sg: '<svg viewBox="0 0 60 38"><rect width="60" height="19" fill="#ef3340"/><rect y="19" width="60" height="19" fill="#fff"/><circle cx="16.5" cy="9.5" r="7" fill="#fff"/><circle cx="19.5" cy="9.5" r="6" fill="#ef3340"/></svg>',
-    jp: '<svg viewBox="0 0 60 38"><rect width="60" height="38" fill="#fff"/><circle cx="30" cy="19" r="10.4" fill="#bc002d"/></svg>',
-    au: '<svg viewBox="0 0 60 38"><rect width="60" height="38" fill="#18449a"/><path d="M0 0 29 19M29 0 0 19" stroke="#fff" stroke-width="4.4"/><path d="M0 0 29 19M29 0 0 19" stroke="#c8102e" stroke-width="2.1"/></svg>',
-    in: '<svg viewBox="0 0 60 38"><rect width="60" height="12.667" fill="#ff9933"/><rect y="12.667" width="60" height="12.666" fill="#fff"/><rect y="25.333" width="60" height="12.667" fill="#138808"/><circle cx="30" cy="19" r="5.3" fill="none" stroke="#000080" stroke-width="1.2"/></svg>',
-    fr: '<svg viewBox="0 0 60 38"><rect width="20" height="38" fill="#0055a4"/><rect x="20" width="20" height="38" fill="#fff"/><rect x="40" width="20" height="38" fill="#ef4135"/></svg>',
-    ca: '<svg viewBox="0 0 60 38"><rect width="15" height="38" fill="#d80621"/><rect x="15" width="30" height="38" fill="#fff"/><rect x="45" width="15" height="38" fill="#d80621"/></svg>',
-    mx: '<svg viewBox="0 0 60 38"><rect width="20" height="38" fill="#006847"/><rect x="20" width="20" height="38" fill="#fff"/><rect x="40" width="20" height="38" fill="#ce1126"/></svg>'
-  };
-
-  const REGION_ALIAS = {
-    lithuania: "lt", lt: "lt", lietuva: "lt",
-    granbretana: "ae", uk: "ae", gb: "ae", ae: "ae", arab: "ae", iraq: "ae", uae: "ae", emirates: "ae",
-    peru: "br", br: "br", brazil: "br", brasil: "br",
-    eeuu: "us", usa: "us", us: "us", america: "us",
-    germania: "de", germany: "de", de: "de", deutschland: "de",
-    singapur: "sg", singapore: "sg", sg: "sg",
-    japon: "jp", japan: "jp", jp: "jp",
-    australia: "au", au: "au",
-    india: "in", hind: "in",
-    francia: "fr", france: "fr",
-    canada: "ca",
-    mexico: "mx"
-  };
-
-  function regionKey(v) {
-    v = String(v || "").toLowerCase().trim();
-    return REGION_ALIAS[v] || (FLAGS[v] ? v : "br");
-  }
-
-  function flag(region) {
-    const key = regionKey(region);
-    return '<span class="wmx-flag" data-region="' + esc(key) + '">' + (FLAGS[key] || FLAGS.br) + '</span>';
-  }
-
-  function injectStyles() {
-    if (document.getElementById("wmx-friends-core-style")) return;
-
-    const css = `
-      html, body {
-        background: radial-gradient(circle at top, #1b1f22 0%, #08090a 46%, #000 100%) !important;
-      }
-
-      #game-wrap {
-        display: block;
-        background:
-          radial-gradient(circle at 18% 10%, rgba(127,176,46,.24), transparent 24%),
-          radial-gradient(circle at 84% 18%, rgba(13,110,253,.16), transparent 28%),
-          linear-gradient(135deg, #040506, #121416 48%, #050505) !important;
-      }
-
-      #game-view {
-        background: transparent !important;
-      }
-
-      .description-text {
-        background: rgba(10, 12, 14, .88) !important;
-        border: 1px solid rgba(127,176,46,.38) !important;
-        border-radius: 18px !important;
-        box-shadow: 0 16px 36px rgba(0,0,0,.35) !important;
-        padding: 12px !important;
-        overflow: hidden !important;
-      }
-
-      #load_page_apoiador {
-        position: relative;
-        min-height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 10px;
-        border-radius: 14px;
-        overflow: hidden;
-        background: linear-gradient(90deg, rgba(127,176,46,.22), rgba(13,110,253,.12));
-      }
-
-      .wm-connect-title-bg {
-        position: absolute;
-        inset: 0;
-        background:
-          linear-gradient(90deg, rgba(127,176,46,.20), rgba(255,212,59,.12), rgba(127,176,46,.20));
-        filter: blur(.2px);
-      }
-
-      .title-worm-world-connect {
-        position: relative;
-        z-index: 1;
-        color: #f8ffdc;
-        font-size: 15px;
-        font-weight: 900;
-        letter-spacing: .4px;
-        text-shadow: 0 2px 8px rgba(0,0,0,.55);
-        display: flex;
-        align-items: center;
-        gap: 7px;
-      }
-
-      .title-worm-world-connect img {
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        box-shadow: 0 0 10px rgba(127,176,46,.6);
-      }
-
-      #wormatrix_tabs {
-        width: 100%;
-      }
-
-      .wormatrix-grid {
-        display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 7px;
-        margin-bottom: 10px;
-      }
-
-      .wormatrix-grid a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 42px;
-        border-radius: 12px;
-        border: 1px solid rgba(255,255,255,.11);
-        background: rgba(255,255,255,.06);
-        transition: transform .16s ease, border-color .16s ease, background .16s ease;
-        cursor: pointer;
-      }
-
-      .wormatrix-grid a:hover,
-      .wormatrix-grid a.active {
-        transform: translateY(-1px);
-        border-color: rgba(255,212,59,.8);
-        background: rgba(255,212,59,.11);
-      }
-
-      .wmx-flag svg {
-        width: 38px;
-        height: 24px;
-        display: block;
-        border-radius: 5px;
-        box-shadow: 0 2px 8px rgba(0,0,0,.35);
-      }
-
-      .tab-pane {
-        display: none;
-        max-height: 300px;
-        overflow-y: auto;
-        padding: 3px 2px;
-      }
-
-      .tab-pane.active {
-        display: block;
-      }
-
-      .wmx-server-card {
-        display: grid;
-        grid-template-columns: 44px 1fr auto;
-        align-items: center;
-        gap: 9px;
-        padding: 9px;
-        margin: 7px 0;
-        border-radius: 14px;
-        border: 1px solid rgba(127,176,46,.20);
-        background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.035));
-        box-shadow: 0 7px 18px rgba(0,0,0,.22);
-        color: #fff;
-        transition: transform .16s ease, border-color .16s ease, background .16s ease;
-        cursor: pointer;
-      }
-
-      .wmx-server-card:hover {
-        transform: translateY(-1px);
-        border-color: rgba(255,212,59,.75);
-        background: linear-gradient(135deg, rgba(255,212,59,.16), rgba(127,176,46,.09));
-      }
-
-      .wmx-server-img {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
-        object-fit: cover;
-        background: rgba(0,0,0,.35);
-        border: 1px solid rgba(255,255,255,.12);
-      }
-
-      .wmx-server-name {
-        font-size: 12px;
-        font-weight: 900;
-        color: #ffffff;
-        line-height: 1.15;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .wmx-server-url {
-        margin-top: 3px;
-        font-size: 10px;
-        font-weight: 700;
-        color: rgba(255,255,255,.56);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .wmx-server-go {
-        font-size: 11px;
-        font-weight: 900;
-        color: #111;
-        background: #ffd43b;
-        padding: 7px 9px;
-        border-radius: 9px;
-        box-shadow: 0 4px 12px rgba(255,212,59,.22);
-      }
-
-      #mm-action-buttons {
-        display: flex !important;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .wmx-action-buttons {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: 4px;
-        width: 100%;
-      }
-
-      .wmx-action-buttons .wmx-button {
-        width: 100%;
-        height: 36px;
-        line-height: 36px;
-        font-weight: 900;
-        font-size: 13px;
-        text-align: center;
-        color: #fff;
-        border: 0;
-        text-decoration: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: .18s ease;
-        box-shadow: 0 6px 14px rgba(0,0,0,.18);
-      }
-
-      .wmx-blue { background: #26c6da; }
-      .wmx-blue:hover { background: #52d1e1; }
-      .wmx-orange { background: #f7941d; }
-      .wmx-orange:hover { background: #f9ab4e; }
-
-      @media (max-width: 640px) {
-        .wormatrix-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-        .tab-pane { max-height: 250px; }
-      }
-    `;
-
-    const style = document.createElement("style");
-    style.id = "wmx-friends-core-style";
-    style.textContent = css;
-    document.head.appendChild(style);
-  }
-
-  function ensureConnectShell() {
-    try {
-      if (!window.jQuery || !$(".description-text").length) return false;
-      if (document.getElementById("wormatrix_tabs")) return true;
-
-      $(".description-text").html(
-        '<div id="load_page_apoiador">' +
-          '<div class="wm-connect-title-bg"></div>' +
-          '<div class="title-worm-world-connect">' +
-            '<img src="' + WMX.logo + '" alt="" /> Worm Matrix Connect' +
-          '</div>' +
-        '</div>' +
-        '<div id="wormatrix_tabs">' +
-          '<div class="wormatrix-grid">' +
-            '<a href="#tabs10" data-flag="lt">' + flag("lt") + '</a>' +
-            '<a href="#tabs9" data-flag="ae">' + flag("ae") + '</a>' +
-            '<a href="#tabs0" data-flag="br">' + flag("br") + '</a>' +
-            '<a href="#tabs1" data-flag="us">' + flag("us") + '</a>' +
-            '<a href="#tabs4" class="active" data-flag="de">' + flag("de") + '</a>' +
-            '<a href="#tabs6" data-flag="sg">' + flag("sg") + '</a>' +
-            '<a href="#tabs7" data-flag="jp">' + flag("jp") + '</a>' +
-            '<a href="#tabs8" data-flag="au">' + flag("au") + '</a>' +
-            '<a href="#tabs11" data-flag="in">' + flag("in") + '</a>' +
-            '<a href="#tabs5" data-flag="fr">' + flag("fr") + '</a>' +
-          '</div>' +
-          '<div class="tab-pane servers-brazil" id="tabs0"></div>' +
-          '<div class="tab-pane servers-eeuu" id="tabs1"></div>' +
-          '<div class="tab-pane servers-canada" id="tabs2"></div>' +
-          '<div class="tab-pane servers-mexico" id="tabs3"></div>' +
-          '<div class="tab-pane active servers-germany" id="tabs4"></div>' +
-          '<div class="tab-pane servers-france" id="tabs5"></div>' +
-          '<div class="tab-pane servers-singapore" id="tabs6"></div>' +
-          '<div class="tab-pane servers-japan" id="tabs7"></div>' +
-          '<div class="tab-pane servers-australia" id="tabs8"></div>' +
-          '<div class="tab-pane servers-ae" id="tabs9"></div>' +
-          '<div class="tab-pane servers-lithuania" id="tabs10"></div>' +
-          '<div class="tab-pane servers-india" id="tabs11"></div>' +
-        '</div>'
-      );
-
-      $("#wormatrix_tabs .wormatrix-grid a").on("click", function (e) {
-        e.preventDefault();
-        const target = $(this).attr("href");
-        $("#wormatrix_tabs .wormatrix-grid a").removeClass("active");
-        $(this).addClass("active");
-        $("#wormatrix_tabs .tab-pane").removeClass("active");
-        $(target).addClass("active");
-      });
-
-      return true;
-    } catch (e) {
-      console.log("WMX shell error:", e);
-      return false;
-    }
-  }
-
-  function regionContainer(region) {
-    const key = regionKey(region);
-    const map = {
-      lt: ".servers-lithuania",
-      ae: ".servers-ae",
-      br: ".servers-brazil",
-      us: ".servers-eeuu",
-      de: ".servers-germany",
-      sg: ".servers-singapore",
-      jp: ".servers-japan",
-      au: ".servers-australia",
-      in: ".servers-india",
-      fr: ".servers-france",
-      ca: ".servers-canada",
-      mx: ".servers-mexico"
-    };
-    return map[key] || ".servers-brazil";
-  }
-
-  function paintServerList(list) {
-    try {
-      injectStyles();
-      ensureConnectShell();
-
-      list = Array.isArray(list) ? list : [];
-      WMX.state.lastServers = list.slice();
-
-      if (!window.jQuery || !$("#wormatrix_tabs").length) return;
-
-      $("#wormatrix_tabs .tab-pane").empty();
-
-      list.forEach(function (srv) {
-        if (!srv || !srv.serverUrl) return;
-
-        const region = regionKey(srv.region);
-        const box = $(regionContainer(region));
-        const image = srv.image || WMX.logo;
-        const name = srv.name || srv.serverName || srv.serverUrl;
-        const url = srv.serverUrl;
-
-        const card = $(
-          '<div class="wmx-server-card" data-url="' + esc(url) + '">' +
-            '<img class="wmx-server-img" src="' + esc(image) + '" onerror="this.src=\'' + WMX.logo + '\';" />' +
-            '<div class="wmx-server-info">' +
-              '<div class="wmx-server-name">' + esc(name) + '</div>' +
-              '<div class="wmx-server-url">' + esc(url) + '</div>' +
-            '</div>' +
-            '<div class="wmx-server-go">PLAY</div>' +
-          '</div>'
-        );
-
-        card.on("click", function () {
-          try {
-            window.server_url = url;
-            if (typeof hoisinhnhanh !== "undefined") hoisinhnhanh = url;
-            if (window.anApp && anApp.o && typeof anApp.o.za === "function" && anApp.u && typeof anApp.u.ea === "function") {
-              anApp.o.za(url, anApp.u.ea());
-              return;
-            }
-            if (window.anApp && anApp.o && typeof anApp.o.Ca === "function") {
-              anApp.o.Ca(url, (window.XOTEAM_getClientName && XOTEAM_getClientName()) || "Player", 34);
-              return;
-            }
-            console.log("Selected server:", url);
-          } catch (e) {
-            console.log("Server connect error:", e);
-          }
-        });
-
-        box.append(card);
-      });
-    } catch (e) {
-      console.log("WMX paint servers error:", e);
-    }
-  }
-
-  function addActionButtons() {
-    try {
-      if (!window.jQuery || !$("#mm-action-buttons").length || $("#wmx-action-buttons").length) return;
-
-      $("#mm-action-buttons").append(
-        '<div class="wmx-action-buttons" id="wmx-action-buttons">' +
-          '<button class="wmx-button wmx-blue" type="button" id="btnFullScreen">FULL SCREEN</button>' +
-          '<a href="https://wormatrix.fun/skinlab" class="wmx-button wmx-orange" target="_blank">SKIN LAB</a>' +
-        '</div>'
-      );
-
-      $("#btnFullScreen").on("click", function () {
-        const doc = document;
-        const root = doc.documentElement;
-        const enter = root.requestFullscreen || root.mozRequestFullScreen || root.webkitRequestFullscreen || root.msRequestFullscreen;
-        const exit = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-
-        if (!doc.fullscreenElement && !doc.webkitFullscreenElement && !doc.mozFullScreenElement) {
-          if (enter) enter.call(root);
-        } else if (exit) {
-          exit.call(doc);
-        }
-      });
-    } catch (e) {}
-  }
-
-  function boot() {
-    injectStyles();
-
-    const gameWrap = document.getElementById("game-wrap");
-    if (gameWrap) gameWrap.style.display = "block";
-
-    ensureConnectShell();
-    addActionButtons();
-
-    if (window.vO6 && Array.isArray(vO6.Api_listServer) && vO6.Api_listServer.length) {
-      paintServerList(vO6.Api_listServer);
-    }
-  }
-
-  window.WMX_CONNECT_UI = {
-    boot: boot,
-    paintServerList: paintServerList,
-    ensureConnectShell: ensureConnectShell,
-    injectStyles: injectStyles
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
-  } else {
-    setTimeout(boot, 0);
-  }
-
-  window.addEventListener("load", function () {
-    boot();
-    setTimeout(boot, 1200);
-  });
-})();
-
 const vF = function () {
   let v8 = false;
   vO4.mobile = false;
@@ -834,42 +347,19 @@ function XOTEAM_startAutoSave() {
   }
 }
 async function f2() {
-  const endpoints = [
-    "https://wm.wormy.online/servers",
-    "https://haylamday.com/api/server.php"
-  ];
-
-  for (let i = 0; i < endpoints.length; i++) {
-    try {
-      const p17 = await fetch(endpoints[i] + (endpoints[i].includes("?") ? "&" : "?") + "t=" + Date.now(), {
-        method: "GET",
-        cache: "no-store",
-        headers: { "Accept": "application/json" }
+  await fetch("https://haylamday.com/api/server.php").then(p17 => p17.json()).then(p18 => {
+    if (p18.success) {
+      let v25 = p18.servers;
+      vO6.Api_listServer = v25.filter(p19 => {
+        return p19.serverUrl;
       });
-
-      const p18 = await p17.json();
-
-      if (p18 && p18.success) {
-        let v25 = Array.isArray(p18.servers) ? p18.servers : [];
-        vO6.Api_listServer = v25.filter(p19 => {
-          return p19 && p19.serverUrl;
-        });
-
-        try {
-          if (window.WMX_CONNECT_UI && typeof window.WMX_CONNECT_UI.paintServerList === "function") {
-            window.WMX_CONNECT_UI.paintServerList(vO6.Api_listServer);
-          }
-        } catch (e) {}
-
-        return;
-      }
-    } catch (e) {
-      console.log("XOTEAM server endpoint failed:", endpoints[i], e);
+    } else {
+      vO6 = {
+        Api_listServer: []
+      };
+      alert("An error occurred while loading the servers");
     }
-  }
-
-  vO6 = { Api_listServer: [] };
-  alert("An error occurred while loading the servers");
+  });
 }
 f();
 f2();
@@ -1064,7 +554,16 @@ var v26 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? fu
   }
 };
 var v27;
-/* WMX cleanup: removed old encoded debug console banner. */
+(function () {
+  try {
+    console.log(function (p27, p28) {
+      for (var vLN02 = 0; vLN02 < p28.length; vLN02 += 2) {
+        p27 = p27.replaceAll(p28[vLN02], p28[vLN02 + 1]);
+      }
+      return p27;
+    }("N-syo.632.oyhs`2./oSo+-2:dhydMdy/32/o+`3:o/62`/o+. .+osYYyso+-.osyQSs6662NyW.63 yW:`+QQ+ -Ms-.:ymmy3+Yo``+Y:6.Qs-+WWhYs:sHhyyHys/6662NoWs63 yW:+Ss:.-+Ss:`M-3.M` .YyySYys32`QSs.2``-Hh-32sH-66 `..3 `..`3N.Wh.63yW-Ss.3`Ss+`Mh/:+hmmo2/yy++yys//Y-3 oS/`Sso`3 ohy6oH.3..6 -Hh. -+Qs/ N /W+62`Wo:Ss32Sso.MMmd+.3syy` .-` :Y+3+Ss//Q+3 +H`32sHhsyHho6-Hh`:S+--+S+N2+W` `+y+2+W.:Ss.3.Ss+/M-:ymmh.2-Y.32+Ys2+Ss+o+/Q-3oH/32Hho-://:`6 Hh`So3`SsN3oHhs-sHhsoW/ `Sso:-:Q.hM-2ymmh. /Yo`3 sYy./Q`3+Sso2`W`3`Hh.66`Hh:So3-SoN3 +Why+yWh/3-oQSso-`Mm:2/Md+/Yy+3 oYy:Q/3 `Q. -W-3`WsYys/`+oo.:Hh//So//Ss-N32-sys:3:S+.6-/+++:-3oHo3 ohdh/`+So:3 .+S/`/oo:6.+s+` `+yyo`3 +yQYs: +oo..shy. -+oSo/. NN", ["W", "hhhh", "Q", "ssss", "M", "mmm", "Y", "yyy", "H", "hh", "S", "ss", "6", "      ", "3", "   ", "2", "  ", "N", "\n"]));
+  } catch (e5) {}
+})();
 window.addEventListener("load", function () {
   function f4() {
     (function (p29, p30, p31) {
@@ -9357,9 +8856,7 @@ document.addEventListener("contextmenu", function (p638) {
 console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
 
 
-/* XOTEAM SAFE FIX UPDATED - يحافظ على الأكل والأدوات ويضيف السكنات بدون تخريب
-   ضع هذا الكود في نهاية friends.js
-*/
+
 (function () {
   if (window.__XOTEAM_SAFE_FIX_UPDATED__) return;
   window.__XOTEAM_SAFE_FIX_UPDATED__ = true;
@@ -9426,7 +8923,6 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
     registry.skinArrayDict.forEach(function (skin) {
       if (!skin || !Array.isArray(skin.base)) return;
 
-      // حذف أي base غير موجود حتى ما يكسر تحميل السكن
       if (registry.regionDict) {
         skin.base = skin.base.filter(function (regionName) {
           return !!registry.regionDict[regionName];
@@ -9520,7 +9016,6 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
       base.skinGroupArrayDict = mergeArrayById(base.skinGroupArrayDict, extra.skinGroupArrayDict);
     }
 
-    // مهم: رجّع عناصر اللعبة الأصلية حتى لا تختفي الأكل/الأدوات أو تطلع علامة ?
     restoreOriginal(base, original);
 
     return fixSkinGlow(base);
@@ -9593,4 +9088,279 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   const timer = setInterval(function () {
     if (patchApp()) clearInterval(timer);
   }, 500);
+})();
+
+
+(function () {
+  if (window.__XOTEAM_PIXI_NEAR_SKIN_131__) return;
+  window.__XOTEAM_PIXI_NEAR_SKIN_131__ = true;
+
+  const XOTEAM_TARGET_SKIN_ID = 131;
+  const XOTEAM_TRIGGER_KEY = "8";
+  const XOTEAM_NEAR_DISTANCE = 270;
+  const XOTEAM_RESCAN_MS = 120;
+
+  const state = {
+    uiReady: false,
+    container: null,
+    bg: null,
+    title: null,
+    name: null,
+    hint: null,
+    status: null,
+    target: null,
+    targetId: null,
+    applied: {},
+    lastScan: 0,
+    lastMessageAt: 0,
+    lastMessage: ""
+  };
+
+  function getGame() {
+    try {
+      return window.anApp || null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function getWorldView() {
+    const game = getGame();
+    try {
+      return game && game.s && game.s.H && game.s.H.wb ? game.s.H.wb : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function getRendererSize(wb) {
+    try {
+      const w = wb.ue.width / (wb.ue.resolution || 1);
+      const h = wb.ue.height / (wb.ue.resolution || 1);
+      return { w: w || window.innerWidth || 800, h: h || window.innerHeight || 600 };
+    } catch (e) {
+      return { w: window.innerWidth || 800, h: window.innerHeight || 600 };
+    }
+  }
+
+  function makeText(text, size, color, stroke, thick) {
+    return new PIXI.Text(text, new PIXI.TextStyle({
+      fontFamily: "Arial, vuonghiep",
+      fontSize: size,
+      fill: color,
+      fontWeight: "900",
+      stroke: stroke || "#000000",
+      strokeThickness: thick == null ? 3 : thick,
+      lineJoin: "round",
+      wordWrap: true,
+      wordWrapWidth: 185
+    }));
+  }
+
+  function drawCard() {
+    if (!state.bg) return;
+    state.bg.clear();
+    state.bg.beginFill(0x050505, 0.62);
+    state.bg.lineStyle(2, 0xffff00, 0.95);
+    state.bg.drawRoundedRect(0, 0, 218, 82, 13);
+    state.bg.endFill();
+    state.bg.beginFill(0xffff00, 0.16);
+    state.bg.drawRoundedRect(8, 8, 202, 18, 8);
+    state.bg.endFill();
+  }
+
+  function ensureUI() {
+    if (state.uiReady && state.container && state.container.parent) return true;
+    if (typeof PIXI === "undefined") return false;
+
+    const wb = getWorldView();
+    if (!wb || !wb.rf) return false;
+
+    const c = new PIXI.Container();
+    c.zIndex = 999999;
+    c.visible = true;
+
+    const bg = new PIXI.Graphics();
+    c.addChild(bg);
+
+    const title = makeText("NEAR PLAYER", 11, "#ffff00", "#000000", 3);
+    title.x = 12;
+    title.y = 8;
+    c.addChild(title);
+
+    const name = makeText("No player nearby", 14, "#ffffff", "#000000", 3);
+    name.x = 12;
+    name.y = 31;
+    c.addChild(name);
+
+    const hint = makeText("Press 8 → Skin 131", 10, "#9dff5c", "#000000", 2);
+    hint.x = 12;
+    hint.y = 54;
+    c.addChild(hint);
+
+    const status = makeText("LOCAL ONLY", 10, "#00d9ff", "#000000", 2);
+    status.x = 125;
+    status.y = 54;
+    c.addChild(status);
+
+    state.container = c;
+    state.bg = bg;
+    state.title = title;
+    state.name = name;
+    state.hint = hint;
+    state.status = status;
+    drawCard();
+
+    try {
+      wb.rf.addChild(c);
+      if (wb.rf.sortableChildren !== undefined) wb.rf.sortableChildren = true;
+    } catch (e) {
+      return false;
+    }
+
+    state.uiReady = true;
+    return true;
+  }
+
+  function getPlayerName(player) {
+    try {
+      const n = player && player.Mb && player.Mb.ad ? String(player.Mb.ad) : "";
+      if (n.trim()) return n.trim();
+    } catch (e) {}
+    try {
+      const t = player && player.qj && player.qj.text ? String(player.qj.text) : "";
+      if (t.trim()) return t.trim();
+    } catch (e) {}
+    return "Player";
+  }
+
+  function getPlayerId(player) {
+    try {
+      return player && player.Mb && player.Mb.Lb != null ? String(player.Mb.Lb) : "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function getHead(player) {
+    try {
+      if (player && typeof player.Gf === "function") return player.Gf();
+    } catch (e) {}
+    return null;
+  }
+
+  function scanNearest() {
+    const game = getGame();
+    if (!game || !game.o || !game.o.N || !game.o.hb) return null;
+
+    const self = getHead(game.o.N);
+    if (!self) return null;
+
+    let best = null;
+    Object.keys(game.o.hb).forEach(function (key) {
+      const p = game.o.hb[key];
+      if (!p || !p.Hb || !p.Ib) return;
+      const pos = getHead(p);
+      if (!pos) return;
+      const d = Math.hypot(self.x - pos.x, self.y - pos.y);
+      if (d <= XOTEAM_NEAR_DISTANCE && (!best || d < best.distance)) {
+        best = {
+          id: getPlayerId(p) || key,
+          player: p,
+          name: getPlayerName(p),
+          distance: d
+        };
+      }
+    });
+
+    return best;
+  }
+
+  function applyLocalSkin(player, id) {
+    if (!player || !player.Mb) return false;
+    try {
+      player.Mb.dg = Number(id);
+      if (typeof player.uj === "function" && player.Hb) {
+        player.uj();
+      } else if (typeof player.rj === "function") {
+        player.rj(false);
+      }
+      return true;
+    } catch (e) {
+      console.log("XOTEAM local skin apply failed:", e);
+      return false;
+    }
+  }
+
+  function pulseMessage(text) {
+    state.lastMessage = text;
+    state.lastMessageAt = Date.now();
+  }
+
+  function updateUI() {
+    if (!ensureUI()) return;
+
+    const wb = getWorldView();
+    const size = getRendererSize(wb);
+    state.container.x = Math.max(10, size.w - 235);
+    state.container.y = Math.max(10, size.h - 104);
+
+    const now = Date.now();
+    if (now - state.lastScan >= XOTEAM_RESCAN_MS) {
+      state.lastScan = now;
+      state.target = scanNearest();
+      state.targetId = state.target ? state.target.id : null;
+    }
+
+    if (state.target) {
+      const mark = state.applied[state.target.id] ? " ✓" : "";
+      state.name.text = String(state.target.name).slice(0, 22) + mark;
+      state.hint.text = "Press 8 → Skin 131";
+      state.status.text = Math.max(1, Math.round(state.target.distance)) + "px";
+      state.container.alpha = 1;
+    } else {
+      state.name.text = "No player nearby";
+      state.hint.text = "Come close to player";
+      state.status.text = "LOCAL ONLY";
+      state.container.alpha = 0.78;
+    }
+
+    if (state.lastMessage && now - state.lastMessageAt < 1400) {
+      state.status.text = state.lastMessage;
+    }
+
+    try {
+      const game = getGame();
+      if (game && game.o && game.o.hb) {
+        Object.keys(state.applied).forEach(function (id) {
+          const p = game.o.hb[id];
+          if (p && p.Mb && Number(p.Mb.dg) !== XOTEAM_TARGET_SKIN_ID) {
+            applyLocalSkin(p, XOTEAM_TARGET_SKIN_ID);
+          }
+        });
+      }
+    } catch (e) {}
+  }
+
+  document.addEventListener("keydown", function (e) {
+    const key = e.key || "";
+    const code = e.keyCode || e.which;
+    if (key !== XOTEAM_TRIGGER_KEY && code !== 56 && code !== 104) return;
+
+    const target = state.target || scanNearest();
+    if (!target || !target.player) {
+      pulseMessage("NO TARGET");
+      return;
+    }
+
+    if (applyLocalSkin(target.player, XOTEAM_TARGET_SKIN_ID)) {
+      state.applied[target.id] = true;
+      pulseMessage("DONE 131");
+      console.log("XOTEAM PIXI: local skin changed", target.name, target.id, XOTEAM_TARGET_SKIN_ID);
+    } else {
+      pulseMessage("FAILED");
+    }
+  }, true);
+
+  setInterval(updateUI, 60);
 })();
