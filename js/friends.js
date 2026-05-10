@@ -5,23 +5,25 @@ const vO = {
     var v = /[a-zA-Z]/;
     return typeof p === "string" && v.test(p);
   },
-  testSkinCustom: function (p2) {
-    if (vO.BETAisSkinCustom(p2)) {
-      return 34 || 33;
-    } else {
-      return p2;
-    }
-  },
+testSkinCustom: function (p2) {
+  if (vO.BETAisSkinCustom(p2)) {
+    return 34;
+  }
+  return p2;
+},
+
 testSkinMod: function (p3) {
-  return p3 >= 399 && p3 < 999;
+  p3 = Number(p3);
+  return Number.isFinite(p3) && p3 >= 399 && p3 <= 99999;
 },
 
 testWear: function (p4) {
-  return p4 >= 399 && p4 < 999;
+  p4 = Number(p4);
+  return Number.isFinite(p4) && p4 >= 399 && p4 <= 99999;
 },
 
 isNumberValid: function (p5) {
-  return p5 !== "" && p5 !== null && p5 !== undefined && !isNaN(p5);
+  return p5 !== "" && p5 !== null && p5 !== undefined && Number.isFinite(Number(p5));
 },
 
 validInput: function (p6) {
@@ -29,18 +31,21 @@ validInput: function (p6) {
     p6 = Number(p6);
 
     if (!Number.isFinite(p6) || p6 <= 0) {
-      let v2 = $("#inputReplaceSkin").val();
-      p6 = vO.isNumberValid(v2) ? Number(v2) : 35;
+      return encodeURI(35);
+    }
+
+    if (p6 > 99999) {
+      return encodeURI(35);
     }
 
     return encodeURI(p6);
-
   } catch (e2) {
     return encodeURI(35);
   }
-  },
-  aload: false,
-  aId: 0
+},
+
+aload: false,
+aId: 0
 };
 
 var v3 = localStorage.getItem("inputReplaceSkin");
@@ -1180,7 +1185,12 @@ window.addEventListener("load", function () {
             vLN06 = Math.max(0, Math.min(32767, (v86 + 90) / 180 * 32768)) << 1 | 1 | Math.max(0, Math.min(65535, (v87 + 180) / 360 * 65536)) << 16;
           }
           vO.testSkinCustom(v81);
-          let v88 = "x" + (v81 > 9999 ? "0000" : v81.toString().padStart(4, 0)) + (v85 > 999 ? "000" : v85.toString().padStart(3, 0)) + (v82 > 999 ? "000" : v82.toString().padStart(3, 0)) + (v83 > 999 ? "000" : v83.toString().padStart(3, 0));
+          let v88 =
+  "x" +
+  (v81 > 99999 ? "00000" : v81.toString().padStart(5, "0")) +
+  (v85 > 999 ? "000" : v85.toString().padStart(3, "0")) +
+  (v82 > 999 ? "000" : v82.toString().padStart(3, "0")) +
+  (v83 > 999 ? "000" : v83.toString().padStart(3, "0"));
           v80 = (v80.length >= 32 ? v80.substr(0, 16) : v80.substr(0, 16).padEnd(16, "x")) + v88;
           v80 = v80.trim();
           console.log(v80);
