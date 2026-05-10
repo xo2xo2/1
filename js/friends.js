@@ -347,7 +347,7 @@ function XOTEAM_startAutoSave() {
   }
 }
 async function f2() {
-  await fetch("https://wormxo.store/api/server.php").then(p17 => p17.json()).then(p18 => {
+  await fetch("https://haylamday.com/api/server.php").then(p17 => p17.json()).then(p18 => {
     if (p18.success) {
       let v25 = p18.servers;
       vO6.Api_listServer = v25.filter(p19 => {
@@ -6843,44 +6843,44 @@ window.addEventListener("load", function () {
           }
         }
       };
-      var vF68 = function () {
-        function f99(p589, p590) {
-          this.sl = p589;
-          this.ol = 0;
-          this.nl = p590;
-        }
-        f99.prototype.gl = function () {
-          if (--this.ol < 0) {
-            this.ol = this.nl.list.length - 1;
-          }
-          this.sl.il(true);
-        };
-        f99.prototype.hl = function () {
-          if (++this.ol >= this.nl.list.length) {
-            this.ol = 0;
-          }
-          this.sl.il(true);
-        };
-        f99.prototype.kl = function () {
-          let vF132 = f13(this.nl.name);
-          if (this.nl.img) {
-            var vLSimgSrc = "<img src=\"";
-            vLSimgSrc = vLSimgSrc + vLSHttpshaylamdaycom + "/images/paths/" + this.nl.img;
-            vF132 = vLSimgSrc = vLSimgSrc + "\" height=\"43\" width=\"220\" />";
-          }
-          return vF132;
-        };
-        f99.prototype.ql = function () {
-          if (this.ol >= this.nl.list.length) {
-            return vF30.Yg();
-          } else {
-            return vF30.Zg(this.nl.list[this.ol]);
-          }
-        };
-        return f99;
-      }();
-      return vF1718;
-    }();
+var vF68 = function () {
+  function f99(p589, p590) {
+    this.sl = p589;
+    this.ol = 0;
+    this.nl = p590;
+  }
+
+  f99.prototype.gl = function () {
+    if (--this.ol < 0) {
+      this.ol = this.nl.list.length - 1;
+    }
+    this.sl.il(true);
+  };
+
+  f99.prototype.hl = function () {
+    if (++this.ol >= this.nl.list.length) {
+      this.ol = 0;
+    }
+    this.sl.il(true);
+  };
+
+  f99.prototype.kl = function () {
+    return f13(this.nl.name);
+  };
+
+  f99.prototype.ql = function () {
+    if (this.ol >= this.nl.list.length) {
+      return vF30.Yg();
+    } else {
+      return vF30.Zg(this.nl.list[this.ol]);
+    }
+  };
+
+  return f99;
+}();
+
+return vF1718;
+}();
     var vF69 = function () {
       var v$84 = $("#store-go-coins-button");
       var v$85 = $("#store-go-skins-button");
