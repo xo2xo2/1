@@ -22,9 +22,10 @@ const vO = {
     return p5 !== "" && p5 !== null && p5 !== undefined && !isNaN(p5);
   },
   validInput: function (p6) {
-    if (!vO.testSkinMod(p6) && !vO.BETAisSkinCustom(p6)) {
-      return p6;
-    }
+  p6 = Number(p6);
+  if (!Number.isFinite(p6) || p6 <= 0) return 35;
+  return encodeURI(p6);
+}
     try {
       let v2 = $("#inputReplaceSkin").val();
       return encodeURI(vO.isNumberValid(v2) ? v2 : 35);
