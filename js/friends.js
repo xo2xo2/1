@@ -264,13 +264,7 @@ const vF3 = function (p7) {
   }
 };
 
-/* ========================================================================
-   WORMXO 131 LOCAL PLAYER CORE
-   - Integrated near the original runtime globals, not appended at the end.
-   - Press 8 near a player: local skin becomes 131 and local name uses bName.
-   - No visible 131 panel is created.
-   ======================================================================== */
-(function () {
+
   if (window.__XOTEAM_PIXI_NEAR_SKIN_131__) return;
   window.__XOTEAM_PIXI_NEAR_SKIN_131__ = true;
 
