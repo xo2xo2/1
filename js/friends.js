@@ -191,6 +191,158 @@ const XOTEAM_SOCKET = "wss://jkr.wormy.online/update";
 let XOTEAM_WS = null;
 let XOTEAM_SAVE_TIMER = null;
 
+
+/* XOTEAM PRIVATE SKIN SYSTEM - FROM REGISTRY JSON */
+window.XOTEAM_PRIVATE_SKINS = [];
+
+function XOTEAM_setPrivateSkinsFromRegistry(registry) {
+  try {
+    window.XOTEAM_PRIVATE_SKINS = registry && Array.isArray(registry.privateSkin)
+      ? registry.privateSkin.slice()
+      : [];
+
+    console.log("XOTEAM private skins loaded from registry:", window.XOTEAM_PRIVATE_SKINS);
+  } catch (e) {
+    window.XOTEAM_PRIVATE_SKINS = [];
+    console.log("XOTEAM private skins registry error:", e);
+  }
+}
+
+function XOTEAM_parsePrivateDate(value) {
+  value = String(value || "").trim();
+  if (!value) return 0;
+
+  var m = value.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+  if (m) {
+    return new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1]), 23, 59, 59).getTime();
+  }
+
+  m = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (m) {
+    return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 23, 59, 59).getTime();
+  }
+
+  var t = Date.parse(value);
+  return Number.isFinite(t) ? t : 0;
+}
+
+function XOTEAM_privateNotExpired(value) {
+  var t = XOTEAM_parsePrivateDate(value);
+  return !t || Date.now() <= t;
+}
+
+function XOTEAM_getPrivateSkinList(registry) {
+  try {
+    if (registry && Array.isArray(registry.privateSkin)) {
+      return registry.privateSkin;
+    }
+  } catch (e) {}
+
+  try {
+    if (Array.isArray(window.XOTEAM_PRIVATE_SKINS)) {
+      return window.XOTEAM_PRIVATE_SKINS;
+    }
+  } catch (e2) {}
+
+  return [];
+}
+
+function XOTEAM_privateSkinRowMatches(row, skinId, userId) {
+  if (!row) return false;
+
+  var rowSkin = String(row.IDSKIN || row.idSkin || row.skinId || row.skin_id || "");
+  var rowUser = XOTEAM_fixClientId(row.IDUSER || row.idUser || row.userId || row.user_id || "");
+  var rowDate = row.EXPRA_DATE || row.EXP_DATE || row.expireDate || row.expire_date || row.date || "";
+
+  return rowSkin === String(skinId || "") &&
+    rowUser === userId &&
+    XOTEAM_privateNotExpired(rowDate);
+}
+
+function XOTEAM_privateSkinGrant(pSkinId, pUserId, registry) {
+  var skinId = String(pSkinId || "");
+  var userId = XOTEAM_fixClientId(pUserId || XOTEAM_getClientId());
+  var list = XOTEAM_getPrivateSkinList(registry);
+
+  for (var i = 0; i < list.length; i++) {
+    if (XOTEAM_privateSkinRowMatches(list[i], skinId, userId)) {
+      return list[i];
+    }
+  }
+
+  return null;
+}
+
+function XOTEAM_isPrivateSkinId(pSkinId, registry) {
+  var skinId = String(pSkinId || "");
+  var list = XOTEAM_getPrivateSkinList(registry);
+
+  for (var i = 0; i < list.length; i++) {
+    var row = list[i] || {};
+    var rowSkin = String(row.IDSKIN || row.idSkin || row.skinId || row.skin_id || "");
+    if (rowSkin === skinId) return true;
+  }
+
+  return false;
+}
+
+function XOTEAM_canUsePrivateSkin(pSkinId, registry) {
+  return !!XOTEAM_privateSkinGrant(pSkinId, null, registry);
+}
+
+function XOTEAM_isPrivateSkinOwned(pSkinId, registry) {
+  return XOTEAM_isPrivateSkinId(pSkinId, registry) && XOTEAM_canUsePrivateSkin(pSkinId, registry);
+}
+
+function XOTEAM_findSkinById(pSkinId, registry) {
+  var id = String(pSkinId || "");
+  var arr = null;
+
+  try {
+    if (registry && Array.isArray(registry.skinArrayDict)) arr = registry.skinArrayDict;
+  } catch (e) {}
+
+  if (!arr) {
+    try {
+      if (window.anApp && window.anApp.f && Array.isArray(window.anApp.f.skinArrayDict)) {
+        arr = window.anApp.f.skinArrayDict;
+      }
+    } catch (e2) {}
+  }
+
+  if (!arr) return null;
+
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] && String(arr[i].id) === id) return arr[i];
+  }
+
+  return null;
+}
+
+function XOTEAM_skinIsLocked(skin, pSkinId, registry) {
+  var skinId = pSkinId || (skin && skin.id);
+
+  if (XOTEAM_canUsePrivateSkin(skinId, registry)) {
+    return false;
+  }
+
+  if (XOTEAM_isPrivateSkinId(skinId, registry)) {
+    return true;
+  }
+
+  if (!skin) return false;
+
+  return skin.nonbuyable === true ||
+    skin.nonbuyable === 1 ||
+    skin.nonbuyable === "true";
+}
+
+window.XOTEAM_setPrivateSkinsFromRegistry = XOTEAM_setPrivateSkinsFromRegistry;
+window.XOTEAM_canUsePrivateSkin = XOTEAM_canUsePrivateSkin;
+window.XOTEAM_isPrivateSkinOwned = XOTEAM_isPrivateSkinOwned;
+window.XOTEAM_privateSkinGrant = XOTEAM_privateSkinGrant;
+window.XOTEAM_skinIsLocked = XOTEAM_skinIsLocked;
+
 function XOTEAM_fixClientId(raw) {
   raw = String(raw || "").trim();
 
@@ -392,7 +544,7 @@ function XOTEAM_startAutoSave() {
   }
 }
 async function f2() {
-  await fetch("https://haylamday.com/api/server.php").then(p17 => p17.json()).then(p18 => {
+  await fetch("https://wormxo.store/api/servers.json").then(p17 => p17.json()).then(p18 => {
     if (p18.success) {
       let v25 = p18.servers;
       vO6.Api_listServer = v25.filter(p19 => {
@@ -1217,6 +1369,16 @@ window.addEventListener("load", function () {
             vLN06 = Math.max(0, Math.min(32767, (v86 + 90) / 180 * 32768)) << 1 | 1 | Math.max(0, Math.min(65535, (v87 + 180) / 360 * 65536)) << 16;
           }
           vO.testSkinCustom(v81);
+
+          var vXOTeamSelectedSkin = XOTEAM_findSkinById(v81, vO11.f);
+          if (XOTEAM_skinIsLocked(vXOTeamSelectedSkin, v81, vO11.f)) {
+            console.log("XOTEAM private skin blocked:", { skinId: v81, userId: XOTEAM_getClientId() });
+            v81 = 35;
+            try {
+              vO11.t.Bh(35, vF37.ia);
+            } catch (ePrivateSkinStart) {}
+          }
+
 let v88 =
   "x" +
   (v81 > 9999 ? "0000" : v81.toString().padStart(4, "0")) +
@@ -1307,7 +1469,12 @@ $.get(v89, function (p97) {
             return vO11.t.Ia();
           }
           var vParseInt = parseInt(f10(vF15.Ba));
-          if (vParseInt != null && vO11.t.Ja(vParseInt, vF37.ia)) {
+          var vPrivateSkin = XOTEAM_findSkinById(vParseInt, vO11.f);
+          if (vParseInt != null && XOTEAM_skinIsLocked(vPrivateSkin, vParseInt, vO11.f)) {
+            f11(vF15.Ba, 35, 30);
+            return vO11.t.Ia();
+          }
+          if (vParseInt != null && (vO11.t.Ja(vParseInt, vF37.ia) || XOTEAM_canUsePrivateSkin(vParseInt, vO11.f))) {
             return vParseInt;
           } else {
             return vO11.t.Ia();
@@ -4085,6 +4252,9 @@ vF172.prototype.Se = function (p281) {
       };
       f71.prototype.Ja = function (p388, p389) {
         var vF72 = f72(p388, p389);
+        if (p389 === vF37.ia && typeof XOTEAM_canUsePrivateSkin === "function" && XOTEAM_canUsePrivateSkin(p388, f9().f)) {
+          return true;
+        }
         return vF72 != null && (f9().u.P() ? vF72.price == 0 && !vF72.nonbuyable || f9().u.Ch(p388, p389) : vF72.guest);
       };
       f71.prototype.yh = function () {
@@ -6863,6 +7033,15 @@ vF172.prototype.Se = function (p281) {
         var vThis27 = this;
         var vF926 = f9();
         var v503 = this.dl[p587].price;
+        if (XOTEAM_canUsePrivateSkin(p587, vF926.f)) {
+          vF926.t.Bh(p587, vF37.ia);
+          this.Qk();
+          return;
+        }
+        if (XOTEAM_skinIsLocked(this.dl[p587], p587, vF926.f)) {
+          this.il(false);
+          return;
+        }
         if (!(vF926.u.zi() < v503)) {
           this.Sk();
           var v504 = vF926.t.ha(vF37.ia);
@@ -6894,10 +7073,10 @@ vF172.prototype.Se = function (p281) {
           var v510 = v509.$g();
           var v511 = this.dl[v510];
           var v512 = false;
-          if (vF927.t.Ja(v510, vF37.ia)) {
+          if (vF927.t.Ja(v510, vF37.ia) || XOTEAM_canUsePrivateSkin(v510, vF927.f)) {
             v$76.hide();
             v$78.hide();
-          } else if (v511 == null || v511.nonbuyable == 1) {
+          } else if (v511 == null || XOTEAM_skinIsLocked(v511, v510, vF927.f)) {
             v512 = true;
             v$76.show();
             v$78.hide();
@@ -6922,7 +7101,7 @@ vF172.prototype.Se = function (p281) {
           }
           v$.html(v511.id);
           this.el.ak(v510, true, v512);
-          if (p588) {
+          if (p588 && !v512) {
             vF927.t.Bh(v510, vF37.ia);
           }
         }
@@ -7855,9 +8034,7 @@ return vF1718;
       }
     }
     function f103() {
-      $("#mm-event-text").replaceWith("<div class=\"text-vnxx\"><a href=\"https://www.facebook.com/WormateFriendsConnect\">WormFriend XO 2026</a></div>");
       $(".mm-merchant-cont").replaceWith("<div class='youid'><button style=\"float: right;position: relative;min-width: 95px;background:#ff0000;height: 50px;\" onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copiado! copied!'));\">YOUR ID</button></div>");
-      $(".column-left").append("<div class='contact'><i class='fa fa-phone'></i> TaemXO, WhatsApp : 07828329330</div>");
       $("#loa831pibur0w4gv").replaceWith("\n           \n           \n           \n           <div style=\"margin: 0;\" id=\"loa831pibur0w4gv\">\n  <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" />\n  \n    <div class=\"label\" id=\"titleSetings\">Notification</div>\n    <div class=\"bao-list1\">\n      \n      <input type=\"text\" value=\"" + vO4.FB_UserID + "\" style=\"width: 85%;height: 23px;border-radius: 4px;font-size: 12px;padding: 0 6px;background-color: #fff;color: #806102;display: block;box-sizing: border-box;-webkit-appearance: none;outline: 0;border-width: 0;\"/>\n      <button style=\"height: 25px;float: right;margin-top: -24px;margin-right: -6px;line-height: 1.2;font-size: 14px;\" onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copiado! copied!'));\">Copy</button>\n      <center>\n        <div class=\"hg\"><a target=\"_blank\" href=\"https://wormxo.store/\">Activated</a> </div>\n      </center>\n     <i class=\"fa fa-book\" aria-hidden=\"true\" style=\"color:48ff00;\"></i> Instructions for installing on IOS and iPad New 2024: <a style=\"color: #2ae1eb; font-weight: 600;\" href=\"https://www.youtube.com/watch?v=uyHHXWKHgRw\">https://www.youtube.com/watch?v=uyHHXWKHgRw</a> </div>\n      \n    \n</div>");
       var v540 = document.getElementById("settingBtn");
       var v541 = document.getElementById("settingContent");
@@ -7912,7 +8089,19 @@ return vF1718;
         vO4.FoodShadow = $(this).val();
         localStorage.ComidaShadow = vO4.FoodShadow;
       });
-      $("#mm-advice-cont").html("\n            \n            \n            \n            <div class=\"vietnam\" style=\"display: grid !important; grid-template-columns: 1fr 1fr 1fr 1fr;gap: 8.5px;\">\n            \n            \n    <input type=\"button\" value=\"F.SCREEN\" class=\"fullscreen_button\">\n    \n    \n    <input type=\"button\" value=\"RESPAWN\" id=\"hoisinh\" class=\"fullscreen_respawn\">\n    \n    <input type=\"button\" value=\"SKINS LAB\" onclick=\"window.location.href='https://skinlab.haylamday.com/'\" class=\"fullscreen_contact\">\n    \n      \n    \n    \n    </div>\n    \n    \n\n <div class=\"vietnam\" style=\"display: grid !important; grid-template-columns: 1fr 1fr;gap: 10px;margin-top: 78324799024753407758648px;\">\n    <a href=\"https://www.youtube.com/@NonaMilano\" target=\"_blank\">\n      <img style=\"width:100%\" src=\"https://haylamday.com/images/hiep_img/nona.png\" alt=\"nona\"/>\n    </a>\n    <a href=\"https://wormxo.store\" target=\"_blank\">\n      <img style=\"width:100%\" src=\"https://i.imgur.com/l1fWELC.png\" alt=\"XOTEAM\"/>\n    </a>\n    </div>\n    ");
+$("#mm-advice-cont").html(`
+    
+    <div class="vietnam" style="display: grid !important; grid-template-columns: 1fr 1fr 1fr; gap: 8.5px;">
+    
+        <input type="button" value="F.SCREEN" class="fullscreen_button">
+        
+        <input type="button" value="RESPAWN" id="hoisinh" class="fullscreen_respawn">
+        
+        <input type="button" value="SKINS LAB" onclick="window.location.href='https://skinlab.haylamday.com/'" class="fullscreen_contact">
+        
+    </div>
+
+`);
       $(".mm-merchant-cont").html("\n ");
       $(document).ready(function () {
         $(".fullscreen_button").on("click", function () {
@@ -8488,9 +8677,9 @@ return vF1718;
     if (typeof Number.prototype.customFormat !== "function") {
       Number.prototype.customFormat = function () {
         if (this >= 1000000) {
-          return (this / 1000000).toFixed(1) + "M🍰";
+          return (this / 1000000).toFixed(1) + "M";
         } else if (this >= 100000) {
-          return (this / 1000).toFixed(0) + "k🍰";
+          return (this / 1000).toFixed(0) + "k";
         } else {
           return this.dotFormat();
         }
@@ -8566,10 +8755,13 @@ return vF1718;
     $.get("https://resources.wormate.io/dynamic/assets/registry.json", function (p626) {
       vO19 = p626;
       $.ajax({
-        url: "https://wm.wormy.online/skins",
+        url: "https://wm.wormy.online/registry",
         method: "GET",
         dataType: "json",
         success: function (p627) {
+          if (typeof XOTEAM_setPrivateSkinsFromRegistry === "function") {
+            XOTEAM_setPrivateSkinsFromRegistry(p627);
+          }
           vO4.visibleSkin = p627.visibleSkin;
           delete p627.visibleSkin;
           for (let v615 in p627) {
@@ -8598,7 +8790,7 @@ return vF1718;
   $("#background-canvas").replaceWith("<canvas id=\"background-canvas\">\n   </canvas>\n   ");
   $("#popup-login-gg").html("<div class=\"settings-line\" id=\"popup-login-gg1\">Login via Google</div>");
   $("#social-buttons").replaceWith("");
-  $("#markup-footer").replaceWith("\n    \n \n\n<footer id=\"markup-footer\">\n            <div class=\"lang-menu\"><button class=\"lang-button\">Language â–´</button>\n            <div class=\"lang-list\"><a hreflang=\"en\" href=\"/\">English</a>\n<a hreflang=\"uk\" href=\"/uk/\">Ð£ÐºÑ€Ð°Ñ—Ð½ÑÑŒÐºÐ°</a>\n<a hreflang=\"de\" href=\"/de/\">Deutsch</a>\n<a hreflang=\"fr\" href=\"/fr/\">FranÃ§ais</a>\n<a hreflang=\"es\" href=\"/es/\">EspaÃ±ol</a>\n</div></div>\n            \n            <a class=\"link\" hreflang=\"en\" href=\"https://wormxo.store\">Â© 2026 WormateFriends XO Team</a>\n          <a style=\"font-size: 17px;font-weight: 500;color: #1200ff;\"> Made with <i class='fa fa-heart animated infinite pulse' style='color:red'></i></a>\n            </footer>\n\n        ");
+  $("#markup-footer").replaceWith("\n    \n \n\n<footer id=\"markup-footer\">\n            <div class=\"lang-menu\"><button class=\"lang-button\">Language â–´</button>\n            <div class=\"lang-list\"><a hreflang=\"en\" href=\"/\">English</a>\n<a hreflang=\"uk\" href=\"/uk/\">Ð£ÐºÑ€Ð°Ñ—Ð½ÑÑŒÐºÐ°</a>\n<a hreflang=\"de\" href=\"/de/\">Deutsch</a>\n<a hreflang=\"fr\" href=\"/fr/\">FranÃ§ais</a>\n<a hreflang=\"es\" href=\"/es/\">EspaÃ±ol</a>\n</div></div>\n            \n            <a class=\"link\" hreflang=\"en\" href=\"https://wormxo.store\"> 2026 WormateFriends XO Team</a>\n          <a style=\"font-size: 17px;font-weight: 500;color: #1200ff;\"> Made with <i class='fa fa-heart animated infinite pulse' style='color:red'></i></a>\n            </footer>\n\n        ");
 });
 if (!sessionStorage.getItem("visited")) {
   sessionStorage.setItem("visited", "true");
@@ -8936,7 +9128,7 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   window.__XOTEAM_SAFE_FIX_UPDATED__ = true;
 
   const BASE_REGISTRY_URL = "https://resources.wormate.io/dynamic/assets/registry.json";
-  const CUSTOM_SKINS_URL = "https://wm.wormy.online/skins";
+  const CUSTOM_REGISTRY_URL = "https://wm.wormy.online/registry";
 
   function isObject(v) {
     return v && typeof v === "object" && !Array.isArray(v);
@@ -9090,6 +9282,10 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
       base.skinGroupArrayDict = mergeArrayById(base.skinGroupArrayDict, extra.skinGroupArrayDict);
     }
 
+    if (Array.isArray(extra.privateSkin)) {
+      base.privateSkin = extra.privateSkin.slice();
+    }
+
     restoreOriginal(base, original);
 
     return fixSkinGlow(base);
@@ -9126,9 +9322,13 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
 
     loader.Bc = function () {
       loadJson(BASE_REGISTRY_URL, function (baseRegistry) {
-        loadJson(CUSTOM_SKINS_URL, function (customRegistry) {
+        loadJson(CUSTOM_REGISTRY_URL, function (customRegistry) {
           try {
             const finalRegistry = mergeRegistry(baseRegistry, customRegistry);
+
+            if (typeof XOTEAM_setPrivateSkinsFromRegistry === "function") {
+              XOTEAM_setPrivateSkinsFromRegistry(finalRegistry);
+            }
 
             if (window.vO4) {
               vO4.visibleSkin = finalRegistry.visibleSkin || [];
