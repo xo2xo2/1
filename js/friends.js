@@ -194,11 +194,12 @@ const XOTEAM_SOCKET = "wss://jkr.wormy.online/update";
 
 let XOTEAM_WS = null;
 let XOTEAM_SAVE_TIMER = null;
+let XOTEAM_TOP_HS_TIMER = null;
 
-
-/* XOTEAM PRIVATE SKIN SYSTEM - FROM REGISTRY JSON */
+window.XOTEAM_TOP_HS_ONLINE = [];
 window.XOTEAM_PRIVATE_SKINS = [];
 
+/* XOTEAM PRIVATE SKIN SYSTEM - FROM REGISTRY JSON */
 function XOTEAM_setPrivateSkinsFromRegistry(registry) {
   try {
     window.XOTEAM_PRIVATE_SKINS = registry && Array.isArray(registry.privateSkin)
@@ -237,15 +238,11 @@ function XOTEAM_privateNotExpired(value) {
 
 function XOTEAM_getPrivateSkinList(registry) {
   try {
-    if (registry && Array.isArray(registry.privateSkin)) {
-      return registry.privateSkin;
-    }
+    if (registry && Array.isArray(registry.privateSkin)) return registry.privateSkin;
   } catch (e) {}
 
   try {
-    if (Array.isArray(window.XOTEAM_PRIVATE_SKINS)) {
-      return window.XOTEAM_PRIVATE_SKINS;
-    }
+    if (Array.isArray(window.XOTEAM_PRIVATE_SKINS)) return window.XOTEAM_PRIVATE_SKINS;
   } catch (e2) {}
 
   return [];
@@ -269,9 +266,7 @@ function XOTEAM_privateSkinGrant(pSkinId, pUserId, registry) {
   var list = XOTEAM_getPrivateSkinList(registry);
 
   for (var i = 0; i < list.length; i++) {
-    if (XOTEAM_privateSkinRowMatches(list[i], skinId, userId)) {
-      return list[i];
-    }
+    if (XOTEAM_privateSkinRowMatches(list[i], skinId, userId)) return list[i];
   }
 
   return null;
@@ -326,14 +321,8 @@ function XOTEAM_findSkinById(pSkinId, registry) {
 function XOTEAM_skinIsLocked(skin, pSkinId, registry) {
   var skinId = pSkinId || (skin && skin.id);
 
-  if (XOTEAM_canUsePrivateSkin(skinId, registry)) {
-    return false;
-  }
-
-  if (XOTEAM_isPrivateSkinId(skinId, registry)) {
-    return true;
-  }
-
+  if (XOTEAM_canUsePrivateSkin(skinId, registry)) return false;
+  if (XOTEAM_isPrivateSkinId(skinId, registry)) return true;
   if (!skin) return false;
 
   return skin.nonbuyable === true ||
@@ -352,13 +341,8 @@ function XOTEAM_fixClientId(raw) {
 
   if (!raw) return "";
 
-  if (/^gg_\d{8,40}$/.test(raw)) {
-    return raw;
-  }
-
-  if (/^\d{8,40}$/.test(raw)) {
-    return "gg_" + raw;
-  }
+  if (/^gg_\d{8,40}$/.test(raw)) return raw;
+  if (/^\d{8,40}$/.test(raw)) return "gg_" + raw;
 
   if (raw.indexOf("gg_") === 0) {
     const onlyNumbers = raw.match(/\d{8,40}/);
@@ -367,13 +351,13 @@ function XOTEAM_fixClientId(raw) {
 
   try {
     const saved = localStorage.getItem("XOTEAM_CLIENTE_ID");
-    if (saved && /^gg_\d{8,40}$/.test(saved)) {
-      return saved;
-    }
+    if (saved && /^gg_\d{8,40}$/.test(saved)) return saved;
   } catch (e) {}
 
   const guest = "gg_" + Date.now();
-  localStorage.setItem("XOTEAM_CLIENTE_ID", guest);
+  try {
+    localStorage.setItem("XOTEAM_CLIENTE_ID", guest);
+  } catch (e2) {}
   return guest;
 }
 
@@ -381,9 +365,7 @@ function XOTEAM_getClientId() {
   let id = "";
 
   try {
-    if (window.vO4 && vO4.FB_UserID) {
-      id = vO4.FB_UserID;
-    }
+    if (window.vO4 && vO4.FB_UserID) id = vO4.FB_UserID;
   } catch (e) {}
 
   try {
@@ -405,15 +387,15 @@ function XOTEAM_getClientId() {
 function XOTEAM_getClientName() {
   try {
     if (window.anApp && window.anApp.s && window.anApp.s.F && typeof window.anApp.s.F.ga === "function") {
-      return window.anApp.s.F.ga();
+      return String(window.anApp.s.F.ga() || "Player").substring(0, 16);
     }
   } catch (e) {}
 
-  return (
+  return String(
     localStorage.getItem("nickname") ||
     localStorage.getItem("XOTEAM_CLIENTE_NOMBRE") ||
     "Player"
-  );
+  ).substring(0, 16);
 }
 
 function XOTEAM_makeUser() {
@@ -424,6 +406,119 @@ function XOTEAM_makeUser() {
     cliente_DateExpired: "22-12-2027",
     status: 0
   };
+}
+
+/* TOP HS SYSTEM */
+function XOTEAM_getCurrentHS() {
+  try {
+    return Number(vO4.headshot || 0);
+  } catch (e) {
+    return 0;
+  }
+}
+
+function XOTEAM_makeTopHSPayload(type) {
+  return {
+    type: type,
+    cliente_ID: XOTEAM_getClientId(),
+    cliente_NOMBRE: XOTEAM_getClientName(),
+    hs: XOTEAM_getCurrentHS(),
+    alive: type !== "top_hs_remove",
+    time: Date.now()
+  };
+}
+
+function XOTEAM_sendTopHSNow() {
+  try {
+    if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) return;
+
+    var hs = XOTEAM_getCurrentHS();
+    if (hs <= 0) return;
+
+    XOTEAM_WS.send(JSON.stringify(XOTEAM_makeTopHSPayload("top_hs_update")));
+  } catch (e) {
+    console.log("XOTEAM_sendTopHSNow error:", e);
+  }
+}
+
+function XOTEAM_removeTopHSNow() {
+  try {
+    if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) return;
+
+    XOTEAM_WS.send(JSON.stringify(XOTEAM_makeTopHSPayload("top_hs_remove")));
+  } catch (e) {
+    console.log("XOTEAM_removeTopHSNow error:", e);
+  }
+}
+
+function XOTEAM_updateTopHSList(row) {
+  try {
+    if (!row || !row.cliente_ID) return;
+
+    window.XOTEAM_TOP_HS_ONLINE = window.XOTEAM_TOP_HS_ONLINE || [];
+
+    if (row.alive === false || row.type === "top_hs_remove") {
+      window.XOTEAM_TOP_HS_ONLINE = window.XOTEAM_TOP_HS_ONLINE.filter(function (p) {
+        return String(p.cliente_ID) !== String(row.cliente_ID);
+      });
+    } else {
+      var found = false;
+
+      for (var i = 0; i < window.XOTEAM_TOP_HS_ONLINE.length; i++) {
+        if (String(window.XOTEAM_TOP_HS_ONLINE[i].cliente_ID) === String(row.cliente_ID)) {
+          window.XOTEAM_TOP_HS_ONLINE[i] = row;
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) window.XOTEAM_TOP_HS_ONLINE.push(row);
+    }
+
+    window.XOTEAM_TOP_HS_ONLINE = window.XOTEAM_TOP_HS_ONLINE
+      .filter(function (p) {
+        return p && p.alive !== false && Number(p.hs || 0) > 0;
+      })
+      .sort(function (a, b) {
+        return Number(b.hs || 0) - Number(a.hs || 0);
+      })
+      .slice(0, 5);
+
+    if (typeof XOTEAM_renderTopHS === "function") {
+      XOTEAM_renderTopHS(window.XOTEAM_TOP_HS_ONLINE);
+    }
+  } catch (e) {
+    console.log("XOTEAM_updateTopHSList error:", e);
+  }
+}
+
+function XOTEAM_handleSocketMessage(event) {
+  try {
+    var data = JSON.parse(event.data);
+
+    if (data && data.type === "top_hs_list" && Array.isArray(data.list)) {
+      window.XOTEAM_TOP_HS_ONLINE = data.list
+        .filter(function (p) {
+          return p && p.alive !== false && Number(p.hs || 0) > 0;
+        })
+        .sort(function (a, b) {
+          return Number(b.hs || 0) - Number(a.hs || 0);
+        })
+        .slice(0, 5);
+
+      if (typeof XOTEAM_renderTopHS === "function") {
+        XOTEAM_renderTopHS(window.XOTEAM_TOP_HS_ONLINE);
+      }
+
+      return;
+    }
+
+    if (data && (data.type === "top_hs_update" || data.type === "top_hs_remove")) {
+      XOTEAM_updateTopHSList(data);
+    }
+  } catch (e) {
+    console.log("XOTEAM WebSocket message error:", e);
+  }
 }
 
 async function f() {
@@ -512,10 +607,12 @@ function XOTEAM_startAutoSave() {
         clearInterval(XOTEAM_SAVE_TIMER);
       }
 
+      if (XOTEAM_TOP_HS_TIMER) {
+        clearInterval(XOTEAM_TOP_HS_TIMER);
+      }
+
       XOTEAM_SAVE_TIMER = setInterval(function () {
-        if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) {
-          return;
-        }
+        if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) return;
 
         const payload = {
           success: true,
@@ -527,7 +624,13 @@ function XOTEAM_startAutoSave() {
         XOTEAM_WS.send(JSON.stringify(payload));
         console.log("XOTEAM user saved:", payload);
       }, 5000);
+
+      XOTEAM_TOP_HS_TIMER = setInterval(function () {
+        XOTEAM_sendTopHSNow();
+      }, 1200);
     };
+
+    XOTEAM_WS.onmessage = XOTEAM_handleSocketMessage;
 
     XOTEAM_WS.onclose = function () {
       console.log("XOTEAM WebSocket closed");
@@ -535,6 +638,11 @@ function XOTEAM_startAutoSave() {
       if (XOTEAM_SAVE_TIMER) {
         clearInterval(XOTEAM_SAVE_TIMER);
         XOTEAM_SAVE_TIMER = null;
+      }
+
+      if (XOTEAM_TOP_HS_TIMER) {
+        clearInterval(XOTEAM_TOP_HS_TIMER);
+        XOTEAM_TOP_HS_TIMER = null;
       }
 
       setTimeout(XOTEAM_startAutoSave, 3000);
@@ -547,6 +655,12 @@ function XOTEAM_startAutoSave() {
     console.log("XOTEAM save start error:", e);
   }
 }
+
+window.XOTEAM_sendTopHSNow = XOTEAM_sendTopHSNow;
+window.XOTEAM_removeTopHSNow = XOTEAM_removeTopHSNow;
+window.XOTEAM_updateTopHSList = XOTEAM_updateTopHSList;
+
+
 async function f2() {
   await fetch("https://wormxo.store/api/servers.json").then(p17 => p17.json()).then(p18 => {
     if (p18.success) {
@@ -566,6 +680,7 @@ f();
 f2();
 $(".store-view-cont").append("<div id=\"idReplaceSkin\"></div>");
 var v$ = $("#idReplaceSkin");
+
 const vO7 = {
   fontStyle: {
     name: new PIXI.TextStyle({
@@ -588,18 +703,18 @@ const vO7 = {
       fontWeight: "bold",
       wordWrap: true
     }),
-     morado: new PIXI.TextStyle({
-           lign: "center",
-            fill: "#f8d968",
-            fontSize: 12,
-            lineJoin: "round",
-            stroke: "red",
-            strokeThickness: 1,
-            whiteSpace: "normal",
-            wordWrap: true
+    morado: new PIXI.TextStyle({
+      align: "center",
+      fill: "#f8d968",
+      fontSize: 12,
+      lineJoin: "round",
+      stroke: "red",
+      strokeThickness: 1,
+      whiteSpace: "normal",
+      wordWrap: true
     }),
     morado1: new PIXI.TextStyle({
-      align: "center",
+      align: "left",
       fill: "#FFF",
       fontSize: 10,
       lineJoin: "round",
@@ -611,14 +726,14 @@ const vO7 = {
       wordWrap: true
     }),
     amarillo: new PIXI.TextStyle({
-           lign: "center",
-            fill: "#f8d968",
-            fontSize: 12,
-            lineJoin: "round",
-            stroke: "red",
-            strokeThickness: 1,
-            whiteSpace: "normal",
-            wordWrap: true
+      align: "center",
+      fill: "#f8d968",
+      fontSize: 12,
+      lineJoin: "round",
+      stroke: "red",
+      strokeThickness: 1,
+      whiteSpace: "normal",
+      wordWrap: true
     }),
     amarillo1: new PIXI.TextStyle({
       align: "center",
@@ -655,15 +770,42 @@ const vO7 = {
       fontWeight: "bold",
       fontFamily: "vuonghiep",
       wordWrap: true
+    }),
+    topTitle: new PIXI.TextStyle({
+      align: "center",
+      fill: "#f8d968",
+      fontSize: 12,
+      lineJoin: "round",
+      stroke: "red",
+      strokeThickness: 2,
+      whiteSpace: "normal",
+      fontFamily: "vuonghiep",
+      fontWeight: "bold",
+      wordWrap: true
+    }),
+    topRow: new PIXI.TextStyle({
+      align: "left",
+      fill: "#ffffff",
+      fontSize: 10,
+      lineJoin: "round",
+      stroke: "#000000",
+      strokeThickness: 2,
+      whiteSpace: "normal",
+      fontFamily: "vuonghiep",
+      fontWeight: "bold",
+      wordWrap: true
     })
   }
 };
+
 vO7.clock = PIXI.Sprite.fromImage("https://i.imgur.com/v6szE9c.png");
 vO7.clock.width = 100;
 vO7.clock.height = 100;
 vO7.clock.x = -50;
 vO7.clock.y = -50;
+
 vO7.clockan = PIXI.Sprite.fromImage("https://i.imgur.com/jkOvq9J.png");
+
 if (vO4.ModeStremeranclock) {
   vO7.clockan.width = 100;
   vO7.clockan.height = 100;
@@ -675,13 +817,17 @@ if (vO4.ModeStremeranclock) {
   vO7.clockan.x = -50;
   vO7.clockan.y = -50;
 }
+
 vO7.value_server = new PIXI.Text("XO", vO7.fontStyle.name);
 vO7.value_server.x = 55;
 vO7.value_server.y = 0;
+
 vO7.label_hs = new PIXI.Text("HS", vO7.fontStyle.amarillo);
 vO7.value1_hs = new PIXI.Text("0", vO7.fontStyle.amarillo);
+
 vO7.label_kill = new PIXI.Text("KILL", vO7.fontStyle.morado);
 vO7.value1_kill = new PIXI.Text("0", vO7.fontStyle.morado);
+
 if (vO4.ModeStremersaveheadshot) {
   vO7.value2_hs = new PIXI.Text("", vO7.fontStyle.amarillo1);
   vO7.value2_kill = new PIXI.Text("", vO7.fontStyle.morado1);
@@ -689,22 +835,29 @@ if (vO4.ModeStremersaveheadshot) {
   vO7.value2_hs = new PIXI.Text("", vO7.fontStyle.amarillo1);
   vO7.value2_kill = new PIXI.Text("", vO7.fontStyle.morado1);
 }
-;
+
 vO7.label_hs.x = 15;
 vO7.label_hs.y = 100;
+
 vO7.label_kill.x = 65;
 vO7.label_kill.y = 100;
+
 vO7.value1_hs.x = 15;
 vO7.value1_hs.y = 116;
+
 vO7.value1_kill.x = 65;
 vO7.value1_kill.y = 116;
+
 vO7.value2_hs.x = 15;
 vO7.value2_hs.y = 133;
+
 vO7.value2_kill.x = 65;
 vO7.value2_kill.y = 133;
+
 vO7.containerCountInfo = new PIXI.Container();
 vO7.containerCountInfo.x = -45;
 vO7.containerCountInfo.y = -52;
+
 vO7.containerCountInfo.addChild(vO7.value_server);
 vO7.containerCountInfo.addChild(vO7.label_hs);
 vO7.containerCountInfo.addChild(vO7.value1_hs);
@@ -712,33 +865,86 @@ vO7.containerCountInfo.addChild(vO7.value2_hs);
 vO7.containerCountInfo.addChild(vO7.label_kill);
 vO7.containerCountInfo.addChild(vO7.value1_kill);
 vO7.containerCountInfo.addChild(vO7.value2_kill);
+
+vO7.topHSContainer = new PIXI.Container();
+vO7.topHSContainer.x = -2;
+vO7.topHSContainer.y = 155;
+
+vO7.topHSTitle = new PIXI.Text("TOP HS", vO7.fontStyle.topTitle);
+vO7.topHSTitle.x = 12;
+vO7.topHSTitle.y = 0;
+
+vO7.topHSContainer.addChild(vO7.topHSTitle);
+
+vO7.topHSRows = [];
+
+for (let i = 0; i < 5; i++) {
+  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.topRow);
+  row.x = 0;
+  row.y = 17 + i * 14;
+  vO7.topHSRows.push(row);
+  vO7.topHSContainer.addChild(row);
+}
+
+vO7.containerCountInfo.addChild(vO7.topHSContainer);
+
+function XOTEAM_renderTopHS(list) {
+  try {
+    list = Array.isArray(list) ? list : [];
+
+    for (let i = 0; i < 5; i++) {
+      let row = list[i];
+
+      if (row) {
+        let hs = Number(row.hs || 0);
+        let name = String(row.cliente_NOMBRE || row.name || "Player");
+
+        if (name.length > 12) {
+          name = name.substring(0, 12);
+        }
+
+        vO7.topHSRows[i].text = (i + 1) + ". " + hs + " HS - " + name;
+      } else {
+        vO7.topHSRows[i].text = (i + 1) + ". ---";
+      }
+    }
+  } catch (e) {
+    console.log("XOTEAM_renderTopHS error:", e);
+  }
+}
+
+window.XOTEAM_renderTopHS = XOTEAM_renderTopHS;
+
 vO7.imgServerbase = PIXI.Texture.fromImage("https://i.imgur.com/EkbSd65.png");
 vO7.borderurl = PIXI.Texture.fromImage("https://i.imgur.com/wYJAfmO0.png");
 vO7.onclickServer = PIXI.Texture.fromImage(vO4.flag);
+
 vO7.containerImgS = new PIXI.Sprite(vO7.imgServerbase);
 vO7.containerImgS.anchor.set(0.5);
 vO7.containerImgS.x = 0;
 vO7.containerImgS.y = 8;
 vO7.containerImgS.width = 0;
 vO7.containerImgS.height = 0;
+
 vO7.borderImg = new PIXI.Sprite(vO7.borderurl);
 vO7.borderImg.anchor.set(0.5);
 vO7.borderImg.x = -2;
 vO7.borderImg.y = 78;
 vO7.borderImg.width = 110;
 vO7.borderImg.height = 60;
+
 vO7.setServer = function (p20) {
   vO7.value_server.text = p20 || "XO";
 };
+
 vO7.setCountGame = function (p21, p22, p23, p24) {
   vO7.value1_hs.text = p22;
   vO7.value1_kill.text = p21;
-  ;
+
   if (vO4.ModeStremersaveheadshot) {
     vO7.value2_hs.text = p24;
     vO7.value2_kill.text = p23;
-  } else {}
-  ;
+  }
 };
 "use strict";
 var v26 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function (p25) {
@@ -2809,6 +3015,14 @@ vF172.prototype.Se = function (p281) {
   f114("count", p281);
 
   if (p281) {
+    try {
+      if (typeof XOTEAM_sendTopHSNow === "function") {
+        XOTEAM_sendTopHSNow();
+      }
+    } catch (e) {
+      console.log("TOP HS send error:", e);
+    }
+
     if (vO4.ModeStremerheadshot) {
     } else {
       var v187 = document.createElement("audio");
@@ -8636,35 +8850,90 @@ $("#mm-advice-cont").html(`
         }
       };
 
-      f113();
+           f113();
 
       if (p619 === "count") {
         vO4.kill = (vO4.kill || 0) + (p620 ? 0 : 1);
         vO4.headshot = (vO4.headshot || 0) + (p620 ? 1 : 0);
         vO4.totalKills = vO4.totalKills + (p620 ? 0 : 1);
         vO4.totalHeadshots = vO4.totalHeadshots + (p620 ? 1 : 0);
+
         f112();
-        vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
+
+        vF81(
+          vO4.kill,
+          vO4.headshot,
+          vO4.totalKills,
+          vO4.totalHeadshots
+        );
+
+        if (p620) {
+          try {
+            if (typeof XOTEAM_sendTopHSNow === "function") {
+              XOTEAM_sendTopHSNow();
+            }
+          } catch (e) {
+            console.log("TOP HS send error:", e);
+          }
+        }
       }
 
       if (p619 === "open") {
+        try {
+          if (typeof XOTEAM_removeTopHSNow === "function") {
+            XOTEAM_removeTopHSNow();
+          }
+        } catch (e) {
+          console.log("TOP HS open remove error:", e);
+        }
+
         vO4.kill = 0;
         vO4.headshot = 0;
+
         $("#contadorKill_12").show();
-        vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
+
+        vF81(
+          vO4.kill,
+          vO4.headshot,
+          vO4.totalKills,
+          vO4.totalHeadshots
+        );
       }
 
       if (p619 === "closed") {
+        try {
+          if (typeof XOTEAM_removeTopHSNow === "function") {
+            XOTEAM_removeTopHSNow();
+          }
+        } catch (e) {
+          console.log("TOP HS closed remove error:", e);
+        }
+
         vO2 = {};
       }
 
       if (p619 === "cerrar") {
+        try {
+          if (typeof XOTEAM_removeTopHSNow === "function") {
+            XOTEAM_removeTopHSNow();
+          }
+        } catch (e) {
+          console.log("TOP HS cerrar remove error:", e);
+        }
+
         vO4.kill = 0;
         vO4.headshot = 0;
         vO4.totalKills = 0;
         vO4.totalHeadshots = 0;
+
         f112();
-        vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
+
+        vF81(
+          vO4.kill,
+          vO4.headshot,
+          vO4.totalKills,
+          vO4.totalHeadshots
+        );
       }
     }
 
