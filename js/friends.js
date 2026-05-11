@@ -265,7 +265,7 @@ const vF3 = function (p7) {
 };
 
 
-  if (window.__XOTEAM_PIXI_NEAR_SKIN_131__) return;
+ if (!window.__XOTEAM_PIXI_NEAR_SKIN_131__) {
   window.__XOTEAM_PIXI_NEAR_SKIN_131__ = true;
 
   var XOTEAM_TARGET_SKIN_ID = (window.WORMXO_CORE && window.WORMXO_CORE.targetSkin) || 131;
