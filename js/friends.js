@@ -9074,253 +9074,6 @@ isValidHotkey = function (p633) {
     return false;
   }
 };
-window.onload = function () {
-
-(function (_0xA1,_0xA2,_0xA3,_0xA4,_0xA5) {
-
-var _0xB0 = document.getElementById("game-wrap");
-if (!_0xB0) { return; }
-
-var _0xC9 = "https://wormate.io/images/confetti-xmas2023.png";
-
-var _0xR = function(_0xM){
-  return Math.floor(Math.random()*_0xM);
-};
-
-var _0xHASH = "WORMXO_BG_" + (_0xR(9999999) + 1337);
-
-if (!document.getElementById(_0xHASH)) {
-
-var _0xSTYLE = document.createElement("style");
-_0xSTYLE.id = _0xHASH;
-
-_0xSTYLE.innerHTML = `
-
-@keyframes WXO_BG_SHIFT_991 {
-0%{
-background-position:
-0% 50%,
-100% 0%,
-0px 0px,
-0px 0px;
-filter:hue-rotate(0deg);
-}
-25%{
-background-position:
-40% 70%,
-70% 20%,
-20px 120px,
--40px 180px;
-filter:hue-rotate(5deg);
-}
-50%{
-background-position:
-100% 50%,
-20% 100%,
-60px 280px,
--80px 340px;
-filter:hue-rotate(12deg);
-}
-75%{
-background-position:
-50% 10%,
-0% 60%,
-120px 460px,
--140px 520px;
-filter:hue-rotate(4deg);
-}
-100%{
-background-position:
-0% 50%,
-100% 0%,
-180px 760px,
--220px 900px;
-filter:hue-rotate(0deg);
-}
-}
-
-@keyframes WXO_BLACK_CORE_220 {
-0%{
-transform:translate(-15%,-10%) scale(1);
-opacity:.42;
-}
-30%{
-transform:translate(25%,15%) scale(1.28);
-opacity:.61;
-}
-60%{
-transform:translate(5%,40%) scale(.88);
-opacity:.33;
-}
-100%{
-transform:translate(-15%,-10%) scale(1);
-opacity:.42;
-}
-}
-
-@keyframes WXO_SNOW_DROP_771 {
-0%{
-transform:translateY(-120vh) translateX(0px) rotate(0deg);
-opacity:0;
-}
-10%{
-opacity:.85;
-}
-50%{
-transform:translateY(10vh) translateX(20px) rotate(90deg);
-opacity:.9;
-}
-100%{
-transform:translateY(130vh) translateX(-35px) rotate(220deg);
-opacity:0;
-}
-}
-
-#game-wrap{
-overflow:hidden !important;
-position:relative !important;
-background:
-radial-gradient(circle at 20% 20%, rgba(255,110,230,.58), transparent 34%),
-radial-gradient(circle at 80% 30%, rgba(90,220,255,.65), transparent 38%),
-linear-gradient(135deg,#0346ff 0%,#4ed8ff 35%,#ff75e7 65%,#7028ff 100%) !important;
-background-size:
-240% 240%,
-240% 240%,
-300% 300% !important;
-animation:WXO_BG_SHIFT_991 18s ease-in-out infinite !important;
-}
-
-#game-wrap::before{
-content:"";
-position:absolute;
-left:-35%;
-top:-35%;
-width:140%;
-height:140%;
-pointer-events:none;
-z-index:0;
-background:
-radial-gradient(circle,
-rgba(0,0,0,.78) 0%,
-rgba(0,0,0,.42) 35%,
-transparent 70%);
-filter:blur(65px);
-animation:WXO_BLACK_CORE_220 12s ease-in-out infinite;
-mix-blend-mode:multiply;
-}
-
-.wxo-mini-snow{
-position:absolute;
-width:12px;
-height:12px;
-pointer-events:none;
-background-image:url("${_0xC9}");
-background-size:contain;
-background-repeat:no-repeat;
-opacity:.75;
-z-index:1;
-will-change:transform;
-animation-name:WXO_SNOW_DROP_771;
-animation-timing-function:linear;
-animation-iteration-count:infinite;
-filter:
-drop-shadow(0 0 3px rgba(255,255,255,.55))
-blur(.2px);
-}
-
-#game-wrap > *{
-position:relative;
-z-index:2;
-}
-
-`;
-
-document.head.appendChild(_0xSTYLE);
-}
-
-_0xB0.setAttribute("wxo-data-bg","active_991_x");
-
-var _0xCOUNT = 44;
-
-for (var _0xI = 0; _0xI < _0xCOUNT; _0xI++) {
-
-var _0xSNOW = document.createElement("div");
-
-_0xSNOW.className = "wxo-mini-snow";
-
-_0xSNOW.style.left = (_0xR(1000) / 10) + "%";
-
-_0xSNOW.style.top = (-_0xR(1200)) + "px";
-
-var _0xSIZE = (4 + Math.random() * 10);
-
-_0xSNOW.style.width = _0xSIZE + "px";
-_0xSNOW.style.height = _0xSIZE + "px";
-
-_0xSNOW.style.opacity = (.25 + Math.random() * .75);
-
-_0xSNOW.style.animationDuration =
-(8 + Math.random() * 12) + "s";
-
-_0xSNOW.style.animationDelay =
-(-Math.random() * 20) + "s";
-
-_0xSNOW.style.transform =
-"translateZ(0px) scale(" + (.5 + Math.random()) + ")";
-
-_0xB0.appendChild(_0xSNOW);
-}
-
-var _0xMIXER = 0;
-
-setInterval(function(){
-
-try{
-
-_0xMIXER++;
-
-if(_0xMIXER % 2 === 0){
-
-_0xB0.style.filter =
-"hue-rotate(" + ((_0xMIXER / 2) % 8) + "deg)";
-}
-
-}catch(_0xERR){}
-
-},120);
-
-})(0x991,0x771,0x220,0x333,0x444);
-
-};
-
-console.log(
-"%cWORMXO VISUAL ENGINE 2026",
-"color:#7df;font-size:14px;font-weight:bold;"
-);
-
-(function(){
-
-var _0xSYNC_BG = setInterval(function(){
-
-try{
-
-var _0xNODE = document.getElementById("game-wrap");
-
-if(_0xNODE){
-
-if(!_0xNODE.getAttribute("wxo-data-bg")){
-
-_0xNODE.setAttribute("wxo-data-bg","restore");
-
-}
-
-}
-
-}catch(_0xERR){}
-
-},100);
-
-})();
 document.addEventListener("keydown", function (p637) {
   if (p637.key === "F12") {
     p637.preventDefault();
@@ -9858,4 +9611,35 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   }, true);
 
   setInterval(updateUI, 60);
+})();
+
+(function(){var _0xA9=["game-wrap","mm-start","main-menu","background-canvas","WORMXO_LOBBY_C0RE_7291","style","div"];function _0xF(_0x1){return document.getElementById(_0x1)}function _0xR(){return Math.random().toString(36).slice(2,9)}function _0xLobby(){return !!(_0xF("mm-start")||_0xF("main-menu")||document.querySelector(".main-menu,.menu,.lobby,#mm-start"))}
+function _0xMake(){
+  if(!_0xLobby())return;
+  if(_0xF(_0xA9[4]))return;
+
+  var _0xS=document.createElement(_0xA9[5]);
+  _0xS.id=_0xA9[4];
+  _0xS.textContent=
+  "#_wx_"+_0xR()+"{display:none}"+
+  "@keyframes _wxA91{0%{background-position:0% 50%,100% 0%,0 0;filter:hue-rotate(0deg)}25%{background-position:50% 80%,20% 40%,30px 60px}50%{background-position:100% 50%,0% 100%,80px 20px;filter:hue-rotate(25deg)}75%{background-position:40% 20%,80% 10%,20px 90px}100%{background-position:0% 50%,100% 0%,0 0;filter:hue-rotate(0deg)}}"+
+  "@keyframes _wxB82{0%{transform:translate3d(-4%,-3%,0) scale(1) rotate(0deg)}50%{transform:translate3d(4%,3%,0) scale(1.08) rotate(8deg)}100%{transform:translate3d(-4%,-3%,0) scale(1) rotate(0deg)}}"+
+  "#WORMXO_LOBBY_BG_9917{position:fixed!important;inset:0!important;z-index:0!important;pointer-events:none!important;overflow:hidden!important;background:radial-gradient(circle at 15% 20%,rgba(0,140,255,.95),transparent 34%),radial-gradient(circle at 80% 15%,rgba(255,0,80,.82),transparent 35%),radial-gradient(circle at 55% 75%,rgba(255,230,0,.85),transparent 36%),radial-gradient(circle at 25% 85%,rgba(0,220,255,.85),transparent 35%),radial-gradient(circle at 75% 78%,rgba(170,0,255,.88),transparent 38%),linear-gradient(135deg,#06152f,#250032,#07182d)!important;background-size:180% 180%,170% 170%,160% 160%,190% 190%,175% 175%,100% 100%!important;animation:_wxA91 16s ease-in-out infinite!important}"+
+  "#WORMXO_LOBBY_BG_9917:before{content:'';position:absolute;inset:-18%;background:radial-gradient(circle,rgba(255,255,255,.16) 0 1px,transparent 2px);background-size:44px 44px;opacity:.35;animation:_wxB82 11s ease-in-out infinite!important}"+
+  "#WORMXO_LOBBY_BG_9917:after{content:'';position:absolute;inset:-25%;background:radial-gradient(circle at 30% 30%,rgba(0,0,0,.42),transparent 34%),radial-gradient(circle at 70% 70%,rgba(0,0,0,.35),transparent 40%);filter:blur(18px);animation:_wxB82 18s ease-in-out infinite reverse!important}"+
+  "#game-wrap,#mm-start,#main-menu,.main-menu,.menu,.lobby{position:relative!important;z-index:2!important}";
+  document.head.appendChild(_0xS);
+
+  var _0xD=document.createElement(_0xA9[6]);
+  _0xD.id="WORMXO_LOBBY_BG_9917";
+  document.body.insertBefore(_0xD,document.body.firstChild);
+
+  var _0xWatch=setInterval(function(){
+    var _0xB=_0xF("WORMXO_LOBBY_BG_9917");
+    if(!_0xB){clearInterval(_0xWatch);return}
+    _0xB.style.display=_0xLobby()?"block":"none";
+  },900);
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",_0xMake)}else{_0xMake()}
+window.addEventListener("load",_0xMake);
 })();
