@@ -92,6 +92,22 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
 // by bmw
 // dark , absi , wormfriend , 
 // QQVD =  1.1
+
+/* WORMXO MOBILE LOW-PERFORMANCE CORE - joystick + lag fix */
+window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
+  enabled: true,
+  isMobile: /android|iphone|ipad|ipod|mobile|silk|tablet/i.test(navigator.userAgent || ""),
+  memory: Number(navigator.deviceMemory || 4),
+  tick131: 260,
+  boardTick: 1500,
+  countTick: 620,
+  socketTopTick: 3000,
+  autoSaveTick: 10000,
+  joystickSize: Number(localStorage.getItem("WORMXO_JOYSTICK_SIZE") || 112),
+  joystickBottom: Number(localStorage.getItem("WORMXO_JOYSTICK_BOTTOM") || 105)
+};
+window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.WORMXO_MOBILE_PERF.isMobile || window.WORMXO_MOBILE_PERF.memory <= 4));
+
 window.detectLog = null;
 const vO = {
   BETAisSkinCustom(p) {
@@ -150,15 +166,17 @@ var vO3 = {
   eventoPrincipal: null,
   joystick: {
     positionMode: "L",
-    checked: false,
-    size: 90,
+    checked: true,
+    size: (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.joystickSize) || 112,
     mode: "dynamic",
+    color: "#ff3b3b",
     position: {
-      left: "110px",
-      bottom: "110px"
+      left: "105px",
+      bottom: ((window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.joystickBottom) || 105) + "px"
     },
+    zone: null,
     backgroundImage: "url('path_to_image.png')",
-    pxy: 110
+    pxy: 105
   }
 };
 var vO4 = {
@@ -209,6 +227,52 @@ vO4.loading = true;
 try {
   if (window.WORMXO_UI_STATE && window.WORMXO_UI_STATE.streamer) vO4.ModeStremer = true;
 } catch (e) {}
+
+function WORMXO_applyMobileLowPerf() {
+  try {
+    var perf = window.WORMXO_MOBILE_PERF || {};
+    var low = !!perf.low;
+    if (!low) return;
+
+    vO4.mobile = true;
+    vO4.smoothCamera = Math.min(Number(vO4.smoothCamera || 0.5), 0.38);
+    vO4.eat_animation = Math.min(Number(vO4.eat_animation || 0.005), 0.0025);
+    vO4.FoodShadow = 0;
+    vO4.FoodSize = Math.min(Number(vO4.FoodSize || 2), 1.15);
+    vO4.PortionSize = Math.min(Number(vO4.PortionSize || 2), 1.35);
+    vO4.PortionAura = Math.min(Number(vO4.PortionAura || 1.2), 0.8);
+    vO4.FoodTransparent = Math.max(Number(vO4.FoodTransparent || 0.3), 0.45);
+    vO4.PortionTransparent = Math.max(Number(vO4.PortionTransparent || 0.8), 0.9);
+
+    if (!vO4.gamePad) vO4.gamePad = vO3.joystick;
+    vO4.gamePad.checked = true;
+    vO4.gamePad.mode = "dynamic";
+    vO4.gamePad.size = perf.joystickSize || 112;
+    vO4.gamePad.pxy = perf.joystickBottom || 105;
+  } catch (e) {
+    console.log("WORMXO mobile perf apply error:", e);
+  }
+}
+WORMXO_applyMobileLowPerf();
+
+(function WORMXO_lazyPixiLowPerf() {
+  var tries = 0;
+  var t = setInterval(function () {
+    tries++;
+    try {
+      if (window.PIXI && window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) {
+        if (PIXI.settings) {
+          PIXI.settings.RESOLUTION = 1;
+          PIXI.settings.ROUND_PIXELS = true;
+        }
+        clearInterval(t);
+      }
+      if (tries > 40) clearInterval(t);
+    } catch (e) { if (tries > 40) clearInterval(t); }
+  }, 500);
+})();
+
+
 const vF = function () {
   let v8 = false;
   vO4.mobile = false;
@@ -231,52 +295,108 @@ const vF3 = function (p7) {
   let v12 = null;
 
   try {
+    var isMobileNow = vF2();
 
     if (!vO4.gamePad) {
       vO4.gamePad = vO3.joystick;
     }
 
-    if (vF2() && (p7 || vO4.gamePad.checked)) {
+    if (isMobileNow || (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) {
+      vO4.mobile = true;
+      vO4.gamePad.checked = true;
+    }
 
-      if (typeof nipplejs !== "undefined") {
+    if (!(isMobileNow || p7 || vO4.gamePad.checked)) {
+      return null;
+    }
 
-        v12 = nipplejs.create(vO4.gamePad);
+    if (typeof nipplejs === "undefined") {
+      console.log("nipplejs missing");
+      return null;
+    }
 
-        if (v12) {
+    var zone = document.getElementById("game-wrap") || document.getElementById("canvas") || document.body;
+    if (!zone) return null;
 
-          v12.on("move", function (p8, p9) {
+    if (!window.__WORMXO_JOYSTICK_STYLE__) {
+      window.__WORMXO_JOYSTICK_STYLE__ = true;
+      var st = document.createElement("style");
+      st.id = "WORMXO_JOYSTICK_FIX_STYLE";
+      st.textContent = ".nipple-collection,.nipple{z-index:999999!important;pointer-events:auto!important;touch-action:none!important}.front{opacity:.92!important}.back{opacity:.38!important}";
+      (document.head || document.documentElement).appendChild(st);
+    }
 
-            if (!p9 || !p9.angle || !vO3.eventoPrincipal) {
-              return;
-            }
+    try {
+      if (window.__WORMXO_JOYSTICK_INSTANCE__ && typeof window.__WORMXO_JOYSTICK_INSTANCE__.destroy === "function") {
+        window.__WORMXO_JOYSTICK_INSTANCE__.destroy();
+      }
+    } catch (oldJoyErr) {}
 
-            vO3.eventoPrincipal.sk =
-              p9.angle.radian <= Math.PI
-                ? p9.angle.radian * -1
-                : Math.PI - (p9.angle.radian - Math.PI);
+    var perf = window.WORMXO_MOBILE_PERF || {};
+    var joy = Object.assign({}, vO3.joystick, vO4.gamePad || {});
+    joy.zone = zone;
+    joy.checked = true;
+    joy.mode = joy.mode || "dynamic";
+    joy.color = joy.color || "#ff3b3b";
+    joy.size = Number(joy.size || perf.joystickSize || 112);
+    joy.multitouch = true;
+    joy.maxNumberOfNipples = 1;
+    joy.restJoystick = true;
+    joy.restOpacity = 0.55;
+    joy.catchDistance = 170;
+    joy.threshold = 0.05;
 
-          });
+    if (joy.mode !== "dynamic") {
+      joy.mode = "static";
+      joy.position = joy.position || { left: "105px", bottom: "105px" };
+    }
 
+    v12 = nipplejs.create(joy);
+    window.__WORMXO_JOYSTICK_INSTANCE__ = v12;
+
+    if (v12) {
+      v12.on("move", function (p8, p9) {
+        if (!p9 || !p9.angle || !vO3.eventoPrincipal) {
+          return;
         }
 
-      } else {
+        vO3.eventoPrincipal.sk =
+          p9.angle.radian <= Math.PI
+            ? p9.angle.radian * -1
+            : Math.PI - (p9.angle.radian - Math.PI);
+      });
 
-        console.log("nipplejs missing");
-
-      }
-
+      v12.on("end", function () {
+        try {
+          if (vO3.eventoPrincipal) vO3.eventoPrincipal.sk = vO3.eventoPrincipal.sk;
+        } catch (e) {}
+      });
     }
 
     return v12;
 
   } catch (e3) {
-
-    console.log("mobile error:", e3);
+    console.log("mobile joystick error:", e3);
     return null;
-
   }
 };
 
+
+/* WORMXO joystick boot fallback for mobile browsers */
+(function () {
+  if (window.__WORMXO_JOYSTICK_BOOT__) return;
+  window.__WORMXO_JOYSTICK_BOOT__ = true;
+  function bootJoy() {
+    try {
+      if ((vF2 && vF2()) || (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) {
+        if (vO4 && vO4.gamePad) vO4.gamePad.checked = true;
+        vF3(true);
+      }
+    } catch (e) {}
+  }
+  window.addEventListener("load", function () { setTimeout(bootJoy, 1200); }, { once: true });
+  document.addEventListener("touchstart", function () { setTimeout(bootJoy, 120); }, { once: true, passive: true });
+})();
 
  if (!window.__XOTEAM_PIXI_NEAR_SKIN_131__) {
   window.__XOTEAM_PIXI_NEAR_SKIN_131__ = true;
@@ -456,7 +576,7 @@ const vF3 = function (p7) {
   window.XOTEAM_131_applyLocalName = XOTEAM_131_applyLocalName;
   window.XOTEAM_131_STATE = XOTEAM_131_STATE;
 
-  setInterval(XOTEAM_131_updateCore, 120);
+  setInterval(XOTEAM_131_updateCore, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.tick131 : 120);
   setInterval(function () {
     try {
       window.XOTEAM_KILL_MESSAGES = (window.XOTEAM_KILL_MESSAGES || []).filter(function (p) {
@@ -465,7 +585,7 @@ const vF3 = function (p7) {
       if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES);
       if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
     } catch (e) {}
-  }, 1000);
+  }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 1800 : 1000);
 }
 
 let vO5 = {
@@ -961,12 +1081,12 @@ function XOTEAM_startAutoSave() {
         };
 
         XOTEAM_WS.send(JSON.stringify(payload));
-        console.log("XOTEAM user saved:", payload);
-      }, 5000);
+        if (!(window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) console.log("XOTEAM user saved:", payload);
+      }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.autoSaveTick : 5000);
 
       XOTEAM_TOP_HS_TIMER = setInterval(function () {
         XOTEAM_sendTopHSNow();
-      }, 1800);
+      }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.socketTopTick : 1800);
     };
 
     XOTEAM_WS.onmessage = XOTEAM_handleSocketMessage;
@@ -1491,7 +1611,7 @@ document.addEventListener("keydown", function (e) {
 setInterval(function () {
   XOTEAM_applyBoardVisibility();
   XOTEAM_applyNameMask();
-}, 800);
+}, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.boardTick : 800);
 setTimeout(XOTEAM_applyBoardVisibility, 250);
 
 vO7.imgServerbase = PIXI.Texture.fromImage("https://i.imgur.com/EkbSd65.png");
@@ -1527,7 +1647,7 @@ vO7.setCountGame = function (p21, p22, p23, p24) {
 
   try {
     var vNowXo = Date.now();
-    if (!window.__XOTEAM_LAST_COUNT_RENDER__ || vNowXo - window.__XOTEAM_LAST_COUNT_RENDER__ > 360) {
+    if (!window.__XOTEAM_LAST_COUNT_RENDER__ || vNowXo - window.__XOTEAM_LAST_COUNT_RENDER__ > ((window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.countTick : 360)) {
       window.__XOTEAM_LAST_COUNT_RENDER__ = vNowXo;
       if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
       if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES || []);
@@ -2478,7 +2598,7 @@ $.get(v89, function (p97) {
               vO12.db.close();
               vO12.db = null;
             }
-          }, 5000);
+          }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.autoSaveTick : 5000);
           vO12.B();
         }
       };
@@ -8463,7 +8583,7 @@ return vF1718;
         }, 4000);
         this.Rl(function () {
           v$103.text(".. 5 ..");
-        }, 5000);
+        }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.autoSaveTick : 5000);
         this.Rl(function () {
           v$103.text(".. 4 ..");
         }, 6000);
