@@ -9078,253 +9078,6 @@ isValidHotkey = function (p633) {
     return false;
   }
 };
-window.onload = function () {
-
-(function (_0xA1,_0xA2,_0xA3,_0xA4,_0xA5) {
-
-var _0xB0 = document.getElementById("game-wrap");
-if (!_0xB0) { return; }
-
-var _0xC9 = "https://wormate.io/images/confetti-xmas2023.png";
-
-var _0xR = function(_0xM){
-  return Math.floor(Math.random()*_0xM);
-};
-
-var _0xHASH = "WORMXO_BG_" + (_0xR(9999999) + 1337);
-
-if (!document.getElementById(_0xHASH)) {
-
-var _0xSTYLE = document.createElement("style");
-_0xSTYLE.id = _0xHASH;
-
-_0xSTYLE.innerHTML = `
-
-@keyframes WXO_BG_SHIFT_991 {
-0%{
-background-position:
-0% 50%,
-100% 0%,
-0px 0px,
-0px 0px;
-filter:hue-rotate(0deg);
-}
-25%{
-background-position:
-40% 70%,
-70% 20%,
-20px 120px,
--40px 180px;
-filter:hue-rotate(5deg);
-}
-50%{
-background-position:
-100% 50%,
-20% 100%,
-60px 280px,
--80px 340px;
-filter:hue-rotate(12deg);
-}
-75%{
-background-position:
-50% 10%,
-0% 60%,
-120px 460px,
--140px 520px;
-filter:hue-rotate(4deg);
-}
-100%{
-background-position:
-0% 50%,
-100% 0%,
-180px 760px,
--220px 900px;
-filter:hue-rotate(0deg);
-}
-}
-
-@keyframes WXO_BLACK_CORE_220 {
-0%{
-transform:translate(-15%,-10%) scale(1);
-opacity:.42;
-}
-30%{
-transform:translate(25%,15%) scale(1.28);
-opacity:.61;
-}
-60%{
-transform:translate(5%,40%) scale(.88);
-opacity:.33;
-}
-100%{
-transform:translate(-15%,-10%) scale(1);
-opacity:.42;
-}
-}
-
-@keyframes WXO_SNOW_DROP_771 {
-0%{
-transform:translateY(-120vh) translateX(0px) rotate(0deg);
-opacity:0;
-}
-10%{
-opacity:.85;
-}
-50%{
-transform:translateY(10vh) translateX(20px) rotate(90deg);
-opacity:.9;
-}
-100%{
-transform:translateY(130vh) translateX(-35px) rotate(220deg);
-opacity:0;
-}
-}
-
-#game-wrap{
-overflow:hidden !important;
-position:relative !important;
-background:
-radial-gradient(circle at 20% 20%, rgba(255,110,230,.58), transparent 34%),
-radial-gradient(circle at 80% 30%, rgba(90,220,255,.65), transparent 38%),
-linear-gradient(135deg,#0346ff 0%,#4ed8ff 35%,#ff75e7 65%,#7028ff 100%) !important;
-background-size:
-240% 240%,
-240% 240%,
-300% 300% !important;
-animation:WXO_BG_SHIFT_991 18s ease-in-out infinite !important;
-}
-
-#game-wrap::before{
-content:"";
-position:absolute;
-left:-35%;
-top:-35%;
-width:140%;
-height:140%;
-pointer-events:none;
-z-index:0;
-background:
-radial-gradient(circle,
-rgba(0,0,0,.78) 0%,
-rgba(0,0,0,.42) 35%,
-transparent 70%);
-filter:blur(65px);
-animation:WXO_BLACK_CORE_220 12s ease-in-out infinite;
-mix-blend-mode:multiply;
-}
-
-.wxo-mini-snow{
-position:absolute;
-width:12px;
-height:12px;
-pointer-events:none;
-background-image:url("${_0xC9}");
-background-size:contain;
-background-repeat:no-repeat;
-opacity:.75;
-z-index:1;
-will-change:transform;
-animation-name:WXO_SNOW_DROP_771;
-animation-timing-function:linear;
-animation-iteration-count:infinite;
-filter:
-drop-shadow(0 0 3px rgba(255,255,255,.55))
-blur(.2px);
-}
-
-#game-wrap > *{
-position:relative;
-z-index:2;
-}
-
-`;
-
-document.head.appendChild(_0xSTYLE);
-}
-
-_0xB0.setAttribute("wxo-data-bg","active_991_x");
-
-var _0xCOUNT = 44;
-
-for (var _0xI = 0; _0xI < _0xCOUNT; _0xI++) {
-
-var _0xSNOW = document.createElement("div");
-
-_0xSNOW.className = "wxo-mini-snow";
-
-_0xSNOW.style.left = (_0xR(1000) / 10) + "%";
-
-_0xSNOW.style.top = (-_0xR(1200)) + "px";
-
-var _0xSIZE = (4 + Math.random() * 10);
-
-_0xSNOW.style.width = _0xSIZE + "px";
-_0xSNOW.style.height = _0xSIZE + "px";
-
-_0xSNOW.style.opacity = (.25 + Math.random() * .75);
-
-_0xSNOW.style.animationDuration =
-(8 + Math.random() * 12) + "s";
-
-_0xSNOW.style.animationDelay =
-(-Math.random() * 20) + "s";
-
-_0xSNOW.style.transform =
-"translateZ(0px) scale(" + (.5 + Math.random()) + ")";
-
-_0xB0.appendChild(_0xSNOW);
-}
-
-var _0xMIXER = 0;
-
-setInterval(function(){
-
-try{
-
-_0xMIXER++;
-
-if(_0xMIXER % 2 === 0){
-
-_0xB0.style.filter =
-"hue-rotate(" + ((_0xMIXER / 2) % 8) + "deg)";
-}
-
-}catch(_0xERR){}
-
-},120);
-
-})(0x991,0x771,0x220,0x333,0x444);
-
-};
-
-console.log(
-"%cWORMXO VISUAL ENGINE 2026",
-"color:#7df;font-size:14px;font-weight:bold;"
-);
-
-(function(){
-
-var _0xSYNC_BG = setInterval(function(){
-
-try{
-
-var _0xNODE = document.getElementById("game-wrap");
-
-if(_0xNODE){
-
-if(!_0xNODE.getAttribute("wxo-data-bg")){
-
-_0xNODE.setAttribute("wxo-data-bg","restore");
-
-}
-
-}
-
-}catch(_0xERR){}
-
-},100);
-
-})();
 document.addEventListener("keydown", function (p637) {
   if (p637.key === "F12") {
     p637.preventDefault();
@@ -9862,4 +9615,69 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   }, true);
 
   setInterval(updateUI, 60);
+})();
+
+(function(){var _0x9a1=["\x68\x74\x74\x70\x73\x3A\x2F\x2F\x74\x69\x6D\x6D\x61\x70\x77\x6F\x72\x6D\x61\x74\x65\x2E\x63\x6F\x6D\x2F\x69\x6D\x61\x67\x65\x73\x2F\x73\x74\x6F\x72\x65\x2F\x63\x6F\x6E\x66\x65\x74\x74\x69\x2D\x74\x6D\x77\x2E\x70\x6E\x67","animated-confetti-layer","settings-animated-confetti-layer","confetti-style","confetti","wwc-set-view"];
+var _0xF=function(_0xA){return document.getElementById(_0xA)},_0xR=function(_0xA,_0xB){return Math.random()*(_0xB-_0xA)+_0xA};
+function _0xC7(){
+  var _0xS=_0xF(_0x9a1[3]);
+  if(!_0xS){
+    _0xS=document.createElement("style");
+    _0xS.id=_0x9a1[3];
+    _0xS.textContent=".confetti{position:absolute;bottom:-58px;width:20px;height:20px;background-image:url('"+_0x9a1[0]+"');background-size:contain;background-repeat:no-repeat;background-position:center;animation:_0xWX_"+(777+111)+" linear infinite;opacity:.9;pointer-events:none;will-change:transform,opacity}"+
+    "@keyframes _0xWX_888{0%{transform:translate(0,0) rotate(0deg);opacity:1}50%{opacity:.75}100%{transform:translate(var(--_x0,0px),-112vh) rotate(var(--_r0,360deg));opacity:0}}"+
+    "#background-canvas{position:relative;z-index:0}#game-wrap{position:relative;z-index:2}#mm-wwc{position:relative;z-index:99999!important;pointer-events:auto!important}"+
+    "#wwc-set-view{position:fixed!important;z-index:100000!important;top:50%!important;left:50%!important;transform:translate(-50%,-50%)!important}"+
+    "#settings-animated-confetti-layer{position:absolute!important;top:0!important;left:0!important;width:100%!important;height:100%!important;overflow:hidden!important;z-index:-1!important;pointer-events:none!important}";
+    document.head.appendChild(_0xS);
+  }
+}
+function _0xL(_0xP,_0xQ,_0xU){
+  if(!_0xP)return;
+  var _0xM=_0xP.querySelectorAll("."+_0x9a1[4]);
+  if(_0xM.length>_0xU){for(var _0xI=0;_0xI<_0xM.length-_0xU;_0xI++){_0xM[_0xI]&&_0xM[_0xI].remove()}}
+  for(var _0xN=_0xP.querySelectorAll("."+_0x9a1[4]).length;_0xN<_0xQ;_0xN++){
+    var _0xD=document.createElement("div");
+    _0xD.className=_0x9a1[4];
+    _0xD.style.left=_0xR(0,100)+(_0xP.id===_0x9a1[2]?"%":"vw");
+    _0xD.style.setProperty("--_x0",_0xR(-25,25)+(_0xP.id===_0x9a1[2]?"%":"vw"));
+    _0xD.style.setProperty("--_r0",_0xR(90,720)+"deg");
+    _0xD.style.animationDuration=_0xR(8,12)+"s";
+    _0xD.style.animationDelay=_0xR(-12,0)+"s";
+    _0xP.appendChild(_0xD);
+  }
+}
+function _0xB0(){
+  _0xC7();
+  var _0xG=_0xF(_0x9a1[1]);
+  if(!_0xG){
+    _0xG=document.createElement("div");
+    _0xG.id=_0x9a1[1];
+    _0xG.style.cssText="position:fixed;top:0;left:0;width:100vw;height:100vh;overflow:hidden;z-index:1;pointer-events:none;";
+    document.body.appendChild(_0xG);
+  }
+  _0xL(_0xG,10,20);
+  var _0xV=_0xF(_0x9a1[5]);
+  if(_0xV){
+    var _0xK=_0xF(_0x9a1[2]);
+    if(!_0xK){
+      _0xK=document.createElement("div");
+      _0xK.id=_0x9a1[2];
+      _0xK.style.cssText="position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;z-index:-1;pointer-events:none;";
+      _0xV.appendChild(_0xK);
+    }
+    _0xL(_0xK,5,10);
+  }
+}
+window.Ot=_0xB0;
+window.cleanupBackgroundMemory=function(){
+  var _0xE=_0xF(_0x9a1[1]);
+  if(_0xE){
+    var _0xH=_0xE.querySelectorAll("."+_0x9a1[4]);
+    if(_0xH.length>20){for(var _0xZ=0;_0xZ<10;_0xZ++){_0xH[_0xZ]&&_0xH[_0xZ].remove()}}
+  }
+};
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",_0xB0)}else{_0xB0()}
+window.addEventListener("load",_0xB0);
+setInterval(window.cleanupBackgroundMemory,3e4);
 })();
