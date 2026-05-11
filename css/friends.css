@@ -228,7 +228,7 @@ body {display:block !important;}
 }
 
 #game-wrap #game-cont #stretch-box {
-  width:1000px;
+  width: 912px;
   height:530px;
   position:absolute;
   top:calc((100% - 20px )/2);
@@ -244,7 +244,7 @@ body {display:block !important;}
 
 #game-wrap #game-cont #stretch-box .stretch-view {
   position:absolute;
-  width: 78%;
+  width: 89%;
   height:100%;
   left: 1px;
   right:0;

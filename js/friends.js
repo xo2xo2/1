@@ -9079,30 +9079,251 @@ isValidHotkey = function (p633) {
   }
 };
 window.onload = function () {
-  var vA18 = [{
-    gradient: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><polygon points='50,5 61,35 95,35 67,57 76,91 50,70 24,91 33,57 5,35 39,35' fill='rgba(255, 255, 255, 0.3)'/></svg>\") repeat,linear-gradient(45deg, #32CD32 20%, #FFD700 100%)",
-    size: "120px 120px, 100% 100%"
-  }, {
-    gradient: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect x='30' y='30' width='40' height='40' fill='rgba(255,255,255,0.2)'/></svg>\") repeat,linear-gradient(45deg, #0000FF 20%, #8A2BE2 100%)",
-    size: "100px 100px, 100% 100%"
-  }, {
-    gradient: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><polygon points='50,10 90,50 50,90 10,50' fill='rgba(255,255,255,0.25)'/></svg>\") repeat,linear-gradient(45deg, #0000FF 20%, #8A2BE2 100%)",
-    size: "100px 100px, 100% 100%"
-  }];
-  var v620 = localStorage.getItem("lastSelected");
-  var v621 = vA18.map((p634, p635) => p635).filter(p636 => p636 != v620);
-  var v622 = v621[Math.floor(Math.random() * v621.length)];
-  var v623 = vA18[v622];
-  localStorage.setItem("lastSelected", v622);
-  var v624 = document.getElementById("game-wrap");
-  v624.style.background = v623.gradient;
-  v624.style.backgroundSize = v623.size;
+
+(function (_0xA1,_0xA2,_0xA3,_0xA4,_0xA5) {
+
+var _0xB0 = document.getElementById("game-wrap");
+if (!_0xB0) { return; }
+
+var _0xC9 = "https://wormate.io/images/confetti-xmas2023.png";
+
+var _0xR = function(_0xM){
+  return Math.floor(Math.random()*_0xM);
 };
-console.log("Core 2022 THEO Update 2023");
-(function () {
-  var vSetInterval2 = setInterval(function () {
-    try {} catch (e30) {}
-  }, 100);
+
+var _0xHASH = "WORMXO_BG_" + (_0xR(9999999) + 1337);
+
+if (!document.getElementById(_0xHASH)) {
+
+var _0xSTYLE = document.createElement("style");
+_0xSTYLE.id = _0xHASH;
+
+_0xSTYLE.innerHTML = `
+
+@keyframes WXO_BG_SHIFT_991 {
+0%{
+background-position:
+0% 50%,
+100% 0%,
+0px 0px,
+0px 0px;
+filter:hue-rotate(0deg);
+}
+25%{
+background-position:
+40% 70%,
+70% 20%,
+20px 120px,
+-40px 180px;
+filter:hue-rotate(5deg);
+}
+50%{
+background-position:
+100% 50%,
+20% 100%,
+60px 280px,
+-80px 340px;
+filter:hue-rotate(12deg);
+}
+75%{
+background-position:
+50% 10%,
+0% 60%,
+120px 460px,
+-140px 520px;
+filter:hue-rotate(4deg);
+}
+100%{
+background-position:
+0% 50%,
+100% 0%,
+180px 760px,
+-220px 900px;
+filter:hue-rotate(0deg);
+}
+}
+
+@keyframes WXO_BLACK_CORE_220 {
+0%{
+transform:translate(-15%,-10%) scale(1);
+opacity:.42;
+}
+30%{
+transform:translate(25%,15%) scale(1.28);
+opacity:.61;
+}
+60%{
+transform:translate(5%,40%) scale(.88);
+opacity:.33;
+}
+100%{
+transform:translate(-15%,-10%) scale(1);
+opacity:.42;
+}
+}
+
+@keyframes WXO_SNOW_DROP_771 {
+0%{
+transform:translateY(-120vh) translateX(0px) rotate(0deg);
+opacity:0;
+}
+10%{
+opacity:.85;
+}
+50%{
+transform:translateY(10vh) translateX(20px) rotate(90deg);
+opacity:.9;
+}
+100%{
+transform:translateY(130vh) translateX(-35px) rotate(220deg);
+opacity:0;
+}
+}
+
+#game-wrap{
+overflow:hidden !important;
+position:relative !important;
+background:
+radial-gradient(circle at 20% 20%, rgba(255,110,230,.58), transparent 34%),
+radial-gradient(circle at 80% 30%, rgba(90,220,255,.65), transparent 38%),
+linear-gradient(135deg,#0346ff 0%,#4ed8ff 35%,#ff75e7 65%,#7028ff 100%) !important;
+background-size:
+240% 240%,
+240% 240%,
+300% 300% !important;
+animation:WXO_BG_SHIFT_991 18s ease-in-out infinite !important;
+}
+
+#game-wrap::before{
+content:"";
+position:absolute;
+left:-35%;
+top:-35%;
+width:140%;
+height:140%;
+pointer-events:none;
+z-index:0;
+background:
+radial-gradient(circle,
+rgba(0,0,0,.78) 0%,
+rgba(0,0,0,.42) 35%,
+transparent 70%);
+filter:blur(65px);
+animation:WXO_BLACK_CORE_220 12s ease-in-out infinite;
+mix-blend-mode:multiply;
+}
+
+.wxo-mini-snow{
+position:absolute;
+width:12px;
+height:12px;
+pointer-events:none;
+background-image:url("${_0xC9}");
+background-size:contain;
+background-repeat:no-repeat;
+opacity:.75;
+z-index:1;
+will-change:transform;
+animation-name:WXO_SNOW_DROP_771;
+animation-timing-function:linear;
+animation-iteration-count:infinite;
+filter:
+drop-shadow(0 0 3px rgba(255,255,255,.55))
+blur(.2px);
+}
+
+#game-wrap > *{
+position:relative;
+z-index:2;
+}
+
+`;
+
+document.head.appendChild(_0xSTYLE);
+}
+
+_0xB0.setAttribute("wxo-data-bg","active_991_x");
+
+var _0xCOUNT = 44;
+
+for (var _0xI = 0; _0xI < _0xCOUNT; _0xI++) {
+
+var _0xSNOW = document.createElement("div");
+
+_0xSNOW.className = "wxo-mini-snow";
+
+_0xSNOW.style.left = (_0xR(1000) / 10) + "%";
+
+_0xSNOW.style.top = (-_0xR(1200)) + "px";
+
+var _0xSIZE = (4 + Math.random() * 10);
+
+_0xSNOW.style.width = _0xSIZE + "px";
+_0xSNOW.style.height = _0xSIZE + "px";
+
+_0xSNOW.style.opacity = (.25 + Math.random() * .75);
+
+_0xSNOW.style.animationDuration =
+(8 + Math.random() * 12) + "s";
+
+_0xSNOW.style.animationDelay =
+(-Math.random() * 20) + "s";
+
+_0xSNOW.style.transform =
+"translateZ(0px) scale(" + (.5 + Math.random()) + ")";
+
+_0xB0.appendChild(_0xSNOW);
+}
+
+var _0xMIXER = 0;
+
+setInterval(function(){
+
+try{
+
+_0xMIXER++;
+
+if(_0xMIXER % 2 === 0){
+
+_0xB0.style.filter =
+"hue-rotate(" + ((_0xMIXER / 2) % 8) + "deg)";
+}
+
+}catch(_0xERR){}
+
+},120);
+
+})(0x991,0x771,0x220,0x333,0x444);
+
+};
+
+console.log(
+"%cWORMXO VISUAL ENGINE 2026",
+"color:#7df;font-size:14px;font-weight:bold;"
+);
+
+(function(){
+
+var _0xSYNC_BG = setInterval(function(){
+
+try{
+
+var _0xNODE = document.getElementById("game-wrap");
+
+if(_0xNODE){
+
+if(!_0xNODE.getAttribute("wxo-data-bg")){
+
+_0xNODE.setAttribute("wxo-data-bg","restore");
+
+}
+
+}
+
+}catch(_0xERR){}
+
+},100);
+
 })();
 document.addEventListener("keydown", function (p637) {
   if (p637.key === "F12") {
