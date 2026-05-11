@@ -491,9 +491,11 @@ body {display:block !important;}
   font-size:18px;
   align-items:center;
   text-align:center;
+  MARGIN-LEFT: -43PX;
 }
 #game-wrap #game-cont #stretch-box #main-menu-view #mm-line-center .column-middle #mm-menu-cont .mm-event-cont #mm-event-text {
   box-sizing:border-box;
+  /* MARGIN-LEFT: 7PX; */
   margin:0 10px;
   width:100%;
 }
