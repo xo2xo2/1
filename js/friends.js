@@ -453,7 +453,7 @@ const vF3 = function (p7) {
       if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
     } catch (e) {}
   }, 500);
-})();
+}
 
 let vO5 = {
   clientesVencidos: [],
