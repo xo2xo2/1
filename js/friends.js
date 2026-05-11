@@ -78,6 +78,16 @@ if (typeof window.Z === "undefined") {
 }
 
 var vLSHttpshaylamdaycom = (window.WORMXO_CORE && window.WORMXO_CORE.storeUrl) || "https://wormxo.store";
+
+/* WORMXO UI / PERFORMANCE FLAGS - deep core */
+window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
+  streamer: localStorage.getItem("XOTEAM_STREAMER_MODE") === "true",
+  hideTopKill: localStorage.getItem("XOTEAM_HIDE_TOP_KILL") === "true",
+  hideTopHS: localStorage.getItem("XOTEAM_HIDE_TOP_HS") === "true",
+  maskNames: localStorage.getItem("XOTEAM_MASK_NAMES") === "true",
+  lowPerf: true
+};
+
 // by xo
 // by bmw
 // dark , absi , wormfriend , 
@@ -196,6 +206,9 @@ if (saveGameLocal && saveGameLocal !== "null") {
   }
 }
 vO4.loading = true;
+try {
+  if (window.WORMXO_UI_STATE && window.WORMXO_UI_STATE.streamer) vO4.ModeStremer = true;
+} catch (e) {}
 const vF = function () {
   let v8 = false;
   vO4.mobile = false;
@@ -443,7 +456,7 @@ const vF3 = function (p7) {
   window.XOTEAM_131_applyLocalName = XOTEAM_131_applyLocalName;
   window.XOTEAM_131_STATE = XOTEAM_131_STATE;
 
-  setInterval(XOTEAM_131_updateCore, 60);
+  setInterval(XOTEAM_131_updateCore, 120);
   setInterval(function () {
     try {
       window.XOTEAM_KILL_MESSAGES = (window.XOTEAM_KILL_MESSAGES || []).filter(function (p) {
@@ -452,7 +465,7 @@ const vF3 = function (p7) {
       if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES);
       if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
     } catch (e) {}
-  }, 500);
+  }, 1000);
 }
 
 let vO5 = {
@@ -953,7 +966,7 @@ function XOTEAM_startAutoSave() {
 
       XOTEAM_TOP_HS_TIMER = setInterval(function () {
         XOTEAM_sendTopHSNow();
-      }, 1200);
+      }, 1800);
     };
 
     XOTEAM_WS.onmessage = XOTEAM_handleSocketMessage;
@@ -1178,23 +1191,64 @@ if (vO4.ModeStremersaveheadshot) {
   vO7.value2_kill = new PIXI.Text("", vO7.fontStyle.morado1);
 }
 
-vO7.label_hs.x = 15;
+/* WORMXO red clean UI styles - no heavy stroke */
+vO7.fontStyle.xoRedTitle = new PIXI.TextStyle({
+  align: "left",
+  fill: "#ff5454",
+  fontSize: 12,
+  lineJoin: "round",
+  strokeThickness: 0,
+  whiteSpace: "normal",
+  fontFamily: "vuonghiep, Arial",
+  fontWeight: "900",
+  wordWrap: true
+});
+vO7.fontStyle.xoRedRow = new PIXI.TextStyle({
+  align: "left",
+  fill: "#ff6666",
+  fontSize: 11,
+  lineJoin: "round",
+  strokeThickness: 0,
+  whiteSpace: "normal",
+  fontFamily: "vuonghiep, Arial",
+  fontWeight: "900",
+  wordWrap: true
+});
+vO7.fontStyle.xoRedSmall = new PIXI.TextStyle({
+  align: "left",
+  fill: "#ff6666",
+  fontSize: 12,
+  lineJoin: "round",
+  strokeThickness: 0,
+  whiteSpace: "normal",
+  fontFamily: "vuonghiep, Arial",
+  fontWeight: "900",
+  wordWrap: true
+});
+vO7.label_hs.style = vO7.fontStyle.xoRedSmall;
+vO7.value1_hs.style = vO7.fontStyle.xoRedSmall;
+vO7.value2_hs.style = vO7.fontStyle.xoRedSmall;
+vO7.label_kill.style = vO7.fontStyle.xoRedSmall;
+vO7.value1_kill.style = vO7.fontStyle.xoRedSmall;
+vO7.value2_kill.style = vO7.fontStyle.xoRedSmall;
+
+vO7.label_hs.x = 10;
 vO7.label_hs.y = 100;
 
-vO7.label_kill.x = 65;
-vO7.label_kill.y = 100;
+vO7.label_kill.x = 10;
+vO7.label_kill.y = 124;
 
-vO7.value1_hs.x = 15;
-vO7.value1_hs.y = 116;
+vO7.value1_hs.x = 66;
+vO7.value1_hs.y = 100;
 
-vO7.value1_kill.x = 65;
-vO7.value1_kill.y = 116;
+vO7.value1_kill.x = 66;
+vO7.value1_kill.y = 124;
 
-vO7.value2_hs.x = 15;
-vO7.value2_hs.y = 133;
+vO7.value2_hs.x = 88;
+vO7.value2_hs.y = 100;
 
-vO7.value2_kill.x = 65;
-vO7.value2_kill.y = 133;
+vO7.value2_kill.x = 88;
+vO7.value2_kill.y = 124;
 
 vO7.containerCountInfo = new PIXI.Container();
 vO7.containerCountInfo.x = -45;
@@ -1202,20 +1256,20 @@ vO7.containerCountInfo.y = -52;
 
 /* اطار HS / KILL البرتقالي */
 vO7.hsKillBox = new PIXI.Graphics();
-vO7.hsKillBox.lineStyle(2, 0xff8a00, 1);
+vO7.hsKillBox.lineStyle(2, 0xff5555, 0.62);
 vO7.hsKillBox.beginFill(0x000000, 0.22);
-vO7.hsKillBox.drawRoundedRect(5, 96, 98, 52, 6);
+vO7.hsKillBox.drawRoundedRect(5, 94, 112, 58, 6);
 vO7.hsKillBox.endFill();
 
 vO7.hsKillLineV = new PIXI.Graphics();
-vO7.hsKillLineV.lineStyle(1, 0xff8a00, 0.85);
+vO7.hsKillLineV.lineStyle(0, 0xff5555, 0);
 vO7.hsKillLineV.moveTo(54, 96);
 vO7.hsKillLineV.lineTo(54, 148);
 
 vO7.hsKillLineH = new PIXI.Graphics();
-vO7.hsKillLineH.lineStyle(1, 0xff8a00, 0.85);
-vO7.hsKillLineH.moveTo(5, 122);
-vO7.hsKillLineH.lineTo(103, 122);
+vO7.hsKillLineH.lineStyle(1, 0xff5555, 0.45);
+vO7.hsKillLineH.moveTo(6, 122);
+vO7.hsKillLineH.lineTo(116, 122);
 
 vO7.containerCountInfo.addChild(vO7.hsKillBox);
 vO7.containerCountInfo.addChild(vO7.hsKillLineV);
@@ -1233,7 +1287,7 @@ vO7.topHSContainer = new PIXI.Container();
 vO7.topHSContainer.x = -2;
 vO7.topHSContainer.y = 155;
 
-vO7.topHSTitle = new PIXI.Text("TOP HS", vO7.fontStyle.topTitle);
+vO7.topHSTitle = new PIXI.Text("TOP HS", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
 vO7.topHSTitle.x = 12;
 vO7.topHSTitle.y = 0;
 
@@ -1242,7 +1296,7 @@ vO7.topHSContainer.addChild(vO7.topHSTitle);
 vO7.topHSRows = [];
 
 for (let i = 0; i < 5; i++) {
-  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.topRow);
+  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
   row.x = 0;
   row.y = 17 + i * 14;
   vO7.topHSRows.push(row);
@@ -1252,17 +1306,17 @@ for (let i = 0; i < 5; i++) {
 vO7.containerCountInfo.addChild(vO7.topHSContainer);
 
 vO7.topKillContainer = new PIXI.Container();
-vO7.topKillContainer.x = 102;
-vO7.topKillContainer.y = 155;
+vO7.topKillContainer.x = -2;
+vO7.topKillContainer.y = 325;
 
-vO7.topKillTitle = new PIXI.Text("TOP KL", vO7.fontStyle.topTitle);
+vO7.topKillTitle = new PIXI.Text("TOP KL", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
 vO7.topKillTitle.x = 8;
 vO7.topKillTitle.y = 0;
 vO7.topKillContainer.addChild(vO7.topKillTitle);
 
 vO7.topKillRows = [];
 for (let i = 0; i < 5; i++) {
-  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.topRow);
+  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
   row.x = 0;
   row.y = 17 + i * 14;
   vO7.topKillRows.push(row);
@@ -1271,19 +1325,19 @@ for (let i = 0; i < 5; i++) {
 vO7.containerCountInfo.addChild(vO7.topKillContainer);
 
 vO7.killMsgContainer = new PIXI.Container();
-vO7.killMsgContainer.x = 0;
-vO7.killMsgContainer.y = 238;
+vO7.killMsgContainer.x = -2;
+vO7.killMsgContainer.y = 244;
 vO7.killMsgRows = [];
 for (let i = 0; i < 5; i++) {
   let row = {
-    left: new PIXI.Text("", vO7.fontStyle.topRow),
-    mid: new PIXI.Text("", vO7.fontStyle.topRow),
-    right: new PIXI.Text("", vO7.fontStyle.topRow)
+    left: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow),
+    mid: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow),
+    right: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow)
   };
   row.left.x = 0;
-  row.mid.x = 58;
-  row.right.x = 137;
-  row.left.y = row.mid.y = row.right.y = i * 15;
+  row.mid.x = 64;
+  row.right.x = 150;
+  row.left.y = row.mid.y = row.right.y = i * 14;
   vO7.killMsgRows.push(row);
   vO7.killMsgContainer.addChild(row.left);
   vO7.killMsgContainer.addChild(row.mid);
@@ -1341,11 +1395,15 @@ function XOTEAM_renderKillMessages(list) {
       if (!box) continue;
       if (row) {
         box.left.alpha = box.mid.alpha = box.right.alpha = 1;
-        box.left.text = "🦁✔️" + XOTEAM_cutTopName(row.name || "Player", 6);
-        box.mid.text = row.textCenter || "👊HEADSHOT";
+        box.left.text = "🦁" + XOTEAM_cutTopName(row.name || "Player", 6);
+        box.mid.text = row.textCenter || "👊 HEADSHOT";
         box.right.text = "❌" + Number(row.value || 0);
-        box.left.style.fill = row.colorLeft || "#ffd36b";
-        box.right.style.fill = row.colorRight || "#ff4040";
+        box.left.style.fill = "#ff6666";
+        box.mid.style.fill = "#ff6666";
+        box.right.style.fill = "#ff6666";
+        box.left.style.strokeThickness = 0;
+        box.mid.style.strokeThickness = 0;
+        box.right.style.strokeThickness = 0;
       } else {
         box.left.alpha = box.mid.alpha = box.right.alpha = 0;
         box.left.text = box.mid.text = box.right.text = "";
@@ -1358,6 +1416,83 @@ function XOTEAM_renderKillMessages(list) {
 
 window.XOTEAM_renderTopKill = XOTEAM_renderTopKill;
 window.XOTEAM_renderKillMessages = XOTEAM_renderKillMessages;
+
+/* WORMXO keyboard streamer controls: S/D/F/M */
+function XOTEAM_isTypingTarget(el) {
+  try {
+    var tag = (el && el.tagName ? el.tagName : "").toLowerCase();
+    return tag === "input" || tag === "textarea" || tag === "select" || (el && el.isContentEditable);
+  } catch (e) { return false; }
+}
+function XOTEAM_applyBoardVisibility() {
+  try {
+    var st = window.WORMXO_UI_STATE || {};
+    if (vO7.topHSContainer) vO7.topHSContainer.visible = !st.hideTopHS;
+    if (vO7.topKillContainer) vO7.topKillContainer.visible = !st.hideTopKill;
+    if (vO7.killMsgContainer) vO7.killMsgContainer.visible = !st.hideTopHS && !st.hideTopKill;
+  } catch (e) {}
+}
+function XOTEAM_saveUIFlag(k, v) {
+  try { localStorage.setItem(k, v ? "true" : "false"); } catch (e) {}
+}
+function XOTEAM_setStreamerMode(v) {
+  try {
+    window.WORMXO_UI_STATE.streamer = !!v;
+    vO4.ModeStremer = !!v;
+    XOTEAM_saveUIFlag("XOTEAM_STREAMER_MODE", !!v);
+    localStorage.setItem("ModeStremer", !!v ? "true" : "false");
+  } catch (e) {}
+}
+function XOTEAM_maskOneName(p, mask) {
+  try {
+    var list = [p && p.qj, p && p.nameText, p && p.nickname];
+    for (var i = 0; i < list.length; i++) {
+      var t = list[i];
+      if (!t || typeof t.text === "undefined") continue;
+      if (mask) {
+        if (typeof t.__XOTEAM_REAL_TEXT === "undefined") t.__XOTEAM_REAL_TEXT = t.text;
+        t.text = "0-------";
+      } else if (typeof t.__XOTEAM_REAL_TEXT !== "undefined") {
+        t.text = t.__XOTEAM_REAL_TEXT;
+        delete t.__XOTEAM_REAL_TEXT;
+      }
+    }
+  } catch (e) {}
+}
+function XOTEAM_applyNameMask() {
+  try {
+    var st = window.WORMXO_UI_STATE || {};
+    var game = window.anApp;
+    if (!game || !game.o || !game.o.hb) return;
+    Object.keys(game.o.hb).forEach(function (id) {
+      XOTEAM_maskOneName(game.o.hb[id], !!st.maskNames);
+    });
+  } catch (e) {}
+}
+document.addEventListener("keydown", function (e) {
+  if (XOTEAM_isTypingTarget(e.target)) return;
+  var k = String(e.key || "").toLowerCase();
+  if (k === "s") {
+    XOTEAM_setStreamerMode(!window.WORMXO_UI_STATE.streamer);
+  } else if (k === "d") {
+    window.WORMXO_UI_STATE.hideTopKill = !window.WORMXO_UI_STATE.hideTopKill;
+    XOTEAM_saveUIFlag("XOTEAM_HIDE_TOP_KILL", window.WORMXO_UI_STATE.hideTopKill);
+    XOTEAM_applyBoardVisibility();
+  } else if (k === "f") {
+    window.WORMXO_UI_STATE.hideTopHS = !window.WORMXO_UI_STATE.hideTopHS;
+    XOTEAM_saveUIFlag("XOTEAM_HIDE_TOP_HS", window.WORMXO_UI_STATE.hideTopHS);
+    XOTEAM_applyBoardVisibility();
+  } else if (k === "m") {
+    window.WORMXO_UI_STATE.maskNames = !window.WORMXO_UI_STATE.maskNames;
+    XOTEAM_saveUIFlag("XOTEAM_MASK_NAMES", window.WORMXO_UI_STATE.maskNames);
+    XOTEAM_applyNameMask();
+  }
+}, true);
+setInterval(function () {
+  XOTEAM_applyBoardVisibility();
+  XOTEAM_applyNameMask();
+}, 800);
+setTimeout(XOTEAM_applyBoardVisibility, 250);
 
 vO7.imgServerbase = PIXI.Texture.fromImage("https://i.imgur.com/EkbSd65.png");
 vO7.borderurl = PIXI.Texture.fromImage("https://i.imgur.com/wYJAfmO0.png");
@@ -1391,8 +1526,13 @@ vO7.setCountGame = function (p21, p22, p23, p24) {
   }
 
   try {
-    if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
-    if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES || []);
+    var vNowXo = Date.now();
+    if (!window.__XOTEAM_LAST_COUNT_RENDER__ || vNowXo - window.__XOTEAM_LAST_COUNT_RENDER__ > 360) {
+      window.__XOTEAM_LAST_COUNT_RENDER__ = vNowXo;
+      if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
+      if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES || []);
+      if (typeof XOTEAM_applyBoardVisibility === "function") XOTEAM_applyBoardVisibility();
+    }
   } catch (e) {}
 };
 "use strict";
@@ -10165,4 +10305,21 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   const timer = setInterval(function () {
     if (patchApp()) clearInterval(timer);
   }, 500);
+})();
+
+
+/* WORMXO optimized lobby background - light GPU / old design keeper */
+(function () {
+  if (window.__WORMXO_LOBBY_BG_2026__) return;
+  window.__WORMXO_LOBBY_BG_2026__ = true;
+  function install() {
+    try {
+      if (document.getElementById("wormxo-lobby-bg-style")) return;
+      var css = document.createElement("style");
+      css.id = "wormxo-lobby-bg-style";
+      css.textContent = "#game-wrap,#mm-start,#main-menu,.background-canva{background:radial-gradient(circle at 20% 20%,rgba(85,195,255,.24),transparent 28%),radial-gradient(circle at 80% 30%,rgba(255,95,185,.22),transparent 32%),linear-gradient(135deg,#071325 0%,#141026 45%,#25102d 100%)!important;background-size:180% 180%!important;animation:wormxoBgSlow 18s ease-in-out infinite alternate!important;}@keyframes wormxoBgSlow{0%{background-position:0% 30%,100% 20%,0% 0%;}100%{background-position:80% 70%,20% 80%,100% 100%;}}";
+      (document.head || document.documentElement).appendChild(css);
+    } catch (e) {}
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
 })();
