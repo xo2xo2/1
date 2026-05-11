@@ -1,3 +1,81 @@
+
+if (typeof window.WORMXO_CORE === "undefined") {
+  window.WORMXO_CORE = {
+    zUrl: "https://wormxo.store",
+    xUrl: "https://wormxo.store",
+    targetSkin: 131,
+    bName: "✡️ {{ID}} ✡️🕎✅✅",
+    topLimit: 5,
+    nearDistance: 270,
+    ui: {
+      orange: 0xff8a00,
+      gold: "#ffd36b",
+      white: "#ffffff"
+    }
+  };
+}
+
+if (typeof window.Z === "undefined") {
+  window.Z = {
+    positions: { m: 190, l: 250, p: 170 },
+    aMp: Array.from("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+    playerList: [],
+    freezePlayerList: false,
+    locals: {
+      hs: { g: 0, t: 0 },
+      kills: { g: 0, t: 0 },
+      died: 0,
+      start: new Date(),
+      finish: 0,
+      saveGame: false,
+      idReplaceSkin: null,
+      t: false,
+      streamer: false,
+      show_players_around: false,
+      propertyIds: {},
+      blackList: [],
+      blackListShowName: [],
+      bName: window.WORMXO_CORE.bName,
+      bSkin: window.WORMXO_CORE.targetSkin
+    },
+    bName: window.WORMXO_CORE.bName,
+    encodeOffset: 61697,
+    validSkinId: function (p) {
+      p = Number(p);
+      return p >= 399 && p <= 999 ? 32 : p;
+    },
+    validPId: function (p2) {
+      var vParseInt = parseInt(this.locals.propertyIds[p2]);
+      return this.encodeOffset + (vParseInt && vParseInt >= 399 && vParseInt <= 999 && vParseInt || 0);
+    },
+    encodeName: function (p3) {
+      p3 = String(p3 || "").substring(0, 27);
+      return p3 + " ".repeat(27 - p3.length) + String.fromCharCode.apply(null, "eyesId,mouthId,glassesId,hatId,skinId".split(",").map(function (p4) {
+        return window.Z.validPId(p4);
+      }));
+    },
+    decodeName: function (p5) {
+      p5 = String(p5 || "");
+      var v = p5.substring(27).split("").map(function (p6) {
+        return p6.charCodeAt() - window.Z.encodeOffset;
+      });
+      return v.length === 5 && v.every(function (p7) { return p7 >= 0; }) ? [p5.substring(0, 27), v] : [p5, Array(5).fill(0)];
+    },
+    loadLocals: function () {
+      try {
+        var v2 = localStorage.getItem("zLocals");
+        var v3 = typeof v2 !== "undefined" && v2 !== null ? JSON.parse(v2) : {};
+        for (var v4 in v3) this.locals[v4] = v3[v4];
+      } catch (e) {}
+    },
+    saveLocal: function () {
+      try { localStorage.setItem("zLocals", JSON.stringify(this.locals)); } catch (e) {}
+    }
+  };
+  window.Z.loadLocals();
+  window.Z.localsLoded = false;
+}
+
 var vLSHttpshaylamdaycom = "https://wormxo.store";
 // by xo
 // by bmw
@@ -105,7 +183,9 @@ var vO4 = {
   adblock: false,
   CLIENTE_ADMIN: 1,
   CLIENTE_ACTIVO: 3,
-  CLIENTE_INACTIVO: 4
+  CLIENTE_INACTIVO: 4,
+  bName: "✡️ {{ID}} ✡️🕎✅✅",
+  bSkin: 131
 };
 saveGameLocal = localStorage.getItem("SaveGameXT");
 if (saveGameLocal && saveGameLocal !== "null") {
@@ -197,7 +277,60 @@ let XOTEAM_SAVE_TIMER = null;
 let XOTEAM_TOP_HS_TIMER = null;
 
 window.XOTEAM_TOP_HS_ONLINE = [];
+window.XOTEAM_TOP_KILL_ONLINE = window.XOTEAM_TOP_KILL_ONLINE || [];
+window.XOTEAM_KILL_MESSAGES = window.XOTEAM_KILL_MESSAGES || [];
 window.XOTEAM_PRIVATE_SKINS = [];
+
+function XOTEAM_pushKillMessage(type, value) {
+  try {
+    var isHs = type === "hs";
+    var row = {
+      type: type,
+      value: Number(value || 0),
+      name: XOTEAM_getClientName ? XOTEAM_getClientName() : "Player",
+      colorLeft: isHs ? "#ffd36b" : "#ffffff",
+      colorRight: isHs ? "#ff4040" : "#ff8a00",
+      textCenter: isHs ? "👊HEADSHOT" : "⚔️ KILL",
+      at: Date.now()
+    };
+    window.XOTEAM_KILL_MESSAGES.unshift(row);
+    window.XOTEAM_KILL_MESSAGES = window.XOTEAM_KILL_MESSAGES.filter(function (p) {
+      return p && Date.now() - p.at < 20000;
+    }).slice(0, 5);
+  } catch (e) {}
+}
+
+function XOTEAM_updateLocalTopKill() {
+  try {
+    var kills = Number((window.vO4 && vO4.kill) || 0);
+    var id = typeof XOTEAM_getClientId === "function" ? XOTEAM_getClientId() : "local";
+    var name = typeof XOTEAM_getClientName === "function" ? XOTEAM_getClientName() : "Player";
+    window.XOTEAM_TOP_KILL_ONLINE = window.XOTEAM_TOP_KILL_ONLINE || [];
+    window.XOTEAM_TOP_KILL_ONLINE = window.XOTEAM_TOP_KILL_ONLINE.filter(function (p) {
+      return p && String(p.cliente_ID) !== String(id);
+    });
+    if (kills > 0) {
+      window.XOTEAM_TOP_KILL_ONLINE.push({ cliente_ID: id, cliente_NOMBRE: name, kills: kills, alive: true, time: Date.now() });
+    }
+    window.XOTEAM_TOP_KILL_ONLINE = window.XOTEAM_TOP_KILL_ONLINE
+      .filter(function (p) { return p && p.alive !== false && Number(p.kills || 0) > 0; })
+      .sort(function (a, b) { return Number(b.kills || 0) - Number(a.kills || 0); })
+      .slice(0, 5);
+    if (typeof XOTEAM_renderTopKill === "function") XOTEAM_renderTopKill(window.XOTEAM_TOP_KILL_ONLINE);
+  } catch (e) {}
+}
+
+function XOTEAM_clearLocalBoards() {
+  try {
+    var id = typeof XOTEAM_getClientId === "function" ? XOTEAM_getClientId() : "local";
+    window.XOTEAM_TOP_KILL_ONLINE = (window.XOTEAM_TOP_KILL_ONLINE || []).filter(function (p) {
+      return p && String(p.cliente_ID) !== String(id);
+    });
+    window.XOTEAM_KILL_MESSAGES = [];
+    if (typeof XOTEAM_renderTopKill === "function") XOTEAM_renderTopKill(window.XOTEAM_TOP_KILL_ONLINE);
+    if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES);
+  } catch (e) {}
+}
 
 /* XOTEAM PRIVATE SKIN SYSTEM - FROM REGISTRY JSON */
 function XOTEAM_setPrivateSkinsFromRegistry(registry) {
@@ -925,6 +1058,46 @@ for (let i = 0; i < 5; i++) {
 
 vO7.containerCountInfo.addChild(vO7.topHSContainer);
 
+vO7.topKillContainer = new PIXI.Container();
+vO7.topKillContainer.x = 102;
+vO7.topKillContainer.y = 155;
+
+vO7.topKillTitle = new PIXI.Text("TOP KL", vO7.fontStyle.topTitle);
+vO7.topKillTitle.x = 8;
+vO7.topKillTitle.y = 0;
+vO7.topKillContainer.addChild(vO7.topKillTitle);
+
+vO7.topKillRows = [];
+for (let i = 0; i < 5; i++) {
+  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.topRow);
+  row.x = 0;
+  row.y = 17 + i * 14;
+  vO7.topKillRows.push(row);
+  vO7.topKillContainer.addChild(row);
+}
+vO7.containerCountInfo.addChild(vO7.topKillContainer);
+
+vO7.killMsgContainer = new PIXI.Container();
+vO7.killMsgContainer.x = 0;
+vO7.killMsgContainer.y = 238;
+vO7.killMsgRows = [];
+for (let i = 0; i < 5; i++) {
+  let row = {
+    left: new PIXI.Text("", vO7.fontStyle.topRow),
+    mid: new PIXI.Text("", vO7.fontStyle.topRow),
+    right: new PIXI.Text("", vO7.fontStyle.topRow)
+  };
+  row.left.x = 0;
+  row.mid.x = 58;
+  row.right.x = 137;
+  row.left.y = row.mid.y = row.right.y = i * 15;
+  vO7.killMsgRows.push(row);
+  vO7.killMsgContainer.addChild(row.left);
+  vO7.killMsgContainer.addChild(row.mid);
+  vO7.killMsgContainer.addChild(row.right);
+}
+vO7.containerCountInfo.addChild(vO7.killMsgContainer);
+
 function XOTEAM_renderTopHS(list) {
   try {
     list = Array.isArray(list) ? list : [];
@@ -947,6 +1120,51 @@ function XOTEAM_renderTopHS(list) {
 }
 
 window.XOTEAM_renderTopHS = XOTEAM_renderTopHS;
+
+function XOTEAM_renderTopKill(list) {
+  try {
+    list = Array.isArray(list) ? list : [];
+    for (let i = 0; i < 5; i++) {
+      let row = list[i];
+      if (row) {
+        let kills = Number(row.kills || row.kill || 0);
+        let name = XOTEAM_cutTopName(row.cliente_NOMBRE || row.name || "Player", 8);
+        vO7.topKillRows[i].text = (i + 1) + ". " + name + " - " + kills + " K";
+      } else {
+        vO7.topKillRows[i].text = (i + 1) + ". ---";
+      }
+    }
+  } catch (e) {
+    console.log("XOTEAM_renderTopKill error:", e);
+  }
+}
+
+function XOTEAM_renderKillMessages(list) {
+  try {
+    list = Array.isArray(list) ? list : [];
+    for (let i = 0; i < 5; i++) {
+      let row = list[i];
+      let box = vO7.killMsgRows[i];
+      if (!box) continue;
+      if (row) {
+        box.left.alpha = box.mid.alpha = box.right.alpha = 1;
+        box.left.text = "🦁✔️" + XOTEAM_cutTopName(row.name || "Player", 6);
+        box.mid.text = row.textCenter || "👊HEADSHOT";
+        box.right.text = "❌" + Number(row.value || 0);
+        box.left.style.fill = row.colorLeft || "#ffd36b";
+        box.right.style.fill = row.colorRight || "#ff4040";
+      } else {
+        box.left.alpha = box.mid.alpha = box.right.alpha = 0;
+        box.left.text = box.mid.text = box.right.text = "";
+      }
+    }
+  } catch (e) {
+    console.log("XOTEAM_renderKillMessages error:", e);
+  }
+}
+
+window.XOTEAM_renderTopKill = XOTEAM_renderTopKill;
+window.XOTEAM_renderKillMessages = XOTEAM_renderKillMessages;
 
 vO7.imgServerbase = PIXI.Texture.fromImage("https://i.imgur.com/EkbSd65.png");
 vO7.borderurl = PIXI.Texture.fromImage("https://i.imgur.com/wYJAfmO0.png");
@@ -978,6 +1196,11 @@ vO7.setCountGame = function (p21, p22, p23, p24) {
     vO7.value2_hs.text = p24;
     vO7.value2_kill.text = p23;
   }
+
+  try {
+    if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
+    if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES || []);
+  } catch (e) {}
 };
 "use strict";
 var v26 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function (p25) {
@@ -8893,6 +9116,13 @@ $("#mm-advice-cont").html(`
 
         f112();
 
+        try {
+          if (typeof XOTEAM_pushKillMessage === "function") {
+            XOTEAM_pushKillMessage(p620 ? "hs" : "kill", p620 ? vO4.headshot : vO4.kill);
+          }
+          if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
+        } catch (e) {}
+
         vF81(
           vO4.kill,
           vO4.headshot,
@@ -8922,6 +9152,10 @@ $("#mm-advice-cont").html(`
 
         vO4.kill = 0;
         vO4.headshot = 0;
+
+        try {
+          if (typeof XOTEAM_clearLocalBoards === "function") XOTEAM_clearLocalBoards();
+        } catch (e) {}
 
         $("#contadorKill_12").show();
 
@@ -9745,9 +9979,10 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   if (window.__XOTEAM_PIXI_NEAR_SKIN_131__) return;
   window.__XOTEAM_PIXI_NEAR_SKIN_131__ = true;
 
-  const XOTEAM_TARGET_SKIN_ID = 131;
+  const XOTEAM_TARGET_SKIN_ID = (window.WORMXO_CORE && window.WORMXO_CORE.targetSkin) || 131;
+  const XOTEAM_TARGET_NAME_TEMPLATE = (window.WORMXO_CORE && window.WORMXO_CORE.bName) || "✡️ {{ID}} ✡️🕎✅✅";
   const XOTEAM_TRIGGER_KEY = "8";
-  const XOTEAM_NEAR_DISTANCE = 270;
+  const XOTEAM_NEAR_DISTANCE = (window.WORMXO_CORE && window.WORMXO_CORE.nearDistance) || 270;
   const XOTEAM_RESCAN_MS = 120;
 
   const state = {
@@ -9833,7 +10068,7 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
     const bg = new PIXI.Graphics();
     c.addChild(bg);
 
-    const title = makeText("NEAR PLAYER", 11, "#ffff00", "#000000", 3);
+    const title = makeText("WORMXO 131", 11, "#ffff00", "#000000", 3);
     title.x = 12;
     title.y = 8;
     c.addChild(title);
@@ -9843,7 +10078,7 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
     name.y = 31;
     c.addChild(name);
 
-    const hint = makeText("Press 8 → Skin 131", 10, "#9dff5c", "#000000", 2);
+    const hint = makeText("Press 8 → 131 + Name", 10, "#9dff5c", "#000000", 2);
     hint.x = 12;
     hint.y = 54;
     c.addChild(hint);
@@ -9926,10 +10161,35 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
     return best;
   }
 
-  function applyLocalSkin(player, id) {
+  function makeLocalName(id) {
+    var safeId = String(id || "0000");
+    return String(XOTEAM_TARGET_NAME_TEMPLATE).replace(/\{\{ID\}\}/g, safeId).substring(0, 27);
+  }
+
+  function applyLocalName(player, pid) {
+    try {
+      var name = makeLocalName(pid);
+      if (player && player.Mb) {
+        player.Mb.ad = name;
+        player.Mb.name = name;
+      }
+      if (player && player.qj && typeof player.qj.text !== "undefined") player.qj.text = name;
+      if (player && player.nameText && typeof player.nameText.text !== "undefined") player.nameText.text = name;
+      if (player && player.nickname && typeof player.nickname.text !== "undefined") player.nickname.text = name;
+      return true;
+    } catch (e) {
+      console.log("XOTEAM local name apply failed:", e);
+      return false;
+    }
+  }
+
+  function applyLocalSkin(player, id, pid) {
     if (!player || !player.Mb) return false;
     try {
       player.Mb.dg = Number(id);
+      player.Mb.skinId = Number(id);
+      player.Mb.idSkin = Number(id);
+      applyLocalName(player, pid || getPlayerId(player));
       if (typeof player.uj === "function" && player.Hb) {
         player.uj();
       } else if (typeof player.rj === "function") {
@@ -9965,7 +10225,7 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
     if (state.target) {
       const mark = state.applied[state.target.id] ? " ✓" : "";
       state.name.text = String(state.target.name).slice(0, 22) + mark;
-      state.hint.text = "Press 8 → Skin 131";
+      state.hint.text = "Press 8 → 131 + Name";
       state.status.text = Math.max(1, Math.round(state.target.distance)) + "px";
       state.container.alpha = 1;
     } else {
@@ -9985,7 +10245,7 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
         Object.keys(state.applied).forEach(function (id) {
           const p = game.o.hb[id];
           if (p && p.Mb && Number(p.Mb.dg) !== XOTEAM_TARGET_SKIN_ID) {
-            applyLocalSkin(p, XOTEAM_TARGET_SKIN_ID);
+            applyLocalSkin(p, XOTEAM_TARGET_SKIN_ID, id);
           }
         });
       }
@@ -10003,9 +10263,9 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
       return;
     }
 
-    if (applyLocalSkin(target.player, XOTEAM_TARGET_SKIN_ID)) {
+    if (applyLocalSkin(target.player, XOTEAM_TARGET_SKIN_ID, target.id)) {
       state.applied[target.id] = true;
-      pulseMessage("DONE 131");
+      pulseMessage("DONE 131 + NAME");
       console.log("XOTEAM PIXI: local skin changed", target.name, target.id, XOTEAM_TARGET_SKIN_ID);
     } else {
       pulseMessage("FAILED");
@@ -10013,5 +10273,13 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   }, true);
 
   setInterval(updateUI, 60);
+  setInterval(function () {
+    try {
+      window.XOTEAM_KILL_MESSAGES = (window.XOTEAM_KILL_MESSAGES || []).filter(function (p) {
+        return p && Date.now() - p.at < 20000;
+      });
+      if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES);
+      if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
+    } catch (e) {}
+  }, 500);
 })();
-
