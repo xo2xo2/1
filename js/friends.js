@@ -1,8 +1,4 @@
-/* ========================================================================
-   WORMXO CORE BRIDGE 2026
-   - Safe globals used by the local systems below.
-   - Does not replace the original game core; only supplies missing bridge data.
-   ======================================================================== */
+
 if (typeof window.WORMXO_CORE === "undefined") {
   window.WORMXO_CORE = {
     zUrl: "https://wormy.wormatrix.fun",
