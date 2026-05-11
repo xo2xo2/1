@@ -192,13 +192,7 @@ let XOTEAM_WS = null;
 let XOTEAM_SAVE_TIMER = null;
 
 
-/* XOTEAM PRIVATE SKIN SYSTEM - FROM REGISTRY JSON
-   Source: https://wm.wormy.online/registry
-   Format:
-   "privateSkin": [
-     { "IDSKIN": 9368, "IDUSER": "gg_111111111111", "EXPRA_DATE": "22-12-2027" }
-   ]
-*/
+/* XOTEAM PRIVATE SKIN SYSTEM - FROM REGISTRY JSON */
 window.XOTEAM_PRIVATE_SKINS = [];
 
 function XOTEAM_setPrivateSkinsFromRegistry(registry) {
@@ -296,6 +290,10 @@ function XOTEAM_canUsePrivateSkin(pSkinId, registry) {
   return !!XOTEAM_privateSkinGrant(pSkinId, null, registry);
 }
 
+function XOTEAM_isPrivateSkinOwned(pSkinId, registry) {
+  return XOTEAM_isPrivateSkinId(pSkinId, registry) && XOTEAM_canUsePrivateSkin(pSkinId, registry);
+}
+
 function XOTEAM_findSkinById(pSkinId, registry) {
   var id = String(pSkinId || "");
   var arr = null;
@@ -341,6 +339,7 @@ function XOTEAM_skinIsLocked(skin, pSkinId, registry) {
 
 window.XOTEAM_setPrivateSkinsFromRegistry = XOTEAM_setPrivateSkinsFromRegistry;
 window.XOTEAM_canUsePrivateSkin = XOTEAM_canUsePrivateSkin;
+window.XOTEAM_isPrivateSkinOwned = XOTEAM_isPrivateSkinOwned;
 window.XOTEAM_privateSkinGrant = XOTEAM_privateSkinGrant;
 window.XOTEAM_skinIsLocked = XOTEAM_skinIsLocked;
 
@@ -4253,6 +4252,9 @@ vF172.prototype.Se = function (p281) {
       };
       f71.prototype.Ja = function (p388, p389) {
         var vF72 = f72(p388, p389);
+        if (p389 === vF37.ia && typeof XOTEAM_canUsePrivateSkin === "function" && XOTEAM_canUsePrivateSkin(p388, f9().f)) {
+          return true;
+        }
         return vF72 != null && (f9().u.P() ? vF72.price == 0 && !vF72.nonbuyable || f9().u.Ch(p388, p389) : vF72.guest);
       };
       f71.prototype.yh = function () {
@@ -7031,13 +7033,13 @@ vF172.prototype.Se = function (p281) {
         var vThis27 = this;
         var vF926 = f9();
         var v503 = this.dl[p587].price;
-        if (XOTEAM_skinIsLocked(this.dl[p587], p587, vF926.f)) {
-          this.il(false);
-          return;
-        }
         if (XOTEAM_canUsePrivateSkin(p587, vF926.f)) {
           vF926.t.Bh(p587, vF37.ia);
           this.Qk();
+          return;
+        }
+        if (XOTEAM_skinIsLocked(this.dl[p587], p587, vF926.f)) {
+          this.il(false);
           return;
         }
         if (!(vF926.u.zi() < v503)) {
@@ -7071,7 +7073,7 @@ vF172.prototype.Se = function (p281) {
           var v510 = v509.$g();
           var v511 = this.dl[v510];
           var v512 = false;
-          if (vF927.t.Ja(v510, vF37.ia)) {
+          if (vF927.t.Ja(v510, vF37.ia) || XOTEAM_canUsePrivateSkin(v510, vF927.f)) {
             v$76.hide();
             v$78.hide();
           } else if (v511 == null || XOTEAM_skinIsLocked(v511, v510, vF927.f)) {
