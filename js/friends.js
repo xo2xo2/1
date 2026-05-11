@@ -728,7 +728,7 @@ vO7.borderImg.y = 78;
 vO7.borderImg.width = 110;
 vO7.borderImg.height = 60;
 vO7.setServer = function (p20) {
-  vO7.value_server.text = p20 || "XOTEAM";
+  vO7.value_server.text = p20 || "XO";
 };
 vO7.setCountGame = function (p21, p22, p23, p24) {
   vO7.value1_hs.text = p22;
