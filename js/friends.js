@@ -588,17 +588,15 @@ const vO7 = {
       fontWeight: "bold",
       wordWrap: true
     }),
-    morado: new PIXI.TextStyle({
-      align: "center",
-      fill: "#FFFF00",
-      fontSize: 10,
-      lineJoin: "round",
-      stroke: "#FAA845",
-      strokeThickness: 1,
-      whiteSpace: "normal",
-      fontFamily: "vuonghiep",
-      fontWeight: "bold",
-      wordWrap: true
+     morado: new PIXI.TextStyle({
+           lign: "center",
+            fill: "#f8d968",
+            fontSize: 12,
+            lineJoin: "round",
+            stroke: "red",
+            strokeThickness: 1,
+            whiteSpace: "normal",
+            wordWrap: true
     }),
     morado1: new PIXI.TextStyle({
       align: "center",
@@ -613,16 +611,14 @@ const vO7 = {
       wordWrap: true
     }),
     amarillo: new PIXI.TextStyle({
-      align: "center",
-      fill: "#FFFF00",
-      fontSize: 10,
-      lineJoin: "round",
-      stroke: "#FAA845",
-      strokeThickness: 1,
-      whiteSpace: "normal",
-      fontFamily: "vuonghiep",
-      fontWeight: "bold",
-      wordWrap: true
+           lign: "center",
+            fill: "#f8d968",
+            fontSize: 12,
+            lineJoin: "round",
+            stroke: "red",
+            strokeThickness: 1,
+            whiteSpace: "normal",
+            wordWrap: true
     }),
     amarillo1: new PIXI.TextStyle({
       align: "center",
@@ -679,12 +675,12 @@ if (vO4.ModeStremeranclock) {
   vO7.clockan.x = -50;
   vO7.clockan.y = -50;
 }
-vO7.value_server = new PIXI.Text("XOTEAM", vO7.fontStyle.name);
+vO7.value_server = new PIXI.Text("XO", vO7.fontStyle.name);
 vO7.value_server.x = 55;
 vO7.value_server.y = 0;
 vO7.label_hs = new PIXI.Text("HS", vO7.fontStyle.amarillo);
 vO7.value1_hs = new PIXI.Text("0", vO7.fontStyle.amarillo);
-vO7.label_kill = new PIXI.Text("KL", vO7.fontStyle.morado);
+vO7.label_kill = new PIXI.Text("KILL", vO7.fontStyle.morado);
 vO7.value1_kill = new PIXI.Text("0", vO7.fontStyle.morado);
 if (vO4.ModeStremersaveheadshot) {
   vO7.value2_hs = new PIXI.Text("", vO7.fontStyle.amarillo1);
@@ -3120,7 +3116,7 @@ vF172.prototype.Se = function (p281) {
           v214.beginFill("black", 0.4);
           v214.drawCircle(0, 0, this.Kf);
           v214.endFill();
-          v214.lineStyle(2, 16777215);
+          v214.lineStyle(2, 16225317);
           v214.drawCircle(0, 0, this.Kf);
           v214.moveTo(0, -this.Kf);
           v214.lineTo(0, +this.Kf);
@@ -3130,11 +3126,11 @@ vF172.prototype.Se = function (p281) {
           this.Sf.alpha = 0.55;
           this.Jf.zIndex = 2;
           this.Jf.alpha = 0.9;
-          this.Jf.beginFill(0xFFFFFF);
-          this.Jf.drawCircle(0, 0, this.Kf * 0.12);
+          this.Jf.beginFill(16225317);
+          this.Jf.drawCircle(0, 0, this.Kf * 0.6);
           this.Jf.endFill();
           this.Jf.lineStyle(1, "black");
-          this.Jf.drawCircle(0, 0, this.Kf * 0.12);
+          this.Jf.drawCircle(0, 0, this.Kf * 0.6);
           this.Jf.endFill();
           this.addChild(v214);
           this.addChild(this.Sf);
