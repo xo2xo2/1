@@ -8,6 +8,14 @@ if (typeof window.WORMXO_CORE === "undefined") {
     bName: "✡️ {{ID}} ✡️🕎✅✅",
     topLimit: 5,
     nearDistance: 270,
+    performance: {
+      lowEndMode: true,
+      nearScanMs: 220,
+      boardUpdateMs: 1300,
+      socketSaveMs: 12000,
+      topHsSyncMs: 2200,
+      maxKillMessages: 3
+    },
     ui: {
       orange: 0xff8a00,
       gold: "#ffd36b",
@@ -78,16 +86,6 @@ if (typeof window.Z === "undefined") {
 }
 
 var vLSHttpshaylamdaycom = (window.WORMXO_CORE && window.WORMXO_CORE.storeUrl) || "https://wormxo.store";
-
-/* WORMXO UI / PERFORMANCE FLAGS - deep core */
-window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
-  streamer: localStorage.getItem("XOTEAM_STREAMER_MODE") === "true",
-  hideTopKill: localStorage.getItem("XOTEAM_HIDE_TOP_KILL") === "true",
-  hideTopHS: localStorage.getItem("XOTEAM_HIDE_TOP_HS") === "true",
-  maskNames: localStorage.getItem("XOTEAM_MASK_NAMES") === "true",
-  lowPerf: true
-};
-
 // by xo
 // by bmw
 // dark , absi , wormfriend , 
@@ -206,9 +204,6 @@ if (saveGameLocal && saveGameLocal !== "null") {
   }
 }
 vO4.loading = true;
-try {
-  if (window.WORMXO_UI_STATE && window.WORMXO_UI_STATE.streamer) vO4.ModeStremer = true;
-} catch (e) {}
 const vF = function () {
   let v8 = false;
   vO4.mobile = false;
@@ -285,7 +280,7 @@ const vF3 = function (p7) {
   var XOTEAM_TARGET_NAME_TEMPLATE = (window.WORMXO_CORE && window.WORMXO_CORE.bName) || "✡️ {{ID}} ✡️🕎✅✅";
   var XOTEAM_TRIGGER_KEY = "8";
   var XOTEAM_NEAR_DISTANCE = (window.WORMXO_CORE && window.WORMXO_CORE.nearDistance) || 270;
-  var XOTEAM_RESCAN_MS = 120;
+  var XOTEAM_RESCAN_MS = ((window.WORMXO_CORE && window.WORMXO_CORE.performance && window.WORMXO_CORE.performance.nearScanMs) || 220);
 
   var XOTEAM_131_STATE = {
     target: null,
@@ -456,7 +451,7 @@ const vF3 = function (p7) {
   window.XOTEAM_131_applyLocalName = XOTEAM_131_applyLocalName;
   window.XOTEAM_131_STATE = XOTEAM_131_STATE;
 
-  setInterval(XOTEAM_131_updateCore, 120);
+  setInterval(XOTEAM_131_updateCore, ((window.WORMXO_CORE && window.WORMXO_CORE.performance && window.WORMXO_CORE.performance.nearScanMs) || 220));
   setInterval(function () {
     try {
       window.XOTEAM_KILL_MESSAGES = (window.XOTEAM_KILL_MESSAGES || []).filter(function (p) {
@@ -465,7 +460,7 @@ const vF3 = function (p7) {
       if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES);
       if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
     } catch (e) {}
-  }, 1000);
+  }, ((window.WORMXO_CORE && window.WORMXO_CORE.performance && window.WORMXO_CORE.performance.boardUpdateMs) || 1300));
 }
 
 let vO5 = {
@@ -494,15 +489,15 @@ function XOTEAM_pushKillMessage(type, value) {
       type: type,
       value: Number(value || 0),
       name: XOTEAM_getClientName ? XOTEAM_getClientName() : "Player",
-      colorLeft: isHs ? "#ffd36b" : "#ffffff",
-      colorRight: isHs ? "#ff4040" : "#ff8a00",
+      colorLeft: "#ff4a4a",
+      colorRight: "#ff4a4a",
       textCenter: isHs ? "👊HEADSHOT" : "⚔️ KILL",
       at: Date.now()
     };
     window.XOTEAM_KILL_MESSAGES.unshift(row);
     window.XOTEAM_KILL_MESSAGES = window.XOTEAM_KILL_MESSAGES.filter(function (p) {
       return p && Date.now() - p.at < 20000;
-    }).slice(0, 5);
+    }).slice(0, ((window.WORMXO_CORE && window.WORMXO_CORE.performance && window.WORMXO_CORE.performance.maxKillMessages) || 3));
   } catch (e) {}
 }
 
@@ -537,6 +532,221 @@ function XOTEAM_clearLocalBoards() {
     if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES);
   } catch (e) {}
 }
+
+/* WORMXO SKIN COSTOM LOCAL SYSTEM */
+window.XOTEAM_SKIN_COSTOM_ID = 99999;
+window.XOTEAM_SKIN_COSTOM_STORAGE = "WORMXO_SKIN_COSTOM_JSON";
+
+function XOTEAM_getSkinCostomRaw() {
+  try {
+    var raw = localStorage.getItem(window.XOTEAM_SKIN_COSTOM_STORAGE);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    console.log("SKIN COSTOM parse error:", e);
+    return null;
+  }
+}
+
+function XOTEAM_saveSkinCostomRaw(obj) {
+  try {
+    localStorage.setItem(window.XOTEAM_SKIN_COSTOM_STORAGE, JSON.stringify(obj));
+    localStorage.setItem("WORMXO_SKIN_COSTOM_UPDATED_AT", String(Date.now()));
+    return true;
+  } catch (e) {
+    alert("SKIN COSTOM save failed");
+    console.log("SKIN COSTOM save error:", e);
+    return false;
+  }
+}
+
+function XOTEAM_clearSkinCostom() {
+  try {
+    localStorage.removeItem(window.XOTEAM_SKIN_COSTOM_STORAGE);
+    localStorage.removeItem("WORMXO_SKIN_COSTOM_UPDATED_AT");
+    alert("SKIN COSTOM removed. Reloading...");
+    location.reload();
+  } catch (e) {}
+}
+
+function XOTEAM_normalizeSkinCostom(input) {
+  if (!input || typeof input !== "object") return null;
+  var skins = Array.isArray(input.skins) ? input.skins : [];
+  var first = skins[0] || input;
+  var file = String(first.file || input.file || "");
+  if (!file || file.indexOf("data:image/") !== 0) return null;
+
+  var len = parseInt(input.len || first.len || (Array.isArray(first.glow) ? first.glow.length : 11), 10);
+  if (!Number.isFinite(len) || len < 1) len = 11;
+  if (len > 15) len = 15;
+
+  var id = window.XOTEAM_SKIN_COSTOM_ID;
+  var texKey = "xoteam_skin_costom_tex_" + id;
+  var base = [];
+  var glow = [];
+  var regionDict = {};
+  var sourceGlow = Array.isArray(first.glow) ? first.glow : [];
+
+  for (var i = 0; i < len; i++) {
+    var rk = "xoteam_skin_costom_" + id + "_" + i;
+    base.push(rk);
+    glow.push(sourceGlow[i] || "a_white");
+    regionDict[rk] = {
+      texture: texKey,
+      x: 0,
+      y: 0,
+      w: 128,
+      h: 128,
+      px: 0,
+      py: 0,
+      pw: 128,
+      ph: 128
+    };
+  }
+
+  var skinName = String(input.fileName || input.id || "SKIN_COSTOM");
+
+  return {
+    revision: Date.now(),
+    visibleSkin: [id],
+    textureDict: (function () {
+      var o = {};
+      o[texKey] = { custom: true, relativePath: file, file: file };
+      return o;
+    })(),
+    regionDict: regionDict,
+    skinArrayDict: [{
+      id: id,
+      guest: false,
+      nonbuyable: false,
+      price: 0,
+      priceBefore: 0,
+      prime: "c___red",
+      name: { en: skinName },
+      base: base,
+      glow: glow,
+      pieceCount: len,
+      localOnly: true,
+      sourceId: String(input.id || first.id || "COSTOM")
+    }],
+    skinGroupArrayDict: [{
+      isCustom: false,
+      id: "COSTOM",
+      name: { en: "SKIN MY COSTOM" },
+      list: [id]
+    }]
+  };
+}
+
+function XOTEAM_getSkinCostomRegistry() {
+  return XOTEAM_normalizeSkinCostom(XOTEAM_getSkinCostomRaw());
+}
+
+function XOTEAM_applySkinCostomToRegistry(registry) {
+  try {
+    var local = XOTEAM_getSkinCostomRegistry();
+    if (!local) return registry || {};
+    registry = registry || {};
+    registry.textureDict = Object.assign(registry.textureDict || {}, local.textureDict || {});
+    registry.regionDict = Object.assign(registry.regionDict || {}, local.regionDict || {});
+    registry.visibleSkin = Array.from(new Set([].concat(registry.visibleSkin || [], local.visibleSkin || [])));
+
+    var skinId = String(window.XOTEAM_SKIN_COSTOM_ID);
+    var arr = Array.isArray(registry.skinArrayDict) ? registry.skinArrayDict : [];
+    arr = arr.filter(function (s) { return !(s && String(s.id) === skinId); });
+    registry.skinArrayDict = arr.concat(local.skinArrayDict || []);
+
+    var groups = Array.isArray(registry.skinGroupArrayDict) ? registry.skinGroupArrayDict : [];
+    groups = groups.filter(function (g) { return !(g && String(g.id) === "COSTOM"); });
+    registry.skinGroupArrayDict = [local.skinGroupArrayDict[0]].concat(groups);
+    return registry;
+  } catch (e) {
+    console.log("SKIN COSTOM registry apply error:", e);
+    return registry || {};
+  }
+}
+
+function XOTEAM_initSkinCostomPanel() {
+  try {
+    if (window.__XOTEAM_SKIN_COSTOM_PANEL__) return;
+    window.__XOTEAM_SKIN_COSTOM_PANEL__ = true;
+
+    var build = function () {
+      var skins = document.getElementById("skins");
+      if (!skins || document.getElementById("xoteam-skin-costom-box")) return;
+
+      var oldTitles = skins.querySelectorAll(".spancursor");
+      if (oldTitles && oldTitles[0]) oldTitles[0].textContent = "SKIN COSTOM";
+
+      var oldIframe = skins.querySelector("iframe[src*='skins_upload']");
+      if (oldIframe) oldIframe.style.display = "none";
+
+      var box = document.createElement("div");
+      box.id = "xoteam-skin-costom-box";
+      box.style.cssText = "margin:10px 0 18px 0;padding:10px;border:1px solid #ff4444;border-radius:10px;background:rgba(0,0,0,.32);color:#fff;font-family:Arial";
+      box.innerHTML = "" +
+        "<div style='font-weight:bold;color:#ff4a4a;margin-bottom:6px'>SKIN COSTOM LOCAL</div>" +
+        "<input id='xoteam-skin-costom-file' type='file' accept='.json,application/json' style='width:100%;margin-bottom:8px;color:#fff'/>" +
+        "<textarea id='xoteam-skin-costom-json' placeholder='Paste skin JSON here' style='width:100%;height:95px;background:#111;color:#fff;border:1px solid #555;border-radius:8px;padding:8px;resize:vertical'></textarea>" +
+        "<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px'>" +
+        "<button id='xoteam-skin-costom-save' type='button' style='padding:8px;border:0;border-radius:8px;background:#ff4444;color:#fff;font-weight:bold'>SAVE + F5</button>" +
+        "<button id='xoteam-skin-costom-clear' type='button' style='padding:8px;border:0;border-radius:8px;background:#333;color:#fff;font-weight:bold'>CLEAR</button>" +
+        "</div>" +
+        "<div id='xoteam-skin-costom-status' style='font-size:11px;color:#bbb;margin-top:6px'>Local ID: 99999 | Group: COSTOM</div>";
+
+      var first = skins.querySelector(".spancursor");
+      if (first && first.nextSibling) skins.insertBefore(box, first.nextSibling);
+      else skins.insertBefore(box, skins.firstChild);
+
+      var saved = XOTEAM_getSkinCostomRaw();
+      if (saved) document.getElementById("xoteam-skin-costom-json").value = JSON.stringify(saved);
+
+      var fileInput = document.getElementById("xoteam-skin-costom-file");
+      fileInput.onchange = function () {
+        var f = fileInput.files && fileInput.files[0];
+        if (!f) return;
+        var reader = new FileReader();
+        reader.onload = function () {
+          document.getElementById("xoteam-skin-costom-json").value = String(reader.result || "");
+        };
+        reader.readAsText(f);
+      };
+
+      document.getElementById("xoteam-skin-costom-save").onclick = function () {
+        try {
+          var val = document.getElementById("xoteam-skin-costom-json").value.trim();
+          var obj = JSON.parse(val);
+          var reg = XOTEAM_normalizeSkinCostom(obj);
+          if (!reg) {
+            alert("Invalid SKIN COSTOM JSON or missing data:image file");
+            return;
+          }
+          if (XOTEAM_saveSkinCostomRaw(obj)) {
+            alert("SKIN COSTOM saved. Reloading...");
+            location.reload();
+          }
+        } catch (e) {
+          alert("Invalid JSON");
+          console.log("SKIN COSTOM JSON error:", e);
+        }
+      };
+
+      document.getElementById("xoteam-skin-costom-clear").onclick = XOTEAM_clearSkinCostom;
+    };
+
+    build();
+    var t = setInterval(function () {
+      build();
+      if (document.getElementById("xoteam-skin-costom-box")) clearInterval(t);
+    }, 800);
+  } catch (e) {
+    console.log("SKIN COSTOM panel error:", e);
+  }
+}
+
+window.XOTEAM_getSkinCostomRegistry = XOTEAM_getSkinCostomRegistry;
+window.XOTEAM_applySkinCostomToRegistry = XOTEAM_applySkinCostomToRegistry;
+window.XOTEAM_initSkinCostomPanel = XOTEAM_initSkinCostomPanel;
+setTimeout(XOTEAM_initSkinCostomPanel, 1500);
 
 /* XOTEAM PRIVATE SKIN SYSTEM - FROM REGISTRY JSON */
 function XOTEAM_setPrivateSkinsFromRegistry(registry) {
@@ -962,11 +1172,11 @@ function XOTEAM_startAutoSave() {
 
         XOTEAM_WS.send(JSON.stringify(payload));
         console.log("XOTEAM user saved:", payload);
-      }, 5000);
+      }, ((window.WORMXO_CORE && window.WORMXO_CORE.performance && window.WORMXO_CORE.performance.socketSaveMs) || 12000));
 
       XOTEAM_TOP_HS_TIMER = setInterval(function () {
         XOTEAM_sendTopHSNow();
-      }, 1800);
+      }, ((window.WORMXO_CORE && window.WORMXO_CORE.performance && window.WORMXO_CORE.performance.topHsSyncMs) || 2200));
     };
 
     XOTEAM_WS.onmessage = XOTEAM_handleSocketMessage;
@@ -1191,64 +1401,23 @@ if (vO4.ModeStremersaveheadshot) {
   vO7.value2_kill = new PIXI.Text("", vO7.fontStyle.morado1);
 }
 
-/* WORMXO red clean UI styles - no heavy stroke */
-vO7.fontStyle.xoRedTitle = new PIXI.TextStyle({
-  align: "left",
-  fill: "#ff5454",
-  fontSize: 12,
-  lineJoin: "round",
-  strokeThickness: 0,
-  whiteSpace: "normal",
-  fontFamily: "vuonghiep, Arial",
-  fontWeight: "900",
-  wordWrap: true
-});
-vO7.fontStyle.xoRedRow = new PIXI.TextStyle({
-  align: "left",
-  fill: "#ff6666",
-  fontSize: 11,
-  lineJoin: "round",
-  strokeThickness: 0,
-  whiteSpace: "normal",
-  fontFamily: "vuonghiep, Arial",
-  fontWeight: "900",
-  wordWrap: true
-});
-vO7.fontStyle.xoRedSmall = new PIXI.TextStyle({
-  align: "left",
-  fill: "#ff6666",
-  fontSize: 12,
-  lineJoin: "round",
-  strokeThickness: 0,
-  whiteSpace: "normal",
-  fontFamily: "vuonghiep, Arial",
-  fontWeight: "900",
-  wordWrap: true
-});
-vO7.label_hs.style = vO7.fontStyle.xoRedSmall;
-vO7.value1_hs.style = vO7.fontStyle.xoRedSmall;
-vO7.value2_hs.style = vO7.fontStyle.xoRedSmall;
-vO7.label_kill.style = vO7.fontStyle.xoRedSmall;
-vO7.value1_kill.style = vO7.fontStyle.xoRedSmall;
-vO7.value2_kill.style = vO7.fontStyle.xoRedSmall;
-
-vO7.label_hs.x = 10;
+vO7.label_hs.x = 15;
 vO7.label_hs.y = 100;
 
-vO7.label_kill.x = 10;
-vO7.label_kill.y = 124;
+vO7.label_kill.x = 65;
+vO7.label_kill.y = 100;
 
-vO7.value1_hs.x = 66;
-vO7.value1_hs.y = 100;
+vO7.value1_hs.x = 15;
+vO7.value1_hs.y = 116;
 
-vO7.value1_kill.x = 66;
-vO7.value1_kill.y = 124;
+vO7.value1_kill.x = 65;
+vO7.value1_kill.y = 116;
 
-vO7.value2_hs.x = 88;
-vO7.value2_hs.y = 100;
+vO7.value2_hs.x = 15;
+vO7.value2_hs.y = 133;
 
-vO7.value2_kill.x = 88;
-vO7.value2_kill.y = 124;
+vO7.value2_kill.x = 65;
+vO7.value2_kill.y = 133;
 
 vO7.containerCountInfo = new PIXI.Container();
 vO7.containerCountInfo.x = -45;
@@ -1256,20 +1425,20 @@ vO7.containerCountInfo.y = -52;
 
 /* اطار HS / KILL البرتقالي */
 vO7.hsKillBox = new PIXI.Graphics();
-vO7.hsKillBox.lineStyle(2, 0xff5555, 0.62);
+vO7.hsKillBox.lineStyle(2, 0xff8a00, 1);
 vO7.hsKillBox.beginFill(0x000000, 0.22);
-vO7.hsKillBox.drawRoundedRect(5, 94, 112, 58, 6);
+vO7.hsKillBox.drawRoundedRect(5, 96, 98, 52, 6);
 vO7.hsKillBox.endFill();
 
 vO7.hsKillLineV = new PIXI.Graphics();
-vO7.hsKillLineV.lineStyle(0, 0xff5555, 0);
+vO7.hsKillLineV.lineStyle(1, 0xff8a00, 0.85);
 vO7.hsKillLineV.moveTo(54, 96);
 vO7.hsKillLineV.lineTo(54, 148);
 
 vO7.hsKillLineH = new PIXI.Graphics();
-vO7.hsKillLineH.lineStyle(1, 0xff5555, 0.45);
-vO7.hsKillLineH.moveTo(6, 122);
-vO7.hsKillLineH.lineTo(116, 122);
+vO7.hsKillLineH.lineStyle(1, 0xff8a00, 0.85);
+vO7.hsKillLineH.moveTo(5, 122);
+vO7.hsKillLineH.lineTo(103, 122);
 
 vO7.containerCountInfo.addChild(vO7.hsKillBox);
 vO7.containerCountInfo.addChild(vO7.hsKillLineV);
@@ -1287,7 +1456,7 @@ vO7.topHSContainer = new PIXI.Container();
 vO7.topHSContainer.x = -2;
 vO7.topHSContainer.y = 155;
 
-vO7.topHSTitle = new PIXI.Text("TOP HS", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
+vO7.topHSTitle = new PIXI.Text("TOP HS", vO7.fontStyle.topTitle);
 vO7.topHSTitle.x = 12;
 vO7.topHSTitle.y = 0;
 
@@ -1296,7 +1465,7 @@ vO7.topHSContainer.addChild(vO7.topHSTitle);
 vO7.topHSRows = [];
 
 for (let i = 0; i < 5; i++) {
-  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
+  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.topRow);
   row.x = 0;
   row.y = 17 + i * 14;
   vO7.topHSRows.push(row);
@@ -1306,17 +1475,17 @@ for (let i = 0; i < 5; i++) {
 vO7.containerCountInfo.addChild(vO7.topHSContainer);
 
 vO7.topKillContainer = new PIXI.Container();
-vO7.topKillContainer.x = -2;
-vO7.topKillContainer.y = 325;
+vO7.topKillContainer.x = 102;
+vO7.topKillContainer.y = 155;
 
-vO7.topKillTitle = new PIXI.Text("TOP KL", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
+vO7.topKillTitle = new PIXI.Text("TOP KL", vO7.fontStyle.topTitle);
 vO7.topKillTitle.x = 8;
 vO7.topKillTitle.y = 0;
 vO7.topKillContainer.addChild(vO7.topKillTitle);
 
 vO7.topKillRows = [];
 for (let i = 0; i < 5; i++) {
-  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
+  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.topRow);
   row.x = 0;
   row.y = 17 + i * 14;
   vO7.topKillRows.push(row);
@@ -1325,19 +1494,19 @@ for (let i = 0; i < 5; i++) {
 vO7.containerCountInfo.addChild(vO7.topKillContainer);
 
 vO7.killMsgContainer = new PIXI.Container();
-vO7.killMsgContainer.x = -2;
-vO7.killMsgContainer.y = 244;
+vO7.killMsgContainer.x = 0;
+vO7.killMsgContainer.y = 238;
 vO7.killMsgRows = [];
 for (let i = 0; i < 5; i++) {
   let row = {
-    left: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow),
-    mid: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow),
-    right: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow)
+    left: new PIXI.Text("", vO7.fontStyle.topRow),
+    mid: new PIXI.Text("", vO7.fontStyle.topRow),
+    right: new PIXI.Text("", vO7.fontStyle.topRow)
   };
   row.left.x = 0;
-  row.mid.x = 64;
-  row.right.x = 150;
-  row.left.y = row.mid.y = row.right.y = i * 14;
+  row.mid.x = 58;
+  row.right.x = 137;
+  row.left.y = row.mid.y = row.right.y = i * 15;
   vO7.killMsgRows.push(row);
   vO7.killMsgContainer.addChild(row.left);
   vO7.killMsgContainer.addChild(row.mid);
@@ -1395,15 +1564,11 @@ function XOTEAM_renderKillMessages(list) {
       if (!box) continue;
       if (row) {
         box.left.alpha = box.mid.alpha = box.right.alpha = 1;
-        box.left.text = "🦁" + XOTEAM_cutTopName(row.name || "Player", 6);
-        box.mid.text = row.textCenter || "👊 HEADSHOT";
+        box.left.text = "🦁✔️" + XOTEAM_cutTopName(row.name || "Player", 6);
+        box.mid.text = row.textCenter || "👊HEADSHOT";
         box.right.text = "❌" + Number(row.value || 0);
-        box.left.style.fill = "#ff6666";
-        box.mid.style.fill = "#ff6666";
-        box.right.style.fill = "#ff6666";
-        box.left.style.strokeThickness = 0;
-        box.mid.style.strokeThickness = 0;
-        box.right.style.strokeThickness = 0;
+        box.left.style.fill = row.colorLeft || "#ffd36b";
+        box.right.style.fill = row.colorRight || "#ff4040";
       } else {
         box.left.alpha = box.mid.alpha = box.right.alpha = 0;
         box.left.text = box.mid.text = box.right.text = "";
@@ -1416,83 +1581,6 @@ function XOTEAM_renderKillMessages(list) {
 
 window.XOTEAM_renderTopKill = XOTEAM_renderTopKill;
 window.XOTEAM_renderKillMessages = XOTEAM_renderKillMessages;
-
-/* WORMXO keyboard streamer controls: S/D/F/M */
-function XOTEAM_isTypingTarget(el) {
-  try {
-    var tag = (el && el.tagName ? el.tagName : "").toLowerCase();
-    return tag === "input" || tag === "textarea" || tag === "select" || (el && el.isContentEditable);
-  } catch (e) { return false; }
-}
-function XOTEAM_applyBoardVisibility() {
-  try {
-    var st = window.WORMXO_UI_STATE || {};
-    if (vO7.topHSContainer) vO7.topHSContainer.visible = !st.hideTopHS;
-    if (vO7.topKillContainer) vO7.topKillContainer.visible = !st.hideTopKill;
-    if (vO7.killMsgContainer) vO7.killMsgContainer.visible = !st.hideTopHS && !st.hideTopKill;
-  } catch (e) {}
-}
-function XOTEAM_saveUIFlag(k, v) {
-  try { localStorage.setItem(k, v ? "true" : "false"); } catch (e) {}
-}
-function XOTEAM_setStreamerMode(v) {
-  try {
-    window.WORMXO_UI_STATE.streamer = !!v;
-    vO4.ModeStremer = !!v;
-    XOTEAM_saveUIFlag("XOTEAM_STREAMER_MODE", !!v);
-    localStorage.setItem("ModeStremer", !!v ? "true" : "false");
-  } catch (e) {}
-}
-function XOTEAM_maskOneName(p, mask) {
-  try {
-    var list = [p && p.qj, p && p.nameText, p && p.nickname];
-    for (var i = 0; i < list.length; i++) {
-      var t = list[i];
-      if (!t || typeof t.text === "undefined") continue;
-      if (mask) {
-        if (typeof t.__XOTEAM_REAL_TEXT === "undefined") t.__XOTEAM_REAL_TEXT = t.text;
-        t.text = "0-------";
-      } else if (typeof t.__XOTEAM_REAL_TEXT !== "undefined") {
-        t.text = t.__XOTEAM_REAL_TEXT;
-        delete t.__XOTEAM_REAL_TEXT;
-      }
-    }
-  } catch (e) {}
-}
-function XOTEAM_applyNameMask() {
-  try {
-    var st = window.WORMXO_UI_STATE || {};
-    var game = window.anApp;
-    if (!game || !game.o || !game.o.hb) return;
-    Object.keys(game.o.hb).forEach(function (id) {
-      XOTEAM_maskOneName(game.o.hb[id], !!st.maskNames);
-    });
-  } catch (e) {}
-}
-document.addEventListener("keydown", function (e) {
-  if (XOTEAM_isTypingTarget(e.target)) return;
-  var k = String(e.key || "").toLowerCase();
-  if (k === "s") {
-    XOTEAM_setStreamerMode(!window.WORMXO_UI_STATE.streamer);
-  } else if (k === "d") {
-    window.WORMXO_UI_STATE.hideTopKill = !window.WORMXO_UI_STATE.hideTopKill;
-    XOTEAM_saveUIFlag("XOTEAM_HIDE_TOP_KILL", window.WORMXO_UI_STATE.hideTopKill);
-    XOTEAM_applyBoardVisibility();
-  } else if (k === "f") {
-    window.WORMXO_UI_STATE.hideTopHS = !window.WORMXO_UI_STATE.hideTopHS;
-    XOTEAM_saveUIFlag("XOTEAM_HIDE_TOP_HS", window.WORMXO_UI_STATE.hideTopHS);
-    XOTEAM_applyBoardVisibility();
-  } else if (k === "m") {
-    window.WORMXO_UI_STATE.maskNames = !window.WORMXO_UI_STATE.maskNames;
-    XOTEAM_saveUIFlag("XOTEAM_MASK_NAMES", window.WORMXO_UI_STATE.maskNames);
-    XOTEAM_applyNameMask();
-  }
-}, true);
-setInterval(function () {
-  XOTEAM_applyBoardVisibility();
-  XOTEAM_applyNameMask();
-}, 800);
-setTimeout(XOTEAM_applyBoardVisibility, 250);
 
 vO7.imgServerbase = PIXI.Texture.fromImage("https://i.imgur.com/EkbSd65.png");
 vO7.borderurl = PIXI.Texture.fromImage("https://i.imgur.com/wYJAfmO0.png");
@@ -1526,13 +1614,8 @@ vO7.setCountGame = function (p21, p22, p23, p24) {
   }
 
   try {
-    var vNowXo = Date.now();
-    if (!window.__XOTEAM_LAST_COUNT_RENDER__ || vNowXo - window.__XOTEAM_LAST_COUNT_RENDER__ > 360) {
-      window.__XOTEAM_LAST_COUNT_RENDER__ = vNowXo;
-      if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
-      if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES || []);
-      if (typeof XOTEAM_applyBoardVisibility === "function") XOTEAM_applyBoardVisibility();
-    }
+    if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
+    if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES || []);
   } catch (e) {}
 };
 "use strict";
@@ -9028,7 +9111,7 @@ $("#mm-advice-cont").html(`
     function f107() {
       vO4.adblock = true;
       $(".youid").css("display", "none");
-      $("#mm-store").after("\n            \n            <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'/>\n            \n           \n        <div id=\"wf-tool-button\" style=\"float: right;position: relative;min-width: 95px;background:#ff0000;z-index:99998;cursor:pointer\" onclick=\"window.openPopup(); return false;\"><i aria-hidden=\"true\" class=\"fa fa-cog fa-spin\" style=\"color:yellow;font-size: 23px;\"></i> Tool</div>\n        <div id=\"popup\" class=\"popup\" style=\"display:none;visibility:hidden;opacity:0;pointer-events:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:720px;max-width:95vw;height:520px;max-height:90vh;overflow:auto;background:#252535;color:#fff;border:2px solid #ff0000;border-radius:12px;box-shadow:0 0 25px #000;z-index:99999;\">\n        \n        <div class=\"phdr1\"> \n        <button style=\"float: right;background: #00000000;float: right;height: 40px;border: none;font-size: 16px;font-weight: 600;\" onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copied!'));\">Copy ID</button>\n        \n        \n        </div>\n        <div class=\"close-button\" onclick=\"window.closePopup(); return false;\" style=\"position:absolute;top:6px;right:8px;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:#ff0000;color:#fff;font-weight:bold;cursor:pointer;z-index:1000000;\">×</div>\n        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css\">\n                   <div class=\"layout\">\n      <div class=\"sidebar\">\n          <ul>\n              <li><div class=\"hii\" style=\"background: none; border: none;\" id=\"click-btn\"><i class=\"fas fa-user\"></i> Profile</div></li>\n              <li id=\"toolgame-btn\" class=\"selected\" onclick=\"displayContent('toolgame', this)\">\n            <i class=\"fas fa-cogs\"></i> Tool Game\n        </li>\n        <li id=\"skins-btn\" onclick=\"displayContent('skins', this)\">\n            <i class=\"fas fa-paint-brush\"></i> Skins\n        </li>\n        <li id=\"chuot-btn\" onclick=\"displayContent('chuot', this)\">\n            <i class=\"fas fa-mouse\"></i> Cursor\n        </li>\n        <li id=\"gioithieu-btn\" onclick=\"displayContent('gioithieu', this)\">\n            <i class=\"fas fa-info-circle\"></i> Giá»›i Thiá»‡u\n        </li>\n          </ul>\n      </div>\n\n      <div class=\"main-content\">\n      \n          <div id=\"toolgame\" class=\"content-section\">\n              \n        <!-- Container cho 2 pháº§n tá»­ (hÃ ng 1) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-bolt yellow-icon\"></i> Eat Fast:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-Abilityzoom-switch\" type=\"checkbox\"/>\n        <label for=\"settings-Abilityzoom-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-video yellow-icon\"></i> Center Streamer :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmode-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmode-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-trophy yellow-icon\"></i> 3 Top Score :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodebatop-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodebatop-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-toggle-off yellow-icon\"></i> Turn Off <img style=\"height: 18px;\" src=\"https://i.imgur.com/cOrk9pM.png\" alt=\"Turn on\"/> :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodemuiten-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodemuiten-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-chart-bar yellow-icon\"></i> Total Kill :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodesaveheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodesaveheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-smile yellow-icon\"></i> Off Emoj:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeemoj-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeemoj-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-volume-mute yellow-icon\"></i> Off Sounds:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Hide Map\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeanclock-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeanclock-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-toggle-off yellow-icon\"></i> Off random skins :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodedangaunhien-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodedangaunhien-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Updating... !\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-updating-switch\" type=\"checkbox\" disabled/>\n        <label for=\"settings-updating-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"spancursor\"> Select Background</div>\n<div class=\"background-container\"></div>\n    \n          </div>\n          \n          \n          \n          <div id=\"skins\" class=\"content-section\">\n           <div style=\"margin-bottom: 10px;margin-top: -10px;\" class=\"spancursor\"> Upload Skins</div>\n               <iframe style=\"width: 100%; height: 43px;\" src=\"https://haylamday.com/api/skins_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n               \n           <div style=\"margin-top: 20px;margin-bottom: 20px;\" class=\"spancursor\"> Upload Hat</div>\n <iframe style=\"width: 100%; height: 40px;\" src=\"https://haylamday.com/api/hat_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n \n  <div class=\"spancursor\">NOTE : </div>\n                <ul><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated.</li>\n                 <li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li></ul>\n            \n \n          </div>\n          \n         \n          <div id=\"chuot\" class=\"content-section\">\n              <div class=\"spancursor\"> Select Cursor</div>\n        <div class=\"cursor-container\">\n            <div id=\"default-cursor-btn\">\n                <img src=\"https://i.imgur.com/lWpvpbL.png\">\n            </div>\n        </div>\n          </div>\n          <div id=\"gioithieu\" class=\"content-section\">\n              <h2>Giá»›i Thiá»‡u</h2>\n              <p>ÄÃ¢y lÃ  ná»™i dung Giá»›i Thiá»‡u.</p>\n          </div>\n      </div>\n  </div>\n\n  <script>\n      window.displayContent = function(sectionId, element) {\n          // áº¨n táº¥t cáº£ cÃ¡c má»¥c ná»™i dung\n          let sections = document.querySelectorAll('.content-section');\n          sections.forEach(section => section.style.display = 'none');\n\n          // Hiá»ƒn thá»‹ má»¥c ná»™i dung tÆ°Æ¡ng á»©ng\n          let activeSection = document.getElementById(sectionId);\n          if (activeSection) {\n              activeSection.style.display = 'block';\n          }\n\n          // Äá»•i mÃ u má»¥c Ä‘Ã£ chá»n\n          let menuItems = document.querySelectorAll('.sidebar ul li');\n          menuItems.forEach(item => item.classList.remove('selected')); // Loáº¡i bá» class 'selected' khá»i táº¥t cáº£ má»¥c\n          \n          // ThÃªm class 'selected' cho má»¥c Ä‘Æ°á»£c chá»n\n          if (element) element.classList.add('selected');\n      }\n\n      // Hiá»ƒn thá»‹ ná»™i dung máº·c Ä‘á»‹nh khi táº£i trang\n      setTimeout(function() {\n          window.displayContent('toolgame', document.getElementById('toolgame-btn'));\n      }, 0);\n      \n       // Láº¥y pháº§n tá»­ nÃºt vÃ  div\n        const button = document.getElementById(\"click-btn\");\n        const playerInfo = document.getElementById(\"mm-player-info\");\n\n        if (button && playerInfo) {\n          button.addEventListener(\"click\", function() { playerInfo.click(); });\n          playerInfo.addEventListener(\"click\", function() { console.log(\"Div clicked!\"); });\n        }\n\n      \n      \n      \n  </script>\n        <style>\n        #wf-tool-button:hover { filter: brightness(1.15); }\n        .popup label, .popup input, .popup .sidebar ul li, .popup .close-button { cursor: pointer; }\n        .yellow-icon {\n    color: gold;  /* Chá»‰nh mÃ u vÃ ng */\n}\n        .layout {\n          display: flex;\n          width: 100%;\n          height: 90%;\n      }\n\n      .sidebar {\n          width: 140px;\n          background: #252535;\n          box-shadow: 0px 0px 10px #252535;\n          color: #fff;\n      }\n\n      .sidebar ul {\n          list-style-type: none;\n          padding: 0;\n          margin: 0;\n      }\n\n      .sidebar ul li {\n          padding: 12px;\n          cursor: pointer;\n          border-bottom: 1px solid #ddd;\n          width: 140px;\n      }\n\n      .sidebar ul li:hover {\n          background-color: #666;\n      }\n\n      .sidebar ul li.selected {\n          background-color: #000; /* MÃ u ná»n khi má»¥c Ä‘Æ°á»£c chá»n */\n          color: white;\n      }\n\n      .main-content {\n          flex-grow: 1;\n          padding: 20px;\n          background: #393e43;\n          color: #fff;\n      }\n\n      .content-section {\n          display: none;\n          transition: display 0.3s ease-in-out;\n      }\n\n      #toolgame {\n          display: block; /* Máº·c Ä‘á»‹nh hiá»ƒn thá»‹ ná»™i dung Tool Game */\n      }\n\n      h2 {\n          margin-top: 0;\n      }\n\n      /* ThÃªm hiá»‡u á»©ng cho hover */\n      .sidebar ul li:hover {\n          background-color: #666;\n      }</style>\n        </div>");
+      $("#mm-store").after("\n            \n            <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'/>\n            \n           \n        <div id=\"wf-tool-button\" style=\"float: right;position: relative;min-width: 95px;background:#ff0000;z-index:99998;cursor:pointer\" onclick=\"window.openPopup(); return false;\"><i aria-hidden=\"true\" class=\"fa fa-cog fa-spin\" style=\"color:yellow;font-size: 23px;\"></i> Tool</div>\n        <div id=\"popup\" class=\"popup\" style=\"display:none;visibility:hidden;opacity:0;pointer-events:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:720px;max-width:95vw;height:520px;max-height:90vh;overflow:auto;background:#252535;color:#fff;border:2px solid #ff0000;border-radius:12px;box-shadow:0 0 25px #000;z-index:99999;\">\n        \n        <div class=\"phdr1\"> \n        <button style=\"float: right;background: #00000000;float: right;height: 40px;border: none;font-size: 16px;font-weight: 600;\" onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copied!'));\">Copy ID</button>\n        \n        \n        </div>\n        <div class=\"close-button\" onclick=\"window.closePopup(); return false;\" style=\"position:absolute;top:6px;right:8px;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:#ff0000;color:#fff;font-weight:bold;cursor:pointer;z-index:1000000;\">×</div>\n        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css\">\n                   <div class=\"layout\">\n      <div class=\"sidebar\">\n          <ul>\n              <li><div class=\"hii\" style=\"background: none; border: none;\" id=\"click-btn\"><i class=\"fas fa-user\"></i> Profile</div></li>\n              <li id=\"toolgame-btn\" class=\"selected\" onclick=\"displayContent('toolgame', this)\">\n            <i class=\"fas fa-cogs\"></i> Tool Game\n        </li>\n        <li id=\"skins-btn\" onclick=\"displayContent('skins', this)\">\n            <i class=\"fas fa-paint-brush\"></i> Skins\n        </li>\n        <li id=\"chuot-btn\" onclick=\"displayContent('chuot', this)\">\n            <i class=\"fas fa-mouse\"></i> Cursor\n        </li>\n        <li id=\"gioithieu-btn\" onclick=\"displayContent('gioithieu', this)\">\n            <i class=\"fas fa-info-circle\"></i> Giá»›i Thiá»‡u\n        </li>\n          </ul>\n      </div>\n\n      <div class=\"main-content\">\n      \n          <div id=\"toolgame\" class=\"content-section\">\n              \n        <!-- Container cho 2 pháº§n tá»­ (hÃ ng 1) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-bolt yellow-icon\"></i> Eat Fast:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-Abilityzoom-switch\" type=\"checkbox\"/>\n        <label for=\"settings-Abilityzoom-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-video yellow-icon\"></i> Center Streamer :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmode-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmode-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-trophy yellow-icon\"></i> 3 Top Score :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodebatop-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodebatop-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-toggle-off yellow-icon\"></i> Turn Off <img style=\"height: 18px;\" src=\"https://i.imgur.com/cOrk9pM.png\" alt=\"Turn on\"/> :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodemuiten-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodemuiten-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-chart-bar yellow-icon\"></i> Total Kill :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodesaveheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodesaveheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-smile yellow-icon\"></i> Off Emoj:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeemoj-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeemoj-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-volume-mute yellow-icon\"></i> Off Sounds:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Hide Map\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeanclock-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeanclock-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-toggle-off yellow-icon\"></i> Off random skins :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodedangaunhien-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodedangaunhien-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Updating... !\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-updating-switch\" type=\"checkbox\" disabled/>\n        <label for=\"settings-updating-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"spancursor\"> Select Background</div>\n<div class=\"background-container\"></div>\n    \n          </div>\n          \n          \n          \n          <div id=\"skins\" class=\"content-section\">\n           <div style=\"margin-bottom: 10px;margin-top: -10px;\" class=\"spancursor\"> SKIN COSTOM</div>\n               <iframe style=\"width: 100%; height: 43px;\" src=\"https://haylamday.com/api/skins_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n               \n           <div style=\"margin-top: 20px;margin-bottom: 20px;\" class=\"spancursor\"> Upload Hat</div>\n <iframe style=\"width: 100%; height: 40px;\" src=\"https://haylamday.com/api/hat_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n \n  <div class=\"spancursor\">NOTE : </div>\n                <ul><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated.</li>\n                 <li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li></ul>\n            \n \n          </div>\n          \n         \n          <div id=\"chuot\" class=\"content-section\">\n              <div class=\"spancursor\"> Select Cursor</div>\n        <div class=\"cursor-container\">\n            <div id=\"default-cursor-btn\">\n                <img src=\"https://i.imgur.com/lWpvpbL.png\">\n            </div>\n        </div>\n          </div>\n          <div id=\"gioithieu\" class=\"content-section\">\n              <h2>Giá»›i Thiá»‡u</h2>\n              <p>ÄÃ¢y lÃ  ná»™i dung Giá»›i Thiá»‡u.</p>\n          </div>\n      </div>\n  </div>\n\n  <script>\n      window.displayContent = function(sectionId, element) {\n          // áº¨n táº¥t cáº£ cÃ¡c má»¥c ná»™i dung\n          let sections = document.querySelectorAll('.content-section');\n          sections.forEach(section => section.style.display = 'none');\n\n          // Hiá»ƒn thá»‹ má»¥c ná»™i dung tÆ°Æ¡ng á»©ng\n          let activeSection = document.getElementById(sectionId);\n          if (activeSection) {\n              activeSection.style.display = 'block';\n          }\n\n          // Äá»•i mÃ u má»¥c Ä‘Ã£ chá»n\n          let menuItems = document.querySelectorAll('.sidebar ul li');\n          menuItems.forEach(item => item.classList.remove('selected')); // Loáº¡i bá» class 'selected' khá»i táº¥t cáº£ má»¥c\n          \n          // ThÃªm class 'selected' cho má»¥c Ä‘Æ°á»£c chá»n\n          if (element) element.classList.add('selected');\n      }\n\n      // Hiá»ƒn thá»‹ ná»™i dung máº·c Ä‘á»‹nh khi táº£i trang\n      setTimeout(function() {\n          window.displayContent('toolgame', document.getElementById('toolgame-btn'));\n      }, 0);\n      \n       // Láº¥y pháº§n tá»­ nÃºt vÃ  div\n        const button = document.getElementById(\"click-btn\");\n        const playerInfo = document.getElementById(\"mm-player-info\");\n\n        if (button && playerInfo) {\n          button.addEventListener(\"click\", function() { playerInfo.click(); });\n          playerInfo.addEventListener(\"click\", function() { console.log(\"Div clicked!\"); });\n        }\n\n      \n      \n      \n  </script>\n        <style>\n        #wf-tool-button:hover { filter: brightness(1.15); }\n        .popup label, .popup input, .popup .sidebar ul li, .popup .close-button { cursor: pointer; }\n        .yellow-icon {\n    color: gold;  /* Chá»‰nh mÃ u vÃ ng */\n}\n        .layout {\n          display: flex;\n          width: 100%;\n          height: 90%;\n      }\n\n      .sidebar {\n          width: 140px;\n          background: #252535;\n          box-shadow: 0px 0px 10px #252535;\n          color: #fff;\n      }\n\n      .sidebar ul {\n          list-style-type: none;\n          padding: 0;\n          margin: 0;\n      }\n\n      .sidebar ul li {\n          padding: 12px;\n          cursor: pointer;\n          border-bottom: 1px solid #ddd;\n          width: 140px;\n      }\n\n      .sidebar ul li:hover {\n          background-color: #666;\n      }\n\n      .sidebar ul li.selected {\n          background-color: #000; /* MÃ u ná»n khi má»¥c Ä‘Æ°á»£c chá»n */\n          color: white;\n      }\n\n      .main-content {\n          flex-grow: 1;\n          padding: 20px;\n          background: #393e43;\n          color: #fff;\n      }\n\n      .content-section {\n          display: none;\n          transition: display 0.3s ease-in-out;\n      }\n\n      #toolgame {\n          display: block; /* Máº·c Ä‘á»‹nh hiá»ƒn thá»‹ ná»™i dung Tool Game */\n      }\n\n      h2 {\n          margin-top: 0;\n      }\n\n      /* ThÃªm hiá»‡u á»©ng cho hover */\n      .sidebar ul li:hover {\n          background-color: #666;\n      }</style>\n        </div>");
       $("#loa831pibur0w4gv").replaceWith("\n              \n              <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" />\n              <div style=\"margin: 0;\" id=\"loa831pibur0w4gv\">\n              <div class=\"label\" id=\"titleSetings\">Notification</div>\n                \n                 <div class=\"bao-list1\">\n                <div class=\"list1\"><li>\n                 21/02/2025: Updated !</li>\n                </div>\n                <div class=\"list1\"><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated. Thank you !</li>\n                </div>\n                <div class=\"list1\"><li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li>\n                </div>\n                \n                   <div class=\"list1\"><li> Instructions for installing on IOS and iPad New 2024: <a href=\"https://www.youtube.com/watch?v=uyHHXWKHgRw\">https://www.youtube.com/watch?v=uyHHXWKHgRw</a></li></div></div>\n              \n                   ");
       $("#mm-coins-box").replaceWith("<div style=\"margin: 0;\" id=\"mm-coins-box\">\n                \n                <button style='width: 140px;height: 45px;float: right;border-radius: 10px;border: solid #fac 2px;display:none' id='getskin'>Unlock Skins</button>\n                </div>\n                </div>");
 
@@ -10267,6 +10350,9 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
       loadJson(BASE_REGISTRY_URL, function (baseRegistry) {
         loadJson(CUSTOM_REGISTRY_URL, function (customRegistry) {
           try {
+            if (typeof XOTEAM_applySkinCostomToRegistry === "function") {
+              customRegistry = XOTEAM_applySkinCostomToRegistry(customRegistry || {});
+            }
             const finalRegistry = mergeRegistry(baseRegistry, customRegistry);
 
             if (typeof XOTEAM_setPrivateSkinsFromRegistry === "function") {
@@ -10285,6 +10371,11 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
             loader.Cc(baseRegistry);
           }
         }, function () {
+          try {
+            if (typeof XOTEAM_applySkinCostomToRegistry === "function") {
+              baseRegistry = XOTEAM_applySkinCostomToRegistry(baseRegistry || {});
+            }
+          } catch (e) {}
           loader.Cc(baseRegistry);
         });
       }, function () {
@@ -10304,22 +10395,5 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
 
   const timer = setInterval(function () {
     if (patchApp()) clearInterval(timer);
-  }, 500);
-})();
-
-
-/* WORMXO optimized lobby background - light GPU / old design keeper */
-(function () {
-  if (window.__WORMXO_LOBBY_BG_2026__) return;
-  window.__WORMXO_LOBBY_BG_2026__ = true;
-  function install() {
-    try {
-      if (document.getElementById("wormxo-lobby-bg-style")) return;
-      var css = document.createElement("style");
-      css.id = "wormxo-lobby-bg-style";
-      css.textContent = "#game-wrap,#mm-start,#main-menu,.background-canva{background:radial-gradient(circle at 20% 20%,rgba(85,195,255,.24),transparent 28%),radial-gradient(circle at 80% 30%,rgba(255,95,185,.22),transparent 32%),linear-gradient(135deg,#071325 0%,#141026 45%,#25102d 100%)!important;background-size:180% 180%!important;animation:wormxoBgSlow 18s ease-in-out infinite alternate!important;}@keyframes wormxoBgSlow{0%{background-position:0% 30%,100% 20%,0% 0%;}100%{background-position:80% 70%,20% 80%,100% 100%;}}";
-      (document.head || document.documentElement).appendChild(css);
-    } catch (e) {}
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
+  }, 1000);
 })();
