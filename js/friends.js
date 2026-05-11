@@ -9613,122 +9613,208 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   setInterval(updateUI, 60);
 })();
 
-/* WORMXO MULTI LOBBY GIF BACKGROUND */
+/* WORMXO CUSTOM ANIMATED LOBBY BACKGROUND */
 (function () {
 
-  var WX_BG_URL =
-    "https://up.6arh.net/uploads/u/__________---__________.gif";
+  var WX_STYLE_ID = "WORMXO_CUSTOM_LOBBY_BG_V3";
+  var WX_LOGO_URL = "https://usa.mfa.gov.ua/storage/app/sites/6/trizubsvg.png";
 
-  var WX_STYLE_ID = "WORMXO_MULTI_GIF_BG_V2";
+  function WX_CUSTOM_BG_INIT() {
 
-  function WX_INIT_GIF_BG() {
+    if (document.getElementById(WX_STYLE_ID)) return;
 
-    if (!document.getElementById(WX_STYLE_ID)) {
+    var WX_STYLE = document.createElement("style");
+    WX_STYLE.id = WX_STYLE_ID;
 
-      var WX_STYLE = document.createElement("style");
-      WX_STYLE.id = WX_STYLE_ID;
-
-      WX_STYLE.innerHTML = `
+    WX_STYLE.innerHTML = `
 
       #game-wrap,
       #mm-start,
       #main-menu,
       #background-canva {
+        position: relative !important;
+        overflow: hidden !important;
 
-        background-image:
-          linear-gradient(
-            135deg,
-            rgba(0,0,0,.42),
-            rgba(0,0,0,.28),
-            rgba(0,0,0,.45)
-          ),
-          url("${WX_BG_URL}") !important;
+        background:
+          radial-gradient(circle at 20% 25%, rgba(0, 85, 255, .75), transparent 34%),
+          radial-gradient(circle at 80% 20%, rgba(0, 210, 255, .65), transparent 35%),
+          radial-gradient(circle at 35% 85%, rgba(255, 70, 180, .58), transparent 36%),
+          radial-gradient(circle at 75% 75%, rgba(150, 70, 255, .65), transparent 38%),
+          linear-gradient(135deg, #06142f, #092b7a, #7d2bff, #ff4db8);
 
-        background-size: cover !important;
-        background-position: center center !important;
-        background-repeat: no-repeat !important;
-        background-attachment: fixed !important;
+        background-size:
+          180% 180%,
+          170% 170%,
+          190% 190%,
+          180% 180%,
+          300% 300%;
 
         animation:
-          WX_BG_ZOOM 18s ease-in-out infinite alternate,
-          WX_BG_FILTER 9s linear infinite;
+          WX_LOBBY_COLOR_MOVE 16s ease-in-out infinite alternate,
+          WX_LOBBY_SOFT_LIGHT 7s ease-in-out infinite;
 
-        overflow: hidden !important;
+        filter: saturate(1.25);
       }
 
       #game-wrap::before,
       #mm-start::before,
       #main-menu::before,
       #background-canva::before {
-
         content: "";
         position: absolute;
-        inset: 0;
+        inset: -20%;
         pointer-events: none;
         z-index: 0;
 
         background:
-          radial-gradient(circle at 20% 20%,
-          rgba(0,180,255,.18),
-          transparent 38%),
+          radial-gradient(circle at 30% 30%, rgba(255,255,255,.15), transparent 32%),
+          radial-gradient(circle at 70% 60%, rgba(0,255,255,.13), transparent 36%),
+          radial-gradient(circle at 45% 80%, rgba(255,0,200,.12), transparent 40%);
 
-          radial-gradient(circle at 80% 70%,
-          rgba(255,0,170,.16),
-          transparent 40%),
-
-          radial-gradient(circle at 50% 50%,
-          rgba(0,255,255,.08),
-          transparent 55%);
-
-        animation:
-          WX_GLOW_MOVE 7s ease-in-out infinite alternate;
+        filter: blur(35px);
+        opacity: .9;
+        animation: WX_LOBBY_MIST 11s ease-in-out infinite alternate;
       }
 
-      @keyframes WX_BG_ZOOM {
+      #game-wrap::after,
+      #mm-start::after,
+      #main-menu::after,
+      #background-canva::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
 
+        background:
+          linear-gradient(120deg, rgba(255,255,255,.08), transparent 45%, rgba(255,255,255,.05)),
+          radial-gradient(circle at center, transparent 35%, rgba(0,0,0,.35));
+
+        backdrop-filter: blur(3px);
+      }
+
+      .wx-trizub-logo {
+        position: absolute;
+        width: 86px;
+        height: 86px;
+        object-fit: contain;
+        pointer-events: none;
+        z-index: 2;
+        opacity: .34;
+
+        filter:
+          drop-shadow(0 0 14px rgba(255,255,255,.45))
+          drop-shadow(0 0 25px currentColor);
+
+        animation:
+          WX_LOGO_FLOAT 13s ease-in-out infinite alternate,
+          WX_LOGO_COLOR 9s linear infinite,
+          WX_LOGO_ROTATE 22s linear infinite;
+      }
+
+      .wx-logo-1 { left: 8%;  top: 16%; width: 75px; height: 75px; animation-delay: 0s; }
+      .wx-logo-2 { left: 78%; top: 14%; width: 95px; height: 95px; animation-delay: -2s; }
+      .wx-logo-3 { left: 18%; top: 70%; width: 105px; height: 105px; animation-delay: -4s; }
+      .wx-logo-4 { left: 64%; top: 66%; width: 82px; height: 82px; animation-delay: -6s; }
+      .wx-logo-5 { left: 45%; top: 38%; width: 120px; height: 120px; animation-delay: -8s; opacity: .22; }
+
+      @keyframes WX_LOBBY_COLOR_MOVE {
         0% {
-          background-position: center top;
-          transform: scale(1);
+          background-position:
+            0% 20%,
+            100% 10%,
+            20% 100%,
+            80% 90%,
+            0% 50%;
         }
 
         100% {
-          background-position: center bottom;
-          transform: scale(1.03);
+          background-position:
+            80% 70%,
+            20% 90%,
+            90% 20%,
+            10% 10%,
+            100% 50%;
         }
       }
 
-      @keyframes WX_BG_FILTER {
-
-        0% {
-          filter: brightness(1) saturate(1);
+      @keyframes WX_LOBBY_SOFT_LIGHT {
+        0%, 100% {
+          filter: saturate(1.15) brightness(1);
         }
 
         50% {
-          filter: brightness(1.08) saturate(1.15);
-        }
-
-        100% {
-          filter: brightness(1) saturate(1);
+          filter: saturate(1.35) brightness(1.12);
         }
       }
 
-      @keyframes WX_GLOW_MOVE {
-
+      @keyframes WX_LOBBY_MIST {
         0% {
-          opacity: .45;
-          transform: scale(1);
+          transform: translate(-4%, -3%) scale(1);
+          opacity: .55;
         }
 
         100% {
+          transform: translate(4%, 3%) scale(1.12);
           opacity: .9;
-          transform: scale(1.08);
         }
       }
 
-      `;
+      @keyframes WX_LOGO_FLOAT {
+        0% {
+          transform: translate3d(-10px, -8px, 0) scale(.95);
+          opacity: .23;
+        }
 
-      document.head.appendChild(WX_STYLE);
-    }
+        100% {
+          transform: translate3d(18px, 14px, 0) scale(1.08);
+          opacity: .45;
+        }
+      }
+
+      @keyframes WX_LOGO_COLOR {
+        0% {
+          color: #ff2020;
+          filter:
+            hue-rotate(0deg)
+            drop-shadow(0 0 14px rgba(255, 0, 0, .55))
+            drop-shadow(0 0 30px rgba(255, 0, 0, .4));
+        }
+
+        33% {
+          color: #ffe600;
+          filter:
+            hue-rotate(80deg)
+            drop-shadow(0 0 14px rgba(255, 230, 0, .55))
+            drop-shadow(0 0 30px rgba(255, 230, 0, .4));
+        }
+
+        66% {
+          color: #00ff6a;
+          filter:
+            hue-rotate(160deg)
+            drop-shadow(0 0 14px rgba(0, 255, 100, .55))
+            drop-shadow(0 0 30px rgba(0, 255, 100, .4));
+        }
+
+        100% {
+          color: #ff2020;
+          filter:
+            hue-rotate(360deg)
+            drop-shadow(0 0 14px rgba(255, 0, 0, .55))
+            drop-shadow(0 0 30px rgba(255, 0, 0, .4));
+        }
+      }
+
+      @keyframes WX_LOGO_ROTATE {
+        0% { rotate: -4deg; }
+        50% { rotate: 4deg; }
+        100% { rotate: -4deg; }
+      }
+
+    `;
+
+    document.head.appendChild(WX_STYLE);
 
     [
       "game-wrap",
@@ -9738,12 +9824,17 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
     ].forEach(function (WX_ID) {
 
       var WX_EL = document.getElementById(WX_ID);
+      if (!WX_EL) return;
 
-      if (WX_EL) {
+      if (WX_EL.getAttribute("data-wx-bg-ready") === "1") return;
+      WX_EL.setAttribute("data-wx-bg-ready", "1");
 
-        WX_EL.style.position = "relative";
-        WX_EL.style.zIndex = "0";
-
+      for (var i = 1; i <= 5; i++) {
+        var WX_LOGO = document.createElement("img");
+        WX_LOGO.src = WX_LOGO_URL;
+        WX_LOGO.className = "wx-trizub-logo wx-logo-" + i;
+        WX_LOGO.alt = "";
+        WX_EL.appendChild(WX_LOGO);
       }
 
     });
@@ -9751,21 +9842,11 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   }
 
   if (document.readyState === "loading") {
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      WX_INIT_GIF_BG
-    );
-
+    document.addEventListener("DOMContentLoaded", WX_CUSTOM_BG_INIT);
   } else {
-
-    WX_INIT_GIF_BG();
-
+    WX_CUSTOM_BG_INIT();
   }
 
-  window.addEventListener(
-    "load",
-    WX_INIT_GIF_BG
-  );
+  window.addEventListener("load", WX_CUSTOM_BG_INIT);
 
 })();
