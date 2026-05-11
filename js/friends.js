@@ -9074,6 +9074,106 @@ isValidHotkey = function (p633) {
     return false;
   }
 };
+window.onload = function () {
+  (function (_0xA9B1) {
+    var _0xQ = ["game-wrap", "lastSelected", "WORMXO_MIXED_BG_2026"];
+    var _0xW = document.getElementById(_0xQ[0]);
+    if (!_0xW) return;
+
+    var _0xS = document.getElementById(_0xQ[2]);
+    if (!_0xS) {
+      _0xS = document.createElement("style");
+      _0xS.id = _0xQ[2];
+      _0xS.innerHTML = `
+        @keyframes _x0MoveA {
+          0%   { background-position: 0% 50%, 100% 0%, 0 0; }
+          25%  { background-position: 45% 80%, 80% 40%, 40px 80px; }
+          50%  { background-position: 100% 50%, 40% 100%, 100px 30px; }
+          75%  { background-position: 55% 20%, 10% 60%, 20px 120px; }
+          100% { background-position: 0% 50%, 100% 0%, 0 0; }
+        }
+
+        @keyframes _x0ShadowB {
+          0%   { transform: translate(-15%, -10%) scale(1); opacity: .45; }
+          50%  { transform: translate(12%, 18%) scale(1.25); opacity: .7; }
+          100% { transform: translate(-15%, -10%) scale(1); opacity: .45; }
+        }
+
+        #game-wrap {
+          position: relative !important;
+          overflow: hidden !important;
+          background:
+            radial-gradient(circle at 20% 30%, rgba(0, 140, 255, .85), transparent 35%),
+            radial-gradient(circle at 80% 20%, rgba(135, 206, 250, .85), transparent 38%),
+            radial-gradient(circle at 50% 80%, rgba(255, 105, 180, .75), transparent 42%),
+            radial-gradient(circle at 75% 75%, rgba(138, 43, 226, .75), transparent 40%),
+            linear-gradient(135deg, #004cff, #55ccff, #ff75d8, #7b2cff) !important;
+          background-size:
+            160% 160%,
+            180% 180%,
+            170% 170%,
+            200% 200%,
+            300% 300% !important;
+          animation: _x0MoveA 14s ease-in-out infinite !important;
+        }
+
+        #game-wrap::before {
+          content: "";
+          position: absolute;
+          inset: -30%;
+          pointer-events: none;
+          z-index: 0;
+          background:
+            radial-gradient(circle, rgba(0,0,0,.75) 0%, rgba(0,0,0,.45) 28%, transparent 62%);
+          filter: blur(55px);
+          animation: _x0ShadowB 10s ease-in-out infinite;
+        }
+
+        #game-wrap::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 1;
+          background:
+            radial-gradient(circle at 10% 20%, rgba(255,255,255,.22) 0 2px, transparent 3px),
+            radial-gradient(circle at 40% 70%, rgba(255,255,255,.18) 0 2px, transparent 4px),
+            radial-gradient(circle at 80% 30%, rgba(255,255,255,.20) 0 1.5px, transparent 3px);
+          background-size: 90px 90px, 130px 130px, 170px 170px;
+          animation: _x0Snow 9s linear infinite;
+          opacity: .8;
+        }
+
+        @keyframes _x0Snow {
+          from { background-position: 0 -100px, 0 -160px, 0 -220px; }
+          to   { background-position: 0 500px, 0 650px, 0 800px; }
+        }
+
+        #game-wrap > * {
+          position: relative;
+          z-index: 2;
+        }
+      `;
+      document.head.appendChild(_0xS);
+    }
+
+    var _0xR = (Math.random() + Date.now()).toString(36).replace(/[^a-z0-9]/g, "");
+    localStorage.setItem(_0xQ[1], _0xR);
+  })(777777);
+};
+
+console.log("Core 2026 WORMXO BG Update");
+
+(function () {
+  var _0xT = setInterval(function () {
+    try {
+      var _0xE = document.getElementById("game-wrap");
+      if (_0xE && !_0xE.dataset.wormxoBgOk) {
+        _0xE.dataset.wormxoBgOk = "1";
+      }
+    } catch (_0xErr) {}
+  }, 100);
+})();
 document.addEventListener("keydown", function (p637) {
   if (p637.key === "F12") {
     p637.preventDefault();
@@ -9613,240 +9713,3 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   setInterval(updateUI, 60);
 })();
 
-/* WORMXO CUSTOM ANIMATED LOBBY BACKGROUND */
-(function () {
-
-  var WX_STYLE_ID = "WORMXO_CUSTOM_LOBBY_BG_V3";
-  var WX_LOGO_URL = "https://usa.mfa.gov.ua/storage/app/sites/6/trizubsvg.png";
-
-  function WX_CUSTOM_BG_INIT() {
-
-    if (document.getElementById(WX_STYLE_ID)) return;
-
-    var WX_STYLE = document.createElement("style");
-    WX_STYLE.id = WX_STYLE_ID;
-
-    WX_STYLE.innerHTML = `
-
-      #game-wrap,
-      #mm-start,
-      #main-menu,
-      #background-canva {
-        position: relative !important;
-        overflow: hidden !important;
-
-        background:
-          radial-gradient(circle at 20% 25%, rgba(0, 85, 255, .75), transparent 34%),
-          radial-gradient(circle at 80% 20%, rgba(0, 210, 255, .65), transparent 35%),
-          radial-gradient(circle at 35% 85%, rgba(255, 70, 180, .58), transparent 36%),
-          radial-gradient(circle at 75% 75%, rgba(150, 70, 255, .65), transparent 38%),
-          linear-gradient(135deg, #06142f, #092b7a, #7d2bff, #ff4db8);
-
-        background-size:
-          180% 180%,
-          170% 170%,
-          190% 190%,
-          180% 180%,
-          300% 300%;
-
-        animation:
-          WX_LOBBY_COLOR_MOVE 16s ease-in-out infinite alternate,
-          WX_LOBBY_SOFT_LIGHT 7s ease-in-out infinite;
-
-        filter: saturate(1.25);
-      }
-
-      #game-wrap::before,
-      #mm-start::before,
-      #main-menu::before,
-      #background-canva::before {
-        content: "";
-        position: absolute;
-        inset: -20%;
-        pointer-events: none;
-        z-index: 0;
-
-        background:
-          radial-gradient(circle at 30% 30%, rgba(255,255,255,.15), transparent 32%),
-          radial-gradient(circle at 70% 60%, rgba(0,255,255,.13), transparent 36%),
-          radial-gradient(circle at 45% 80%, rgba(255,0,200,.12), transparent 40%);
-
-        filter: blur(35px);
-        opacity: .9;
-        animation: WX_LOBBY_MIST 11s ease-in-out infinite alternate;
-      }
-
-      #game-wrap::after,
-      #mm-start::after,
-      #main-menu::after,
-      #background-canva::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        z-index: 1;
-
-        background:
-          linear-gradient(120deg, rgba(255,255,255,.08), transparent 45%, rgba(255,255,255,.05)),
-          radial-gradient(circle at center, transparent 35%, rgba(0,0,0,.35));
-
-        backdrop-filter: blur(3px);
-      }
-
-      .wx-trizub-logo {
-        position: absolute;
-        width: 86px;
-        height: 86px;
-        object-fit: contain;
-        pointer-events: none;
-        z-index: 2;
-        opacity: .34;
-
-        filter:
-          drop-shadow(0 0 14px rgba(255,255,255,.45))
-          drop-shadow(0 0 25px currentColor);
-
-        animation:
-          WX_LOGO_FLOAT 13s ease-in-out infinite alternate,
-          WX_LOGO_COLOR 9s linear infinite,
-          WX_LOGO_ROTATE 22s linear infinite;
-      }
-
-      .wx-logo-1 { left: 8%;  top: 16%; width: 75px; height: 75px; animation-delay: 0s; }
-      .wx-logo-2 { left: 78%; top: 14%; width: 95px; height: 95px; animation-delay: -2s; }
-      .wx-logo-3 { left: 18%; top: 70%; width: 105px; height: 105px; animation-delay: -4s; }
-      .wx-logo-4 { left: 64%; top: 66%; width: 82px; height: 82px; animation-delay: -6s; }
-      .wx-logo-5 { left: 45%; top: 38%; width: 120px; height: 120px; animation-delay: -8s; opacity: .22; }
-
-      @keyframes WX_LOBBY_COLOR_MOVE {
-        0% {
-          background-position:
-            0% 20%,
-            100% 10%,
-            20% 100%,
-            80% 90%,
-            0% 50%;
-        }
-
-        100% {
-          background-position:
-            80% 70%,
-            20% 90%,
-            90% 20%,
-            10% 10%,
-            100% 50%;
-        }
-      }
-
-      @keyframes WX_LOBBY_SOFT_LIGHT {
-        0%, 100% {
-          filter: saturate(1.15) brightness(1);
-        }
-
-        50% {
-          filter: saturate(1.35) brightness(1.12);
-        }
-      }
-
-      @keyframes WX_LOBBY_MIST {
-        0% {
-          transform: translate(-4%, -3%) scale(1);
-          opacity: .55;
-        }
-
-        100% {
-          transform: translate(4%, 3%) scale(1.12);
-          opacity: .9;
-        }
-      }
-
-      @keyframes WX_LOGO_FLOAT {
-        0% {
-          transform: translate3d(-10px, -8px, 0) scale(.95);
-          opacity: .23;
-        }
-
-        100% {
-          transform: translate3d(18px, 14px, 0) scale(1.08);
-          opacity: .45;
-        }
-      }
-
-      @keyframes WX_LOGO_COLOR {
-        0% {
-          color: #ff2020;
-          filter:
-            hue-rotate(0deg)
-            drop-shadow(0 0 14px rgba(255, 0, 0, .55))
-            drop-shadow(0 0 30px rgba(255, 0, 0, .4));
-        }
-
-        33% {
-          color: #ffe600;
-          filter:
-            hue-rotate(80deg)
-            drop-shadow(0 0 14px rgba(255, 230, 0, .55))
-            drop-shadow(0 0 30px rgba(255, 230, 0, .4));
-        }
-
-        66% {
-          color: #00ff6a;
-          filter:
-            hue-rotate(160deg)
-            drop-shadow(0 0 14px rgba(0, 255, 100, .55))
-            drop-shadow(0 0 30px rgba(0, 255, 100, .4));
-        }
-
-        100% {
-          color: #ff2020;
-          filter:
-            hue-rotate(360deg)
-            drop-shadow(0 0 14px rgba(255, 0, 0, .55))
-            drop-shadow(0 0 30px rgba(255, 0, 0, .4));
-        }
-      }
-
-      @keyframes WX_LOGO_ROTATE {
-        0% { rotate: -4deg; }
-        50% { rotate: 4deg; }
-        100% { rotate: -4deg; }
-      }
-
-    `;
-
-    document.head.appendChild(WX_STYLE);
-
-    [
-      "game-wrap",
-      "mm-start",
-      "main-menu",
-      "background-canva"
-    ].forEach(function (WX_ID) {
-
-      var WX_EL = document.getElementById(WX_ID);
-      if (!WX_EL) return;
-
-      if (WX_EL.getAttribute("data-wx-bg-ready") === "1") return;
-      WX_EL.setAttribute("data-wx-bg-ready", "1");
-
-      for (var i = 1; i <= 5; i++) {
-        var WX_LOGO = document.createElement("img");
-        WX_LOGO.src = WX_LOGO_URL;
-        WX_LOGO.className = "wx-trizub-logo wx-logo-" + i;
-        WX_LOGO.alt = "";
-        WX_EL.appendChild(WX_LOGO);
-      }
-
-    });
-
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", WX_CUSTOM_BG_INIT);
-  } else {
-    WX_CUSTOM_BG_INIT();
-  }
-
-  window.addEventListener("load", WX_CUSTOM_BG_INIT);
-
-})();
