@@ -3127,10 +3127,10 @@ vF172.prototype.Se = function (p281) {
           this.Jf.zIndex = 2;
           this.Jf.alpha = 0.9;
           this.Jf.beginFill(16225317);
-          this.Jf.drawCircle(0, 0, this.Kf * 0.15);
+          this.Jf.drawCircle(0, 0, this.Kf * 0.25);
           this.Jf.endFill();
           this.Jf.lineStyle(1, "black");
-          this.Jf.drawCircle(0, 0, this.Kf * 0.15);
+          this.Jf.drawCircle(0, 0, this.Kf * 0.25);
           this.Jf.endFill();
           this.addChild(v214);
           this.addChild(this.Sf);
