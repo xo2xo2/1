@@ -9079,26 +9079,94 @@ isValidHotkey = function (p633) {
   }
 };
 window.onload = function () {
-  var vA18 = [{
-    gradient: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><polygon points='50,5 61,35 95,35 67,57 76,91 50,70 24,91 33,57 5,35 39,35' fill='rgba(255, 255, 255, 0.3)'/></svg>\") repeat,linear-gradient(45deg, #32CD32 20%, #FFD700 100%)",
-    size: "120px 120px, 100% 100%"
-  }, {
-    gradient: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect x='30' y='30' width='40' height='40' fill='rgba(255,255,255,0.2)'/></svg>\") repeat,linear-gradient(45deg, #0000FF 20%, #8A2BE2 100%)",
-    size: "100px 100px, 100% 100%"
-  }, {
-    gradient: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><polygon points='50,10 90,50 50,90 10,50' fill='rgba(255,255,255,0.25)'/></svg>\") repeat,linear-gradient(45deg, #0000FF 20%, #8A2BE2 100%)",
-    size: "100px 100px, 100% 100%"
-  }];
-  var v620 = localStorage.getItem("lastSelected");
-  var v621 = vA18.map((p634, p635) => p635).filter(p636 => p636 != v620);
-  var v622 = v621[Math.floor(Math.random() * v621.length)];
-  var v623 = vA18[v622];
-  localStorage.setItem("lastSelected", v622);
-  var v624 = document.getElementById("game-wrap");
-  v624.style.background = v623.gradient;
-  v624.style.backgroundSize = v623.size;
+  var gameWrap = document.getElementById("game-wrap");
+  if (!gameWrap) return;
+
+  gameWrap.style.position = gameWrap.style.position || "relative";
+  gameWrap.style.overflow = "hidden";
+
+  gameWrap.style.background = `
+    radial-gradient(circle at 20% 25%, rgba(0, 191, 255, 0.95), transparent 35%),
+    radial-gradient(circle at 80% 20%, rgba(255, 105, 180, 0.85), transparent 35%),
+    radial-gradient(circle at 50% 80%, rgba(138, 43, 226, 0.95), transparent 40%),
+    linear-gradient(135deg, #003cff, #00cfff, #ff69b4, #7b2cff)
+  `;
+
+  gameWrap.style.backgroundSize = "300% 300%";
+  gameWrap.style.animation = "xoBackgroundMove 12s ease-in-out infinite";
+
+  var style = document.createElement("style");
+  style.innerHTML = `
+    @keyframes xoBackgroundMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes xoShadowMove {
+      0% { transform: translate(-25%, -20%) scale(1); opacity: .45; }
+      50% { transform: translate(20%, 15%) scale(1.25); opacity: .65; }
+      100% { transform: translate(-25%, -20%) scale(1); opacity: .45; }
+    }
+
+    @keyframes xoSnowFall {
+      0% { transform: translateY(-120px) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(110vh) translateX(60px); opacity: 0; }
+    }
+
+    #xo-bg-shadow {
+      position: absolute;
+      width: 900px;
+      height: 900px;
+      left: 10%;
+      top: 5%;
+      background: radial-gradient(circle, rgba(0,0,0,.75), transparent 65%);
+      filter: blur(35px);
+      pointer-events: none;
+      z-index: 0;
+      animation: xoShadowMove 10s ease-in-out infinite;
+    }
+
+    .xo-snow {
+      position: absolute;
+      top: -20px;
+      width: 6px;
+      height: 6px;
+      background: rgba(255,255,255,.9);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255,255,255,.8);
+      pointer-events: none;
+      z-index: 1;
+      animation-name: xoSnowFall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+  `;
+  document.head.appendChild(style);
+
+  var shadow = document.createElement("div");
+  shadow.id = "xo-bg-shadow";
+  gameWrap.appendChild(shadow);
+
+  for (var i = 0; i < 55; i++) {
+    var snow = document.createElement("div");
+    snow.className = "xo-snow";
+
+    var size = Math.random() * 5 + 3;
+    snow.style.width = size + "px";
+    snow.style.height = size + "px";
+    snow.style.left = Math.random() * 100 + "%";
+    snow.style.animationDuration = Math.random() * 8 + 6 + "s";
+    snow.style.animationDelay = Math.random() * 8 + "s";
+    snow.style.opacity = Math.random() * 0.7 + 0.3;
+
+    gameWrap.appendChild(snow);
+  }
 };
-console.log("Core 2022 THEO Update 2023");
+
+console.log("Worm Friends XO 2026 ");
+
 (function () {
   var vSetInterval2 = setInterval(function () {
     try {} catch (e30) {}
