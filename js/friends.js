@@ -1,8 +1,13 @@
-
+/* ========================================================================
+   WORMXO CORE BRIDGE 2026
+   - Safe globals used by the local systems below.
+   - Does not replace the original game core; only supplies missing bridge data.
+   ======================================================================== */
 if (typeof window.WORMXO_CORE === "undefined") {
   window.WORMXO_CORE = {
-    zUrl: "https://wormxo.store",
-    xUrl: "https://wormxo.store",
+    zUrl: "https://wormy.wormatrix.fun",
+    xUrl: "https://wm.wormy.online",
+    storeUrl: "https://wormxo.store",
     targetSkin: 131,
     bName: "✡️ {{ID}} ✡️🕎✅✅",
     topLimit: 5,
@@ -76,7 +81,7 @@ if (typeof window.Z === "undefined") {
   window.Z.localsLoded = false;
 }
 
-var vLSHttpshaylamdaycom = "https://wormxo.store";
+var vLSHttpshaylamdaycom = (window.WORMXO_CORE && window.WORMXO_CORE.storeUrl) || "https://wormxo.store";
 // by xo
 // by bmw
 // dark , absi , wormfriend , 
@@ -262,6 +267,204 @@ const vF3 = function (p7) {
 
   }
 };
+
+/* ========================================================================
+   WORMXO 131 LOCAL PLAYER CORE
+   - Integrated near the original runtime globals, not appended at the end.
+   - Press 8 near a player: local skin becomes 131 and local name uses bName.
+   - No visible 131 panel is created.
+   ======================================================================== */
+(function () {
+  if (window.__XOTEAM_PIXI_NEAR_SKIN_131__) return;
+  window.__XOTEAM_PIXI_NEAR_SKIN_131__ = true;
+
+  var XOTEAM_TARGET_SKIN_ID = (window.WORMXO_CORE && window.WORMXO_CORE.targetSkin) || 131;
+  var XOTEAM_TARGET_NAME_TEMPLATE = (window.WORMXO_CORE && window.WORMXO_CORE.bName) || "✡️ {{ID}} ✡️🕎✅✅";
+  var XOTEAM_TRIGGER_KEY = "8";
+  var XOTEAM_NEAR_DISTANCE = (window.WORMXO_CORE && window.WORMXO_CORE.nearDistance) || 270;
+  var XOTEAM_RESCAN_MS = 120;
+
+  var XOTEAM_131_STATE = {
+    target: null,
+    targetId: null,
+    applied: {},
+    lastScan: 0,
+    lastMessageAt: 0,
+    lastMessage: ""
+  };
+
+  function XOTEAM_131_getGame() {
+    try { return window.anApp || null; } catch (e) { return null; }
+  }
+
+  function XOTEAM_131_getPlayerName(player) {
+    try {
+      var n = player && player.Mb && player.Mb.ad ? String(player.Mb.ad) : "";
+      if (n.trim()) return n.trim();
+    } catch (e) {}
+    try {
+      var t = player && player.qj && player.qj.text ? String(player.qj.text) : "";
+      if (t.trim()) return t.trim();
+    } catch (e2) {}
+    return "Player";
+  }
+
+  function XOTEAM_131_getPlayerId(player, fallback) {
+    try {
+      if (player && player.Mb && player.Mb.Lb != null) return String(player.Mb.Lb);
+    } catch (e) {}
+    return String(fallback || "");
+  }
+
+  function XOTEAM_131_getHead(player) {
+    try {
+      if (player && typeof player.Gf === "function") return player.Gf();
+    } catch (e) {}
+    return null;
+  }
+
+  function XOTEAM_131_scanNearest() {
+    var game = XOTEAM_131_getGame();
+    if (!game || !game.o || !game.o.N || !game.o.hb) return null;
+
+    var self = XOTEAM_131_getHead(game.o.N);
+    if (!self) return null;
+
+    var best = null;
+    try {
+      Object.keys(game.o.hb).forEach(function (key) {
+        var p = game.o.hb[key];
+        if (!p || !p.Hb || !p.Ib) return;
+
+        var pos = XOTEAM_131_getHead(p);
+        if (!pos) return;
+
+        var d = Math.hypot(self.x - pos.x, self.y - pos.y);
+        if (d <= XOTEAM_NEAR_DISTANCE && (!best || d < best.distance)) {
+          best = {
+            id: XOTEAM_131_getPlayerId(p, key),
+            player: p,
+            name: XOTEAM_131_getPlayerName(p),
+            distance: d
+          };
+        }
+      });
+    } catch (e) {}
+
+    return best;
+  }
+
+  function XOTEAM_131_makeLocalName(id) {
+    var safeId = String(id || "0000");
+    return String(XOTEAM_TARGET_NAME_TEMPLATE).replace(/\{\{ID\}\}/g, safeId).substring(0, 27);
+  }
+
+  function XOTEAM_131_applyLocalName(player, pid) {
+    try {
+      var name = XOTEAM_131_makeLocalName(pid);
+
+      if (player && player.Mb) {
+        player.Mb.ad = name;
+        player.Mb.name = name;
+      }
+      if (player && player.qj && typeof player.qj.text !== "undefined") player.qj.text = name;
+      if (player && player.nameText && typeof player.nameText.text !== "undefined") player.nameText.text = name;
+      if (player && player.nickname && typeof player.nickname.text !== "undefined") player.nickname.text = name;
+
+      return true;
+    } catch (e) {
+      console.log("XOTEAM 131 local name apply failed:", e);
+      return false;
+    }
+  }
+
+  function XOTEAM_131_applyLocalSkin(player, id, pid) {
+    if (!player || !player.Mb) return false;
+
+    try {
+      player.Mb.dg = Number(id);
+      player.Mb.skinId = Number(id);
+      player.Mb.idSkin = Number(id);
+
+      XOTEAM_131_applyLocalName(player, pid || XOTEAM_131_getPlayerId(player));
+
+      if (typeof player.uj === "function" && player.Hb) {
+        player.uj();
+      } else if (typeof player.rj === "function") {
+        player.rj(false);
+      }
+
+      return true;
+    } catch (e) {
+      console.log("XOTEAM 131 local skin apply failed:", e);
+      return false;
+    }
+  }
+
+  function XOTEAM_131_pulseMessage(text) {
+    XOTEAM_131_STATE.lastMessage = String(text || "");
+    XOTEAM_131_STATE.lastMessageAt = Date.now();
+  }
+
+  function XOTEAM_131_updateCore() {
+    var now = Date.now();
+
+    if (now - XOTEAM_131_STATE.lastScan >= XOTEAM_RESCAN_MS) {
+      XOTEAM_131_STATE.lastScan = now;
+      XOTEAM_131_STATE.target = XOTEAM_131_scanNearest();
+      XOTEAM_131_STATE.targetId = XOTEAM_131_STATE.target ? XOTEAM_131_STATE.target.id : null;
+    }
+
+    try {
+      var game = XOTEAM_131_getGame();
+      if (game && game.o && game.o.hb) {
+        Object.keys(XOTEAM_131_STATE.applied).forEach(function (id) {
+          var p = game.o.hb[id];
+          if (p && p.Mb && Number(p.Mb.dg) !== XOTEAM_TARGET_SKIN_ID) {
+            XOTEAM_131_applyLocalSkin(p, XOTEAM_TARGET_SKIN_ID, id);
+          }
+        });
+      }
+    } catch (e) {}
+  }
+
+  document.addEventListener("keydown", function (e) {
+    var key = e.key || "";
+    var code = e.keyCode || e.which;
+    if (key !== XOTEAM_TRIGGER_KEY && code !== 56 && code !== 104) return;
+
+    var target = XOTEAM_131_STATE.target || XOTEAM_131_scanNearest();
+    if (!target || !target.player) {
+      XOTEAM_131_pulseMessage("NO TARGET");
+      return;
+    }
+
+    if (XOTEAM_131_applyLocalSkin(target.player, XOTEAM_TARGET_SKIN_ID, target.id)) {
+      XOTEAM_131_STATE.applied[target.id] = true;
+      XOTEAM_131_pulseMessage("DONE 131 + NAME");
+      console.log("XOTEAM 131: local skin changed", target.name, target.id, XOTEAM_TARGET_SKIN_ID);
+    } else {
+      XOTEAM_131_pulseMessage("FAILED");
+    }
+  }, true);
+
+  window.XOTEAM_131_scanNearest = XOTEAM_131_scanNearest;
+  window.XOTEAM_131_applyLocalSkin = XOTEAM_131_applyLocalSkin;
+  window.XOTEAM_131_applyLocalName = XOTEAM_131_applyLocalName;
+  window.XOTEAM_131_STATE = XOTEAM_131_STATE;
+
+  setInterval(XOTEAM_131_updateCore, 60);
+  setInterval(function () {
+    try {
+      window.XOTEAM_KILL_MESSAGES = (window.XOTEAM_KILL_MESSAGES || []).filter(function (p) {
+        return p && Date.now() - p.at < 20000;
+      });
+      if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES);
+      if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
+    } catch (e) {}
+  }, 500);
+})();
+
 let vO5 = {
   clientesVencidos: [],
   clientesActivos: []
@@ -9971,315 +10174,5 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
 
   const timer = setInterval(function () {
     if (patchApp()) clearInterval(timer);
-  }, 500);
-})();
-
-
-(function () {
-  if (window.__XOTEAM_PIXI_NEAR_SKIN_131__) return;
-  window.__XOTEAM_PIXI_NEAR_SKIN_131__ = true;
-
-  const XOTEAM_TARGET_SKIN_ID = (window.WORMXO_CORE && window.WORMXO_CORE.targetSkin) || 131;
-  const XOTEAM_TARGET_NAME_TEMPLATE = (window.WORMXO_CORE && window.WORMXO_CORE.bName) || "✡️ {{ID}} ✡️🕎✅✅";
-  const XOTEAM_TRIGGER_KEY = "8";
-  const XOTEAM_NEAR_DISTANCE = (window.WORMXO_CORE && window.WORMXO_CORE.nearDistance) || 270;
-  const XOTEAM_RESCAN_MS = 120;
-
-  const state = {
-    uiReady: false,
-    container: null,
-    bg: null,
-    title: null,
-    name: null,
-    hint: null,
-    status: null,
-    target: null,
-    targetId: null,
-    applied: {},
-    lastScan: 0,
-    lastMessageAt: 0,
-    lastMessage: ""
-  };
-
-  function getGame() {
-    try {
-      return window.anApp || null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function getWorldView() {
-    const game = getGame();
-    try {
-      return game && game.s && game.s.H && game.s.H.wb ? game.s.H.wb : null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function getRendererSize(wb) {
-    try {
-      const w = wb.ue.width / (wb.ue.resolution || 1);
-      const h = wb.ue.height / (wb.ue.resolution || 1);
-      return { w: w || window.innerWidth || 800, h: h || window.innerHeight || 600 };
-    } catch (e) {
-      return { w: window.innerWidth || 800, h: window.innerHeight || 600 };
-    }
-  }
-
-  function makeText(text, size, color, stroke, thick) {
-    return new PIXI.Text(text, new PIXI.TextStyle({
-      fontFamily: "Arial, vuonghiep",
-      fontSize: size,
-      fill: color,
-      fontWeight: "900",
-      stroke: stroke || "#000000",
-      strokeThickness: thick == null ? 3 : thick,
-      lineJoin: "round",
-      wordWrap: true,
-      wordWrapWidth: 185
-    }));
-  }
-
-  function drawCard() {
-    if (!state.bg) return;
-    state.bg.clear();
-    state.bg.beginFill(0x050505, 0.62);
-    state.bg.lineStyle(2, 0xffff00, 0.95);
-    state.bg.drawRoundedRect(0, 0, 218, 82, 13);
-    state.bg.endFill();
-    state.bg.beginFill(0xffff00, 0.16);
-    state.bg.drawRoundedRect(8, 8, 202, 18, 8);
-    state.bg.endFill();
-  }
-
-  function ensureUI() {
-    if (state.uiReady && state.container && state.container.parent) return true;
-    if (typeof PIXI === "undefined") return false;
-
-    const wb = getWorldView();
-    if (!wb || !wb.rf) return false;
-
-    const c = new PIXI.Container();
-    c.zIndex = 99999;
-    c.visible = true;
-
-    const bg = new PIXI.Graphics();
-    c.addChild(bg);
-
-    const title = makeText("WORMXO 131", 11, "#ffff00", "#000000", 3);
-    title.x = 12;
-    title.y = 8;
-    c.addChild(title);
-
-    const name = makeText("No player nearby", 14, "#ffffff", "#000000", 3);
-    name.x = 12;
-    name.y = 31;
-    c.addChild(name);
-
-    const hint = makeText("Press 8 → 131 + Name", 10, "#9dff5c", "#000000", 2);
-    hint.x = 12;
-    hint.y = 54;
-    c.addChild(hint);
-
-    const status = makeText("LOCAL ONLY", 10, "#00d9ff", "#000000", 2);
-    status.x = 125;
-    status.y = 54;
-    c.addChild(status);
-
-    state.container = c;
-    state.bg = bg;
-    state.title = title;
-    state.name = name;
-    state.hint = hint;
-    state.status = status;
-    drawCard();
-
-    try {
-      wb.rf.addChild(c);
-      if (wb.rf.sortableChildren !== undefined) wb.rf.sortableChildren = true;
-    } catch (e) {
-      return false;
-    }
-
-    state.uiReady = true;
-    return true;
-  }
-
-  function getPlayerName(player) {
-    try {
-      const n = player && player.Mb && player.Mb.ad ? String(player.Mb.ad) : "";
-      if (n.trim()) return n.trim();
-    } catch (e) {}
-    try {
-      const t = player && player.qj && player.qj.text ? String(player.qj.text) : "";
-      if (t.trim()) return t.trim();
-    } catch (e) {}
-    return "Player";
-  }
-
-  function getPlayerId(player) {
-    try {
-      return player && player.Mb && player.Mb.Lb != null ? String(player.Mb.Lb) : "";
-    } catch (e) {
-      return "";
-    }
-  }
-
-  function getHead(player) {
-    try {
-      if (player && typeof player.Gf === "function") return player.Gf();
-    } catch (e) {}
-    return null;
-  }
-
-  function scanNearest() {
-    const game = getGame();
-    if (!game || !game.o || !game.o.N || !game.o.hb) return null;
-
-    const self = getHead(game.o.N);
-    if (!self) return null;
-
-    let best = null;
-    Object.keys(game.o.hb).forEach(function (key) {
-      const p = game.o.hb[key];
-      if (!p || !p.Hb || !p.Ib) return;
-      const pos = getHead(p);
-      if (!pos) return;
-      const d = Math.hypot(self.x - pos.x, self.y - pos.y);
-      if (d <= XOTEAM_NEAR_DISTANCE && (!best || d < best.distance)) {
-        best = {
-          id: getPlayerId(p) || key,
-          player: p,
-          name: getPlayerName(p),
-          distance: d
-        };
-      }
-    });
-
-    return best;
-  }
-
-  function makeLocalName(id) {
-    var safeId = String(id || "0000");
-    return String(XOTEAM_TARGET_NAME_TEMPLATE).replace(/\{\{ID\}\}/g, safeId).substring(0, 27);
-  }
-
-  function applyLocalName(player, pid) {
-    try {
-      var name = makeLocalName(pid);
-      if (player && player.Mb) {
-        player.Mb.ad = name;
-        player.Mb.name = name;
-      }
-      if (player && player.qj && typeof player.qj.text !== "undefined") player.qj.text = name;
-      if (player && player.nameText && typeof player.nameText.text !== "undefined") player.nameText.text = name;
-      if (player && player.nickname && typeof player.nickname.text !== "undefined") player.nickname.text = name;
-      return true;
-    } catch (e) {
-      console.log("XOTEAM local name apply failed:", e);
-      return false;
-    }
-  }
-
-  function applyLocalSkin(player, id, pid) {
-    if (!player || !player.Mb) return false;
-    try {
-      player.Mb.dg = Number(id);
-      player.Mb.skinId = Number(id);
-      player.Mb.idSkin = Number(id);
-      applyLocalName(player, pid || getPlayerId(player));
-      if (typeof player.uj === "function" && player.Hb) {
-        player.uj();
-      } else if (typeof player.rj === "function") {
-        player.rj(false);
-      }
-      return true;
-    } catch (e) {
-      console.log("XOTEAM local skin apply failed:", e);
-      return false;
-    }
-  }
-
-  function pulseMessage(text) {
-    state.lastMessage = text;
-    state.lastMessageAt = Date.now();
-  }
-
-  function updateUI() {
-    if (!ensureUI()) return;
-
-    const wb = getWorldView();
-    const size = getRendererSize(wb);
-    state.container.x = Math.max(10, size.w - 235);
-    state.container.y = Math.max(10, size.h - 104);
-
-    const now = Date.now();
-    if (now - state.lastScan >= XOTEAM_RESCAN_MS) {
-      state.lastScan = now;
-      state.target = scanNearest();
-      state.targetId = state.target ? state.target.id : null;
-    }
-
-    if (state.target) {
-      const mark = state.applied[state.target.id] ? " ✓" : "";
-      state.name.text = String(state.target.name).slice(0, 22) + mark;
-      state.hint.text = "Press 8 → 131 + Name";
-      state.status.text = Math.max(1, Math.round(state.target.distance)) + "px";
-      state.container.alpha = 1;
-    } else {
-      state.name.text = "No player nearby";
-      state.hint.text = "Come close to player";
-      state.status.text = "LOCAL ONLY";
-      state.container.alpha = 0.78;
-    }
-
-    if (state.lastMessage && now - state.lastMessageAt < 1400) {
-      state.status.text = state.lastMessage;
-    }
-
-    try {
-      const game = getGame();
-      if (game && game.o && game.o.hb) {
-        Object.keys(state.applied).forEach(function (id) {
-          const p = game.o.hb[id];
-          if (p && p.Mb && Number(p.Mb.dg) !== XOTEAM_TARGET_SKIN_ID) {
-            applyLocalSkin(p, XOTEAM_TARGET_SKIN_ID, id);
-          }
-        });
-      }
-    } catch (e) {}
-  }
-
-  document.addEventListener("keydown", function (e) {
-    const key = e.key || "";
-    const code = e.keyCode || e.which;
-    if (key !== XOTEAM_TRIGGER_KEY && code !== 56 && code !== 104) return;
-
-    const target = state.target || scanNearest();
-    if (!target || !target.player) {
-      pulseMessage("NO TARGET");
-      return;
-    }
-
-    if (applyLocalSkin(target.player, XOTEAM_TARGET_SKIN_ID, target.id)) {
-      state.applied[target.id] = true;
-      pulseMessage("DONE 131 + NAME");
-      console.log("XOTEAM PIXI: local skin changed", target.name, target.id, XOTEAM_TARGET_SKIN_ID);
-    } else {
-      pulseMessage("FAILED");
-    }
-  }, true);
-
-  setInterval(updateUI, 60);
-  setInterval(function () {
-    try {
-      window.XOTEAM_KILL_MESSAGES = (window.XOTEAM_KILL_MESSAGES || []).filter(function (p) {
-        return p && Date.now() - p.at < 20000;
-      });
-      if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES);
-      if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
-    } catch (e) {}
   }, 500);
 })();
