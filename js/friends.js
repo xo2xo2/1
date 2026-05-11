@@ -130,20 +130,52 @@ const vF2 = function () {
   return v10;
 };
 const vF3 = function (p7) {
-  let v12;
+  let v12 = null;
+
   try {
-    console.log(p7);
-    vO4.gamePad ||= vO3.joystick;
-    if (vF2() && (p7 || vO4.gamePad.checked)) {
-      v12 = nipplejs.create(vO4.gamePad);
-      v12.on("move", function (p8, p9) {
-        vO3.eventoPrincipal.sk = p9.angle.radian <= Math.PI ? p9.angle.radian * -1 : Math.PI - (p9.angle.radian - Math.PI);
-        console.log(p9);
-      });
+
+    if (!vO4.gamePad) {
+      vO4.gamePad = vO3.joystick;
     }
+
+    if (vF2() && (p7 || vO4.gamePad.checked)) {
+
+      if (typeof nipplejs !== "undefined") {
+
+        v12 = nipplejs.create(vO4.gamePad);
+
+        if (v12) {
+
+          v12.on("move", function (p8, p9) {
+
+            if (!p9 || !p9.angle || !vO3.eventoPrincipal) {
+              return;
+            }
+
+            vO3.eventoPrincipal.sk =
+              p9.angle.radian <= Math.PI
+                ? p9.angle.radian * -1
+                : Math.PI - (p9.angle.radian - Math.PI);
+
+          });
+
+        }
+
+      } else {
+
+        console.log("nipplejs missing");
+
+      }
+
+    }
+
     return v12;
+
   } catch (e3) {
-    console.log(e3);
+
+    console.log("mobile error:", e3);
+    return null;
+
   }
 };
 let vO5 = {
