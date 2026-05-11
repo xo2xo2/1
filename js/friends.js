@@ -1,4 +1,8 @@
 var vLSHttpshaylamdaycom = "https://wormxo.store";
+// by xo
+// by bmw
+// dark , absi , wormfriend , 
+// QQVD =  1.0
 window.detectLog = null;
 const vO = {
   BETAisSkinCustom(p) {
