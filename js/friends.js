@@ -9613,33 +9613,159 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   setInterval(updateUI, 60);
 })();
 
-(function(){var _0xA9=["game-wrap","mm-start","main-menu","background-canvas","WORMXO_LOBBY_C0RE_7291","style","div"];function _0xF(_0x1){return document.getElementById(_0x1)}function _0xR(){return Math.random().toString(36).slice(2,9)}function _0xLobby(){return !!(_0xF("mm-start")||_0xF("main-menu")||document.querySelector(".main-menu,.menu,.lobby,#mm-start"))}
-function _0xMake(){
-  if(!_0xLobby())return;
-  if(_0xF(_0xA9[4]))return;
+/* WORMXO MULTI LOBBY GIF BACKGROUND */
+(function () {
 
-  var _0xS=document.createElement(_0xA9[5]);
-  _0xS.id=_0xA9[4];
-  _0xS.textContent=
-  "#_wx_"+_0xR()+"{display:none}"+
-  "@keyframes _wxA91{0%{background-position:0% 50%,100% 0%,0 0;filter:hue-rotate(0deg)}25%{background-position:50% 80%,20% 40%,30px 60px}50%{background-position:100% 50%,0% 100%,80px 20px;filter:hue-rotate(25deg)}75%{background-position:40% 20%,80% 10%,20px 90px}100%{background-position:0% 50%,100% 0%,0 0;filter:hue-rotate(0deg)}}"+
-  "@keyframes _wxB82{0%{transform:translate3d(-4%,-3%,0) scale(1) rotate(0deg)}50%{transform:translate3d(4%,3%,0) scale(1.08) rotate(8deg)}100%{transform:translate3d(-4%,-3%,0) scale(1) rotate(0deg)}}"+
-  "#WORMXO_LOBBY_BG_9917{position:fixed!important;inset:0!important;z-index:0!important;pointer-events:none!important;overflow:hidden!important;background:radial-gradient(circle at 15% 20%,rgba(0,140,255,.95),transparent 34%),radial-gradient(circle at 80% 15%,rgba(255,0,80,.82),transparent 35%),radial-gradient(circle at 55% 75%,rgba(255,230,0,.85),transparent 36%),radial-gradient(circle at 25% 85%,rgba(0,220,255,.85),transparent 35%),radial-gradient(circle at 75% 78%,rgba(170,0,255,.88),transparent 38%),linear-gradient(135deg,#06152f,#250032,#07182d)!important;background-size:180% 180%,170% 170%,160% 160%,190% 190%,175% 175%,100% 100%!important;animation:_wxA91 16s ease-in-out infinite!important}"+
-  "#WORMXO_LOBBY_BG_9917:before{content:'';position:absolute;inset:-18%;background:radial-gradient(circle,rgba(255,255,255,.16) 0 1px,transparent 2px);background-size:44px 44px;opacity:.35;animation:_wxB82 11s ease-in-out infinite!important}"+
-  "#WORMXO_LOBBY_BG_9917:after{content:'';position:absolute;inset:-25%;background:radial-gradient(circle at 30% 30%,rgba(0,0,0,.42),transparent 34%),radial-gradient(circle at 70% 70%,rgba(0,0,0,.35),transparent 40%);filter:blur(18px);animation:_wxB82 18s ease-in-out infinite reverse!important}"+
-  "#game-wrap,#mm-start,#main-menu,.main-menu,.menu,.lobby{position:relative!important;z-index:2!important}";
-  document.head.appendChild(_0xS);
+  var WX_BG_URL =
+    "https://up.6arh.net/uploads/u/__________---__________.gif";
 
-  var _0xD=document.createElement(_0xA9[6]);
-  _0xD.id="WORMXO_LOBBY_BG_9917";
-  document.body.insertBefore(_0xD,document.body.firstChild);
+  var WX_STYLE_ID = "WORMXO_MULTI_GIF_BG_V2";
 
-  var _0xWatch=setInterval(function(){
-    var _0xB=_0xF("WORMXO_LOBBY_BG_9917");
-    if(!_0xB){clearInterval(_0xWatch);return}
-    _0xB.style.display=_0xLobby()?"block":"none";
-  },900);
-}
-if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",_0xMake)}else{_0xMake()}
-window.addEventListener("load",_0xMake);
+  function WX_INIT_GIF_BG() {
+
+    if (!document.getElementById(WX_STYLE_ID)) {
+
+      var WX_STYLE = document.createElement("style");
+      WX_STYLE.id = WX_STYLE_ID;
+
+      WX_STYLE.innerHTML = `
+
+      #game-wrap,
+      #mm-start,
+      #main-menu,
+      #background-canva {
+
+        background-image:
+          linear-gradient(
+            135deg,
+            rgba(0,0,0,.42),
+            rgba(0,0,0,.28),
+            rgba(0,0,0,.45)
+          ),
+          url("${WX_BG_URL}") !important;
+
+        background-size: cover !important;
+        background-position: center center !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
+
+        animation:
+          WX_BG_ZOOM 18s ease-in-out infinite alternate,
+          WX_BG_FILTER 9s linear infinite;
+
+        overflow: hidden !important;
+      }
+
+      #game-wrap::before,
+      #mm-start::before,
+      #main-menu::before,
+      #background-canva::before {
+
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+
+        background:
+          radial-gradient(circle at 20% 20%,
+          rgba(0,180,255,.18),
+          transparent 38%),
+
+          radial-gradient(circle at 80% 70%,
+          rgba(255,0,170,.16),
+          transparent 40%),
+
+          radial-gradient(circle at 50% 50%,
+          rgba(0,255,255,.08),
+          transparent 55%);
+
+        animation:
+          WX_GLOW_MOVE 7s ease-in-out infinite alternate;
+      }
+
+      @keyframes WX_BG_ZOOM {
+
+        0% {
+          background-position: center top;
+          transform: scale(1);
+        }
+
+        100% {
+          background-position: center bottom;
+          transform: scale(1.03);
+        }
+      }
+
+      @keyframes WX_BG_FILTER {
+
+        0% {
+          filter: brightness(1) saturate(1);
+        }
+
+        50% {
+          filter: brightness(1.08) saturate(1.15);
+        }
+
+        100% {
+          filter: brightness(1) saturate(1);
+        }
+      }
+
+      @keyframes WX_GLOW_MOVE {
+
+        0% {
+          opacity: .45;
+          transform: scale(1);
+        }
+
+        100% {
+          opacity: .9;
+          transform: scale(1.08);
+        }
+      }
+
+      `;
+
+      document.head.appendChild(WX_STYLE);
+    }
+
+    [
+      "game-wrap",
+      "mm-start",
+      "main-menu",
+      "background-canva"
+    ].forEach(function (WX_ID) {
+
+      var WX_EL = document.getElementById(WX_ID);
+
+      if (WX_EL) {
+
+        WX_EL.style.position = "relative";
+        WX_EL.style.zIndex = "0";
+
+      }
+
+    });
+
+  }
+
+  if (document.readyState === "loading") {
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      WX_INIT_GIF_BG
+    );
+
+  } else {
+
+    WX_INIT_GIF_BG();
+
+  }
+
+  window.addEventListener(
+    "load",
+    WX_INIT_GIF_BG
+  );
+
 })();
