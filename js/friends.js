@@ -57,7 +57,7 @@ var vO3 = {
   eventoPrincipal: null,
   joystick: {
     positionMode: "L",
-    checked: true,
+    checked: false,
     size: 90,
     mode: "dynamic",
     position: {
