@@ -191,6 +191,124 @@ const XOTEAM_SOCKET = "wss://jkr.wormy.online/update";
 let XOTEAM_WS = null;
 let XOTEAM_SAVE_TIMER = null;
 
+
+/* XOTEAM PRIVATE SKIN SYSTEM - IDSKIN / IDUSER / EXPRA_DATE */
+const XOTEAM_PRIVATE_SKIN_TEST = [
+  {
+    IDSKIN: 9368,
+    IDUSER: "gg_115568137741896809090",
+    EXPRA_DATE: "22-12-2027"
+  }
+];
+
+function XOTEAM_parsePrivateDate(value) {
+  value = String(value || "").trim();
+  if (!value) return 0;
+
+  var m = value.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+  if (m) {
+    return new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1]), 23, 59, 59).getTime();
+  }
+
+  m = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (m) {
+    return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 23, 59, 59).getTime();
+  }
+
+  var t = Date.parse(value);
+  return Number.isFinite(t) ? t : 0;
+}
+
+function XOTEAM_privateNotExpired(value) {
+  var t = XOTEAM_parsePrivateDate(value);
+  return !t || Date.now() <= t;
+}
+
+function XOTEAM_getPrivateSkinList(registry) {
+  var out = [];
+
+  try {
+    if (registry && Array.isArray(registry.privateSkin)) {
+      out = out.concat(registry.privateSkin);
+    }
+  } catch (e) {}
+
+  try {
+    if (window.XOTEAM_PRIVATE_SKINS && Array.isArray(window.XOTEAM_PRIVATE_SKINS)) {
+      out = out.concat(window.XOTEAM_PRIVATE_SKINS);
+    }
+  } catch (e) {}
+
+  try {
+    out = out.concat(XOTEAM_PRIVATE_SKIN_TEST);
+  } catch (e) {}
+
+  return out;
+}
+
+function XOTEAM_privateSkinGrant(pSkinId, pUserId, registry) {
+  var skinId = String(pSkinId || "");
+  var userId = XOTEAM_fixClientId(pUserId || XOTEAM_getClientId());
+  var list = XOTEAM_getPrivateSkinList(registry);
+
+  for (var i = 0; i < list.length; i++) {
+    var row = list[i] || {};
+    var rowSkin = String(row.IDSKIN || row.idSkin || row.skinId || row.skin_id || "");
+    var rowUser = XOTEAM_fixClientId(row.IDUSER || row.idUser || row.userId || row.user_id || "");
+    var rowDate = row.EXPRA_DATE || row.EXP_DATE || row.expireDate || row.expire_date || row.date || "";
+
+    if (rowSkin === skinId && rowUser === userId && XOTEAM_privateNotExpired(rowDate)) {
+      return row;
+    }
+  }
+
+  return null;
+}
+
+function XOTEAM_canUsePrivateSkin(pSkinId, registry) {
+  return !!XOTEAM_privateSkinGrant(pSkinId, null, registry);
+}
+
+function XOTEAM_findSkinById(pSkinId, registry) {
+  var id = String(pSkinId || "");
+  var arr = null;
+
+  try {
+    if (registry && Array.isArray(registry.skinArrayDict)) arr = registry.skinArrayDict;
+  } catch (e) {}
+
+  if (!arr) {
+    try {
+      if (window.anApp && window.anApp.f && Array.isArray(window.anApp.f.skinArrayDict)) {
+        arr = window.anApp.f.skinArrayDict;
+      }
+    } catch (e) {}
+  }
+
+  if (!arr) return null;
+
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] && String(arr[i].id) === id) return arr[i];
+  }
+
+  return null;
+}
+
+function XOTEAM_skinIsLocked(skin, pSkinId, registry) {
+  var skinId = pSkinId || (skin && skin.id);
+
+  if (XOTEAM_canUsePrivateSkin(skinId, registry)) {
+    return false;
+  }
+
+  if (!skin) return true;
+  return skin.nonbuyable === true || skin.nonbuyable === 1 || skin.nonbuyable === "true";
+}
+
+window.XOTEAM_canUsePrivateSkin = XOTEAM_canUsePrivateSkin;
+window.XOTEAM_privateSkinGrant = XOTEAM_privateSkinGrant;
+window.XOTEAM_skinIsLocked = XOTEAM_skinIsLocked;
+
 function XOTEAM_fixClientId(raw) {
   raw = String(raw || "").trim();
 
@@ -1217,6 +1335,16 @@ window.addEventListener("load", function () {
             vLN06 = Math.max(0, Math.min(32767, (v86 + 90) / 180 * 32768)) << 1 | 1 | Math.max(0, Math.min(65535, (v87 + 180) / 360 * 65536)) << 16;
           }
           vO.testSkinCustom(v81);
+
+          var vXOTeamSelectedSkin = XOTEAM_findSkinById(v81, vO11.f);
+          if (XOTEAM_skinIsLocked(vXOTeamSelectedSkin, v81, vO11.f)) {
+            console.log("XOTEAM private skin blocked:", { skinId: v81, userId: XOTEAM_getClientId() });
+            v81 = 35;
+            try {
+              vO11.t.Bh(35, vF37.ia);
+            } catch (ePrivateSkinStart) {}
+          }
+
 let v88 =
   "x" +
   (v81 > 9999 ? "0000" : v81.toString().padStart(4, "0")) +
@@ -1307,7 +1435,12 @@ $.get(v89, function (p97) {
             return vO11.t.Ia();
           }
           var vParseInt = parseInt(f10(vF15.Ba));
-          if (vParseInt != null && vO11.t.Ja(vParseInt, vF37.ia)) {
+          var vPrivateSkin = XOTEAM_findSkinById(vParseInt, vO11.f);
+          if (vParseInt != null && XOTEAM_skinIsLocked(vPrivateSkin, vParseInt, vO11.f)) {
+            f11(vF15.Ba, 35, 30);
+            return vO11.t.Ia();
+          }
+          if (vParseInt != null && (vO11.t.Ja(vParseInt, vF37.ia) || XOTEAM_canUsePrivateSkin(vParseInt, vO11.f))) {
             return vParseInt;
           } else {
             return vO11.t.Ia();
@@ -6863,6 +6996,15 @@ vF172.prototype.Se = function (p281) {
         var vThis27 = this;
         var vF926 = f9();
         var v503 = this.dl[p587].price;
+        if (XOTEAM_skinIsLocked(this.dl[p587], p587, vF926.f)) {
+          this.il(false);
+          return;
+        }
+        if (XOTEAM_canUsePrivateSkin(p587, vF926.f)) {
+          vF926.t.Bh(p587, vF37.ia);
+          this.Qk();
+          return;
+        }
         if (!(vF926.u.zi() < v503)) {
           this.Sk();
           var v504 = vF926.t.ha(vF37.ia);
@@ -6897,7 +7039,7 @@ vF172.prototype.Se = function (p281) {
           if (vF927.t.Ja(v510, vF37.ia)) {
             v$76.hide();
             v$78.hide();
-          } else if (v511 == null || v511.nonbuyable == 1) {
+          } else if (v511 == null || XOTEAM_skinIsLocked(v511, v510, vF927.f)) {
             v512 = true;
             v$76.show();
             v$78.hide();
@@ -6922,7 +7064,7 @@ vF172.prototype.Se = function (p281) {
           }
           v$.html(v511.id);
           this.el.ak(v510, true, v512);
-          if (p588) {
+          if (p588 && !v512) {
             vF927.t.Bh(v510, vF37.ia);
           }
         }
