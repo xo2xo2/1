@@ -192,14 +192,27 @@ let XOTEAM_WS = null;
 let XOTEAM_SAVE_TIMER = null;
 
 
-/* XOTEAM PRIVATE SKIN SYSTEM - IDSKIN / IDUSER / EXPRA_DATE */
-const XOTEAM_PRIVATE_SKIN_TEST = [
-  {
-    IDSKIN: 9368,
-    IDUSER: "gg_115568137741896809090",
-    EXPRA_DATE: "22-12-2027"
+/* XOTEAM PRIVATE SKIN SYSTEM - FROM REGISTRY JSON
+   Source: https://wm.wormy.online/registry
+   Format:
+   "privateSkin": [
+     { "IDSKIN": 9368, "IDUSER": "gg_111111111111", "EXPRA_DATE": "22-12-2027" }
+   ]
+*/
+window.XOTEAM_PRIVATE_SKINS = [];
+
+function XOTEAM_setPrivateSkinsFromRegistry(registry) {
+  try {
+    window.XOTEAM_PRIVATE_SKINS = registry && Array.isArray(registry.privateSkin)
+      ? registry.privateSkin.slice()
+      : [];
+
+    console.log("XOTEAM private skins loaded from registry:", window.XOTEAM_PRIVATE_SKINS);
+  } catch (e) {
+    window.XOTEAM_PRIVATE_SKINS = [];
+    console.log("XOTEAM private skins registry error:", e);
   }
-];
+}
 
 function XOTEAM_parsePrivateDate(value) {
   value = String(value || "").trim();
@@ -225,25 +238,31 @@ function XOTEAM_privateNotExpired(value) {
 }
 
 function XOTEAM_getPrivateSkinList(registry) {
-  var out = [];
-
   try {
     if (registry && Array.isArray(registry.privateSkin)) {
-      out = out.concat(registry.privateSkin);
+      return registry.privateSkin;
     }
   } catch (e) {}
 
   try {
-    if (window.XOTEAM_PRIVATE_SKINS && Array.isArray(window.XOTEAM_PRIVATE_SKINS)) {
-      out = out.concat(window.XOTEAM_PRIVATE_SKINS);
+    if (Array.isArray(window.XOTEAM_PRIVATE_SKINS)) {
+      return window.XOTEAM_PRIVATE_SKINS;
     }
-  } catch (e) {}
+  } catch (e2) {}
 
-  try {
-    out = out.concat(XOTEAM_PRIVATE_SKIN_TEST);
-  } catch (e) {}
+  return [];
+}
 
-  return out;
+function XOTEAM_privateSkinRowMatches(row, skinId, userId) {
+  if (!row) return false;
+
+  var rowSkin = String(row.IDSKIN || row.idSkin || row.skinId || row.skin_id || "");
+  var rowUser = XOTEAM_fixClientId(row.IDUSER || row.idUser || row.userId || row.user_id || "");
+  var rowDate = row.EXPRA_DATE || row.EXP_DATE || row.expireDate || row.expire_date || row.date || "";
+
+  return rowSkin === String(skinId || "") &&
+    rowUser === userId &&
+    XOTEAM_privateNotExpired(rowDate);
 }
 
 function XOTEAM_privateSkinGrant(pSkinId, pUserId, registry) {
@@ -252,17 +271,25 @@ function XOTEAM_privateSkinGrant(pSkinId, pUserId, registry) {
   var list = XOTEAM_getPrivateSkinList(registry);
 
   for (var i = 0; i < list.length; i++) {
-    var row = list[i] || {};
-    var rowSkin = String(row.IDSKIN || row.idSkin || row.skinId || row.skin_id || "");
-    var rowUser = XOTEAM_fixClientId(row.IDUSER || row.idUser || row.userId || row.user_id || "");
-    var rowDate = row.EXPRA_DATE || row.EXP_DATE || row.expireDate || row.expire_date || row.date || "";
-
-    if (rowSkin === skinId && rowUser === userId && XOTEAM_privateNotExpired(rowDate)) {
-      return row;
+    if (XOTEAM_privateSkinRowMatches(list[i], skinId, userId)) {
+      return list[i];
     }
   }
 
   return null;
+}
+
+function XOTEAM_isPrivateSkinId(pSkinId, registry) {
+  var skinId = String(pSkinId || "");
+  var list = XOTEAM_getPrivateSkinList(registry);
+
+  for (var i = 0; i < list.length; i++) {
+    var row = list[i] || {};
+    var rowSkin = String(row.IDSKIN || row.idSkin || row.skinId || row.skin_id || "");
+    if (rowSkin === skinId) return true;
+  }
+
+  return false;
 }
 
 function XOTEAM_canUsePrivateSkin(pSkinId, registry) {
@@ -282,7 +309,7 @@ function XOTEAM_findSkinById(pSkinId, registry) {
       if (window.anApp && window.anApp.f && Array.isArray(window.anApp.f.skinArrayDict)) {
         arr = window.anApp.f.skinArrayDict;
       }
-    } catch (e) {}
+    } catch (e2) {}
   }
 
   if (!arr) return null;
@@ -301,10 +328,18 @@ function XOTEAM_skinIsLocked(skin, pSkinId, registry) {
     return false;
   }
 
-  if (!skin) return true;
-  return skin.nonbuyable === true || skin.nonbuyable === 1 || skin.nonbuyable === "true";
+  if (XOTEAM_isPrivateSkinId(skinId, registry)) {
+    return true;
+  }
+
+  if (!skin) return false;
+
+  return skin.nonbuyable === true ||
+    skin.nonbuyable === 1 ||
+    skin.nonbuyable === "true";
 }
 
+window.XOTEAM_setPrivateSkinsFromRegistry = XOTEAM_setPrivateSkinsFromRegistry;
 window.XOTEAM_canUsePrivateSkin = XOTEAM_canUsePrivateSkin;
 window.XOTEAM_privateSkinGrant = XOTEAM_privateSkinGrant;
 window.XOTEAM_skinIsLocked = XOTEAM_skinIsLocked;
@@ -8718,10 +8753,13 @@ $("#mm-advice-cont").html(`
     $.get("https://resources.wormate.io/dynamic/assets/registry.json", function (p626) {
       vO19 = p626;
       $.ajax({
-        url: "https://wm.wormy.online/skins",
+        url: "https://wm.wormy.online/registry",
         method: "GET",
         dataType: "json",
         success: function (p627) {
+          if (typeof XOTEAM_setPrivateSkinsFromRegistry === "function") {
+            XOTEAM_setPrivateSkinsFromRegistry(p627);
+          }
           vO4.visibleSkin = p627.visibleSkin;
           delete p627.visibleSkin;
           for (let v615 in p627) {
@@ -9088,7 +9126,7 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
   window.__XOTEAM_SAFE_FIX_UPDATED__ = true;
 
   const BASE_REGISTRY_URL = "https://resources.wormate.io/dynamic/assets/registry.json";
-  const CUSTOM_SKINS_URL = "https://wm.wormy.online/skins";
+  const CUSTOM_REGISTRY_URL = "https://wm.wormy.online/registry";
 
   function isObject(v) {
     return v && typeof v === "object" && !Array.isArray(v);
@@ -9242,6 +9280,10 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
       base.skinGroupArrayDict = mergeArrayById(base.skinGroupArrayDict, extra.skinGroupArrayDict);
     }
 
+    if (Array.isArray(extra.privateSkin)) {
+      base.privateSkin = extra.privateSkin.slice();
+    }
+
     restoreOriginal(base, original);
 
     return fixSkinGlow(base);
@@ -9278,9 +9320,13 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
 
     loader.Bc = function () {
       loadJson(BASE_REGISTRY_URL, function (baseRegistry) {
-        loadJson(CUSTOM_SKINS_URL, function (customRegistry) {
+        loadJson(CUSTOM_REGISTRY_URL, function (customRegistry) {
           try {
             const finalRegistry = mergeRegistry(baseRegistry, customRegistry);
+
+            if (typeof XOTEAM_setPrivateSkinsFromRegistry === "function") {
+              XOTEAM_setPrivateSkinsFromRegistry(finalRegistry);
+            }
 
             if (window.vO4) {
               vO4.visibleSkin = finalRegistry.visibleSkin || [];
