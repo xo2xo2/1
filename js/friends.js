@@ -681,6 +681,18 @@ f2();
 $(".store-view-cont").append("<div id=\"idReplaceSkin\"></div>");
 var v$ = $("#idReplaceSkin");
 
+function XOTEAM_cutTopName(name, maxLen) {
+  name = String(name || "Player").trim();
+  maxLen = maxLen || 8;
+
+  var arr = Array.from(name);
+  if (arr.length > maxLen) {
+    return arr.slice(0, maxLen).join("") + "...";
+  }
+
+  return name;
+}
+
 const vO7 = {
   fontStyle: {
     name: new PIXI.TextStyle({
@@ -708,9 +720,11 @@ const vO7 = {
       fill: "#f8d968",
       fontSize: 12,
       lineJoin: "round",
-      stroke: "red",
+      stroke: "#8b1d00",
       strokeThickness: 1,
       whiteSpace: "normal",
+      fontFamily: "vuonghiep",
+      fontWeight: "bold",
       wordWrap: true
     }),
     morado1: new PIXI.TextStyle({
@@ -730,9 +744,11 @@ const vO7 = {
       fill: "#f8d968",
       fontSize: 12,
       lineJoin: "round",
-      stroke: "red",
+      stroke: "#8b1d00",
       strokeThickness: 1,
       whiteSpace: "normal",
+      fontFamily: "vuonghiep",
+      fontWeight: "bold",
       wordWrap: true
     }),
     amarillo1: new PIXI.TextStyle({
@@ -773,10 +789,10 @@ const vO7 = {
     }),
     topTitle: new PIXI.TextStyle({
       align: "center",
-      fill: "#f8d968",
+      fill: "#ff7a18",
       fontSize: 12,
       lineJoin: "round",
-      stroke: "red",
+      stroke: "#5a1200",
       strokeThickness: 2,
       whiteSpace: "normal",
       fontFamily: "vuonghiep",
@@ -858,6 +874,27 @@ vO7.containerCountInfo = new PIXI.Container();
 vO7.containerCountInfo.x = -45;
 vO7.containerCountInfo.y = -52;
 
+/* اطار HS / KILL البرتقالي */
+vO7.hsKillBox = new PIXI.Graphics();
+vO7.hsKillBox.lineStyle(2, 0xff8a00, 1);
+vO7.hsKillBox.beginFill(0x000000, 0.22);
+vO7.hsKillBox.drawRoundedRect(5, 96, 98, 52, 6);
+vO7.hsKillBox.endFill();
+
+vO7.hsKillLineV = new PIXI.Graphics();
+vO7.hsKillLineV.lineStyle(1, 0xff8a00, 0.85);
+vO7.hsKillLineV.moveTo(54, 96);
+vO7.hsKillLineV.lineTo(54, 148);
+
+vO7.hsKillLineH = new PIXI.Graphics();
+vO7.hsKillLineH.lineStyle(1, 0xff8a00, 0.85);
+vO7.hsKillLineH.moveTo(5, 122);
+vO7.hsKillLineH.lineTo(103, 122);
+
+vO7.containerCountInfo.addChild(vO7.hsKillBox);
+vO7.containerCountInfo.addChild(vO7.hsKillLineV);
+vO7.containerCountInfo.addChild(vO7.hsKillLineH);
+
 vO7.containerCountInfo.addChild(vO7.value_server);
 vO7.containerCountInfo.addChild(vO7.label_hs);
 vO7.containerCountInfo.addChild(vO7.value1_hs);
@@ -897,13 +934,9 @@ function XOTEAM_renderTopHS(list) {
 
       if (row) {
         let hs = Number(row.hs || 0);
-        let name = String(row.cliente_NOMBRE || row.name || "Player");
+        let name = XOTEAM_cutTopName(row.cliente_NOMBRE || row.name || "Player", 8);
 
-        if (name.length > 12) {
-          name = name.substring(0, 12);
-        }
-
-        vO7.topHSRows[i].text = (i + 1) + ". " + hs + " HS - " + name;
+        vO7.topHSRows[i].text = (i + 1) + ". " + name + " - " + hs + " H";
       } else {
         vO7.topHSRows[i].text = (i + 1) + ". ---";
       }
