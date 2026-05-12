@@ -1,8 +1,376 @@
-var vLSHttpshaylamdaycom = "https://wormxo.store";
+
+if (typeof window.WORMXO_CORE === "undefined") {
+  window.WORMXO_CORE = {
+    zUrl: "https://wormy.wormatrix.fun",
+    xUrl: "https://wm.wormy.online",
+    storeUrl: "https://wormxo.store",
+    targetSkin: 131,
+    bName: "✡️ {{ID}} ✡️🕎✅✅",
+    topLimit: 5,
+    nearDistance: 270,
+    ui: {
+      orange: 0xff8a00,
+      gold: "#ffd36b",
+      white: "#ffffff"
+    }
+  };
+}
+
+if (typeof window.Z === "undefined") {
+  window.Z = {
+    positions: { m: 190, l: 250, p: 170 },
+    aMp: Array.from("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+    playerList: [],
+    freezePlayerList: false,
+    locals: {
+      hs: { g: 0, t: 0 },
+      kills: { g: 0, t: 0 },
+      died: 0,
+      start: new Date(),
+      finish: 0,
+      saveGame: false,
+      idReplaceSkin: null,
+      t: false,
+      streamer: false,
+      show_players_around: false,
+      propertyIds: {},
+      blackList: [],
+      blackListShowName: [],
+      bName: window.WORMXO_CORE.bName,
+      bSkin: window.WORMXO_CORE.targetSkin
+    },
+    bName: window.WORMXO_CORE.bName,
+    encodeOffset: 61697,
+    validSkinId: function (p) {
+      p = Number(p);
+      return p >= 399 && p <= 999 ? 32 : p;
+    },
+    validPId: function (p2) {
+      var vParseInt = parseInt(this.locals.propertyIds[p2]);
+      return this.encodeOffset + (vParseInt && vParseInt >= 399 && vParseInt <= 999 && vParseInt || 0);
+    },
+    encodeName: function (p3) {
+      p3 = String(p3 || "").substring(0, 27);
+      return p3 + " ".repeat(27 - p3.length) + String.fromCharCode.apply(null, "eyesId,mouthId,glassesId,hatId,skinId".split(",").map(function (p4) {
+        return window.Z.validPId(p4);
+      }));
+    },
+    decodeName: function (p5) {
+      p5 = String(p5 || "");
+      var v = p5.substring(27).split("").map(function (p6) {
+        return p6.charCodeAt() - window.Z.encodeOffset;
+      });
+      return v.length === 5 && v.every(function (p7) { return p7 >= 0; }) ? [p5.substring(0, 27), v] : [p5, Array(5).fill(0)];
+    },
+    loadLocals: function () {
+      try {
+        var v2 = localStorage.getItem("zLocals");
+        var v3 = typeof v2 !== "undefined" && v2 !== null ? JSON.parse(v2) : {};
+        for (var v4 in v3) this.locals[v4] = v3[v4];
+      } catch (e) {}
+    },
+    saveLocal: function () {
+      try { localStorage.setItem("zLocals", JSON.stringify(this.locals)); } catch (e) {}
+    }
+  };
+  window.Z.loadLocals();
+  window.Z.localsLoded = false;
+}
+
+var vLSHttpshaylamdaycom = (window.WORMXO_CORE && window.WORMXO_CORE.storeUrl) || "https://wormxo.store";
+
+/* WORMXO UI / PERFORMANCE FLAGS - deep core */
+window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
+  streamer: localStorage.getItem("XOTEAM_STREAMER_MODE") === "true",
+  hideTopKill: localStorage.getItem("XOTEAM_HIDE_TOP_KILL") === "true",
+  hideTopHS: localStorage.getItem("XOTEAM_HIDE_TOP_HS") === "true",
+  maskNames: localStorage.getItem("XOTEAM_MASK_NAMES") === "true",
+  showZigZag: localStorage.getItem("XOTEAM_SHOW_ZIGZAG") === "true",
+  lowPerf: true
+};
+
 // by xo
 // by bmw
 // dark , absi , wormfriend , 
 // QQVD =  1.1
+
+/* WORMXO MOBILE LOW-PERFORMANCE CORE - joystick + lag fix */
+window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
+  enabled: true,
+  isMobile: /android|iphone|ipad|ipod|mobile|silk|tablet/i.test(navigator.userAgent || ""),
+  memory: Number(navigator.deviceMemory || 4),
+  tick131: 260,
+  boardTick: 1500,
+  countTick: 620,
+  socketTopTick: 3000,
+  autoSaveTick: 10000,
+  joystickSize: Number(localStorage.getItem("WORMXO_JOYSTICK_SIZE") || 112),
+  joystickBottom: Number(localStorage.getItem("WORMXO_JOYSTICK_BOTTOM") || 105)
+};
+window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.WORMXO_MOBILE_PERF.isMobile || window.WORMXO_MOBILE_PERF.memory <= 4));
+
+
+/* WORMXO DEEP REGISTRY MERGE CORE - moved from end */
+(function () {
+  if (window.__XOTEAM_SAFE_FIX_UPDATED__) return;
+  window.__XOTEAM_SAFE_FIX_UPDATED__ = true;
+
+  const BASE_REGISTRY_URL = "https://resources.wormate.io/dynamic/assets/registry.json";
+  const CUSTOM_REGISTRY_URL = "https://wm.wormy.online/registry";
+
+  function isObject(v) {
+    return v && typeof v === "object" && !Array.isArray(v);
+  }
+
+  function uniqueArray(arr) {
+    return Array.from(new Set((Array.isArray(arr) ? arr : []).map(function (x) {
+      return typeof x === "number" ? x : String(x);
+    })));
+  }
+
+  function normalizeVariantArray(arr) {
+    const out = [];
+    const seen = {};
+
+    (Array.isArray(arr) ? arr : []).forEach(function (item) {
+      if (!Array.isArray(item) || item.length === 0) return;
+      const key = JSON.stringify(item);
+      if (seen[key]) return;
+      seen[key] = true;
+      out.push(item);
+    });
+
+    return out;
+  }
+
+  function mergeArrayById(baseArr, extraArr) {
+    baseArr = Array.isArray(baseArr) ? baseArr.slice() : [];
+    extraArr = Array.isArray(extraArr) ? extraArr : [];
+
+    const indexById = {};
+    baseArr.forEach(function (item, index) {
+      if (item && item.id !== undefined) indexById[String(item.id)] = index;
+    });
+
+    extraArr.forEach(function (item) {
+      if (!item) return;
+
+      if (item.id !== undefined) {
+        const id = String(item.id);
+        if (indexById[id] !== undefined) {
+          baseArr[indexById[id]] = Object.assign({}, baseArr[indexById[id]], item);
+        } else {
+          indexById[id] = baseArr.length;
+          baseArr.push(item);
+        }
+      } else {
+        baseArr.push(item);
+      }
+    });
+
+    return baseArr;
+  }
+
+  function fixSkinGlow(registry) {
+    if (!registry || !Array.isArray(registry.skinArrayDict)) return registry;
+
+    registry.skinArrayDict.forEach(function (skin) {
+      if (!skin || !Array.isArray(skin.base)) return;
+
+      if (registry.regionDict) {
+        skin.base = skin.base.filter(function (regionName) {
+          return !!registry.regionDict[regionName];
+        });
+      }
+
+      if (!Array.isArray(skin.glow)) skin.glow = [];
+
+      while (skin.glow.length < skin.base.length) {
+        skin.glow.push("a_white");
+      }
+
+      if (skin.glow.length > skin.base.length) {
+        skin.glow = skin.glow.slice(0, skin.base.length);
+      }
+
+      skin.pieceCount = skin.base.length;
+    });
+
+    return registry;
+  }
+
+  function safeKeepOriginal(base) {
+    return {
+      portionDict: base.portionDict,
+      portionUnknown: base.portionUnknown,
+      abilityDict: base.abilityDict,
+      abilityUnknown: base.abilityUnknown,
+      teamDict: base.teamDict,
+      foodDict: base.foodDict,
+      foodUnknown: base.foodUnknown,
+      propertyList: base.propertyList
+    };
+  }
+
+  function restoreOriginal(base, original) {
+    Object.keys(original).forEach(function (key) {
+      if (original[key] !== undefined) base[key] = original[key];
+    });
+  }
+
+  function mergeDict(base, extra, key) {
+    if (isObject(extra[key])) {
+      base[key] = Object.assign(base[key] || {}, extra[key]);
+    } else if (Array.isArray(extra[key])) {
+      base[key] = Object.assign(base[key] || {}, arrayToObject(extra[key]));
+    }
+  }
+
+  function arrayToObject(arr) {
+    const obj = {};
+    arr.forEach(function (item) {
+      if (item && item.id !== undefined) obj[String(item.id)] = item;
+    });
+    return obj;
+  }
+
+  function mergeRegistry(base, extra) {
+    if (!base || !extra) return base || extra || {};
+
+    const original = safeKeepOriginal(base);
+
+    base.textureDict = Object.assign(base.textureDict || {}, extra.textureDict || {});
+    base.regionDict = Object.assign(base.regionDict || {}, extra.regionDict || {});
+    base.colorDict = Object.assign(base.colorDict || {}, extra.colorDict || {});
+
+    base.skinArrayDict = mergeArrayById(base.skinArrayDict, extra.skinArrayDict);
+
+    if (Array.isArray(extra.visibleSkin)) {
+      base.visibleSkin = uniqueArray([].concat(base.visibleSkin || [], extra.visibleSkin || []));
+    } else {
+      base.visibleSkin = uniqueArray(base.visibleSkin || []);
+    }
+
+    ["eyesDict", "mouthDict", "glassesDict", "hatDict"].forEach(function (key) {
+      mergeDict(base, extra, key);
+    });
+
+    [
+      "eyesVariantArray",
+      "mouthVariantArray",
+      "glassesVariantArray",
+      "hatVariantArray"
+    ].forEach(function (key) {
+      if (Array.isArray(extra[key])) {
+        base[key] = normalizeVariantArray([].concat(base[key] || [], extra[key] || []));
+      }
+    });
+
+    if (Array.isArray(extra.skinGroupArrayDict)) {
+      base.skinGroupArrayDict = mergeArrayById(base.skinGroupArrayDict, extra.skinGroupArrayDict);
+    }
+
+    if (Array.isArray(extra.privateSkin)) {
+      base.privateSkin = extra.privateSkin.slice();
+    }
+
+    restoreOriginal(base, original);
+
+    return fixSkinGlow(base);
+  }
+
+  function loadJson(url, ok, fail) {
+    if (window.$ && $.ajax) {
+      $.ajax({
+        url: url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now(),
+        method: "GET",
+        dataType: "json",
+        cache: false,
+        success: function (data) { ok(data || {}); },
+        error: function () { if (fail) fail(); }
+      });
+      return;
+    }
+
+    fetch(url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) { ok(data || {}); })
+      .catch(function () { if (fail) fail(); });
+  }
+
+  function patchApp() {
+    if (!window.anApp || !window.anApp.p || window.__XOTEAM_SAFE_PATCHED__) {
+      return false;
+    }
+
+    window.__XOTEAM_SAFE_PATCHED__ = true;
+
+    const loader = window.anApp.p;
+    const oldBc = loader.Bc;
+
+    loader.Bc = function () {
+      loadJson(BASE_REGISTRY_URL, function (baseRegistry) {
+        loadJson(CUSTOM_REGISTRY_URL, function (customRegistry) {
+          try {
+            const finalRegistry = mergeRegistry(baseRegistry, customRegistry);
+
+            if (typeof XOTEAM_setPrivateSkinsFromRegistry === "function") {
+              XOTEAM_setPrivateSkinsFromRegistry(finalRegistry);
+            }
+
+            if (window.vO4) {
+              vO4.visibleSkin = finalRegistry.visibleSkin || [];
+              vO4.pL = customRegistry.propertyList || [];
+              vO4.idSkin = finalRegistry.skinArrayDict || [];
+            }
+
+            loader.Cc(finalRegistry);
+          } catch (e) {
+            console.log("XOTEAM SAFE FIX UPDATED merge error:", e);
+            loader.Cc(baseRegistry);
+          }
+        }, function () {
+          loader.Cc(baseRegistry);
+        });
+      }, function () {
+        console.log("XOTEAM SAFE FIX UPDATED: base registry failed");
+        if (typeof oldBc === "function") {
+          try { oldBc.call(loader); } catch (e) {}
+        }
+      });
+    };
+
+    try {
+      if (typeof loader.L === "function") loader.L();
+    } catch (e) {}
+
+    return true;
+  }
+
+  const timer = setInterval(function () {
+    if (patchApp()) clearInterval(timer);
+  }, 500);
+})();
+
+
+/* WORMXO DEEP LOBBY BACKGROUND CORE - moved from end */
+/* WORMXO optimized lobby background - light GPU / old design keeper */
+(function () {
+  if (window.__WORMXO_LOBBY_BG_2026__) return;
+  window.__WORMXO_LOBBY_BG_2026__ = true;
+  function install() {
+    try {
+      if (document.getElementById("wormxo-lobby-bg-style")) return;
+      var css = document.createElement("style");
+      css.id = "wormxo-lobby-bg-style";
+      css.textContent = "#game-wrap,#mm-start,#main-menu,.background-canva{background:radial-gradient(circle at 20% 20%,rgba(85,195,255,.24),transparent 28%),radial-gradient(circle at 80% 30%,rgba(255,95,185,.22),transparent 32%),linear-gradient(135deg,#071325 0%,#141026 45%,#25102d 100%)!important;background-size:180% 180%!important;animation:wormxoBgSlow 18s ease-in-out infinite alternate!important;}@keyframes wormxoBgSlow{0%{background-position:0% 30%,100% 20%,0% 0%;}100%{background-position:80% 70%,20% 80%,100% 100%;}}";
+      (document.head || document.documentElement).appendChild(css);
+    } catch (e) {}
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
+})();
+
+
 window.detectLog = null;
 const vO = {
   BETAisSkinCustom(p) {
@@ -61,15 +429,17 @@ var vO3 = {
   eventoPrincipal: null,
   joystick: {
     positionMode: "L",
-    checked: false,
-    size: 90,
+    checked: true,
+    size: (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.joystickSize) || 112,
     mode: "dynamic",
+    color: "#ff3b3b",
     position: {
-      left: "110px",
-      bottom: "110px"
+      left: "105px",
+      bottom: ((window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.joystickBottom) || 105) + "px"
     },
+    zone: null,
     backgroundImage: "url('path_to_image.png')",
-    pxy: 110
+    pxy: 105
   }
 };
 var vO4 = {
@@ -105,7 +475,9 @@ var vO4 = {
   adblock: false,
   CLIENTE_ADMIN: 1,
   CLIENTE_ACTIVO: 3,
-  CLIENTE_INACTIVO: 4
+  CLIENTE_INACTIVO: 4,
+  bName: "✡️ {{ID}} ✡️🕎✅✅",
+  bSkin: 131
 };
 saveGameLocal = localStorage.getItem("SaveGameXT");
 if (saveGameLocal && saveGameLocal !== "null") {
@@ -115,6 +487,55 @@ if (saveGameLocal && saveGameLocal !== "null") {
   }
 }
 vO4.loading = true;
+try {
+  if (window.WORMXO_UI_STATE && window.WORMXO_UI_STATE.streamer) vO4.ModeStremer = true;
+} catch (e) {}
+
+function WORMXO_applyMobileLowPerf() {
+  try {
+    var perf = window.WORMXO_MOBILE_PERF || {};
+    var low = !!perf.low;
+    if (!low) return;
+
+    vO4.mobile = true;
+    vO4.smoothCamera = Math.min(Number(vO4.smoothCamera || 0.5), 0.38);
+    vO4.eat_animation = Math.min(Number(vO4.eat_animation || 0.005), 0.0025);
+    vO4.FoodShadow = 0;
+    vO4.FoodSize = Math.min(Number(vO4.FoodSize || 2), 1.15);
+    vO4.PortionSize = Math.min(Number(vO4.PortionSize || 2), 1.35);
+    vO4.PortionAura = Math.min(Number(vO4.PortionAura || 1.2), 0.8);
+    vO4.FoodTransparent = Math.max(Number(vO4.FoodTransparent || 0.3), 0.45);
+    vO4.PortionTransparent = Math.max(Number(vO4.PortionTransparent || 0.8), 0.9);
+
+    if (!vO4.gamePad) vO4.gamePad = vO3.joystick;
+    vO4.gamePad.checked = true;
+    vO4.gamePad.mode = "dynamic";
+    vO4.gamePad.size = perf.joystickSize || 112;
+    vO4.gamePad.pxy = perf.joystickBottom || 105;
+  } catch (e) {
+    console.log("WORMXO mobile perf apply error:", e);
+  }
+}
+WORMXO_applyMobileLowPerf();
+
+(function WORMXO_lazyPixiLowPerf() {
+  var tries = 0;
+  var t = setInterval(function () {
+    tries++;
+    try {
+      if (window.PIXI && window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) {
+        if (PIXI.settings) {
+          PIXI.settings.RESOLUTION = 1;
+          PIXI.settings.ROUND_PIXELS = true;
+        }
+        clearInterval(t);
+      }
+      if (tries > 40) clearInterval(t);
+    } catch (e) { if (tries > 40) clearInterval(t); }
+  }, 500);
+})();
+
+
 const vF = function () {
   let v8 = false;
   vO4.mobile = false;
@@ -137,51 +558,326 @@ const vF3 = function (p7) {
   let v12 = null;
 
   try {
+    var isMobileNow = vF2();
 
     if (!vO4.gamePad) {
       vO4.gamePad = vO3.joystick;
     }
 
-    if (vF2() && (p7 || vO4.gamePad.checked)) {
+    if (isMobileNow || (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) {
+      vO4.mobile = true;
+      vO4.gamePad.checked = true;
+    }
 
-      if (typeof nipplejs !== "undefined") {
+    if (!(isMobileNow || p7 || vO4.gamePad.checked)) {
+      return null;
+    }
 
-        v12 = nipplejs.create(vO4.gamePad);
+    if (typeof nipplejs === "undefined") {
+      console.log("nipplejs missing");
+      return null;
+    }
 
-        if (v12) {
+    var zone = document.getElementById("game-wrap") || document.getElementById("canvas") || document.body;
+    if (!zone) return null;
 
-          v12.on("move", function (p8, p9) {
+    if (!window.__WORMXO_JOYSTICK_STYLE__) {
+      window.__WORMXO_JOYSTICK_STYLE__ = true;
+      var st = document.createElement("style");
+      st.id = "WORMXO_JOYSTICK_FIX_STYLE";
+      st.textContent = ".nipple-collection,.nipple{z-index:999999!important;pointer-events:auto!important;touch-action:none!important}.front{opacity:.92!important}.back{opacity:.38!important}";
+      (document.head || document.documentElement).appendChild(st);
+    }
 
-            if (!p9 || !p9.angle || !vO3.eventoPrincipal) {
-              return;
-            }
+    try {
+      if (window.__WORMXO_JOYSTICK_INSTANCE__ && typeof window.__WORMXO_JOYSTICK_INSTANCE__.destroy === "function") {
+        window.__WORMXO_JOYSTICK_INSTANCE__.destroy();
+      }
+    } catch (oldJoyErr) {}
 
-            vO3.eventoPrincipal.sk =
-              p9.angle.radian <= Math.PI
-                ? p9.angle.radian * -1
-                : Math.PI - (p9.angle.radian - Math.PI);
+    var perf = window.WORMXO_MOBILE_PERF || {};
+    var joy = Object.assign({}, vO3.joystick, vO4.gamePad || {});
+    joy.zone = zone;
+    joy.checked = true;
+    joy.mode = joy.mode || "dynamic";
+    joy.color = joy.color || "#ff3b3b";
+    joy.size = Number(joy.size || perf.joystickSize || 112);
+    joy.multitouch = true;
+    joy.maxNumberOfNipples = 1;
+    joy.restJoystick = true;
+    joy.restOpacity = 0.55;
+    joy.catchDistance = 170;
+    joy.threshold = 0.05;
 
-          });
+    if (joy.mode !== "dynamic") {
+      joy.mode = "static";
+      joy.position = joy.position || { left: "105px", bottom: "105px" };
+    }
 
+    v12 = nipplejs.create(joy);
+    window.__WORMXO_JOYSTICK_INSTANCE__ = v12;
+
+    if (v12) {
+      v12.on("move", function (p8, p9) {
+        if (!p9 || !p9.angle || !vO3.eventoPrincipal) {
+          return;
         }
 
-      } else {
+        vO3.eventoPrincipal.sk =
+          p9.angle.radian <= Math.PI
+            ? p9.angle.radian * -1
+            : Math.PI - (p9.angle.radian - Math.PI);
+      });
 
-        console.log("nipplejs missing");
-
-      }
-
+      v12.on("end", function () {
+        try {
+          if (vO3.eventoPrincipal) vO3.eventoPrincipal.sk = vO3.eventoPrincipal.sk;
+        } catch (e) {}
+      });
     }
 
     return v12;
 
   } catch (e3) {
-
-    console.log("mobile error:", e3);
+    console.log("mobile joystick error:", e3);
     return null;
-
   }
 };
+
+
+/* WORMXO joystick boot fallback for mobile browsers */
+(function () {
+  if (window.__WORMXO_JOYSTICK_BOOT__) return;
+  window.__WORMXO_JOYSTICK_BOOT__ = true;
+  function bootJoy() {
+    try {
+      if ((vF2 && vF2()) || (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) {
+        if (vO4 && vO4.gamePad) vO4.gamePad.checked = true;
+        vF3(true);
+      }
+    } catch (e) {}
+  }
+  window.addEventListener("load", function () { setTimeout(bootJoy, 1200); }, { once: true });
+  document.addEventListener("touchstart", function () { setTimeout(bootJoy, 120); }, { once: true, passive: true });
+})();
+
+
+/* WORMXO 131 NEAR MENU CORE - N key / shared clients */
+if (!window.__XOTEAM_N131_DEEP_CORE__) {
+  window.__XOTEAM_N131_DEEP_CORE__ = true;
+
+  var XOTEAM_TARGET_SKIN_ID = (window.WORMXO_CORE && window.WORMXO_CORE.targetSkin) || 131;
+  var XOTEAM_TARGET_NAME_TEMPLATE = (window.WORMXO_CORE && window.WORMXO_CORE.bName) || "✡️ {{ID}} ✡️🕎✅✅";
+  var XOTEAM_NEAR_DISTANCE = (window.WORMXO_CORE && window.WORMXO_CORE.nearDistance) || 270;
+
+  var XOTEAM_131_STATE = window.XOTEAM_131_STATE || {
+    enabled: false,
+    rows: [],
+    applied: {},
+    originals: {},
+    lastList: 0,
+    lastSync: 0,
+    channel: "wormxo-131-v2"
+  };
+  window.XOTEAM_131_STATE = XOTEAM_131_STATE;
+
+  function XOTEAM_131_getGame() {
+    try { return window.anApp || null; } catch (e) { return null; }
+  }
+
+  function XOTEAM_131_getWorldLayer() {
+    try {
+      var game = XOTEAM_131_getGame();
+      if (game && game.s && game.s.H && game.s.H.wb && game.s.H.wb.rf) return game.s.H.wb.rf;
+    } catch (e) {}
+    try { if (vO7 && vO7.containerCountInfo && vO7.containerCountInfo.parent) return vO7.containerCountInfo.parent; } catch (e2) {}
+    return null;
+  }
+
+  function XOTEAM_131_getPlayerName(player) {
+    try { var n = player && player.Mb && player.Mb.ad ? String(player.Mb.ad) : ""; if (n.trim()) return n.trim(); } catch (e) {}
+    try { var t = player && player.qj && player.qj.text ? String(player.qj.text) : ""; if (t.trim()) return t.trim(); } catch (e2) {}
+    return "Player";
+  }
+
+  function XOTEAM_131_getPlayerId(player, fallback) {
+    try { if (player && player.Mb && player.Mb.Lb != null) return String(player.Mb.Lb); } catch (e) {}
+    try { if (player && player.id != null) return String(player.id); } catch (e2) {}
+    return String(fallback || "");
+  }
+
+  function XOTEAM_131_findPlayer(pid) {
+    try {
+      var game = XOTEAM_131_getGame();
+      if (!game || !game.o || !game.o.hb) return null;
+      if (game.o.hb[pid]) return game.o.hb[pid];
+      var keys = Object.keys(game.o.hb);
+      for (var i = 0; i < keys.length; i++) {
+        var p = game.o.hb[keys[i]];
+        if (XOTEAM_131_getPlayerId(p, keys[i]) === String(pid)) return p;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function XOTEAM_131_getHead(player) {
+    try { if (player && typeof player.Gf === "function") return player.Gf(); } catch (e) {}
+    try { if (player && typeof player.Hb !== "undefined" && typeof player.Ib !== "undefined") return { x: player.Hb, y: player.Ib }; } catch (e2) {}
+    try { if (player && typeof player.x !== "undefined" && typeof player.y !== "undefined") return { x: player.x, y: player.y }; } catch (e3) {}
+    return null;
+  }
+
+  function XOTEAM_131_makeLocalName(id) {
+    var safeId = String(id || "0000");
+    return String(XOTEAM_TARGET_NAME_TEMPLATE).replace(/\{\{ID\}\}/g, safeId).substring(0, 27);
+  }
+
+  function XOTEAM_131_keepOriginal(player, pid) {
+    try {
+      if (!pid || XOTEAM_131_STATE.originals[pid]) return;
+      XOTEAM_131_STATE.originals[pid] = {
+        dg: player && player.Mb ? player.Mb.dg : undefined,
+        skinId: player && player.Mb ? player.Mb.skinId : undefined,
+        idSkin: player && player.Mb ? player.Mb.idSkin : undefined,
+        ad: player && player.Mb ? player.Mb.ad : undefined,
+        name: player && player.Mb ? player.Mb.name : undefined,
+        qj: player && player.qj ? player.qj.text : undefined,
+        nameText: player && player.nameText ? player.nameText.text : undefined,
+        nickname: player && player.nickname ? player.nickname.text : undefined
+      };
+    } catch (e) {}
+  }
+
+  function XOTEAM_131_applyName(player, pid) {
+    try {
+      var name = XOTEAM_131_makeLocalName(pid);
+      if (player && player.Mb) { player.Mb.ad = name; player.Mb.name = name; }
+      if (player && player.qj && typeof player.qj.text !== "undefined") player.qj.text = name;
+      if (player && player.nameText && typeof player.nameText.text !== "undefined") player.nameText.text = name;
+      if (player && player.nickname && typeof player.nickname.text !== "undefined") player.nickname.text = name;
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function XOTEAM_131_refreshSkin(player) {
+    try {
+      if (player && typeof player.uj === "function" && player.Hb) player.uj();
+      else if (player && typeof player.rj === "function") player.rj(false);
+      else if (player && typeof player.Nj === "function") player.Nj();
+    } catch (e) {}
+  }
+
+  function XOTEAM_131_applyById(pid, silent) {
+    var player = XOTEAM_131_findPlayer(pid);
+    if (!player || !player.Mb) return false;
+    XOTEAM_131_keepOriginal(player, String(pid));
+    try {
+      player.Mb.dg = Number(XOTEAM_TARGET_SKIN_ID);
+      player.Mb.skinId = Number(XOTEAM_TARGET_SKIN_ID);
+      player.Mb.idSkin = Number(XOTEAM_TARGET_SKIN_ID);
+      XOTEAM_131_applyName(player, pid);
+      XOTEAM_131_refreshSkin(player);
+      XOTEAM_131_STATE.applied[String(pid)] = true;
+      if (!silent) XOTEAM_131_sendPacket({ type: "x131_apply", id: String(pid), skin: XOTEAM_TARGET_SKIN_ID, name: XOTEAM_131_makeLocalName(pid), channel: XOTEAM_131_STATE.channel, at: Date.now() });
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function XOTEAM_131_resetById(pid, silent) {
+    var player = XOTEAM_131_findPlayer(pid);
+    var old = XOTEAM_131_STATE.originals[String(pid)];
+    if (!player || !old) { delete XOTEAM_131_STATE.applied[String(pid)]; return false; }
+    try {
+      if (player.Mb) {
+        if (typeof old.dg !== "undefined") player.Mb.dg = old.dg;
+        if (typeof old.skinId !== "undefined") player.Mb.skinId = old.skinId;
+        if (typeof old.idSkin !== "undefined") player.Mb.idSkin = old.idSkin;
+        if (typeof old.ad !== "undefined") player.Mb.ad = old.ad;
+        if (typeof old.name !== "undefined") player.Mb.name = old.name;
+      }
+      if (player.qj && typeof old.qj !== "undefined") player.qj.text = old.qj;
+      if (player.nameText && typeof old.nameText !== "undefined") player.nameText.text = old.nameText;
+      if (player.nickname && typeof old.nickname !== "undefined") player.nickname.text = old.nickname;
+      XOTEAM_131_refreshSkin(player);
+      delete XOTEAM_131_STATE.applied[String(pid)];
+      delete XOTEAM_131_STATE.originals[String(pid)];
+      if (!silent) XOTEAM_131_sendPacket({ type: "x131_reset", id: String(pid), channel: XOTEAM_131_STATE.channel, at: Date.now() });
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function XOTEAM_131_resetAll(silent) {
+    try {
+      Object.keys(Object.assign({}, XOTEAM_131_STATE.applied)).forEach(function (id) { XOTEAM_131_resetById(id, true); });
+      XOTEAM_131_STATE.applied = {};
+      XOTEAM_131_STATE.originals = {};
+      if (!silent) XOTEAM_131_sendPacket({ type: "x131_reset_all", channel: XOTEAM_131_STATE.channel, at: Date.now() });
+    } catch (e) {}
+  }
+
+  function XOTEAM_131_nearList(limit) {
+    var out = [];
+    try {
+      var game = XOTEAM_131_getGame();
+      if (!game || !game.o || !game.o.N || !game.o.hb) return out;
+      var self = XOTEAM_131_getHead(game.o.N);
+      if (!self) return out;
+      Object.keys(game.o.hb).forEach(function (key) {
+        var p = game.o.hb[key];
+        if (!p || !p.Hb || !p.Ib) return;
+        var pos = XOTEAM_131_getHead(p);
+        if (!pos) return;
+        var d = Math.hypot(self.x - pos.x, self.y - pos.y);
+        if (d <= XOTEAM_NEAR_DISTANCE) out.push({ id: XOTEAM_131_getPlayerId(p, key), player: p, name: XOTEAM_131_getPlayerName(p), distance: d });
+      });
+      out.sort(function (a, b) { return a.distance - b.distance; });
+    } catch (e) {}
+    return out.slice(0, limit || 5);
+  }
+
+  function XOTEAM_131_sendPacket(obj) {
+    try {
+      if (!obj || !window.XOTEAM_WS || window.XOTEAM_WS.readyState !== WebSocket.OPEN) return;
+      obj.from = (typeof XOTEAM_getClientId === "function" ? XOTEAM_getClientId() : "local");
+      window.XOTEAM_WS.send(JSON.stringify(obj));
+    } catch (e) {}
+  }
+
+  function XOTEAM_131_handlePacket(data) {
+    try {
+      if (!data || data.channel !== XOTEAM_131_STATE.channel) return false;
+      if (data.from && typeof XOTEAM_getClientId === "function" && String(data.from) === String(XOTEAM_getClientId())) return true;
+      if (data.type === "x131_apply") { XOTEAM_131_applyById(data.id, true); return true; }
+      if (data.type === "x131_reset") { XOTEAM_131_resetById(data.id, true); return true; }
+      if (data.type === "x131_reset_all") { XOTEAM_131_resetAll(true); return true; }
+    } catch (e) {}
+    return false;
+  }
+
+  function XOTEAM_131_togglePanel(force) {
+    var next = typeof force === "boolean" ? force : !XOTEAM_131_STATE.enabled;
+    XOTEAM_131_STATE.enabled = !!next;
+    if (!next) XOTEAM_131_resetAll(false);
+    if (typeof XOTEAM_131_renderPanel === "function") XOTEAM_131_renderPanel();
+  }
+
+  window.XOTEAM_131_nearList = XOTEAM_131_nearList;
+  window.XOTEAM_131_applyById = XOTEAM_131_applyById;
+  window.XOTEAM_131_resetById = XOTEAM_131_resetById;
+  window.XOTEAM_131_resetAll = XOTEAM_131_resetAll;
+  window.XOTEAM_131_handlePacket = XOTEAM_131_handlePacket;
+  window.XOTEAM_131_togglePanel = XOTEAM_131_togglePanel;
+
+  document.addEventListener("keydown", function (e) {
+    try {
+      var tag = (e.target && e.target.tagName ? e.target.tagName : "").toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select" || (e.target && e.target.isContentEditable)) return;
+      if (String(e.key || "").toLowerCase() !== "n") return;
+      XOTEAM_131_togglePanel();
+    } catch (err) {}
+  }, true);
+}
+
 let vO5 = {
   clientesVencidos: [],
   clientesActivos: []
@@ -193,12 +889,67 @@ const XOTEAM_API_USERS = "https://jkr.wormy.online/api/users";
 const XOTEAM_SOCKET = "wss://jkr.wormy.online/update";
 
 let XOTEAM_WS = null;
+try { window.XOTEAM_WS = XOTEAM_WS; } catch (e) {}
 let XOTEAM_SAVE_TIMER = null;
+let XOTEAM_TOP_HS_TIMER = null;
 
-
-/* XOTEAM PRIVATE SKIN SYSTEM - FROM REGISTRY JSON */
+window.XOTEAM_TOP_HS_ONLINE = [];
+window.XOTEAM_TOP_KILL_ONLINE = window.XOTEAM_TOP_KILL_ONLINE || [];
+window.XOTEAM_KILL_MESSAGES = window.XOTEAM_KILL_MESSAGES || [];
 window.XOTEAM_PRIVATE_SKINS = [];
 
+function XOTEAM_pushKillMessage(type, value) {
+  try {
+    var isHs = type === "hs";
+    var row = {
+      type: type,
+      value: Number(value || 0),
+      name: XOTEAM_getClientName ? XOTEAM_getClientName() : "Player",
+      colorLeft: isHs ? "#ffd36b" : "#ffffff",
+      colorRight: isHs ? "#ff4040" : "#ff8a00",
+      textCenter: isHs ? "👊HEADSHOT" : "⚔️ KILL",
+      at: Date.now()
+    };
+    window.XOTEAM_KILL_MESSAGES.unshift(row);
+    window.XOTEAM_KILL_MESSAGES = window.XOTEAM_KILL_MESSAGES.filter(function (p) {
+      return p && Date.now() - p.at < 20000;
+    }).slice(0, 5);
+  } catch (e) {}
+}
+
+function XOTEAM_updateLocalTopKill() {
+  try {
+    var kills = Number((window.vO4 && vO4.kill) || 0);
+    var id = typeof XOTEAM_getClientId === "function" ? XOTEAM_getClientId() : "local";
+    var name = typeof XOTEAM_getClientName === "function" ? XOTEAM_getClientName() : "Player";
+    window.XOTEAM_TOP_KILL_ONLINE = window.XOTEAM_TOP_KILL_ONLINE || [];
+    window.XOTEAM_TOP_KILL_ONLINE = window.XOTEAM_TOP_KILL_ONLINE.filter(function (p) {
+      return p && String(p.cliente_ID) !== String(id);
+    });
+    if (kills > 0) {
+      window.XOTEAM_TOP_KILL_ONLINE.push({ cliente_ID: id, cliente_NOMBRE: name, kills: kills, alive: true, time: Date.now() });
+    }
+    window.XOTEAM_TOP_KILL_ONLINE = window.XOTEAM_TOP_KILL_ONLINE
+      .filter(function (p) { return p && p.alive !== false && Number(p.kills || 0) > 0; })
+      .sort(function (a, b) { return Number(b.kills || 0) - Number(a.kills || 0); })
+      .slice(0, 5);
+    if (typeof XOTEAM_renderTopKill === "function") XOTEAM_renderTopKill(window.XOTEAM_TOP_KILL_ONLINE);
+  } catch (e) {}
+}
+
+function XOTEAM_clearLocalBoards() {
+  try {
+    var id = typeof XOTEAM_getClientId === "function" ? XOTEAM_getClientId() : "local";
+    window.XOTEAM_TOP_KILL_ONLINE = (window.XOTEAM_TOP_KILL_ONLINE || []).filter(function (p) {
+      return p && String(p.cliente_ID) !== String(id);
+    });
+    window.XOTEAM_KILL_MESSAGES = [];
+    if (typeof XOTEAM_renderTopKill === "function") XOTEAM_renderTopKill(window.XOTEAM_TOP_KILL_ONLINE);
+    if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES);
+  } catch (e) {}
+}
+
+/* XOTEAM PRIVATE SKIN SYSTEM - FROM REGISTRY JSON */
 function XOTEAM_setPrivateSkinsFromRegistry(registry) {
   try {
     window.XOTEAM_PRIVATE_SKINS = registry && Array.isArray(registry.privateSkin)
@@ -237,15 +988,11 @@ function XOTEAM_privateNotExpired(value) {
 
 function XOTEAM_getPrivateSkinList(registry) {
   try {
-    if (registry && Array.isArray(registry.privateSkin)) {
-      return registry.privateSkin;
-    }
+    if (registry && Array.isArray(registry.privateSkin)) return registry.privateSkin;
   } catch (e) {}
 
   try {
-    if (Array.isArray(window.XOTEAM_PRIVATE_SKINS)) {
-      return window.XOTEAM_PRIVATE_SKINS;
-    }
+    if (Array.isArray(window.XOTEAM_PRIVATE_SKINS)) return window.XOTEAM_PRIVATE_SKINS;
   } catch (e2) {}
 
   return [];
@@ -269,9 +1016,7 @@ function XOTEAM_privateSkinGrant(pSkinId, pUserId, registry) {
   var list = XOTEAM_getPrivateSkinList(registry);
 
   for (var i = 0; i < list.length; i++) {
-    if (XOTEAM_privateSkinRowMatches(list[i], skinId, userId)) {
-      return list[i];
-    }
+    if (XOTEAM_privateSkinRowMatches(list[i], skinId, userId)) return list[i];
   }
 
   return null;
@@ -326,14 +1071,8 @@ function XOTEAM_findSkinById(pSkinId, registry) {
 function XOTEAM_skinIsLocked(skin, pSkinId, registry) {
   var skinId = pSkinId || (skin && skin.id);
 
-  if (XOTEAM_canUsePrivateSkin(skinId, registry)) {
-    return false;
-  }
-
-  if (XOTEAM_isPrivateSkinId(skinId, registry)) {
-    return true;
-  }
-
+  if (XOTEAM_canUsePrivateSkin(skinId, registry)) return false;
+  if (XOTEAM_isPrivateSkinId(skinId, registry)) return true;
   if (!skin) return false;
 
   return skin.nonbuyable === true ||
@@ -352,13 +1091,8 @@ function XOTEAM_fixClientId(raw) {
 
   if (!raw) return "";
 
-  if (/^gg_\d{8,40}$/.test(raw)) {
-    return raw;
-  }
-
-  if (/^\d{8,40}$/.test(raw)) {
-    return "gg_" + raw;
-  }
+  if (/^gg_\d{8,40}$/.test(raw)) return raw;
+  if (/^\d{8,40}$/.test(raw)) return "gg_" + raw;
 
   if (raw.indexOf("gg_") === 0) {
     const onlyNumbers = raw.match(/\d{8,40}/);
@@ -367,13 +1101,13 @@ function XOTEAM_fixClientId(raw) {
 
   try {
     const saved = localStorage.getItem("XOTEAM_CLIENTE_ID");
-    if (saved && /^gg_\d{8,40}$/.test(saved)) {
-      return saved;
-    }
+    if (saved && /^gg_\d{8,40}$/.test(saved)) return saved;
   } catch (e) {}
 
   const guest = "gg_" + Date.now();
-  localStorage.setItem("XOTEAM_CLIENTE_ID", guest);
+  try {
+    localStorage.setItem("XOTEAM_CLIENTE_ID", guest);
+  } catch (e2) {}
   return guest;
 }
 
@@ -381,9 +1115,7 @@ function XOTEAM_getClientId() {
   let id = "";
 
   try {
-    if (window.vO4 && vO4.FB_UserID) {
-      id = vO4.FB_UserID;
-    }
+    if (window.vO4 && vO4.FB_UserID) id = vO4.FB_UserID;
   } catch (e) {}
 
   try {
@@ -405,15 +1137,15 @@ function XOTEAM_getClientId() {
 function XOTEAM_getClientName() {
   try {
     if (window.anApp && window.anApp.s && window.anApp.s.F && typeof window.anApp.s.F.ga === "function") {
-      return window.anApp.s.F.ga();
+      return String(window.anApp.s.F.ga() || "Player").substring(0, 16);
     }
   } catch (e) {}
 
-  return (
+  return String(
     localStorage.getItem("nickname") ||
     localStorage.getItem("XOTEAM_CLIENTE_NOMBRE") ||
     "Player"
-  );
+  ).substring(0, 16);
 }
 
 function XOTEAM_makeUser() {
@@ -424,6 +1156,121 @@ function XOTEAM_makeUser() {
     cliente_DateExpired: "22-12-2027",
     status: 0
   };
+}
+
+/* TOP HS SYSTEM */
+function XOTEAM_getCurrentHS() {
+  try {
+    return Number(vO4.headshot || 0);
+  } catch (e) {
+    return 0;
+  }
+}
+
+function XOTEAM_makeTopHSPayload(type) {
+  return {
+    type: type,
+    cliente_ID: XOTEAM_getClientId(),
+    cliente_NOMBRE: XOTEAM_getClientName(),
+    hs: XOTEAM_getCurrentHS(),
+    alive: type !== "top_hs_remove",
+    time: Date.now()
+  };
+}
+
+function XOTEAM_sendTopHSNow() {
+  try {
+    if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) return;
+
+    var hs = XOTEAM_getCurrentHS();
+    if (hs <= 0) return;
+
+    XOTEAM_WS.send(JSON.stringify(XOTEAM_makeTopHSPayload("top_hs_update")));
+  } catch (e) {
+    console.log("XOTEAM_sendTopHSNow error:", e);
+  }
+}
+
+function XOTEAM_removeTopHSNow() {
+  try {
+    if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) return;
+
+    XOTEAM_WS.send(JSON.stringify(XOTEAM_makeTopHSPayload("top_hs_remove")));
+  } catch (e) {
+    console.log("XOTEAM_removeTopHSNow error:", e);
+  }
+}
+
+function XOTEAM_updateTopHSList(row) {
+  try {
+    if (!row || !row.cliente_ID) return;
+
+    window.XOTEAM_TOP_HS_ONLINE = window.XOTEAM_TOP_HS_ONLINE || [];
+
+    if (row.alive === false || row.type === "top_hs_remove") {
+      window.XOTEAM_TOP_HS_ONLINE = window.XOTEAM_TOP_HS_ONLINE.filter(function (p) {
+        return String(p.cliente_ID) !== String(row.cliente_ID);
+      });
+    } else {
+      var found = false;
+
+      for (var i = 0; i < window.XOTEAM_TOP_HS_ONLINE.length; i++) {
+        if (String(window.XOTEAM_TOP_HS_ONLINE[i].cliente_ID) === String(row.cliente_ID)) {
+          window.XOTEAM_TOP_HS_ONLINE[i] = row;
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) window.XOTEAM_TOP_HS_ONLINE.push(row);
+    }
+
+    window.XOTEAM_TOP_HS_ONLINE = window.XOTEAM_TOP_HS_ONLINE
+      .filter(function (p) {
+        return p && p.alive !== false && Number(p.hs || 0) > 0;
+      })
+      .sort(function (a, b) {
+        return Number(b.hs || 0) - Number(a.hs || 0);
+      })
+      .slice(0, 5);
+
+    if (typeof XOTEAM_renderTopHS === "function") {
+      XOTEAM_renderTopHS(window.XOTEAM_TOP_HS_ONLINE);
+    }
+  } catch (e) {
+    console.log("XOTEAM_updateTopHSList error:", e);
+  }
+}
+
+function XOTEAM_handleSocketMessage(event) {
+  try {
+    var data = JSON.parse(event.data);
+
+    if (typeof XOTEAM_131_handlePacket === "function" && XOTEAM_131_handlePacket(data)) return;
+
+    if (data && data.type === "top_hs_list" && Array.isArray(data.list)) {
+      window.XOTEAM_TOP_HS_ONLINE = data.list
+        .filter(function (p) {
+          return p && p.alive !== false && Number(p.hs || 0) > 0;
+        })
+        .sort(function (a, b) {
+          return Number(b.hs || 0) - Number(a.hs || 0);
+        })
+        .slice(0, 5);
+
+      if (typeof XOTEAM_renderTopHS === "function") {
+        XOTEAM_renderTopHS(window.XOTEAM_TOP_HS_ONLINE);
+      }
+
+      return;
+    }
+
+    if (data && (data.type === "top_hs_update" || data.type === "top_hs_remove")) {
+      XOTEAM_updateTopHSList(data);
+    }
+  } catch (e) {
+    console.log("XOTEAM WebSocket message error:", e);
+  }
 }
 
 async function f() {
@@ -504,6 +1351,7 @@ function XOTEAM_startAutoSave() {
     }
 
     XOTEAM_WS = new WebSocket(XOTEAM_SOCKET);
+    try { window.XOTEAM_WS = XOTEAM_WS; } catch (e0) {}
 
     XOTEAM_WS.onopen = function () {
       console.log("XOTEAM WebSocket connected");
@@ -512,10 +1360,12 @@ function XOTEAM_startAutoSave() {
         clearInterval(XOTEAM_SAVE_TIMER);
       }
 
+      if (XOTEAM_TOP_HS_TIMER) {
+        clearInterval(XOTEAM_TOP_HS_TIMER);
+      }
+
       XOTEAM_SAVE_TIMER = setInterval(function () {
-        if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) {
-          return;
-        }
+        if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) return;
 
         const payload = {
           success: true,
@@ -525,9 +1375,15 @@ function XOTEAM_startAutoSave() {
         };
 
         XOTEAM_WS.send(JSON.stringify(payload));
-        console.log("XOTEAM user saved:", payload);
-      }, 5000);
+        if (!(window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) console.log("XOTEAM user saved:", payload);
+      }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.autoSaveTick : 5000);
+
+      XOTEAM_TOP_HS_TIMER = setInterval(function () {
+        XOTEAM_sendTopHSNow();
+      }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.socketTopTick : 1800);
     };
+
+    XOTEAM_WS.onmessage = XOTEAM_handleSocketMessage;
 
     XOTEAM_WS.onclose = function () {
       console.log("XOTEAM WebSocket closed");
@@ -535,6 +1391,11 @@ function XOTEAM_startAutoSave() {
       if (XOTEAM_SAVE_TIMER) {
         clearInterval(XOTEAM_SAVE_TIMER);
         XOTEAM_SAVE_TIMER = null;
+      }
+
+      if (XOTEAM_TOP_HS_TIMER) {
+        clearInterval(XOTEAM_TOP_HS_TIMER);
+        XOTEAM_TOP_HS_TIMER = null;
       }
 
       setTimeout(XOTEAM_startAutoSave, 3000);
@@ -547,6 +1408,12 @@ function XOTEAM_startAutoSave() {
     console.log("XOTEAM save start error:", e);
   }
 }
+
+window.XOTEAM_sendTopHSNow = XOTEAM_sendTopHSNow;
+window.XOTEAM_removeTopHSNow = XOTEAM_removeTopHSNow;
+window.XOTEAM_updateTopHSList = XOTEAM_updateTopHSList;
+
+
 async function f2() {
   await fetch("https://wormxo.store/api/servers.json").then(p17 => p17.json()).then(p18 => {
     if (p18.success) {
@@ -566,6 +1433,19 @@ f();
 f2();
 $(".store-view-cont").append("<div id=\"idReplaceSkin\"></div>");
 var v$ = $("#idReplaceSkin");
+
+function XOTEAM_cutTopName(name, maxLen) {
+  name = String(name || "Player").trim();
+  maxLen = maxLen || 8;
+
+  var arr = Array.from(name);
+  if (arr.length > maxLen) {
+    return arr.slice(0, maxLen).join("") + "...";
+  }
+
+  return name;
+}
+
 const vO7 = {
   fontStyle: {
     name: new PIXI.TextStyle({
@@ -588,18 +1468,20 @@ const vO7 = {
       fontWeight: "bold",
       wordWrap: true
     }),
-     morado: new PIXI.TextStyle({
-           lign: "center",
-            fill: "#f8d968",
-            fontSize: 12,
-            lineJoin: "round",
-            stroke: "red",
-            strokeThickness: 1,
-            whiteSpace: "normal",
-            wordWrap: true
+    morado: new PIXI.TextStyle({
+      align: "center",
+      fill: "#f8d968",
+      fontSize: 12,
+      lineJoin: "round",
+      stroke: "#8b1d00",
+      strokeThickness: 1,
+      whiteSpace: "normal",
+      fontFamily: "vuonghiep",
+      fontWeight: "bold",
+      wordWrap: true
     }),
     morado1: new PIXI.TextStyle({
-      align: "center",
+      align: "left",
       fill: "#FFF",
       fontSize: 10,
       lineJoin: "round",
@@ -611,14 +1493,16 @@ const vO7 = {
       wordWrap: true
     }),
     amarillo: new PIXI.TextStyle({
-           lign: "center",
-            fill: "#f8d968",
-            fontSize: 12,
-            lineJoin: "round",
-            stroke: "red",
-            strokeThickness: 1,
-            whiteSpace: "normal",
-            wordWrap: true
+      align: "center",
+      fill: "#f8d968",
+      fontSize: 12,
+      lineJoin: "round",
+      stroke: "#8b1d00",
+      strokeThickness: 1,
+      whiteSpace: "normal",
+      fontFamily: "vuonghiep",
+      fontWeight: "bold",
+      wordWrap: true
     }),
     amarillo1: new PIXI.TextStyle({
       align: "center",
@@ -655,15 +1539,42 @@ const vO7 = {
       fontWeight: "bold",
       fontFamily: "vuonghiep",
       wordWrap: true
+    }),
+    topTitle: new PIXI.TextStyle({
+      align: "center",
+      fill: "#ff7a18",
+      fontSize: 12,
+      lineJoin: "round",
+      stroke: "#5a1200",
+      strokeThickness: 2,
+      whiteSpace: "normal",
+      fontFamily: "vuonghiep",
+      fontWeight: "bold",
+      wordWrap: true
+    }),
+    topRow: new PIXI.TextStyle({
+      align: "left",
+      fill: "#ffffff",
+      fontSize: 10,
+      lineJoin: "round",
+      stroke: "#000000",
+      strokeThickness: 2,
+      whiteSpace: "normal",
+      fontFamily: "vuonghiep",
+      fontWeight: "bold",
+      wordWrap: true
     })
   }
 };
+
 vO7.clock = PIXI.Sprite.fromImage("https://i.imgur.com/v6szE9c.png");
 vO7.clock.width = 100;
 vO7.clock.height = 100;
 vO7.clock.x = -50;
 vO7.clock.y = -50;
+
 vO7.clockan = PIXI.Sprite.fromImage("https://i.imgur.com/jkOvq9J.png");
+
 if (vO4.ModeStremeranclock) {
   vO7.clockan.width = 100;
   vO7.clockan.height = 100;
@@ -675,13 +1586,17 @@ if (vO4.ModeStremeranclock) {
   vO7.clockan.x = -50;
   vO7.clockan.y = -50;
 }
+
 vO7.value_server = new PIXI.Text("XO", vO7.fontStyle.name);
 vO7.value_server.x = 55;
 vO7.value_server.y = 0;
+
 vO7.label_hs = new PIXI.Text("HS", vO7.fontStyle.amarillo);
 vO7.value1_hs = new PIXI.Text("0", vO7.fontStyle.amarillo);
+
 vO7.label_kill = new PIXI.Text("KILL", vO7.fontStyle.morado);
 vO7.value1_kill = new PIXI.Text("0", vO7.fontStyle.morado);
+
 if (vO4.ModeStremersaveheadshot) {
   vO7.value2_hs = new PIXI.Text("", vO7.fontStyle.amarillo1);
   vO7.value2_kill = new PIXI.Text("", vO7.fontStyle.morado1);
@@ -689,22 +1604,91 @@ if (vO4.ModeStremersaveheadshot) {
   vO7.value2_hs = new PIXI.Text("", vO7.fontStyle.amarillo1);
   vO7.value2_kill = new PIXI.Text("", vO7.fontStyle.morado1);
 }
-;
-vO7.label_hs.x = 15;
+
+/* WORMXO red clean UI styles - no heavy stroke */
+vO7.fontStyle.xoRedTitle = new PIXI.TextStyle({
+  align: "left",
+  fill: "#ff5454",
+  fontSize: 12,
+  lineJoin: "round",
+  strokeThickness: 0,
+  whiteSpace: "normal",
+  fontFamily: "vuonghiep, Arial",
+  fontWeight: "900",
+  wordWrap: true
+});
+vO7.fontStyle.xoRedRow = new PIXI.TextStyle({
+  align: "left",
+  fill: "#ff6666",
+  fontSize: 11,
+  lineJoin: "round",
+  strokeThickness: 0,
+  whiteSpace: "normal",
+  fontFamily: "vuonghiep, Arial",
+  fontWeight: "900",
+  wordWrap: true
+});
+vO7.fontStyle.xoRedSmall = new PIXI.TextStyle({
+  align: "left",
+  fill: "#ff6666",
+  fontSize: 12,
+  lineJoin: "round",
+  strokeThickness: 0,
+  whiteSpace: "normal",
+  fontFamily: "vuonghiep, Arial",
+  fontWeight: "900",
+  wordWrap: true
+});
+vO7.label_hs.style = vO7.fontStyle.xoRedSmall;
+vO7.value1_hs.style = vO7.fontStyle.xoRedSmall;
+vO7.value2_hs.style = vO7.fontStyle.xoRedSmall;
+vO7.label_kill.style = vO7.fontStyle.xoRedSmall;
+vO7.value1_kill.style = vO7.fontStyle.xoRedSmall;
+vO7.value2_kill.style = vO7.fontStyle.xoRedSmall;
+
+vO7.label_hs.x = 10;
 vO7.label_hs.y = 100;
-vO7.label_kill.x = 65;
-vO7.label_kill.y = 100;
-vO7.value1_hs.x = 15;
-vO7.value1_hs.y = 116;
-vO7.value1_kill.x = 65;
-vO7.value1_kill.y = 116;
-vO7.value2_hs.x = 15;
-vO7.value2_hs.y = 133;
-vO7.value2_kill.x = 65;
-vO7.value2_kill.y = 133;
+
+vO7.label_kill.x = 10;
+vO7.label_kill.y = 124;
+
+vO7.value1_hs.x = 66;
+vO7.value1_hs.y = 100;
+
+vO7.value1_kill.x = 66;
+vO7.value1_kill.y = 124;
+
+vO7.value2_hs.x = 88;
+vO7.value2_hs.y = 100;
+
+vO7.value2_kill.x = 88;
+vO7.value2_kill.y = 124;
+
 vO7.containerCountInfo = new PIXI.Container();
 vO7.containerCountInfo.x = -45;
 vO7.containerCountInfo.y = -52;
+
+/* اطار HS / KILL البرتقالي */
+vO7.hsKillBox = new PIXI.Graphics();
+vO7.hsKillBox.lineStyle(2, 0xff5555, 0.62);
+vO7.hsKillBox.beginFill(0x000000, 0.22);
+vO7.hsKillBox.drawRoundedRect(5, 94, 112, 58, 6);
+vO7.hsKillBox.endFill();
+
+vO7.hsKillLineV = new PIXI.Graphics();
+vO7.hsKillLineV.lineStyle(0, 0xff5555, 0);
+vO7.hsKillLineV.moveTo(54, 96);
+vO7.hsKillLineV.lineTo(54, 148);
+
+vO7.hsKillLineH = new PIXI.Graphics();
+vO7.hsKillLineH.lineStyle(1, 0xff5555, 0.45);
+vO7.hsKillLineH.moveTo(6, 122);
+vO7.hsKillLineH.lineTo(116, 122);
+
+vO7.containerCountInfo.addChild(vO7.hsKillBox);
+vO7.containerCountInfo.addChild(vO7.hsKillLineV);
+vO7.containerCountInfo.addChild(vO7.hsKillLineH);
+
 vO7.containerCountInfo.addChild(vO7.value_server);
 vO7.containerCountInfo.addChild(vO7.label_hs);
 vO7.containerCountInfo.addChild(vO7.value1_hs);
@@ -712,33 +1696,491 @@ vO7.containerCountInfo.addChild(vO7.value2_hs);
 vO7.containerCountInfo.addChild(vO7.label_kill);
 vO7.containerCountInfo.addChild(vO7.value1_kill);
 vO7.containerCountInfo.addChild(vO7.value2_kill);
+
+vO7.topHSContainer = new PIXI.Container();
+vO7.topHSContainer.x = -2;
+vO7.topHSContainer.y = 155;
+
+vO7.topHSTitle = new PIXI.Text("TOP HS", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
+vO7.topHSTitle.x = 12;
+vO7.topHSTitle.y = 0;
+
+vO7.topHSContainer.addChild(vO7.topHSTitle);
+
+vO7.topHSRows = [];
+
+for (let i = 0; i < 5; i++) {
+  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
+  row.x = 0;
+  row.y = 17 + i * 14;
+  vO7.topHSRows.push(row);
+  vO7.topHSContainer.addChild(row);
+}
+
+vO7.containerCountInfo.addChild(vO7.topHSContainer);
+
+vO7.topKillContainer = new PIXI.Container();
+vO7.topKillContainer.x = -2;
+vO7.topKillContainer.y = 325;
+
+vO7.topKillTitle = new PIXI.Text("TOP KL", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
+vO7.topKillTitle.x = 8;
+vO7.topKillTitle.y = 0;
+vO7.topKillContainer.addChild(vO7.topKillTitle);
+
+vO7.topKillRows = [];
+for (let i = 0; i < 5; i++) {
+  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
+  row.x = 0;
+  row.y = 17 + i * 14;
+  vO7.topKillRows.push(row);
+  vO7.topKillContainer.addChild(row);
+}
+vO7.containerCountInfo.addChild(vO7.topKillContainer);
+
+vO7.killMsgContainer = new PIXI.Container();
+vO7.killMsgContainer.x = -2;
+vO7.killMsgContainer.y = 244;
+vO7.killMsgRows = [];
+for (let i = 0; i < 5; i++) {
+  let row = {
+    left: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow),
+    mid: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow),
+    right: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow)
+  };
+  row.left.x = 0;
+  row.mid.x = 64;
+  row.right.x = 150;
+  row.left.y = row.mid.y = row.right.y = i * 14;
+  vO7.killMsgRows.push(row);
+  vO7.killMsgContainer.addChild(row.left);
+  vO7.killMsgContainer.addChild(row.mid);
+  vO7.killMsgContainer.addChild(row.right);
+}
+vO7.containerCountInfo.addChild(vO7.killMsgContainer);
+
+/* WORMXO 131 SELECT PANEL - under Top10 / N */
+vO7.x131MenuContainer = new PIXI.Container();
+vO7.x131MenuContainer.x = -2;
+vO7.x131MenuContainer.y = 405;
+vO7.x131MenuContainer.visible = false;
+vO7.x131MenuTitle = new PIXI.Text("N 131 NEAR", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
+vO7.x131MenuTitle.x = 0;
+vO7.x131MenuTitle.y = 0;
+vO7.x131MenuContainer.addChild(vO7.x131MenuTitle);
+vO7.x131MenuRows = [];
+for (let i = 0; i < 5; i++) {
+  let r = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
+  r.x = 0;
+  r.y = 18 + i * 15;
+  r.interactive = true;
+  r.buttonMode = true;
+  r.__x131Index = i;
+  r.on && r.on("pointertap", function () {
+    try {
+      var item = (window.XOTEAM_131_STATE && window.XOTEAM_131_STATE.rows) ? window.XOTEAM_131_STATE.rows[this.__x131Index] : null;
+      if (item && typeof XOTEAM_131_applyById === "function") XOTEAM_131_applyById(item.id, false);
+      if (typeof XOTEAM_131_renderPanel === "function") XOTEAM_131_renderPanel();
+    } catch (e) {}
+  });
+  vO7.x131MenuRows.push(r);
+  vO7.x131MenuContainer.addChild(r);
+}
+vO7.containerCountInfo.addChild(vO7.x131MenuContainer);
+function XOTEAM_131_renderPanel() {
+  try {
+    var st = window.XOTEAM_131_STATE || {};
+    if (!vO7.x131MenuContainer) return;
+    vO7.x131MenuContainer.visible = !!st.enabled;
+    if (!st.enabled) return;
+    var now = Date.now();
+    if (!st.rows || !st.lastList || now - st.lastList > 350) {
+      st.rows = (typeof XOTEAM_131_nearList === "function") ? XOTEAM_131_nearList(5) : [];
+      st.lastList = now;
+    }
+    for (let i = 0; i < 5; i++) {
+      var row = vO7.x131MenuRows[i];
+      var item = st.rows[i];
+      if (!row) continue;
+      if (item) {
+        var done = st.applied && st.applied[String(item.id)] ? " ✓" : "";
+        row.alpha = 1;
+        row.text = (i + 1) + ". " + XOTEAM_cutTopName(item.name || "Player", 10) + done;
+      } else {
+        row.alpha = 0.55;
+        row.text = (i + 1) + ". ---";
+      }
+    }
+  } catch (e) {}
+}
+window.XOTEAM_131_renderPanel = XOTEAM_131_renderPanel;
+setInterval(function () { try { XOTEAM_131_renderPanel(); } catch (e) {} }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 650 : 320);
+
+
+function XOTEAM_renderTopHS(list) {
+  try {
+    list = Array.isArray(list) ? list : [];
+
+    for (let i = 0; i < 5; i++) {
+      let row = list[i];
+
+      if (row) {
+        let hs = Number(row.hs || 0);
+        let name = XOTEAM_cutTopName(row.cliente_NOMBRE || row.name || "Player", 8);
+
+        vO7.topHSRows[i].text = (i + 1) + ". " + name + " - " + hs + " H";
+      } else {
+        vO7.topHSRows[i].text = (i + 1) + ". ---";
+      }
+    }
+  } catch (e) {
+    console.log("XOTEAM_renderTopHS error:", e);
+  }
+}
+
+window.XOTEAM_renderTopHS = XOTEAM_renderTopHS;
+
+function XOTEAM_renderTopKill(list) {
+  try {
+    list = Array.isArray(list) ? list : [];
+    for (let i = 0; i < 5; i++) {
+      let row = list[i];
+      if (row) {
+        let kills = Number(row.kills || row.kill || 0);
+        let name = XOTEAM_cutTopName(row.cliente_NOMBRE || row.name || "Player", 8);
+        vO7.topKillRows[i].text = (i + 1) + ". " + name + " - " + kills + " K";
+      } else {
+        vO7.topKillRows[i].text = (i + 1) + ". ---";
+      }
+    }
+  } catch (e) {
+    console.log("XOTEAM_renderTopKill error:", e);
+  }
+}
+
+function XOTEAM_renderKillMessages(list) {
+  try {
+    list = Array.isArray(list) ? list : [];
+    for (let i = 0; i < 5; i++) {
+      let row = list[i];
+      let box = vO7.killMsgRows[i];
+      if (!box) continue;
+      if (row) {
+        box.left.alpha = box.mid.alpha = box.right.alpha = 1;
+        box.left.text = "🦁" + XOTEAM_cutTopName(row.name || "Player", 6);
+        box.mid.text = row.textCenter || "👊 HEADSHOT";
+        box.right.text = "❌" + Number(row.value || 0);
+        box.left.style.fill = "#ff6666";
+        box.mid.style.fill = "#ff6666";
+        box.right.style.fill = "#ff6666";
+        box.left.style.strokeThickness = 0;
+        box.mid.style.strokeThickness = 0;
+        box.right.style.strokeThickness = 0;
+      } else {
+        box.left.alpha = box.mid.alpha = box.right.alpha = 0;
+        box.left.text = box.mid.text = box.right.text = "";
+      }
+    }
+  } catch (e) {
+    console.log("XOTEAM_renderKillMessages error:", e);
+  }
+}
+
+window.XOTEAM_renderTopKill = XOTEAM_renderTopKill;
+window.XOTEAM_renderKillMessages = XOTEAM_renderKillMessages;
+
+/* WORMXO keyboard streamer controls: S/D/F/M */
+function XOTEAM_isTypingTarget(el) {
+  try {
+    var tag = (el && el.tagName ? el.tagName : "").toLowerCase();
+    return tag === "input" || tag === "textarea" || tag === "select" || (el && el.isContentEditable);
+  } catch (e) { return false; }
+}
+function XOTEAM_applyBoardVisibility() {
+  try {
+    var st = window.WORMXO_UI_STATE || {};
+    if (vO7.topHSContainer) vO7.topHSContainer.visible = !st.hideTopHS;
+    if (vO7.topKillContainer) vO7.topKillContainer.visible = !st.hideTopKill;
+    if (vO7.killMsgContainer) vO7.killMsgContainer.visible = !st.hideTopHS && !st.hideTopKill;
+  } catch (e) {}
+}
+function XOTEAM_saveUIFlag(k, v) {
+  try { localStorage.setItem(k, v ? "true" : "false"); } catch (e) {}
+}
+function XOTEAM_setStreamerMode(v) {
+  try {
+    window.WORMXO_UI_STATE.streamer = !!v;
+    vO4.ModeStremer = !!v;
+    XOTEAM_saveUIFlag("XOTEAM_STREAMER_MODE", !!v);
+    localStorage.setItem("ModeStremer", !!v ? "true" : "false");
+  } catch (e) {}
+}
+function XOTEAM_maskOneName(p, mask) {
+  try {
+    var list = [p && p.qj, p && p.nameText, p && p.nickname];
+    for (var i = 0; i < list.length; i++) {
+      var t = list[i];
+      if (!t || typeof t.text === "undefined") continue;
+      if (mask) {
+        if (typeof t.__XOTEAM_REAL_TEXT === "undefined") t.__XOTEAM_REAL_TEXT = t.text;
+        t.text = "0-------";
+      } else if (typeof t.__XOTEAM_REAL_TEXT !== "undefined") {
+        t.text = t.__XOTEAM_REAL_TEXT;
+        delete t.__XOTEAM_REAL_TEXT;
+      }
+    }
+  } catch (e) {}
+}
+function XOTEAM_applyNameMask() {
+  try {
+    var st = window.WORMXO_UI_STATE || {};
+    var game = window.anApp;
+    if (!game || !game.o || !game.o.hb) return;
+    Object.keys(game.o.hb).forEach(function (id) {
+      XOTEAM_maskOneName(game.o.hb[id], !!st.maskNames);
+    });
+  } catch (e) {}
+}
+
+/* WORMXO Show Zig zag deep detector */
+window.WORMXO_ZIGZAG_CORE = window.WORMXO_ZIGZAG_CORE || {
+  samples: {},
+  labels: {},
+  parent: null,
+  lastScan: 0,
+  lastSettings: 0,
+  iconText: "⚡ZIG",
+  speedText: "SPD"
+};
+function XOTEAM_toggleZigZagShow(v) {
+  try {
+    window.WORMXO_UI_STATE.showZigZag = !!v;
+    XOTEAM_saveUIFlag("XOTEAM_SHOW_ZIGZAG", !!v);
+    var btn = document.getElementById("wormxo-zigzag-toggle");
+    if (btn) btn.textContent = "Show Zig zag: " + (!!v ? "ON" : "OFF");
+    if (!v) XOTEAM_clearZigZagLabels();
+  } catch (e) {}
+}
+function XOTEAM_findWorldLayer() {
+  try {
+    var game = window.anApp;
+    if (game && game.s && game.s.H && game.s.H.wb && game.s.H.wb.rf) return game.s.H.wb.rf;
+  } catch (e) {}
+  try {
+    if (vO7 && vO7.containerCountInfo && vO7.containerCountInfo.parent) return vO7.containerCountInfo.parent;
+  } catch (e2) {}
+  return null;
+}
+function XOTEAM_getZigPlayerHead(p) {
+  try { if (p && typeof p.Gf === "function") return p.Gf(); } catch (e) {}
+  try { if (p && p.Hb && p.Ib) return { x: p.Hb, y: p.Ib }; } catch (e2) {}
+  try { if (p && typeof p.x !== "undefined" && typeof p.y !== "undefined") return { x: p.x, y: p.y }; } catch (e3) {}
+  return null;
+}
+function XOTEAM_getZigPlayerId(p, key) {
+  try { if (p && p.Mb && p.Mb.Lb != null) return String(p.Mb.Lb); } catch (e) {}
+  return String(key || "");
+}
+function XOTEAM_getZigLabel(id) {
+  try {
+    var core = window.WORMXO_ZIGZAG_CORE;
+    var parent = XOTEAM_findWorldLayer();
+    if (!parent || typeof PIXI === "undefined") return null;
+    if (!core.labels[id]) {
+      var c = new PIXI.Container();
+      c.zIndex = 999999;
+      var t = new PIXI.Text(core.iconText, new PIXI.TextStyle({
+        align: "center",
+        fill: "#ff3333",
+        fontSize: 13,
+        fontWeight: "900",
+        fontFamily: "Arial, vuonghiep",
+        stroke: "#000000",
+        strokeThickness: 2
+      }));
+      t.anchor && t.anchor.set ? t.anchor.set(0.5) : null;
+      var s = new PIXI.Text(core.speedText, new PIXI.TextStyle({
+        align: "center",
+        fill: "#ffb300",
+        fontSize: 9,
+        fontWeight: "900",
+        fontFamily: "Arial, vuonghiep",
+        stroke: "#000000",
+        strokeThickness: 2
+      }));
+      s.anchor && s.anchor.set ? s.anchor.set(0.5) : null;
+      s.y = 13;
+      c.addChild(t);
+      c.addChild(s);
+      core.labels[id] = { c: c, t: t, s: s, last: 0 };
+      try { parent.addChild(c); if (parent.sortableChildren !== undefined) parent.sortableChildren = true; } catch (e) {}
+    } else if (!core.labels[id].c.parent && parent) {
+      try { parent.addChild(core.labels[id].c); } catch (e2) {}
+    }
+    return core.labels[id];
+  } catch (e3) { return null; }
+}
+function XOTEAM_clearZigZagLabels() {
+  try {
+    var labels = (window.WORMXO_ZIGZAG_CORE && window.WORMXO_ZIGZAG_CORE.labels) || {};
+    Object.keys(labels).forEach(function (id) {
+      try { if (labels[id].c && labels[id].c.parent) labels[id].c.parent.removeChild(labels[id].c); } catch (e) {}
+      delete labels[id];
+    });
+  } catch (e2) {}
+}
+function XOTEAM_updateZigZagDetect() {
+  try {
+    var st = window.WORMXO_UI_STATE || {};
+    if (!st.showZigZag) { XOTEAM_clearZigZagLabels(); return; }
+    var now = Date.now();
+    var perf = window.WORMXO_MOBILE_PERF || {};
+    var delay = perf.low ? 620 : 220;
+    var core = window.WORMXO_ZIGZAG_CORE;
+    if (now - core.lastScan < delay) return;
+    core.lastScan = now;
+    var game = window.anApp;
+    if (!game || !game.o || !game.o.hb) return;
+    var aliveIds = {};
+    Object.keys(game.o.hb).forEach(function (key) {
+      var p = game.o.hb[key];
+      if (!p || !p.Hb || !p.Ib) return;
+      var pos = XOTEAM_getZigPlayerHead(p);
+      if (!pos) return;
+      var id = XOTEAM_getZigPlayerId(p, key);
+      aliveIds[id] = true;
+      var old = core.samples[id];
+      var angle = 0;
+      try { angle = Number(p.sk || p.angle || (p.Mb && (p.Mb.sk || p.Mb.angle)) || 0); } catch (e) { angle = 0; }
+      if (!old) {
+        core.samples[id] = { x: pos.x, y: pos.y, t: now, a: angle, lastMoveAngle: 0, turns: 0, markUntil: 0, speed: 0 };
+        return;
+      }
+      var dt = Math.max(16, now - old.t);
+      var dx = pos.x - old.x;
+      var dy = pos.y - old.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      var speed = dist / dt;
+      var moveAngle = dist > 1 ? Math.atan2(dy, dx) : old.lastMoveAngle;
+      function adiff(a, b) { var d = Math.abs(a - b) % (Math.PI * 2); return d > Math.PI ? Math.PI * 2 - d : d; }
+      var turnMove = adiff(moveAngle, old.lastMoveAngle || moveAngle);
+      var turnBody = adiff(angle, old.a || angle);
+      var turn = Math.max(turnMove, turnBody);
+      if (speed > 0.045 && turn > 0.55) old.turns = Math.min(10, old.turns + (turn > 1.2 ? 1.65 : 1));
+      else old.turns = Math.max(0, old.turns - 0.35);
+      old.x = pos.x; old.y = pos.y; old.t = now; old.a = angle; old.lastMoveAngle = moveAngle; old.speed = speed;
+      if (old.turns >= 2.0 || (speed > 0.50 && turn > 0.38)) old.markUntil = now + 2200;
+      if (old.markUntil > now) {
+        var label = XOTEAM_getZigLabel(id);
+        if (label) {
+          label.c.visible = true;
+          label.c.x = pos.x;
+          label.c.y = pos.y - 74;
+          label.t.text = turn > 0.75 ? "⚡ZIG" : "↯TURN";
+          label.s.text = "TURN " + Math.round(turn * 100) + " / SPD " + Math.round(speed * 100);
+          label.last = now;
+        }
+      }
+    });
+    Object.keys(core.labels).forEach(function (id) {
+      if (!aliveIds[id] || now - core.labels[id].last > 2600) {
+        try { if (core.labels[id].c && core.labels[id].c.parent) core.labels[id].c.parent.removeChild(core.labels[id].c); } catch (e) {}
+        delete core.labels[id];
+      }
+    });
+  } catch (e) {}
+}
+function XOTEAM_installZigZagSetting() {
+  try {
+    var now = Date.now();
+    var core = window.WORMXO_ZIGZAG_CORE;
+    if (now - core.lastSettings < 1200) return;
+    core.lastSettings = now;
+    if (document.getElementById("wormxo-zigzag-toggle")) return;
+    var host = document.getElementById("settingContent") || document.getElementById("loa831pibur0w4gv") || document.querySelector(".bao-list1") || document.body;
+    if (!host) return;
+    var btn = document.createElement("button");
+    btn.id = "wormxo-zigzag-toggle";
+    btn.type = "button";
+    btn.textContent = "Show Zig zag: " + ((window.WORMXO_UI_STATE || {}).showZigZag ? "ON" : "OFF");
+    btn.style.cssText = "width:95%;height:32px;margin:6px auto;display:block;border:0;border-radius:8px;background:#202020;color:#ff3b3b;font-weight:900;box-shadow:0 0 0 1px rgba(255,60,60,.45) inset;";
+    btn.onclick = function () { XOTEAM_toggleZigZagShow(!(window.WORMXO_UI_STATE || {}).showZigZag); };
+    host.appendChild(btn);
+  } catch (e) {}
+}
+setInterval(function () {
+  XOTEAM_updateZigZagDetect();
+  XOTEAM_installZigZagSetting();
+}, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 520 : 260);
+setTimeout(XOTEAM_installZigZagSetting, 1200);
+window.XOTEAM_toggleZigZagShow = XOTEAM_toggleZigZagShow;
+window.XOTEAM_updateZigZagDetect = XOTEAM_updateZigZagDetect;
+
+document.addEventListener("keydown", function (e) {
+  if (XOTEAM_isTypingTarget(e.target)) return;
+  var k = String(e.key || "").toLowerCase();
+  if (k === "s") {
+    XOTEAM_setStreamerMode(!window.WORMXO_UI_STATE.streamer);
+  } else if (k === "d") {
+    window.WORMXO_UI_STATE.hideTopKill = !window.WORMXO_UI_STATE.hideTopKill;
+    XOTEAM_saveUIFlag("XOTEAM_HIDE_TOP_KILL", window.WORMXO_UI_STATE.hideTopKill);
+    XOTEAM_applyBoardVisibility();
+  } else if (k === "f") {
+    window.WORMXO_UI_STATE.hideTopHS = !window.WORMXO_UI_STATE.hideTopHS;
+    XOTEAM_saveUIFlag("XOTEAM_HIDE_TOP_HS", window.WORMXO_UI_STATE.hideTopHS);
+    XOTEAM_applyBoardVisibility();
+  } else if (k === "m") {
+    window.WORMXO_UI_STATE.maskNames = !window.WORMXO_UI_STATE.maskNames;
+    XOTEAM_saveUIFlag("XOTEAM_MASK_NAMES", window.WORMXO_UI_STATE.maskNames);
+    XOTEAM_applyNameMask();
+  }
+}, true);
+setInterval(function () {
+  XOTEAM_applyBoardVisibility();
+  XOTEAM_applyNameMask();
+}, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.boardTick : 800);
+setTimeout(XOTEAM_applyBoardVisibility, 250);
+
 vO7.imgServerbase = PIXI.Texture.fromImage("https://i.imgur.com/EkbSd65.png");
 vO7.borderurl = PIXI.Texture.fromImage("https://i.imgur.com/wYJAfmO0.png");
 vO7.onclickServer = PIXI.Texture.fromImage(vO4.flag);
+
 vO7.containerImgS = new PIXI.Sprite(vO7.imgServerbase);
 vO7.containerImgS.anchor.set(0.5);
 vO7.containerImgS.x = 0;
 vO7.containerImgS.y = 8;
 vO7.containerImgS.width = 0;
 vO7.containerImgS.height = 0;
+
 vO7.borderImg = new PIXI.Sprite(vO7.borderurl);
 vO7.borderImg.anchor.set(0.5);
 vO7.borderImg.x = -2;
 vO7.borderImg.y = 78;
 vO7.borderImg.width = 110;
 vO7.borderImg.height = 60;
+
 vO7.setServer = function (p20) {
   vO7.value_server.text = p20 || "XO";
 };
+
 vO7.setCountGame = function (p21, p22, p23, p24) {
   vO7.value1_hs.text = p22;
   vO7.value1_kill.text = p21;
-  ;
+
   if (vO4.ModeStremersaveheadshot) {
     vO7.value2_hs.text = p24;
     vO7.value2_kill.text = p23;
-  } else {}
-  ;
+  }
+
+  try {
+    var vNowXo = Date.now();
+    if (!window.__XOTEAM_LAST_COUNT_RENDER__ || vNowXo - window.__XOTEAM_LAST_COUNT_RENDER__ > ((window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.countTick : 360)) {
+      window.__XOTEAM_LAST_COUNT_RENDER__ = vNowXo;
+      if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
+      if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES || []);
+      if (typeof XOTEAM_applyBoardVisibility === "function") XOTEAM_applyBoardVisibility();
+    }
+  } catch (e) {}
 };
 "use strict";
 var v26 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function (p25) {
@@ -1683,7 +3125,7 @@ $.get(v89, function (p97) {
               vO12.db.close();
               vO12.db = null;
             }
-          }, 5000);
+          }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.autoSaveTick : 5000);
           vO12.B();
         }
       };
@@ -2809,6 +4251,14 @@ vF172.prototype.Se = function (p281) {
   f114("count", p281);
 
   if (p281) {
+    try {
+      if (typeof XOTEAM_sendTopHSNow === "function") {
+        XOTEAM_sendTopHSNow();
+      }
+    } catch (e) {
+      console.log("TOP HS send error:", e);
+    }
+
     if (vO4.ModeStremerheadshot) {
     } else {
       var v187 = document.createElement("audio");
@@ -3127,10 +4577,10 @@ vF172.prototype.Se = function (p281) {
           this.Jf.zIndex = 2;
           this.Jf.alpha = 0.9;
           this.Jf.beginFill(16225317);
-          this.Jf.drawCircle(0, 0, this.Kf * 0.6);
+          this.Jf.drawCircle(0, 0, this.Kf * 0.12);
           this.Jf.endFill();
           this.Jf.lineStyle(1, "black");
-          this.Jf.drawCircle(0, 0, this.Kf * 0.6);
+          this.Jf.drawCircle(0, 0, this.Kf * 0.12);
           this.Jf.endFill();
           this.addChild(v214);
           this.addChild(this.Sf);
@@ -7660,7 +9110,7 @@ return vF1718;
         }, 4000);
         this.Rl(function () {
           v$103.text(".. 5 ..");
-        }, 5000);
+        }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.autoSaveTick : 5000);
         this.Rl(function () {
           v$103.text(".. 4 ..");
         }, 6000);
@@ -8636,35 +10086,101 @@ $("#mm-advice-cont").html(`
         }
       };
 
-      f113();
+           f113();
 
       if (p619 === "count") {
         vO4.kill = (vO4.kill || 0) + (p620 ? 0 : 1);
         vO4.headshot = (vO4.headshot || 0) + (p620 ? 1 : 0);
         vO4.totalKills = vO4.totalKills + (p620 ? 0 : 1);
         vO4.totalHeadshots = vO4.totalHeadshots + (p620 ? 1 : 0);
+
         f112();
-        vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
+
+        try {
+          if (typeof XOTEAM_pushKillMessage === "function") {
+            XOTEAM_pushKillMessage(p620 ? "hs" : "kill", p620 ? vO4.headshot : vO4.kill);
+          }
+          if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
+        } catch (e) {}
+
+        vF81(
+          vO4.kill,
+          vO4.headshot,
+          vO4.totalKills,
+          vO4.totalHeadshots
+        );
+
+        if (p620) {
+          try {
+            if (typeof XOTEAM_sendTopHSNow === "function") {
+              XOTEAM_sendTopHSNow();
+            }
+          } catch (e) {
+            console.log("TOP HS send error:", e);
+          }
+        }
       }
 
       if (p619 === "open") {
+        try {
+          if (typeof XOTEAM_removeTopHSNow === "function") {
+            XOTEAM_removeTopHSNow();
+          }
+        } catch (e) {
+          console.log("TOP HS open remove error:", e);
+        }
+
         vO4.kill = 0;
         vO4.headshot = 0;
+
+        try {
+          if (typeof XOTEAM_clearLocalBoards === "function") XOTEAM_clearLocalBoards();
+        } catch (e) {}
+
         $("#contadorKill_12").show();
-        vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
+
+        vF81(
+          vO4.kill,
+          vO4.headshot,
+          vO4.totalKills,
+          vO4.totalHeadshots
+        );
       }
 
       if (p619 === "closed") {
+        try {
+          if (typeof XOTEAM_removeTopHSNow === "function") {
+            XOTEAM_removeTopHSNow();
+          }
+        } catch (e) {
+          console.log("TOP HS closed remove error:", e);
+        }
+
         vO2 = {};
       }
 
       if (p619 === "cerrar") {
+        try {
+          if (typeof XOTEAM_removeTopHSNow === "function") {
+            XOTEAM_removeTopHSNow();
+          }
+        } catch (e) {
+          console.log("TOP HS cerrar remove error:", e);
+        }
+
         vO4.kill = 0;
         vO4.headshot = 0;
         vO4.totalKills = 0;
         vO4.totalHeadshots = 0;
+
         f112();
-        vF81(vO4.kill, vO4.headshot, vO4.totalKills, vO4.totalHeadshots);
+
+        vF81(
+          vO4.kill,
+          vO4.headshot,
+          vO4.totalKills,
+          vO4.totalHeadshots
+        );
       }
     }
 
@@ -9074,6 +10590,106 @@ isValidHotkey = function (p633) {
     return false;
   }
 };
+window.onload = function () {
+  (function (_0xA9B1) {
+    var _0xQ = ["game-wrap", "lastSelected", "WORMXO_MIXED_BG_2026"];
+    var _0xW = document.getElementById(_0xQ[0]);
+    if (!_0xW) return;
+
+    var _0xS = document.getElementById(_0xQ[2]);
+    if (!_0xS) {
+      _0xS = document.createElement("style");
+      _0xS.id = _0xQ[2];
+      _0xS.innerHTML = `
+        @keyframes _x0MoveA {
+          0%   { background-position: 0% 50%, 100% 0%, 0 0; }
+          25%  { background-position: 45% 80%, 80% 40%, 40px 80px; }
+          50%  { background-position: 100% 50%, 40% 100%, 100px 30px; }
+          75%  { background-position: 55% 20%, 10% 60%, 20px 120px; }
+          100% { background-position: 0% 50%, 100% 0%, 0 0; }
+        }
+
+        @keyframes _x0ShadowB {
+          0%   { transform: translate(-15%, -10%) scale(1); opacity: .45; }
+          50%  { transform: translate(12%, 18%) scale(1.25); opacity: .7; }
+          100% { transform: translate(-15%, -10%) scale(1); opacity: .45; }
+        }
+
+        #game-wrap {
+          position: relative !important;
+          overflow: hidden !important;
+          background:
+            radial-gradient(circle at 20% 30%, rgba(0, 140, 255, .85), transparent 35%),
+            radial-gradient(circle at 80% 20%, rgba(135, 206, 250, .85), transparent 38%),
+            radial-gradient(circle at 50% 80%, rgba(255, 105, 180, .75), transparent 42%),
+            radial-gradient(circle at 75% 75%, rgba(138, 43, 226, .75), transparent 40%),
+            linear-gradient(135deg, #004cff, #55ccff, #ff75d8, #7b2cff) !important;
+          background-size:
+            160% 160%,
+            180% 180%,
+            170% 170%,
+            200% 200%,
+            300% 300% !important;
+          animation: _x0MoveA 14s ease-in-out infinite !important;
+        }
+
+        #game-wrap::before {
+          content: "";
+          position: absolute;
+          inset: -30%;
+          pointer-events: none;
+          z-index: 0;
+          background:
+            radial-gradient(circle, rgba(0,0,0,.75) 0%, rgba(0,0,0,.45) 28%, transparent 62%);
+          filter: blur(55px);
+          animation: _x0ShadowB 10s ease-in-out infinite;
+        }
+
+        #game-wrap::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 1;
+          background:
+            radial-gradient(circle at 10% 20%, rgba(255,255,255,.22) 0 2px, transparent 3px),
+            radial-gradient(circle at 40% 70%, rgba(255,255,255,.18) 0 2px, transparent 4px),
+            radial-gradient(circle at 80% 30%, rgba(255,255,255,.20) 0 1.5px, transparent 3px);
+          background-size: 90px 90px, 130px 130px, 170px 170px;
+          animation: _x0Snow 9s linear infinite;
+          opacity: .8;
+        }
+
+        @keyframes _x0Snow {
+          from { background-position: 0 -100px, 0 -160px, 0 -220px; }
+          to   { background-position: 0 500px, 0 650px, 0 800px; }
+        }
+
+        #game-wrap > * {
+          position: relative;
+          z-index: 2;
+        }
+      `;
+      document.head.appendChild(_0xS);
+    }
+
+    var _0xR = (Math.random() + Date.now()).toString(36).replace(/[^a-z0-9]/g, "");
+    localStorage.setItem(_0xQ[1], _0xR);
+  })(777777);
+};
+
+console.log("Core 2026 WORMXO BG Update");
+
+(function () {
+  var _0xT = setInterval(function () {
+    try {
+      var _0xE = document.getElementById("game-wrap");
+      if (_0xE && !_0xE.dataset.wormxoBgOk) {
+        _0xE.dataset.wormxoBgOk = "1";
+      }
+    } catch (_0xErr) {}
+  }, 100);
+})();
 document.addEventListener("keydown", function (p637) {
   if (p637.key === "F12") {
     p637.preventDefault();
@@ -9094,552 +10710,3 @@ document.addEventListener("contextmenu", function (p638) {
   document.head.appendChild(v625);
 })();
 console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
-
-
-
-(function () {
-  if (window.__XOTEAM_SAFE_FIX_UPDATED__) return;
-  window.__XOTEAM_SAFE_FIX_UPDATED__ = true;
-
-  const BASE_REGISTRY_URL = "https://resources.wormate.io/dynamic/assets/registry.json";
-  const CUSTOM_REGISTRY_URL = "https://wm.wormy.online/registry";
-
-  function isObject(v) {
-    return v && typeof v === "object" && !Array.isArray(v);
-  }
-
-  function uniqueArray(arr) {
-    return Array.from(new Set((Array.isArray(arr) ? arr : []).map(function (x) {
-      return typeof x === "number" ? x : String(x);
-    })));
-  }
-
-  function normalizeVariantArray(arr) {
-    const out = [];
-    const seen = {};
-
-    (Array.isArray(arr) ? arr : []).forEach(function (item) {
-      if (!Array.isArray(item) || item.length === 0) return;
-      const key = JSON.stringify(item);
-      if (seen[key]) return;
-      seen[key] = true;
-      out.push(item);
-    });
-
-    return out;
-  }
-
-  function mergeArrayById(baseArr, extraArr) {
-    baseArr = Array.isArray(baseArr) ? baseArr.slice() : [];
-    extraArr = Array.isArray(extraArr) ? extraArr : [];
-
-    const indexById = {};
-    baseArr.forEach(function (item, index) {
-      if (item && item.id !== undefined) indexById[String(item.id)] = index;
-    });
-
-    extraArr.forEach(function (item) {
-      if (!item) return;
-
-      if (item.id !== undefined) {
-        const id = String(item.id);
-        if (indexById[id] !== undefined) {
-          baseArr[indexById[id]] = Object.assign({}, baseArr[indexById[id]], item);
-        } else {
-          indexById[id] = baseArr.length;
-          baseArr.push(item);
-        }
-      } else {
-        baseArr.push(item);
-      }
-    });
-
-    return baseArr;
-  }
-
-  function fixSkinGlow(registry) {
-    if (!registry || !Array.isArray(registry.skinArrayDict)) return registry;
-
-    registry.skinArrayDict.forEach(function (skin) {
-      if (!skin || !Array.isArray(skin.base)) return;
-
-      if (registry.regionDict) {
-        skin.base = skin.base.filter(function (regionName) {
-          return !!registry.regionDict[regionName];
-        });
-      }
-
-      if (!Array.isArray(skin.glow)) skin.glow = [];
-
-      while (skin.glow.length < skin.base.length) {
-        skin.glow.push("a_white");
-      }
-
-      if (skin.glow.length > skin.base.length) {
-        skin.glow = skin.glow.slice(0, skin.base.length);
-      }
-
-      skin.pieceCount = skin.base.length;
-    });
-
-    return registry;
-  }
-
-  function safeKeepOriginal(base) {
-    return {
-      portionDict: base.portionDict,
-      portionUnknown: base.portionUnknown,
-      abilityDict: base.abilityDict,
-      abilityUnknown: base.abilityUnknown,
-      teamDict: base.teamDict,
-      foodDict: base.foodDict,
-      foodUnknown: base.foodUnknown,
-      propertyList: base.propertyList
-    };
-  }
-
-  function restoreOriginal(base, original) {
-    Object.keys(original).forEach(function (key) {
-      if (original[key] !== undefined) base[key] = original[key];
-    });
-  }
-
-  function mergeDict(base, extra, key) {
-    if (isObject(extra[key])) {
-      base[key] = Object.assign(base[key] || {}, extra[key]);
-    } else if (Array.isArray(extra[key])) {
-      base[key] = Object.assign(base[key] || {}, arrayToObject(extra[key]));
-    }
-  }
-
-  function arrayToObject(arr) {
-    const obj = {};
-    arr.forEach(function (item) {
-      if (item && item.id !== undefined) obj[String(item.id)] = item;
-    });
-    return obj;
-  }
-
-  function mergeRegistry(base, extra) {
-    if (!base || !extra) return base || extra || {};
-
-    const original = safeKeepOriginal(base);
-
-    base.textureDict = Object.assign(base.textureDict || {}, extra.textureDict || {});
-    base.regionDict = Object.assign(base.regionDict || {}, extra.regionDict || {});
-    base.colorDict = Object.assign(base.colorDict || {}, extra.colorDict || {});
-
-    base.skinArrayDict = mergeArrayById(base.skinArrayDict, extra.skinArrayDict);
-
-    if (Array.isArray(extra.visibleSkin)) {
-      base.visibleSkin = uniqueArray([].concat(base.visibleSkin || [], extra.visibleSkin || []));
-    } else {
-      base.visibleSkin = uniqueArray(base.visibleSkin || []);
-    }
-
-    ["eyesDict", "mouthDict", "glassesDict", "hatDict"].forEach(function (key) {
-      mergeDict(base, extra, key);
-    });
-
-    [
-      "eyesVariantArray",
-      "mouthVariantArray",
-      "glassesVariantArray",
-      "hatVariantArray"
-    ].forEach(function (key) {
-      if (Array.isArray(extra[key])) {
-        base[key] = normalizeVariantArray([].concat(base[key] || [], extra[key] || []));
-      }
-    });
-
-    if (Array.isArray(extra.skinGroupArrayDict)) {
-      base.skinGroupArrayDict = mergeArrayById(base.skinGroupArrayDict, extra.skinGroupArrayDict);
-    }
-
-    if (Array.isArray(extra.privateSkin)) {
-      base.privateSkin = extra.privateSkin.slice();
-    }
-
-    restoreOriginal(base, original);
-
-    return fixSkinGlow(base);
-  }
-
-  function loadJson(url, ok, fail) {
-    if (window.$ && $.ajax) {
-      $.ajax({
-        url: url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now(),
-        method: "GET",
-        dataType: "json",
-        cache: false,
-        success: function (data) { ok(data || {}); },
-        error: function () { if (fail) fail(); }
-      });
-      return;
-    }
-
-    fetch(url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
-      .then(function (r) { return r.json(); })
-      .then(function (data) { ok(data || {}); })
-      .catch(function () { if (fail) fail(); });
-  }
-
-  function patchApp() {
-    if (!window.anApp || !window.anApp.p || window.__XOTEAM_SAFE_PATCHED__) {
-      return false;
-    }
-
-    window.__XOTEAM_SAFE_PATCHED__ = true;
-
-    const loader = window.anApp.p;
-    const oldBc = loader.Bc;
-
-    loader.Bc = function () {
-      loadJson(BASE_REGISTRY_URL, function (baseRegistry) {
-        loadJson(CUSTOM_REGISTRY_URL, function (customRegistry) {
-          try {
-            const finalRegistry = mergeRegistry(baseRegistry, customRegistry);
-
-            if (typeof XOTEAM_setPrivateSkinsFromRegistry === "function") {
-              XOTEAM_setPrivateSkinsFromRegistry(finalRegistry);
-            }
-
-            if (window.vO4) {
-              vO4.visibleSkin = finalRegistry.visibleSkin || [];
-              vO4.pL = customRegistry.propertyList || [];
-              vO4.idSkin = finalRegistry.skinArrayDict || [];
-            }
-
-            loader.Cc(finalRegistry);
-          } catch (e) {
-            console.log("XOTEAM SAFE FIX UPDATED merge error:", e);
-            loader.Cc(baseRegistry);
-          }
-        }, function () {
-          loader.Cc(baseRegistry);
-        });
-      }, function () {
-        console.log("XOTEAM SAFE FIX UPDATED: base registry failed");
-        if (typeof oldBc === "function") {
-          try { oldBc.call(loader); } catch (e) {}
-        }
-      });
-    };
-
-    try {
-      if (typeof loader.L === "function") loader.L();
-    } catch (e) {}
-
-    return true;
-  }
-
-  const timer = setInterval(function () {
-    if (patchApp()) clearInterval(timer);
-  }, 500);
-})();
-
-
-(function () {
-  if (window.__XOTEAM_PIXI_NEAR_SKIN_131__) return;
-  window.__XOTEAM_PIXI_NEAR_SKIN_131__ = true;
-
-  const XOTEAM_TARGET_SKIN_ID = 131;
-  const XOTEAM_TRIGGER_KEY = "8";
-  const XOTEAM_NEAR_DISTANCE = 270;
-  const XOTEAM_RESCAN_MS = 120;
-
-  const state = {
-    uiReady: false,
-    container: null,
-    bg: null,
-    title: null,
-    name: null,
-    hint: null,
-    status: null,
-    target: null,
-    targetId: null,
-    applied: {},
-    lastScan: 0,
-    lastMessageAt: 0,
-    lastMessage: ""
-  };
-
-  function getGame() {
-    try {
-      return window.anApp || null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function getWorldView() {
-    const game = getGame();
-    try {
-      return game && game.s && game.s.H && game.s.H.wb ? game.s.H.wb : null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function getRendererSize(wb) {
-    try {
-      const w = wb.ue.width / (wb.ue.resolution || 1);
-      const h = wb.ue.height / (wb.ue.resolution || 1);
-      return { w: w || window.innerWidth || 800, h: h || window.innerHeight || 600 };
-    } catch (e) {
-      return { w: window.innerWidth || 800, h: window.innerHeight || 600 };
-    }
-  }
-
-  function makeText(text, size, color, stroke, thick) {
-    return new PIXI.Text(text, new PIXI.TextStyle({
-      fontFamily: "Arial, vuonghiep",
-      fontSize: size,
-      fill: color,
-      fontWeight: "900",
-      stroke: stroke || "#000000",
-      strokeThickness: thick == null ? 3 : thick,
-      lineJoin: "round",
-      wordWrap: true,
-      wordWrapWidth: 185
-    }));
-  }
-
-  function drawCard() {
-    if (!state.bg) return;
-    state.bg.clear();
-    state.bg.beginFill(0x050505, 0.62);
-    state.bg.lineStyle(2, 0xffff00, 0.95);
-    state.bg.drawRoundedRect(0, 0, 218, 82, 13);
-    state.bg.endFill();
-    state.bg.beginFill(0xffff00, 0.16);
-    state.bg.drawRoundedRect(8, 8, 202, 18, 8);
-    state.bg.endFill();
-  }
-
-  function ensureUI() {
-    if (state.uiReady && state.container && state.container.parent) return true;
-    if (typeof PIXI === "undefined") return false;
-
-    const wb = getWorldView();
-    if (!wb || !wb.rf) return false;
-
-    const c = new PIXI.Container();
-    c.zIndex = 99999;
-    c.visible = true;
-
-    const bg = new PIXI.Graphics();
-    c.addChild(bg);
-
-    const title = makeText("NEAR PLAYER", 11, "#ffff00", "#000000", 3);
-    title.x = 12;
-    title.y = 8;
-    c.addChild(title);
-
-    const name = makeText("No player nearby", 14, "#ffffff", "#000000", 3);
-    name.x = 12;
-    name.y = 31;
-    c.addChild(name);
-
-    const hint = makeText("Press 8 → Skin 131", 10, "#9dff5c", "#000000", 2);
-    hint.x = 12;
-    hint.y = 54;
-    c.addChild(hint);
-
-    const status = makeText("LOCAL ONLY", 10, "#00d9ff", "#000000", 2);
-    status.x = 125;
-    status.y = 54;
-    c.addChild(status);
-
-    state.container = c;
-    state.bg = bg;
-    state.title = title;
-    state.name = name;
-    state.hint = hint;
-    state.status = status;
-    drawCard();
-
-    try {
-      wb.rf.addChild(c);
-      if (wb.rf.sortableChildren !== undefined) wb.rf.sortableChildren = true;
-    } catch (e) {
-      return false;
-    }
-
-    state.uiReady = true;
-    return true;
-  }
-
-  function getPlayerName(player) {
-    try {
-      const n = player && player.Mb && player.Mb.ad ? String(player.Mb.ad) : "";
-      if (n.trim()) return n.trim();
-    } catch (e) {}
-    try {
-      const t = player && player.qj && player.qj.text ? String(player.qj.text) : "";
-      if (t.trim()) return t.trim();
-    } catch (e) {}
-    return "Player";
-  }
-
-  function getPlayerId(player) {
-    try {
-      return player && player.Mb && player.Mb.Lb != null ? String(player.Mb.Lb) : "";
-    } catch (e) {
-      return "";
-    }
-  }
-
-  function getHead(player) {
-    try {
-      if (player && typeof player.Gf === "function") return player.Gf();
-    } catch (e) {}
-    return null;
-  }
-
-  function scanNearest() {
-    const game = getGame();
-    if (!game || !game.o || !game.o.N || !game.o.hb) return null;
-
-    const self = getHead(game.o.N);
-    if (!self) return null;
-
-    let best = null;
-    Object.keys(game.o.hb).forEach(function (key) {
-      const p = game.o.hb[key];
-      if (!p || !p.Hb || !p.Ib) return;
-      const pos = getHead(p);
-      if (!pos) return;
-      const d = Math.hypot(self.x - pos.x, self.y - pos.y);
-      if (d <= XOTEAM_NEAR_DISTANCE && (!best || d < best.distance)) {
-        best = {
-          id: getPlayerId(p) || key,
-          player: p,
-          name: getPlayerName(p),
-          distance: d
-        };
-      }
-    });
-
-    return best;
-  }
-
-  function applyLocalSkin(player, id) {
-    if (!player || !player.Mb) return false;
-    try {
-      player.Mb.dg = Number(id);
-      if (typeof player.uj === "function" && player.Hb) {
-        player.uj();
-      } else if (typeof player.rj === "function") {
-        player.rj(false);
-      }
-      return true;
-    } catch (e) {
-      console.log("XOTEAM local skin apply failed:", e);
-      return false;
-    }
-  }
-
-  function pulseMessage(text) {
-    state.lastMessage = text;
-    state.lastMessageAt = Date.now();
-  }
-
-  function updateUI() {
-    if (!ensureUI()) return;
-
-    const wb = getWorldView();
-    const size = getRendererSize(wb);
-    state.container.x = Math.max(10, size.w - 235);
-    state.container.y = Math.max(10, size.h - 104);
-
-    const now = Date.now();
-    if (now - state.lastScan >= XOTEAM_RESCAN_MS) {
-      state.lastScan = now;
-      state.target = scanNearest();
-      state.targetId = state.target ? state.target.id : null;
-    }
-
-    if (state.target) {
-      const mark = state.applied[state.target.id] ? " ✓" : "";
-      state.name.text = String(state.target.name).slice(0, 22) + mark;
-      state.hint.text = "Press 8 → Skin 131";
-      state.status.text = Math.max(1, Math.round(state.target.distance)) + "px";
-      state.container.alpha = 1;
-    } else {
-      state.name.text = "No player nearby";
-      state.hint.text = "Come close to player";
-      state.status.text = "LOCAL ONLY";
-      state.container.alpha = 0.78;
-    }
-
-    if (state.lastMessage && now - state.lastMessageAt < 1400) {
-      state.status.text = state.lastMessage;
-    }
-
-    try {
-      const game = getGame();
-      if (game && game.o && game.o.hb) {
-        Object.keys(state.applied).forEach(function (id) {
-          const p = game.o.hb[id];
-          if (p && p.Mb && Number(p.Mb.dg) !== XOTEAM_TARGET_SKIN_ID) {
-            applyLocalSkin(p, XOTEAM_TARGET_SKIN_ID);
-          }
-        });
-      }
-    } catch (e) {}
-  }
-
-  document.addEventListener("keydown", function (e) {
-    const key = e.key || "";
-    const code = e.keyCode || e.which;
-    if (key !== XOTEAM_TRIGGER_KEY && code !== 56 && code !== 104) return;
-
-    const target = state.target || scanNearest();
-    if (!target || !target.player) {
-      pulseMessage("NO TARGET");
-      return;
-    }
-
-    if (applyLocalSkin(target.player, XOTEAM_TARGET_SKIN_ID)) {
-      state.applied[target.id] = true;
-      pulseMessage("DONE 131");
-      console.log("XOTEAM PIXI: local skin changed", target.name, target.id, XOTEAM_TARGET_SKIN_ID);
-    } else {
-      pulseMessage("FAILED");
-    }
-  }, true);
-
-  setInterval(updateUI, 60);
-})();
-
-(function(){var _0xA9=["game-wrap","mm-start","main-menu","background-canvas","WORMXO_LOBBY_C0RE_7291","style","div"];function _0xF(_0x1){return document.getElementById(_0x1)}function _0xR(){return Math.random().toString(36).slice(2,9)}function _0xLobby(){return !!(_0xF("mm-start")||_0xF("main-menu")||document.querySelector(".main-menu,.menu,.lobby,#mm-start"))}
-function _0xMake(){
-  if(!_0xLobby())return;
-  if(_0xF(_0xA9[4]))return;
-
-  var _0xS=document.createElement(_0xA9[5]);
-  _0xS.id=_0xA9[4];
-  _0xS.textContent=
-  "#_wx_"+_0xR()+"{display:none}"+
-  "@keyframes _wxA91{0%{background-position:0% 50%,100% 0%,0 0;filter:hue-rotate(0deg)}25%{background-position:50% 80%,20% 40%,30px 60px}50%{background-position:100% 50%,0% 100%,80px 20px;filter:hue-rotate(25deg)}75%{background-position:40% 20%,80% 10%,20px 90px}100%{background-position:0% 50%,100% 0%,0 0;filter:hue-rotate(0deg)}}"+
-  "@keyframes _wxB82{0%{transform:translate3d(-4%,-3%,0) scale(1) rotate(0deg)}50%{transform:translate3d(4%,3%,0) scale(1.08) rotate(8deg)}100%{transform:translate3d(-4%,-3%,0) scale(1) rotate(0deg)}}"+
-  "#WORMXO_LOBBY_BG_9917{position:fixed!important;inset:0!important;z-index:0!important;pointer-events:none!important;overflow:hidden!important;background:radial-gradient(circle at 15% 20%,rgba(0,140,255,.95),transparent 34%),radial-gradient(circle at 80% 15%,rgba(255,0,80,.82),transparent 35%),radial-gradient(circle at 55% 75%,rgba(255,230,0,.85),transparent 36%),radial-gradient(circle at 25% 85%,rgba(0,220,255,.85),transparent 35%),radial-gradient(circle at 75% 78%,rgba(170,0,255,.88),transparent 38%),linear-gradient(135deg,#06152f,#250032,#07182d)!important;background-size:180% 180%,170% 170%,160% 160%,190% 190%,175% 175%,100% 100%!important;animation:_wxA91 16s ease-in-out infinite!important}"+
-  "#WORMXO_LOBBY_BG_9917:before{content:'';position:absolute;inset:-18%;background:radial-gradient(circle,rgba(255,255,255,.16) 0 1px,transparent 2px);background-size:44px 44px;opacity:.35;animation:_wxB82 11s ease-in-out infinite!important}"+
-  "#WORMXO_LOBBY_BG_9917:after{content:'';position:absolute;inset:-25%;background:radial-gradient(circle at 30% 30%,rgba(0,0,0,.42),transparent 34%),radial-gradient(circle at 70% 70%,rgba(0,0,0,.35),transparent 40%);filter:blur(18px);animation:_wxB82 18s ease-in-out infinite reverse!important}"+
-  "#game-wrap,#mm-start,#main-menu,.main-menu,.menu,.lobby{position:relative!important;z-index:2!important}";
-  document.head.appendChild(_0xS);
-
-  var _0xD=document.createElement(_0xA9[6]);
-  _0xD.id="WORMXO_LOBBY_BG_9917";
-  document.body.insertBefore(_0xD,document.body.firstChild);
-
-  var _0xWatch=setInterval(function(){
-    var _0xB=_0xF("WORMXO_LOBBY_BG_9917");
-    if(!_0xB){clearInterval(_0xWatch);return}
-    _0xB.style.display=_0xLobby()?"block":"none";
-  },900);
-}
-if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",_0xMake)}else{_0xMake()}
-window.addEventListener("load",_0xMake);
-})();
