@@ -85,6 +85,7 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
   hideTopKill: localStorage.getItem("XOTEAM_HIDE_TOP_KILL") === "true",
   hideTopHS: localStorage.getItem("XOTEAM_HIDE_TOP_HS") === "true",
   maskNames: localStorage.getItem("XOTEAM_MASK_NAMES") === "true",
+  showZigZag: localStorage.getItem("XOTEAM_SHOW_ZIGZAG") === "true",
   lowPerf: true
 };
 
@@ -107,6 +108,268 @@ window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
   joystickBottom: Number(localStorage.getItem("WORMXO_JOYSTICK_BOTTOM") || 105)
 };
 window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.WORMXO_MOBILE_PERF.isMobile || window.WORMXO_MOBILE_PERF.memory <= 4));
+
+
+/* WORMXO DEEP REGISTRY MERGE CORE - moved from end */
+(function () {
+  if (window.__XOTEAM_SAFE_FIX_UPDATED__) return;
+  window.__XOTEAM_SAFE_FIX_UPDATED__ = true;
+
+  const BASE_REGISTRY_URL = "https://resources.wormate.io/dynamic/assets/registry.json";
+  const CUSTOM_REGISTRY_URL = "https://wm.wormy.online/registry";
+
+  function isObject(v) {
+    return v && typeof v === "object" && !Array.isArray(v);
+  }
+
+  function uniqueArray(arr) {
+    return Array.from(new Set((Array.isArray(arr) ? arr : []).map(function (x) {
+      return typeof x === "number" ? x : String(x);
+    })));
+  }
+
+  function normalizeVariantArray(arr) {
+    const out = [];
+    const seen = {};
+
+    (Array.isArray(arr) ? arr : []).forEach(function (item) {
+      if (!Array.isArray(item) || item.length === 0) return;
+      const key = JSON.stringify(item);
+      if (seen[key]) return;
+      seen[key] = true;
+      out.push(item);
+    });
+
+    return out;
+  }
+
+  function mergeArrayById(baseArr, extraArr) {
+    baseArr = Array.isArray(baseArr) ? baseArr.slice() : [];
+    extraArr = Array.isArray(extraArr) ? extraArr : [];
+
+    const indexById = {};
+    baseArr.forEach(function (item, index) {
+      if (item && item.id !== undefined) indexById[String(item.id)] = index;
+    });
+
+    extraArr.forEach(function (item) {
+      if (!item) return;
+
+      if (item.id !== undefined) {
+        const id = String(item.id);
+        if (indexById[id] !== undefined) {
+          baseArr[indexById[id]] = Object.assign({}, baseArr[indexById[id]], item);
+        } else {
+          indexById[id] = baseArr.length;
+          baseArr.push(item);
+        }
+      } else {
+        baseArr.push(item);
+      }
+    });
+
+    return baseArr;
+  }
+
+  function fixSkinGlow(registry) {
+    if (!registry || !Array.isArray(registry.skinArrayDict)) return registry;
+
+    registry.skinArrayDict.forEach(function (skin) {
+      if (!skin || !Array.isArray(skin.base)) return;
+
+      if (registry.regionDict) {
+        skin.base = skin.base.filter(function (regionName) {
+          return !!registry.regionDict[regionName];
+        });
+      }
+
+      if (!Array.isArray(skin.glow)) skin.glow = [];
+
+      while (skin.glow.length < skin.base.length) {
+        skin.glow.push("a_white");
+      }
+
+      if (skin.glow.length > skin.base.length) {
+        skin.glow = skin.glow.slice(0, skin.base.length);
+      }
+
+      skin.pieceCount = skin.base.length;
+    });
+
+    return registry;
+  }
+
+  function safeKeepOriginal(base) {
+    return {
+      portionDict: base.portionDict,
+      portionUnknown: base.portionUnknown,
+      abilityDict: base.abilityDict,
+      abilityUnknown: base.abilityUnknown,
+      teamDict: base.teamDict,
+      foodDict: base.foodDict,
+      foodUnknown: base.foodUnknown,
+      propertyList: base.propertyList
+    };
+  }
+
+  function restoreOriginal(base, original) {
+    Object.keys(original).forEach(function (key) {
+      if (original[key] !== undefined) base[key] = original[key];
+    });
+  }
+
+  function mergeDict(base, extra, key) {
+    if (isObject(extra[key])) {
+      base[key] = Object.assign(base[key] || {}, extra[key]);
+    } else if (Array.isArray(extra[key])) {
+      base[key] = Object.assign(base[key] || {}, arrayToObject(extra[key]));
+    }
+  }
+
+  function arrayToObject(arr) {
+    const obj = {};
+    arr.forEach(function (item) {
+      if (item && item.id !== undefined) obj[String(item.id)] = item;
+    });
+    return obj;
+  }
+
+  function mergeRegistry(base, extra) {
+    if (!base || !extra) return base || extra || {};
+
+    const original = safeKeepOriginal(base);
+
+    base.textureDict = Object.assign(base.textureDict || {}, extra.textureDict || {});
+    base.regionDict = Object.assign(base.regionDict || {}, extra.regionDict || {});
+    base.colorDict = Object.assign(base.colorDict || {}, extra.colorDict || {});
+
+    base.skinArrayDict = mergeArrayById(base.skinArrayDict, extra.skinArrayDict);
+
+    if (Array.isArray(extra.visibleSkin)) {
+      base.visibleSkin = uniqueArray([].concat(base.visibleSkin || [], extra.visibleSkin || []));
+    } else {
+      base.visibleSkin = uniqueArray(base.visibleSkin || []);
+    }
+
+    ["eyesDict", "mouthDict", "glassesDict", "hatDict"].forEach(function (key) {
+      mergeDict(base, extra, key);
+    });
+
+    [
+      "eyesVariantArray",
+      "mouthVariantArray",
+      "glassesVariantArray",
+      "hatVariantArray"
+    ].forEach(function (key) {
+      if (Array.isArray(extra[key])) {
+        base[key] = normalizeVariantArray([].concat(base[key] || [], extra[key] || []));
+      }
+    });
+
+    if (Array.isArray(extra.skinGroupArrayDict)) {
+      base.skinGroupArrayDict = mergeArrayById(base.skinGroupArrayDict, extra.skinGroupArrayDict);
+    }
+
+    if (Array.isArray(extra.privateSkin)) {
+      base.privateSkin = extra.privateSkin.slice();
+    }
+
+    restoreOriginal(base, original);
+
+    return fixSkinGlow(base);
+  }
+
+  function loadJson(url, ok, fail) {
+    if (window.$ && $.ajax) {
+      $.ajax({
+        url: url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now(),
+        method: "GET",
+        dataType: "json",
+        cache: false,
+        success: function (data) { ok(data || {}); },
+        error: function () { if (fail) fail(); }
+      });
+      return;
+    }
+
+    fetch(url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) { ok(data || {}); })
+      .catch(function () { if (fail) fail(); });
+  }
+
+  function patchApp() {
+    if (!window.anApp || !window.anApp.p || window.__XOTEAM_SAFE_PATCHED__) {
+      return false;
+    }
+
+    window.__XOTEAM_SAFE_PATCHED__ = true;
+
+    const loader = window.anApp.p;
+    const oldBc = loader.Bc;
+
+    loader.Bc = function () {
+      loadJson(BASE_REGISTRY_URL, function (baseRegistry) {
+        loadJson(CUSTOM_REGISTRY_URL, function (customRegistry) {
+          try {
+            const finalRegistry = mergeRegistry(baseRegistry, customRegistry);
+
+            if (typeof XOTEAM_setPrivateSkinsFromRegistry === "function") {
+              XOTEAM_setPrivateSkinsFromRegistry(finalRegistry);
+            }
+
+            if (window.vO4) {
+              vO4.visibleSkin = finalRegistry.visibleSkin || [];
+              vO4.pL = customRegistry.propertyList || [];
+              vO4.idSkin = finalRegistry.skinArrayDict || [];
+            }
+
+            loader.Cc(finalRegistry);
+          } catch (e) {
+            console.log("XOTEAM SAFE FIX UPDATED merge error:", e);
+            loader.Cc(baseRegistry);
+          }
+        }, function () {
+          loader.Cc(baseRegistry);
+        });
+      }, function () {
+        console.log("XOTEAM SAFE FIX UPDATED: base registry failed");
+        if (typeof oldBc === "function") {
+          try { oldBc.call(loader); } catch (e) {}
+        }
+      });
+    };
+
+    try {
+      if (typeof loader.L === "function") loader.L();
+    } catch (e) {}
+
+    return true;
+  }
+
+  const timer = setInterval(function () {
+    if (patchApp()) clearInterval(timer);
+  }, 500);
+})();
+
+
+/* WORMXO DEEP LOBBY BACKGROUND CORE - moved from end */
+/* WORMXO optimized lobby background - light GPU / old design keeper */
+(function () {
+  if (window.__WORMXO_LOBBY_BG_2026__) return;
+  window.__WORMXO_LOBBY_BG_2026__ = true;
+  function install() {
+    try {
+      if (document.getElementById("wormxo-lobby-bg-style")) return;
+      var css = document.createElement("style");
+      css.id = "wormxo-lobby-bg-style";
+      css.textContent = "#game-wrap,#mm-start,#main-menu,.background-canva{background:radial-gradient(circle at 20% 20%,rgba(85,195,255,.24),transparent 28%),radial-gradient(circle at 80% 30%,rgba(255,95,185,.22),transparent 32%),linear-gradient(135deg,#071325 0%,#141026 45%,#25102d 100%)!important;background-size:180% 180%!important;animation:wormxoBgSlow 18s ease-in-out infinite alternate!important;}@keyframes wormxoBgSlow{0%{background-position:0% 30%,100% 20%,0% 0%;}100%{background-position:80% 70%,20% 80%,100% 100%;}}";
+      (document.head || document.documentElement).appendChild(css);
+    } catch (e) {}
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
+})();
+
 
 window.detectLog = null;
 const vO = {
@@ -1589,6 +1852,177 @@ function XOTEAM_applyNameMask() {
     });
   } catch (e) {}
 }
+
+/* WORMXO Show Zig zag deep detector */
+window.WORMXO_ZIGZAG_CORE = window.WORMXO_ZIGZAG_CORE || {
+  samples: {},
+  labels: {},
+  parent: null,
+  lastScan: 0,
+  lastSettings: 0,
+  iconText: "⚡ZIG",
+  speedText: "SPD"
+};
+function XOTEAM_toggleZigZagShow(v) {
+  try {
+    window.WORMXO_UI_STATE.showZigZag = !!v;
+    XOTEAM_saveUIFlag("XOTEAM_SHOW_ZIGZAG", !!v);
+    var btn = document.getElementById("wormxo-zigzag-toggle");
+    if (btn) btn.textContent = "Show Zig zag: " + (!!v ? "ON" : "OFF");
+    if (!v) XOTEAM_clearZigZagLabels();
+  } catch (e) {}
+}
+function XOTEAM_findWorldLayer() {
+  try {
+    var game = window.anApp;
+    if (game && game.s && game.s.H && game.s.H.wb && game.s.H.wb.rf) return game.s.H.wb.rf;
+  } catch (e) {}
+  try {
+    if (vO7 && vO7.containerCountInfo && vO7.containerCountInfo.parent) return vO7.containerCountInfo.parent;
+  } catch (e2) {}
+  return null;
+}
+function XOTEAM_getZigPlayerHead(p) {
+  try { if (p && typeof p.Gf === "function") return p.Gf(); } catch (e) {}
+  try { if (p && p.Hb && p.Ib) return { x: p.Hb, y: p.Ib }; } catch (e2) {}
+  try { if (p && typeof p.x !== "undefined" && typeof p.y !== "undefined") return { x: p.x, y: p.y }; } catch (e3) {}
+  return null;
+}
+function XOTEAM_getZigPlayerId(p, key) {
+  try { if (p && p.Mb && p.Mb.Lb != null) return String(p.Mb.Lb); } catch (e) {}
+  return String(key || "");
+}
+function XOTEAM_getZigLabel(id) {
+  try {
+    var core = window.WORMXO_ZIGZAG_CORE;
+    var parent = XOTEAM_findWorldLayer();
+    if (!parent || typeof PIXI === "undefined") return null;
+    if (!core.labels[id]) {
+      var c = new PIXI.Container();
+      c.zIndex = 999999;
+      var t = new PIXI.Text(core.iconText, new PIXI.TextStyle({
+        align: "center",
+        fill: "#ff3333",
+        fontSize: 13,
+        fontWeight: "900",
+        fontFamily: "Arial, vuonghiep",
+        stroke: "#000000",
+        strokeThickness: 2
+      }));
+      t.anchor && t.anchor.set ? t.anchor.set(0.5) : null;
+      var s = new PIXI.Text(core.speedText, new PIXI.TextStyle({
+        align: "center",
+        fill: "#ffb300",
+        fontSize: 9,
+        fontWeight: "900",
+        fontFamily: "Arial, vuonghiep",
+        stroke: "#000000",
+        strokeThickness: 2
+      }));
+      s.anchor && s.anchor.set ? s.anchor.set(0.5) : null;
+      s.y = 13;
+      c.addChild(t);
+      c.addChild(s);
+      core.labels[id] = { c: c, t: t, s: s, last: 0 };
+      try { parent.addChild(c); if (parent.sortableChildren !== undefined) parent.sortableChildren = true; } catch (e) {}
+    } else if (!core.labels[id].c.parent && parent) {
+      try { parent.addChild(core.labels[id].c); } catch (e2) {}
+    }
+    return core.labels[id];
+  } catch (e3) { return null; }
+}
+function XOTEAM_clearZigZagLabels() {
+  try {
+    var labels = (window.WORMXO_ZIGZAG_CORE && window.WORMXO_ZIGZAG_CORE.labels) || {};
+    Object.keys(labels).forEach(function (id) {
+      try { if (labels[id].c && labels[id].c.parent) labels[id].c.parent.removeChild(labels[id].c); } catch (e) {}
+      delete labels[id];
+    });
+  } catch (e2) {}
+}
+function XOTEAM_updateZigZagDetect() {
+  try {
+    var st = window.WORMXO_UI_STATE || {};
+    if (!st.showZigZag) { XOTEAM_clearZigZagLabels(); return; }
+    var now = Date.now();
+    var perf = window.WORMXO_MOBILE_PERF || {};
+    var delay = perf.low ? 520 : 260;
+    var core = window.WORMXO_ZIGZAG_CORE;
+    if (now - core.lastScan < delay) return;
+    core.lastScan = now;
+    var game = window.anApp;
+    if (!game || !game.o || !game.o.hb) return;
+    var aliveIds = {};
+    Object.keys(game.o.hb).forEach(function (key) {
+      var p = game.o.hb[key];
+      if (!p || !p.Hb || !p.Ib) return;
+      var pos = XOTEAM_getZigPlayerHead(p);
+      if (!pos) return;
+      var id = XOTEAM_getZigPlayerId(p, key);
+      aliveIds[id] = true;
+      var old = core.samples[id];
+      if (!old) {
+        core.samples[id] = { x: pos.x, y: pos.y, t: now, vx: 0, vy: 0, turns: 0, markUntil: 0, speed: 0 };
+        return;
+      }
+      var dt = Math.max(16, now - old.t);
+      var dx = pos.x - old.x;
+      var dy = pos.y - old.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      var vx = dx / dt;
+      var vy = dy / dt;
+      var speed = dist / dt;
+      var dot = vx * old.vx + vy * old.vy;
+      var mag = Math.sqrt(vx * vx + vy * vy) * Math.sqrt(old.vx * old.vx + old.vy * old.vy);
+      var turn = mag > 0.0001 ? Math.acos(Math.max(-1, Math.min(1, dot / mag))) : 0;
+      if (speed > 0.18 && turn > 1.05) old.turns = Math.min(8, old.turns + 1); else old.turns = Math.max(0, old.turns - 0.45);
+      old.x = pos.x; old.y = pos.y; old.t = now; old.vx = vx; old.vy = vy; old.speed = speed;
+      if (old.turns >= 2.5 || speed > 0.72) old.markUntil = now + 1800;
+      if (old.markUntil > now) {
+        var label = XOTEAM_getZigLabel(id);
+        if (label) {
+          label.c.visible = true;
+          label.c.x = pos.x;
+          label.c.y = pos.y - 70;
+          label.s.text = (speed > 0.72 ? "SPEED" : "ZIG") + " " + Math.round(speed * 100);
+          label.last = now;
+        }
+      }
+    });
+    Object.keys(core.labels).forEach(function (id) {
+      if (!aliveIds[id] || now - core.labels[id].last > 2400) {
+        try { if (core.labels[id].c && core.labels[id].c.parent) core.labels[id].c.parent.removeChild(core.labels[id].c); } catch (e) {}
+        delete core.labels[id];
+      }
+    });
+  } catch (e) {}
+}
+function XOTEAM_installZigZagSetting() {
+  try {
+    var now = Date.now();
+    var core = window.WORMXO_ZIGZAG_CORE;
+    if (now - core.lastSettings < 1200) return;
+    core.lastSettings = now;
+    if (document.getElementById("wormxo-zigzag-toggle")) return;
+    var host = document.getElementById("settingContent") || document.getElementById("loa831pibur0w4gv") || document.querySelector(".bao-list1") || document.body;
+    if (!host) return;
+    var btn = document.createElement("button");
+    btn.id = "wormxo-zigzag-toggle";
+    btn.type = "button";
+    btn.textContent = "Show Zig zag: " + ((window.WORMXO_UI_STATE || {}).showZigZag ? "ON" : "OFF");
+    btn.style.cssText = "width:95%;height:32px;margin:6px auto;display:block;border:0;border-radius:8px;background:#202020;color:#ff3b3b;font-weight:900;box-shadow:0 0 0 1px rgba(255,60,60,.45) inset;";
+    btn.onclick = function () { XOTEAM_toggleZigZagShow(!(window.WORMXO_UI_STATE || {}).showZigZag); };
+    host.appendChild(btn);
+  } catch (e) {}
+}
+setInterval(function () {
+  XOTEAM_updateZigZagDetect();
+  XOTEAM_installZigZagSetting();
+}, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 520 : 260);
+setTimeout(XOTEAM_installZigZagSetting, 1200);
+window.XOTEAM_toggleZigZagShow = XOTEAM_toggleZigZagShow;
+window.XOTEAM_updateZigZagDetect = XOTEAM_updateZigZagDetect;
+
 document.addEventListener("keydown", function (e) {
   if (XOTEAM_isTypingTarget(e.target)) return;
   var k = String(e.key || "").toLowerCase();
@@ -10183,263 +10617,3 @@ document.addEventListener("contextmenu", function (p638) {
   document.head.appendChild(v625);
 })();
 console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
-
-
-
-(function () {
-  if (window.__XOTEAM_SAFE_FIX_UPDATED__) return;
-  window.__XOTEAM_SAFE_FIX_UPDATED__ = true;
-
-  const BASE_REGISTRY_URL = "https://resources.wormate.io/dynamic/assets/registry.json";
-  const CUSTOM_REGISTRY_URL = "https://wm.wormy.online/registry";
-
-  function isObject(v) {
-    return v && typeof v === "object" && !Array.isArray(v);
-  }
-
-  function uniqueArray(arr) {
-    return Array.from(new Set((Array.isArray(arr) ? arr : []).map(function (x) {
-      return typeof x === "number" ? x : String(x);
-    })));
-  }
-
-  function normalizeVariantArray(arr) {
-    const out = [];
-    const seen = {};
-
-    (Array.isArray(arr) ? arr : []).forEach(function (item) {
-      if (!Array.isArray(item) || item.length === 0) return;
-      const key = JSON.stringify(item);
-      if (seen[key]) return;
-      seen[key] = true;
-      out.push(item);
-    });
-
-    return out;
-  }
-
-  function mergeArrayById(baseArr, extraArr) {
-    baseArr = Array.isArray(baseArr) ? baseArr.slice() : [];
-    extraArr = Array.isArray(extraArr) ? extraArr : [];
-
-    const indexById = {};
-    baseArr.forEach(function (item, index) {
-      if (item && item.id !== undefined) indexById[String(item.id)] = index;
-    });
-
-    extraArr.forEach(function (item) {
-      if (!item) return;
-
-      if (item.id !== undefined) {
-        const id = String(item.id);
-        if (indexById[id] !== undefined) {
-          baseArr[indexById[id]] = Object.assign({}, baseArr[indexById[id]], item);
-        } else {
-          indexById[id] = baseArr.length;
-          baseArr.push(item);
-        }
-      } else {
-        baseArr.push(item);
-      }
-    });
-
-    return baseArr;
-  }
-
-  function fixSkinGlow(registry) {
-    if (!registry || !Array.isArray(registry.skinArrayDict)) return registry;
-
-    registry.skinArrayDict.forEach(function (skin) {
-      if (!skin || !Array.isArray(skin.base)) return;
-
-      if (registry.regionDict) {
-        skin.base = skin.base.filter(function (regionName) {
-          return !!registry.regionDict[regionName];
-        });
-      }
-
-      if (!Array.isArray(skin.glow)) skin.glow = [];
-
-      while (skin.glow.length < skin.base.length) {
-        skin.glow.push("a_white");
-      }
-
-      if (skin.glow.length > skin.base.length) {
-        skin.glow = skin.glow.slice(0, skin.base.length);
-      }
-
-      skin.pieceCount = skin.base.length;
-    });
-
-    return registry;
-  }
-
-  function safeKeepOriginal(base) {
-    return {
-      portionDict: base.portionDict,
-      portionUnknown: base.portionUnknown,
-      abilityDict: base.abilityDict,
-      abilityUnknown: base.abilityUnknown,
-      teamDict: base.teamDict,
-      foodDict: base.foodDict,
-      foodUnknown: base.foodUnknown,
-      propertyList: base.propertyList
-    };
-  }
-
-  function restoreOriginal(base, original) {
-    Object.keys(original).forEach(function (key) {
-      if (original[key] !== undefined) base[key] = original[key];
-    });
-  }
-
-  function mergeDict(base, extra, key) {
-    if (isObject(extra[key])) {
-      base[key] = Object.assign(base[key] || {}, extra[key]);
-    } else if (Array.isArray(extra[key])) {
-      base[key] = Object.assign(base[key] || {}, arrayToObject(extra[key]));
-    }
-  }
-
-  function arrayToObject(arr) {
-    const obj = {};
-    arr.forEach(function (item) {
-      if (item && item.id !== undefined) obj[String(item.id)] = item;
-    });
-    return obj;
-  }
-
-  function mergeRegistry(base, extra) {
-    if (!base || !extra) return base || extra || {};
-
-    const original = safeKeepOriginal(base);
-
-    base.textureDict = Object.assign(base.textureDict || {}, extra.textureDict || {});
-    base.regionDict = Object.assign(base.regionDict || {}, extra.regionDict || {});
-    base.colorDict = Object.assign(base.colorDict || {}, extra.colorDict || {});
-
-    base.skinArrayDict = mergeArrayById(base.skinArrayDict, extra.skinArrayDict);
-
-    if (Array.isArray(extra.visibleSkin)) {
-      base.visibleSkin = uniqueArray([].concat(base.visibleSkin || [], extra.visibleSkin || []));
-    } else {
-      base.visibleSkin = uniqueArray(base.visibleSkin || []);
-    }
-
-    ["eyesDict", "mouthDict", "glassesDict", "hatDict"].forEach(function (key) {
-      mergeDict(base, extra, key);
-    });
-
-    [
-      "eyesVariantArray",
-      "mouthVariantArray",
-      "glassesVariantArray",
-      "hatVariantArray"
-    ].forEach(function (key) {
-      if (Array.isArray(extra[key])) {
-        base[key] = normalizeVariantArray([].concat(base[key] || [], extra[key] || []));
-      }
-    });
-
-    if (Array.isArray(extra.skinGroupArrayDict)) {
-      base.skinGroupArrayDict = mergeArrayById(base.skinGroupArrayDict, extra.skinGroupArrayDict);
-    }
-
-    if (Array.isArray(extra.privateSkin)) {
-      base.privateSkin = extra.privateSkin.slice();
-    }
-
-    restoreOriginal(base, original);
-
-    return fixSkinGlow(base);
-  }
-
-  function loadJson(url, ok, fail) {
-    if (window.$ && $.ajax) {
-      $.ajax({
-        url: url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now(),
-        method: "GET",
-        dataType: "json",
-        cache: false,
-        success: function (data) { ok(data || {}); },
-        error: function () { if (fail) fail(); }
-      });
-      return;
-    }
-
-    fetch(url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
-      .then(function (r) { return r.json(); })
-      .then(function (data) { ok(data || {}); })
-      .catch(function () { if (fail) fail(); });
-  }
-
-  function patchApp() {
-    if (!window.anApp || !window.anApp.p || window.__XOTEAM_SAFE_PATCHED__) {
-      return false;
-    }
-
-    window.__XOTEAM_SAFE_PATCHED__ = true;
-
-    const loader = window.anApp.p;
-    const oldBc = loader.Bc;
-
-    loader.Bc = function () {
-      loadJson(BASE_REGISTRY_URL, function (baseRegistry) {
-        loadJson(CUSTOM_REGISTRY_URL, function (customRegistry) {
-          try {
-            const finalRegistry = mergeRegistry(baseRegistry, customRegistry);
-
-            if (typeof XOTEAM_setPrivateSkinsFromRegistry === "function") {
-              XOTEAM_setPrivateSkinsFromRegistry(finalRegistry);
-            }
-
-            if (window.vO4) {
-              vO4.visibleSkin = finalRegistry.visibleSkin || [];
-              vO4.pL = customRegistry.propertyList || [];
-              vO4.idSkin = finalRegistry.skinArrayDict || [];
-            }
-
-            loader.Cc(finalRegistry);
-          } catch (e) {
-            console.log("XOTEAM SAFE FIX UPDATED merge error:", e);
-            loader.Cc(baseRegistry);
-          }
-        }, function () {
-          loader.Cc(baseRegistry);
-        });
-      }, function () {
-        console.log("XOTEAM SAFE FIX UPDATED: base registry failed");
-        if (typeof oldBc === "function") {
-          try { oldBc.call(loader); } catch (e) {}
-        }
-      });
-    };
-
-    try {
-      if (typeof loader.L === "function") loader.L();
-    } catch (e) {}
-
-    return true;
-  }
-
-  const timer = setInterval(function () {
-    if (patchApp()) clearInterval(timer);
-  }, 500);
-})();
-
-
-/* WORMXO optimized lobby background - light GPU / old design keeper */
-(function () {
-  if (window.__WORMXO_LOBBY_BG_2026__) return;
-  window.__WORMXO_LOBBY_BG_2026__ = true;
-  function install() {
-    try {
-      if (document.getElementById("wormxo-lobby-bg-style")) return;
-      var css = document.createElement("style");
-      css.id = "wormxo-lobby-bg-style";
-      css.textContent = "#game-wrap,#mm-start,#main-menu,.background-canva{background:radial-gradient(circle at 20% 20%,rgba(85,195,255,.24),transparent 28%),radial-gradient(circle at 80% 30%,rgba(255,95,185,.22),transparent 32%),linear-gradient(135deg,#071325 0%,#141026 45%,#25102d 100%)!important;background-size:180% 180%!important;animation:wormxoBgSlow 18s ease-in-out infinite alternate!important;}@keyframes wormxoBgSlow{0%{background-position:0% 30%,100% 20%,0% 0%;}100%{background-position:80% 70%,20% 80%,100% 100%;}}";
-      (document.head || document.documentElement).appendChild(css);
-    } catch (e) {}
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
-})();
