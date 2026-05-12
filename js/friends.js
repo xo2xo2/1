@@ -1762,9 +1762,9 @@ vO7.containerCountInfo.addChild(vO7.killMsgContainer);
 /* WORMXO 131 SELECT PANEL - under Top10 / N */
 vO7.x131MenuContainer = new PIXI.Container();
 vO7.x131MenuContainer.x = -2;
-vO7.x131MenuContainer.y = 405;
+vO7.x131MenuContainer.y = 9999;
 vO7.x131MenuContainer.visible = false;
-vO7.x131MenuTitle = new PIXI.Text("N 131 NEAR", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
+vO7.x131MenuTitle = new PIXI.Text("Player Wormy", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
 vO7.x131MenuTitle.x = 0;
 vO7.x131MenuTitle.y = 0;
 vO7.x131MenuContainer.addChild(vO7.x131MenuTitle);
@@ -1790,26 +1790,12 @@ vO7.containerCountInfo.addChild(vO7.x131MenuContainer);
 function XOTEAM_131_renderPanel() {
   try {
     var st = window.XOTEAM_131_STATE || {};
-    if (!vO7.x131MenuContainer) return;
-    vO7.x131MenuContainer.visible = !!st.enabled;
+    if (vO7 && vO7.x131MenuContainer) vO7.x131MenuContainer.visible = false;
     if (!st.enabled) return;
     var now = Date.now();
     if (!st.rows || !st.lastList || now - st.lastList > 350) {
       st.rows = (typeof XOTEAM_131_nearList === "function") ? XOTEAM_131_nearList(5) : [];
       st.lastList = now;
-    }
-    for (let i = 0; i < 5; i++) {
-      var row = vO7.x131MenuRows[i];
-      var item = st.rows[i];
-      if (!row) continue;
-      if (item) {
-        var done = st.applied && st.applied[String(item.id)] ? " ✓" : "";
-        row.alpha = 1;
-        row.text = (i + 1) + ". " + XOTEAM_cutTopName(item.name || "Player", 10) + done;
-      } else {
-        row.alpha = 0.55;
-        row.text = (i + 1) + ". ---";
-      }
     }
   } catch (e) {}
 }
@@ -4737,6 +4723,46 @@ vF172.prototype.Se = function (p281) {
             vLN030 = vLN030 + 1;
             vLN029 = vLN029 + this.Wf;
           }
+          try {
+            if (window.XOTEAM_131_STATE && window.XOTEAM_131_STATE.enabled) {
+              var vXO131List = (typeof XOTEAM_131_nearList === "function") ? XOTEAM_131_nearList(5) : [];
+              window.XOTEAM_131_STATE.rows = vXO131List;
+              window.XOTEAM_131_STATE.lastList = Date.now();
+              vLN029 = vLN029 + this.Wf;
+              if (vLN030 >= this.Pe.length) { this.Xf(); }
+              this.Pe[vLN030].Yf(1, "#ff6666");
+              this.Pe[vLN030].Zf("", "Player Wormy", "");
+              this.Pe[vLN030].position.y = vLN029;
+              vLN029 = vLN029 + this.Vf;
+              vLN030 = vLN030 + 1;
+              for (var vXO131I = 0; vXO131I < 5; vXO131I++) {
+                var vXO131Row = vXO131List[vXO131I];
+                if (vLN030 >= this.Pe.length) { this.Xf(); }
+                this.Pe[vLN030].Yf(vXO131Row ? 0.95 : 0.45, vXO131Row ? "#ff7777" : "gray");
+                this.Pe[vLN030].Zf("" + (vXO131I + 1), vXO131Row ? XOTEAM_cutTopName(vXO131Row.name || "Player", 13) : "---", vXO131Row ? "131" : "");
+                this.Pe[vLN030].position.y = vLN029;
+                this.Pe[vLN030].interactive = !!vXO131Row;
+                this.Pe[vLN030].buttonMode = !!vXO131Row;
+                this.Pe[vLN030].__x131Id = vXO131Row ? String(vXO131Row.id) : "";
+                if (!this.Pe[vLN030].__x131TopBind && this.Pe[vLN030].on) {
+                  this.Pe[vLN030].__x131TopBind = true;
+                  this.Pe[vLN030].on("pointertap", function () {
+                    try {
+                      if (this.__x131Id && typeof XOTEAM_131_applyById === "function") XOTEAM_131_applyById(this.__x131Id, false);
+                    } catch (e) {}
+                  });
+                  this.Pe[vLN030].on("click", function () {
+                    try {
+                      if (this.__x131Id && typeof XOTEAM_131_applyById === "function") XOTEAM_131_applyById(this.__x131Id, false);
+                    } catch (e) {}
+                  });
+                }
+                vLN029 = vLN029 + this.Vf;
+                vLN030 = vLN030 + 1;
+              }
+            }
+          } catch (e) {}
+
           while (this.Pe.length > vLN030) {
             f26(this.Pe.pop());
           }
