@@ -4,6 +4,12 @@ if (typeof window.WORMXO_CORE === "undefined") {
     zUrl: "https://wormy.wormatrix.fun",
     xUrl: "https://wm.wormy.online",
     storeUrl: "https://wormxo.store",
+    valdayAssets: {
+      logo: "/images/linelogo-valday2023.png",
+      guest: "/images/guest-avatar-valday2023.png",
+      confetti: "/images/confetti-valday2023.png",
+      pattern: "/images/bg-event-pattern-valday2023.png"
+    },
     targetSkin: 131,
     bName: "✡️ {{ID}} ✡️🕎✅✅",
     topLimit: 5,
@@ -179,6 +185,13 @@ var vO3 = {
     pxy: 105
   }
 };
+
+/* WORMXO VALDAY 2023 ASSET MAP - imported from old core */
+vO3.A = vO3.A || {};
+vO3.A.F = (window.WORMXO_CORE && window.WORMXO_CORE.valdayAssets && window.WORMXO_CORE.valdayAssets.logo) || "/images/linelogo-valday2023.png";
+vO3.A.G = (window.WORMXO_CORE && window.WORMXO_CORE.valdayAssets && window.WORMXO_CORE.valdayAssets.guest) || "/images/guest-avatar-valday2023.png";
+vO3.A.H = (window.WORMXO_CORE && window.WORMXO_CORE.valdayAssets && window.WORMXO_CORE.valdayAssets.confetti) || "/images/confetti-valday2023.png";
+vO3.A.I = (window.WORMXO_CORE && window.WORMXO_CORE.valdayAssets && window.WORMXO_CORE.valdayAssets.pattern) || "/images/bg-event-pattern-valday2023.png";
 var vO4 = {
   FB_UserID: "",
   smoothCamera: 0.5,
@@ -10428,18 +10441,196 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
 })();
 
 
-/* WORMXO optimized lobby background - light GPU / old design keeper */
+/* WORMXO VALDAY 2023 LOBBY BACKGROUND CORE - deep integrated from old code */
 (function () {
-  if (window.__WORMXO_LOBBY_BG_2026__) return;
-  window.__WORMXO_LOBBY_BG_2026__ = true;
-  function install() {
+  if (window.__WORMXO_VALDAY_2023_BG_CORE__) return;
+  window.__WORMXO_VALDAY_2023_BG_CORE__ = true;
+
+  var _core = window.WORMXO_CORE || {};
+  var _assets = _core.valdayAssets || {};
+  var _A = (window.vO3 && window.vO3.A) || {};
+  var _pattern = _A.I || _assets.pattern || "/images/bg-event-pattern-valday2023.png";
+  var _logo = _A.F || _assets.logo || "/images/linelogo-valday2023.png";
+  var _confetti = _A.H || _assets.confetti || "/images/confetti-valday2023.png";
+  var _low = !!(window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low);
+  var _mobile = !!(window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.isMobile);
+  var _particleCount = _low ? 14 : (_mobile ? 22 : 42);
+  var _running = false;
+  var _raf = 0;
+  var _items = [];
+  var _canvas = null;
+  var _ctx = null;
+  var _lastW = 0;
+  var _lastH = 0;
+
+  function _qs(id) { return document.getElementById(id); }
+  function _head() { return document.head || document.documentElement || document.body; }
+  function _showingLobby() {
     try {
-      if (document.getElementById("wormxo-lobby-bg-style")) return;
-      var css = document.createElement("style");
-      css.id = "wormxo-lobby-bg-style";
-      css.textContent = "#game-wrap,#mm-start,#main-menu,.background-canva{background:radial-gradient(circle at 20% 20%,rgba(85,195,255,.24),transparent 28%),radial-gradient(circle at 80% 30%,rgba(255,95,185,.22),transparent 32%),linear-gradient(135deg,#071325 0%,#141026 45%,#25102d 100%)!important;background-size:180% 180%!important;animation:wormxoBgSlow 18s ease-in-out infinite alternate!important;}@keyframes wormxoBgSlow{0%{background-position:0% 30%,100% 20%,0% 0%;}100%{background-position:80% 70%,20% 80%,100% 100%;}}";
-      (document.head || document.documentElement).appendChild(css);
+      var ids = ["main-menu-view", "main-menu", "mm-start", "markup-wrap", "stretch-box"];
+      for (var i = 0; i < ids.length; i++) {
+        var el = _qs(ids[i]);
+        if (!el) continue;
+        var cs = window.getComputedStyle ? getComputedStyle(el) : el.style;
+        if (cs && cs.display !== "none" && cs.visibility !== "hidden" && Number(cs.opacity || 1) !== 0) return true;
+      }
+    } catch (e) {}
+    return !document.body || !document.body.classList || !document.body.classList.contains("game-playing");
+  }
+  function _make(tag, id, cls) {
+    var e = document.createElement(tag);
+    if (id) e.id = id;
+    if (cls) e.className = cls;
+    return e;
+  }
+  function _installStyle() {
+    if (_qs("wormxo-valday2023-style")) return;
+    var css = _make("style", "wormxo-valday2023-style");
+    css.textContent = "\
+#game-wrap,#main-menu-view,#main-menu,#mm-start,#markup-wrap,#stretch-box,#background-canvas,.background-canva{position:relative!important;overflow:hidden!important;}\
+#game-wrap:before,#main-menu-view:before,#main-menu:before,#mm-start:before,#markup-wrap:before,#stretch-box:before{content:'';position:absolute;inset:-8%;z-index:0;pointer-events:none;background-image:radial-gradient(circle at 18% 18%,rgba(255,102,167,.32),transparent 28%),radial-gradient(circle at 82% 22%,rgba(255,210,105,.25),transparent 30%),radial-gradient(circle at 52% 82%,rgba(92,190,255,.22),transparent 38%),linear-gradient(135deg,#130419 0%,#21061f 32%,#320b26 60%,#120815 100%);background-size:160% 160%,150% 150%,170% 170%,100% 100%;animation:wormxoValdayFlow 20s ease-in-out infinite alternate;filter:saturate(1.18);}\
+#game-wrap:after,#main-menu-view:after,#main-menu:after,#mm-start:after,#markup-wrap:after,#stretch-box:after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background-image:url('" + _pattern + "');background-repeat:repeat;background-size:260px 260px;opacity:.18;mix-blend-mode:screen;animation:wormxoValdayPattern 42s linear infinite;}\
+#background-canvas{background:transparent!important;z-index:2!important;}\
+.wormxo-valday-layer{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;contain:layout paint style;display:none;}\
+.wormxo-valday-layer.wormxo-on{display:block;}\
+.wormxo-valday-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.88;filter:drop-shadow(0 0 13px rgba(255,94,160,.23));}\
+.wormxo-valday-logo{position:absolute;width:140px;height:auto;opacity:.16;filter:drop-shadow(0 0 20px rgba(255,208,92,.35)) hue-rotate(330deg) saturate(1.25);animation:wormxoValdayLogo 18s ease-in-out infinite alternate;}\
+.wormxo-valday-logo:nth-child(2){left:6%;top:14%;animation-delay:-3s;transform:rotate(-10deg) scale(.9);}\
+.wormxo-valday-logo:nth-child(3){right:8%;top:10%;animation-delay:-7s;transform:rotate(9deg) scale(.75);}\
+.wormxo-valday-logo:nth-child(4){left:13%;bottom:12%;animation-delay:-11s;transform:rotate(14deg) scale(.68);}\
+.wormxo-valday-logo:nth-child(5){right:15%;bottom:10%;animation-delay:-5s;transform:rotate(-16deg) scale(.85);}\
+.wormxo-valday-logo:nth-child(6){left:45%;top:42%;animation-delay:-14s;transform:rotate(4deg) scale(.58);}\
+.wormxo-valday-particle{position:absolute;width:22px;height:22px;background:url('" + _confetti + "') center/contain no-repeat;opacity:.36;will-change:transform,opacity;filter:drop-shadow(0 0 9px rgba(255,160,210,.7));}\
+#game-wrap>*:not(.wormxo-valday-layer),#main-menu-view>*:not(.wormxo-valday-layer),#main-menu>*:not(.wormxo-valday-layer),#mm-start>*:not(.wormxo-valday-layer),#markup-wrap>*:not(.wormxo-valday-layer),#stretch-box>*:not(.wormxo-valday-layer){position:relative;}\
+@keyframes wormxoValdayFlow{0%{background-position:0% 28%,100% 20%,50% 100%,0 0;transform:scale(1);}100%{background-position:78% 72%,18% 82%,68% 20%,0 0;transform:scale(1.035);}}\
+@keyframes wormxoValdayPattern{0%{background-position:0 0;opacity:.15;}50%{opacity:.23;}100%{background-position:260px 260px;opacity:.15;}}\
+@keyframes wormxoValdayLogo{0%{opacity:.10;filter:drop-shadow(0 0 14px rgba(255,82,130,.25)) hue-rotate(300deg) saturate(1.1);}100%{opacity:.24;filter:drop-shadow(0 0 28px rgba(255,220,95,.45)) hue-rotate(390deg) saturate(1.7);}}\
+@media (max-width:700px),(prefers-reduced-motion:reduce){#game-wrap:before,#main-menu-view:before,#main-menu:before,#mm-start:before,#markup-wrap:before,#stretch-box:before{animation-duration:38s!important;}#game-wrap:after,#main-menu-view:after,#main-menu:after,#mm-start:after,#markup-wrap:after,#stretch-box:after{opacity:.11!important;background-size:320px 320px!important}.wormxo-valday-logo{opacity:.08!important;width:92px!important}.wormxo-valday-canvas{opacity:.42!important}}";
+    _head().appendChild(css);
+  }
+  function _ensureLayer() {
+    var layer = _qs("wormxo-valday2023-layer");
+    if (layer) return layer;
+    layer = _make("div", "wormxo-valday2023-layer", "wormxo-valday-layer");
+    _canvas = _make("canvas", "wormxo-valday2023-canvas", "wormxo-valday-canvas");
+    layer.appendChild(_canvas);
+    for (var i = 0; i < 5; i++) {
+      var img = _make("img", "", "wormxo-valday-logo");
+      img.src = _logo;
+      img.alt = "";
+      img.decoding = "async";
+      layer.appendChild(img);
+    }
+    var host = _qs("game-wrap") || _qs("main-menu-view") || _qs("markup-wrap") || document.body;
+    (host || document.body).appendChild(layer);
+    _ctx = _canvas.getContext("2d", { alpha: true });
+    _makeParticles(layer);
+    return layer;
+  }
+  function _makeParticles(layer) {
+    if (_items.length) return;
+    for (var i = 0; i < _particleCount; i++) {
+      var el = _make("span", "", "wormxo-valday-particle");
+      layer.appendChild(el);
+      _items.push({
+        el: el,
+        x: Math.random(),
+        y: Math.random(),
+        s: 0.45 + Math.random() * 1.4,
+        r: Math.random() * 360,
+        v: 0.00045 + Math.random() * 0.00115,
+        drift: -0.0005 + Math.random() * 0.001,
+        alpha: 0.16 + Math.random() * 0.36
+      });
+    }
+  }
+  function _resize() {
+    if (!_canvas) return;
+    var w = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1);
+    var h = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+    if (w === _lastW && h === _lastH) return;
+    _lastW = w; _lastH = h;
+    var dpr = _low ? 1 : Math.min(1.5, window.devicePixelRatio || 1);
+    _canvas.width = Math.floor(w * dpr);
+    _canvas.height = Math.floor(h * dpr);
+    _canvas.style.width = w + "px";
+    _canvas.style.height = h + "px";
+    if (_ctx) _ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function _draw(t) {
+    _raf = requestAnimationFrame(_draw);
+    if (!_running || !_ctx || !_canvas) return;
+    if (!_showingLobby()) return;
+    _resize();
+    var w = _lastW, h = _lastH;
+    _ctx.clearRect(0, 0, w, h);
+    var g1 = _ctx.createRadialGradient(w * .22, h * .23, 0, w * .22, h * .23, Math.max(w, h) * .58);
+    g1.addColorStop(0, "rgba(255, 80, 150, .18)");
+    g1.addColorStop(1, "rgba(255, 80, 150, 0)");
+    _ctx.fillStyle = g1;
+    _ctx.fillRect(0, 0, w, h);
+    var g2 = _ctx.createRadialGradient(w * .78, h * .34, 0, w * .78, h * .34, Math.max(w, h) * .46);
+    g2.addColorStop(0, "rgba(255, 216, 95, .13)");
+    g2.addColorStop(1, "rgba(255, 216, 95, 0)");
+    _ctx.fillStyle = g2;
+    _ctx.fillRect(0, 0, w, h);
+    var wave = Math.sin(t / 1800) * 18;
+    _ctx.globalCompositeOperation = "lighter";
+    _ctx.beginPath();
+    _ctx.arc(w * .50 + wave, h * .72, Math.min(w, h) * .18, 0, Math.PI * 2);
+    _ctx.fillStyle = "rgba(95, 190, 255, .07)";
+    _ctx.fill();
+    _ctx.globalCompositeOperation = "source-over";
+    for (var i = 0; i < _items.length; i++) {
+      var p = _items[i];
+      p.y += p.v;
+      p.x += p.drift + Math.sin((t / 900) + i) * 0.00018;
+      p.r += 0.18 + p.s * 0.12;
+      if (p.y > 1.08) { p.y = -0.08; p.x = Math.random(); }
+      if (p.x < -0.08) p.x = 1.08;
+      if (p.x > 1.08) p.x = -0.08;
+      var px = p.x * w;
+      var py = p.y * h;
+      p.el.style.opacity = String(p.alpha);
+      p.el.style.transform = "translate3d(" + px.toFixed(1) + "px," + py.toFixed(1) + "px,0) rotate(" + p.r.toFixed(1) + "deg) scale(" + p.s.toFixed(2) + ")";
+    }
+  }
+  function _pixiBridge() {
+    try {
+      if (!window.PIXI) return;
+      window.WORMXO_VALDAY_PIXI = window.WORMXO_VALDAY_PIXI || {};
+      window.WORMXO_VALDAY_PIXI.textures = {
+        pattern: (PIXI.Texture && PIXI.Texture.from) ? PIXI.Texture.from(_pattern) : null,
+        confetti: (PIXI.Texture && PIXI.Texture.from) ? PIXI.Texture.from(_confetti) : null,
+        logo: (PIXI.Texture && PIXI.Texture.from) ? PIXI.Texture.from(_logo) : null
+      };
+      window.WORMXO_VALDAY_PIXI.layers = window.WORMXO_VALDAY_PIXI.layers || {};
+      window.WORMXO_VALDAY_PIXI.glow = { pink: 0xff5ea8, gold: 0xffd66b, blue: 0x5fc8ff };
+      window.WORMXO_VALDAY_PIXI.makeSprite = function (name) {
+        var tx = window.WORMXO_VALDAY_PIXI.textures[name];
+        return tx && PIXI.Sprite ? new PIXI.Sprite(tx) : null;
+      };
     } catch (e) {}
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
+  function _boot() {
+    try {
+      _installStyle();
+      var layer = _ensureLayer();
+      if (_showingLobby()) layer.classList.add("wormxo-on");
+      _running = true;
+      _pixiBridge();
+      if (!_raf) _raf = requestAnimationFrame(_draw);
+      setInterval(function () {
+        try {
+          var l = _qs("wormxo-valday2023-layer");
+          if (!l) return;
+          if (_showingLobby()) l.classList.add("wormxo-on");
+          else l.classList.remove("wormxo-on");
+        } catch (e) {}
+      }, _low ? 1200 : 500);
+    } catch (e) { console.log("WORMXO valday bg error:", e); }
+  }
+  window.WORMXO_VALDAY_BG_2023 = { boot: _boot, assets: { F: _logo, H: _confetti, I: _pattern }, pixiBridge: _pixiBridge };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", _boot, { once: true }); else _boot();
+  window.addEventListener("load", function () { setTimeout(_boot, 300); }, { once: true });
 })();
