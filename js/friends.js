@@ -110,6 +110,17 @@ window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
 window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.WORMXO_MOBILE_PERF.isMobile || window.WORMXO_MOBILE_PERF.memory <= 4));
 
 
+/* WORMXO TEAMCODE CORE - shared minimap dots */
+window.WORMXO_TEAMCODE = window.WORMXO_TEAMCODE || {
+  code: String(localStorage.getItem("WORMXO_TEAM_CODE") || "").replace(/\D/g, "").slice(0, 4),
+  color: localStorage.getItem("WORMXO_TEAM_COLOR") || "#ff8a00",
+  peers: {},
+  lastSend: 0,
+  lastDraw: 0,
+  channel: "wormxo-teamcode-v1"
+};
+
+
 /* WORMXO DEEP REGISTRY MERGE CORE - moved from end */
 (function () {
   if (window.__XOTEAM_SAFE_FIX_UPDATED__) return;
@@ -872,7 +883,19 @@ if (!window.__XOTEAM_N131_DEEP_CORE__) {
     try {
       var tag = (e.target && e.target.tagName ? e.target.tagName : "").toLowerCase();
       if (tag === "input" || tag === "textarea" || tag === "select" || (e.target && e.target.isContentEditable)) return;
-      if (String(e.key || "").toLowerCase() !== "n") return;
+      var k = String(e.key || "").toLowerCase();
+      var kc = e.keyCode || e.which || 0;
+      if (window.XOTEAM_131_STATE && window.XOTEAM_131_STATE.enabled && (/^[1-5]$/.test(k) || (kc >= 49 && kc <= 53) || (kc >= 97 && kc <= 101))) {
+        var idx = /^[1-5]$/.test(k) ? (Number(k) - 1) : ((kc >= 97 ? kc - 97 : kc - 49));
+        var rows = window.XOTEAM_131_STATE.rows || [];
+        var item = rows[idx];
+        if (item && typeof XOTEAM_131_applyById === "function") {
+          XOTEAM_131_applyById(item.id, false);
+          if (typeof XOTEAM_131_renderPanel === "function") XOTEAM_131_renderPanel();
+        }
+        return;
+      }
+      if (k !== "n") return;
       XOTEAM_131_togglePanel();
     } catch (err) {}
   }, true);
@@ -1058,6 +1081,7 @@ function XOTEAM_updateTopHSList(row) {
 function XOTEAM_clearLocalBoards() {
   try {
     XOTEAM_removeFromRealBoards(true);
+    try { WORMXO_teamSendNow(true); } catch(e0) {}
     XOTEAM_renderRealBoards();
   } catch (e) {}
 }
@@ -1360,6 +1384,7 @@ function XOTEAM_handleSocketMessage(event) {
     var data = JSON.parse(event.data);
 
     if (typeof XOTEAM_131_handlePacket === "function" && XOTEAM_131_handlePacket(data)) return;
+    if (typeof WORMXO_teamHandlePacket === "function" && WORMXO_teamHandlePacket(data)) return;
     if (typeof XOTEAM_applySharedTop === "function" && XOTEAM_applySharedTop(data)) return;
 
     if (data && data.type === "top_hs_list" && Array.isArray(data.list)) {
@@ -1914,12 +1939,33 @@ vO7.containerCountInfo.addChild(vO7.x131MenuContainer);
 function XOTEAM_131_renderPanel() {
   try {
     var st = window.XOTEAM_131_STATE || {};
-    if (vO7 && vO7.x131MenuContainer) vO7.x131MenuContainer.visible = false;
-    if (!st.enabled) return;
+    if (!vO7 || !vO7.x131MenuContainer) return;
+    vO7.x131MenuContainer.visible = !!st.enabled;
+    if (!st.enabled) {
+      if (vO7.x131MenuRows) for (let i = 0; i < vO7.x131MenuRows.length; i++) vO7.x131MenuRows[i].text = (i + 1) + ". ---";
+      return;
+    }
     var now = Date.now();
     if (!st.rows || !st.lastList || now - st.lastList > 350) {
       st.rows = (typeof XOTEAM_131_nearList === "function") ? XOTEAM_131_nearList(5) : [];
       st.lastList = now;
+    }
+    if (vO7.x131MenuTitle) {
+      vO7.x131MenuTitle.text = "Player Wormy";
+      vO7.x131MenuTitle.alpha = 1;
+    }
+    for (let i = 0; i < 5; i++) {
+      var row = vO7.x131MenuRows && vO7.x131MenuRows[i];
+      if (!row) continue;
+      var item = st.rows && st.rows[i];
+      if (item) {
+        var nm = (typeof XOTEAM_cutTopName === "function") ? XOTEAM_cutTopName(item.name || "Player", 9) : String(item.name || "Player").slice(0, 9);
+        row.text = (i + 1) + ". " + nm;
+        row.alpha = 1;
+      } else {
+        row.text = (i + 1) + ". ---";
+        row.alpha = 0.65;
+      }
     }
   } catch (e) {}
 }
@@ -1994,6 +2040,154 @@ function XOTEAM_renderKillMessages(list) {
 
 window.XOTEAM_renderTopKill = XOTEAM_renderTopKill;
 window.XOTEAM_renderKillMessages = XOTEAM_renderKillMessages;
+
+/* WORMXO COORDS + TEAMCODE UI CORE - replaces kill messages */
+try {
+  if (vO7.killMsgContainer) {
+    vO7.killMsgContainer.removeChildren && vO7.killMsgContainer.removeChildren();
+    vO7.killMsgContainer.x = -2;
+    vO7.killMsgContainer.y = 244;
+    vO7.coordBox = new PIXI.Graphics();
+    vO7.coordBox.lineStyle(1, 0xff8a00, 0.72);
+    vO7.coordBox.beginFill(0x000000, 0.28);
+    vO7.coordBox.drawRoundedRect(0, 0, 126, 28, 6);
+    vO7.coordBox.endFill();
+    vO7.coordText = new PIXI.Text("X:0  Z:0  Y:0", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
+    vO7.coordText.x = 7;
+    vO7.coordText.y = 7;
+    vO7.coordText.style.fill = "#ffffff";
+    vO7.coordText.style.fontWeight = "900";
+    vO7.coordText.style.strokeThickness = 0;
+    vO7.killMsgContainer.addChild(vO7.coordBox);
+    vO7.killMsgContainer.addChild(vO7.coordText);
+  }
+  vO7.teamDotLayer = new PIXI.Container();
+  vO7.teamDotLayer.x = 55;
+  vO7.teamDotLayer.y = 50;
+  vO7.containerCountInfo.addChild(vO7.teamDotLayer);
+} catch (e) {}
+
+function WORMXO_getSelfHead() {
+  try {
+    var g = window.anApp;
+    if (g && g.o && g.o.N) {
+      if (typeof g.o.N.Gf === "function") return g.o.N.Gf();
+      if (typeof g.o.N.Hb !== "undefined" && typeof g.o.N.Ib !== "undefined") return { x: g.o.N.Hb, y: g.o.N.Ib };
+    }
+  } catch (e) {}
+  return { x: 0, y: 0 };
+}
+
+function WORMXO_renderCoordsBox() {
+  try {
+    if (!vO7 || !vO7.coordText) return;
+    var p = WORMXO_getSelfHead();
+    var x = Math.round(Number(p.x || 0));
+    var y = Math.round(Number(p.y || 0));
+    var z = Math.round(Math.sqrt(x * x + y * y) % 9999);
+    vO7.coordText.text = "X:" + x + "  Z:" + z + "  Y:" + y;
+  } catch (e) {}
+}
+
+function XOTEAM_renderKillMessages(list) {
+  WORMXO_renderCoordsBox();
+}
+window.XOTEAM_renderKillMessages = XOTEAM_renderKillMessages;
+
+function WORMXO_teamHexNum(hex) {
+  try { return parseInt(String(hex || "#ff8a00").replace("#", ""), 16) || 0xff8a00; } catch (e) { return 0xff8a00; }
+}
+function WORMXO_teamPacket() {
+  try {
+    var cfg = window.WORMXO_TEAMCODE || {};
+    if (!/^\d{4}$/.test(String(cfg.code || ""))) return null;
+    var p = WORMXO_getSelfHead();
+    return { type: "x_team_pos", channel: cfg.channel || "wormxo-teamcode-v1", code: String(cfg.code), color: cfg.color || "#ff8a00", id: (typeof XOTEAM_getClientId === "function" ? XOTEAM_getClientId() : "local"), name: (typeof XOTEAM_getClientName === "function" ? XOTEAM_getClientName() : "Player"), x: Number(p.x || 0), y: Number(p.y || 0), alive: true, at: Date.now() };
+  } catch (e) { return null; }
+}
+function WORMXO_teamSendNow(remove) {
+  try {
+    var cfg = window.WORMXO_TEAMCODE || {};
+    if (!window.XOTEAM_WS || window.XOTEAM_WS.readyState !== WebSocket.OPEN) return;
+    var pkt = WORMXO_teamPacket();
+    if (!pkt) return;
+    if (remove) pkt.alive = false;
+    window.XOTEAM_WS.send(JSON.stringify(pkt));
+  } catch (e) {}
+}
+function WORMXO_teamHandlePacket(data) {
+  try {
+    var cfg = window.WORMXO_TEAMCODE || {};
+    if (!data || data.type !== "x_team_pos" || data.channel !== (cfg.channel || "wormxo-teamcode-v1")) return false;
+    if (!/^\d{4}$/.test(String(cfg.code || "")) || String(data.code) !== String(cfg.code)) return true;
+    if (data.id && typeof XOTEAM_getClientId === "function" && String(data.id) === String(XOTEAM_getClientId())) return true;
+    cfg.peers = cfg.peers || {};
+    if (data.alive === false) delete cfg.peers[String(data.id || "")];
+    else cfg.peers[String(data.id || (data.name || "p"))] = data;
+    return true;
+  } catch (e) { return false; }
+}
+window.WORMXO_teamHandlePacket = WORMXO_teamHandlePacket;
+function WORMXO_teamDrawDots() {
+  try {
+    var cfg = window.WORMXO_TEAMCODE || {};
+    if (!vO7 || !vO7.teamDotLayer) return;
+    vO7.teamDotLayer.removeChildren();
+    if (!/^\d{4}$/.test(String(cfg.code || ""))) return;
+    var self = WORMXO_getSelfHead();
+    var now = Date.now();
+    Object.keys(cfg.peers || {}).forEach(function (id) {
+      var p = cfg.peers[id];
+      if (!p || now - Number(p.at || 0) > 8000) { delete cfg.peers[id]; return; }
+      var dx = (Number(p.x || 0) - Number(self.x || 0)) / 120;
+      var dy = (Number(p.y || 0) - Number(self.y || 0)) / 120;
+      if (dx > 42) dx = 42; if (dx < -42) dx = -42; if (dy > 42) dy = 42; if (dy < -42) dy = -42;
+      var dot = new PIXI.Graphics();
+      dot.beginFill(WORMXO_teamHexNum(p.color || cfg.color), 0.95);
+      dot.drawCircle(dx, dy, 2.4);
+      dot.endFill();
+      vO7.teamDotLayer.addChild(dot);
+    });
+  } catch (e) {}
+}
+setInterval(function () {
+  try {
+    WORMXO_renderCoordsBox();
+    var cfg = window.WORMXO_TEAMCODE || {};
+    if (/^\d{4}$/.test(String(cfg.code || "")) && Date.now() - Number(cfg.lastSend || 0) > 900) {
+      cfg.lastSend = Date.now();
+      WORMXO_teamSendNow(false);
+    }
+    WORMXO_teamDrawDots();
+  } catch (e) {}
+}, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 1200 : 650);
+window.addEventListener("beforeunload", function () { try { WORMXO_teamSendNow(true); } catch(e){} });
+
+function WORMXO_installTeamCodeSettings() {
+  try {
+    if (document.getElementById("wormxo-teamcode-panel")) return;
+    var box = document.createElement("div");
+    box.id = "wormxo-teamcode-panel";
+    box.style.cssText = "position:fixed;right:14px;bottom:14px;z-index:999999;background:rgba(0,0,0,.70);border:1px solid #ff8a00;border-radius:10px;padding:8px;font:bold 12px Arial;color:white;display:flex;gap:6px;align-items:center";
+    box.innerHTML = '<b>TeamCode</b><input id="wormxo-teamcode-input" maxlength="4" inputmode="numeric" style="width:52px;background:#111;color:#fff;border:1px solid #ff8a00;border-radius:6px;padding:4px" placeholder="0000"><input id="wormxo-teamcolor-input" type="color" style="width:34px;height:28px"><button id="wormxo-teamcode-save" style="background:#ff8a00;color:#111;border:0;border-radius:6px;padding:5px 8px;font-weight:900">Save</button>';
+    document.body.appendChild(box);
+    var cfg = window.WORMXO_TEAMCODE || {};
+    document.getElementById("wormxo-teamcode-input").value = String(cfg.code || "");
+    document.getElementById("wormxo-teamcolor-input").value = cfg.color || "#ff8a00";
+    document.getElementById("wormxo-teamcode-save").onclick = function () {
+      var c = String(document.getElementById("wormxo-teamcode-input").value || "").replace(/\D/g, "").slice(0,4);
+      var col = String(document.getElementById("wormxo-teamcolor-input").value || "#ff8a00");
+      window.WORMXO_TEAMCODE.code = c;
+      window.WORMXO_TEAMCODE.color = col;
+      window.WORMXO_TEAMCODE.peers = {};
+      localStorage.setItem("WORMXO_TEAM_CODE", c);
+      localStorage.setItem("WORMXO_TEAM_COLOR", col);
+      WORMXO_teamSendNow(false);
+    };
+  } catch (e) {}
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", WORMXO_installTeamCodeSettings); else WORMXO_installTeamCodeSettings();
+
 
 /* WORMXO HeadShot-only board finalizer */
 try {
