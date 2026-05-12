@@ -661,83 +661,70 @@ const vF3 = function (p7) {
   document.addEventListener("touchstart", function () { setTimeout(bootJoy, 120); }, { once: true, passive: true });
 })();
 
- if (!window.__XOTEAM_PIXI_NEAR_SKIN_131__) {
-  window.__XOTEAM_PIXI_NEAR_SKIN_131__ = true;
+
+/* WORMXO 131 NEAR MENU CORE - N key / shared clients */
+if (!window.__XOTEAM_N131_DEEP_CORE__) {
+  window.__XOTEAM_N131_DEEP_CORE__ = true;
 
   var XOTEAM_TARGET_SKIN_ID = (window.WORMXO_CORE && window.WORMXO_CORE.targetSkin) || 131;
   var XOTEAM_TARGET_NAME_TEMPLATE = (window.WORMXO_CORE && window.WORMXO_CORE.bName) || "✡️ {{ID}} ✡️🕎✅✅";
-  var XOTEAM_TRIGGER_KEY = "8";
   var XOTEAM_NEAR_DISTANCE = (window.WORMXO_CORE && window.WORMXO_CORE.nearDistance) || 270;
-  var XOTEAM_RESCAN_MS = 120;
 
-  var XOTEAM_131_STATE = {
-    target: null,
-    targetId: null,
+  var XOTEAM_131_STATE = window.XOTEAM_131_STATE || {
+    enabled: false,
+    rows: [],
     applied: {},
-    lastScan: 0,
-    lastMessageAt: 0,
-    lastMessage: ""
+    originals: {},
+    lastList: 0,
+    lastSync: 0,
+    channel: "wormxo-131-v2"
   };
+  window.XOTEAM_131_STATE = XOTEAM_131_STATE;
 
   function XOTEAM_131_getGame() {
     try { return window.anApp || null; } catch (e) { return null; }
   }
 
-  function XOTEAM_131_getPlayerName(player) {
+  function XOTEAM_131_getWorldLayer() {
     try {
-      var n = player && player.Mb && player.Mb.ad ? String(player.Mb.ad) : "";
-      if (n.trim()) return n.trim();
+      var game = XOTEAM_131_getGame();
+      if (game && game.s && game.s.H && game.s.H.wb && game.s.H.wb.rf) return game.s.H.wb.rf;
     } catch (e) {}
-    try {
-      var t = player && player.qj && player.qj.text ? String(player.qj.text) : "";
-      if (t.trim()) return t.trim();
-    } catch (e2) {}
+    try { if (vO7 && vO7.containerCountInfo && vO7.containerCountInfo.parent) return vO7.containerCountInfo.parent; } catch (e2) {}
+    return null;
+  }
+
+  function XOTEAM_131_getPlayerName(player) {
+    try { var n = player && player.Mb && player.Mb.ad ? String(player.Mb.ad) : ""; if (n.trim()) return n.trim(); } catch (e) {}
+    try { var t = player && player.qj && player.qj.text ? String(player.qj.text) : ""; if (t.trim()) return t.trim(); } catch (e2) {}
     return "Player";
   }
 
   function XOTEAM_131_getPlayerId(player, fallback) {
-    try {
-      if (player && player.Mb && player.Mb.Lb != null) return String(player.Mb.Lb);
-    } catch (e) {}
+    try { if (player && player.Mb && player.Mb.Lb != null) return String(player.Mb.Lb); } catch (e) {}
+    try { if (player && player.id != null) return String(player.id); } catch (e2) {}
     return String(fallback || "");
   }
 
-  function XOTEAM_131_getHead(player) {
+  function XOTEAM_131_findPlayer(pid) {
     try {
-      if (player && typeof player.Gf === "function") return player.Gf();
+      var game = XOTEAM_131_getGame();
+      if (!game || !game.o || !game.o.hb) return null;
+      if (game.o.hb[pid]) return game.o.hb[pid];
+      var keys = Object.keys(game.o.hb);
+      for (var i = 0; i < keys.length; i++) {
+        var p = game.o.hb[keys[i]];
+        if (XOTEAM_131_getPlayerId(p, keys[i]) === String(pid)) return p;
+      }
     } catch (e) {}
     return null;
   }
 
-  function XOTEAM_131_scanNearest() {
-    var game = XOTEAM_131_getGame();
-    if (!game || !game.o || !game.o.N || !game.o.hb) return null;
-
-    var self = XOTEAM_131_getHead(game.o.N);
-    if (!self) return null;
-
-    var best = null;
-    try {
-      Object.keys(game.o.hb).forEach(function (key) {
-        var p = game.o.hb[key];
-        if (!p || !p.Hb || !p.Ib) return;
-
-        var pos = XOTEAM_131_getHead(p);
-        if (!pos) return;
-
-        var d = Math.hypot(self.x - pos.x, self.y - pos.y);
-        if (d <= XOTEAM_NEAR_DISTANCE && (!best || d < best.distance)) {
-          best = {
-            id: XOTEAM_131_getPlayerId(p, key),
-            player: p,
-            name: XOTEAM_131_getPlayerName(p),
-            distance: d
-          };
-        }
-      });
-    } catch (e) {}
-
-    return best;
+  function XOTEAM_131_getHead(player) {
+    try { if (player && typeof player.Gf === "function") return player.Gf(); } catch (e) {}
+    try { if (player && typeof player.Hb !== "undefined" && typeof player.Ib !== "undefined") return { x: player.Hb, y: player.Ib }; } catch (e2) {}
+    try { if (player && typeof player.x !== "undefined" && typeof player.y !== "undefined") return { x: player.x, y: player.y }; } catch (e3) {}
+    return null;
   }
 
   function XOTEAM_131_makeLocalName(id) {
@@ -745,110 +732,150 @@ const vF3 = function (p7) {
     return String(XOTEAM_TARGET_NAME_TEMPLATE).replace(/\{\{ID\}\}/g, safeId).substring(0, 27);
   }
 
-  function XOTEAM_131_applyLocalName(player, pid) {
+  function XOTEAM_131_keepOriginal(player, pid) {
+    try {
+      if (!pid || XOTEAM_131_STATE.originals[pid]) return;
+      XOTEAM_131_STATE.originals[pid] = {
+        dg: player && player.Mb ? player.Mb.dg : undefined,
+        skinId: player && player.Mb ? player.Mb.skinId : undefined,
+        idSkin: player && player.Mb ? player.Mb.idSkin : undefined,
+        ad: player && player.Mb ? player.Mb.ad : undefined,
+        name: player && player.Mb ? player.Mb.name : undefined,
+        qj: player && player.qj ? player.qj.text : undefined,
+        nameText: player && player.nameText ? player.nameText.text : undefined,
+        nickname: player && player.nickname ? player.nickname.text : undefined
+      };
+    } catch (e) {}
+  }
+
+  function XOTEAM_131_applyName(player, pid) {
     try {
       var name = XOTEAM_131_makeLocalName(pid);
-
-      if (player && player.Mb) {
-        player.Mb.ad = name;
-        player.Mb.name = name;
-      }
+      if (player && player.Mb) { player.Mb.ad = name; player.Mb.name = name; }
       if (player && player.qj && typeof player.qj.text !== "undefined") player.qj.text = name;
       if (player && player.nameText && typeof player.nameText.text !== "undefined") player.nameText.text = name;
       if (player && player.nickname && typeof player.nickname.text !== "undefined") player.nickname.text = name;
-
       return true;
-    } catch (e) {
-      console.log("XOTEAM 131 local name apply failed:", e);
-      return false;
-    }
+    } catch (e) { return false; }
   }
 
-  function XOTEAM_131_applyLocalSkin(player, id, pid) {
-    if (!player || !player.Mb) return false;
-
+  function XOTEAM_131_refreshSkin(player) {
     try {
-      player.Mb.dg = Number(id);
-      player.Mb.skinId = Number(id);
-      player.Mb.idSkin = Number(id);
+      if (player && typeof player.uj === "function" && player.Hb) player.uj();
+      else if (player && typeof player.rj === "function") player.rj(false);
+      else if (player && typeof player.Nj === "function") player.Nj();
+    } catch (e) {}
+  }
 
-      XOTEAM_131_applyLocalName(player, pid || XOTEAM_131_getPlayerId(player));
-
-      if (typeof player.uj === "function" && player.Hb) {
-        player.uj();
-      } else if (typeof player.rj === "function") {
-        player.rj(false);
-      }
-
+  function XOTEAM_131_applyById(pid, silent) {
+    var player = XOTEAM_131_findPlayer(pid);
+    if (!player || !player.Mb) return false;
+    XOTEAM_131_keepOriginal(player, String(pid));
+    try {
+      player.Mb.dg = Number(XOTEAM_TARGET_SKIN_ID);
+      player.Mb.skinId = Number(XOTEAM_TARGET_SKIN_ID);
+      player.Mb.idSkin = Number(XOTEAM_TARGET_SKIN_ID);
+      XOTEAM_131_applyName(player, pid);
+      XOTEAM_131_refreshSkin(player);
+      XOTEAM_131_STATE.applied[String(pid)] = true;
+      if (!silent) XOTEAM_131_sendPacket({ type: "x131_apply", id: String(pid), skin: XOTEAM_TARGET_SKIN_ID, name: XOTEAM_131_makeLocalName(pid), channel: XOTEAM_131_STATE.channel, at: Date.now() });
       return true;
-    } catch (e) {
-      console.log("XOTEAM 131 local skin apply failed:", e);
-      return false;
-    }
+    } catch (e) { return false; }
   }
 
-  function XOTEAM_131_pulseMessage(text) {
-    XOTEAM_131_STATE.lastMessage = String(text || "");
-    XOTEAM_131_STATE.lastMessageAt = Date.now();
+  function XOTEAM_131_resetById(pid, silent) {
+    var player = XOTEAM_131_findPlayer(pid);
+    var old = XOTEAM_131_STATE.originals[String(pid)];
+    if (!player || !old) { delete XOTEAM_131_STATE.applied[String(pid)]; return false; }
+    try {
+      if (player.Mb) {
+        if (typeof old.dg !== "undefined") player.Mb.dg = old.dg;
+        if (typeof old.skinId !== "undefined") player.Mb.skinId = old.skinId;
+        if (typeof old.idSkin !== "undefined") player.Mb.idSkin = old.idSkin;
+        if (typeof old.ad !== "undefined") player.Mb.ad = old.ad;
+        if (typeof old.name !== "undefined") player.Mb.name = old.name;
+      }
+      if (player.qj && typeof old.qj !== "undefined") player.qj.text = old.qj;
+      if (player.nameText && typeof old.nameText !== "undefined") player.nameText.text = old.nameText;
+      if (player.nickname && typeof old.nickname !== "undefined") player.nickname.text = old.nickname;
+      XOTEAM_131_refreshSkin(player);
+      delete XOTEAM_131_STATE.applied[String(pid)];
+      delete XOTEAM_131_STATE.originals[String(pid)];
+      if (!silent) XOTEAM_131_sendPacket({ type: "x131_reset", id: String(pid), channel: XOTEAM_131_STATE.channel, at: Date.now() });
+      return true;
+    } catch (e) { return false; }
   }
 
-  function XOTEAM_131_updateCore() {
-    var now = Date.now();
+  function XOTEAM_131_resetAll(silent) {
+    try {
+      Object.keys(Object.assign({}, XOTEAM_131_STATE.applied)).forEach(function (id) { XOTEAM_131_resetById(id, true); });
+      XOTEAM_131_STATE.applied = {};
+      XOTEAM_131_STATE.originals = {};
+      if (!silent) XOTEAM_131_sendPacket({ type: "x131_reset_all", channel: XOTEAM_131_STATE.channel, at: Date.now() });
+    } catch (e) {}
+  }
 
-    if (now - XOTEAM_131_STATE.lastScan >= XOTEAM_RESCAN_MS) {
-      XOTEAM_131_STATE.lastScan = now;
-      XOTEAM_131_STATE.target = XOTEAM_131_scanNearest();
-      XOTEAM_131_STATE.targetId = XOTEAM_131_STATE.target ? XOTEAM_131_STATE.target.id : null;
-    }
-
+  function XOTEAM_131_nearList(limit) {
+    var out = [];
     try {
       var game = XOTEAM_131_getGame();
-      if (game && game.o && game.o.hb) {
-        Object.keys(XOTEAM_131_STATE.applied).forEach(function (id) {
-          var p = game.o.hb[id];
-          if (p && p.Mb && Number(p.Mb.dg) !== XOTEAM_TARGET_SKIN_ID) {
-            XOTEAM_131_applyLocalSkin(p, XOTEAM_TARGET_SKIN_ID, id);
-          }
-        });
-      }
+      if (!game || !game.o || !game.o.N || !game.o.hb) return out;
+      var self = XOTEAM_131_getHead(game.o.N);
+      if (!self) return out;
+      Object.keys(game.o.hb).forEach(function (key) {
+        var p = game.o.hb[key];
+        if (!p || !p.Hb || !p.Ib) return;
+        var pos = XOTEAM_131_getHead(p);
+        if (!pos) return;
+        var d = Math.hypot(self.x - pos.x, self.y - pos.y);
+        if (d <= XOTEAM_NEAR_DISTANCE) out.push({ id: XOTEAM_131_getPlayerId(p, key), player: p, name: XOTEAM_131_getPlayerName(p), distance: d });
+      });
+      out.sort(function (a, b) { return a.distance - b.distance; });
+    } catch (e) {}
+    return out.slice(0, limit || 5);
+  }
+
+  function XOTEAM_131_sendPacket(obj) {
+    try {
+      if (!obj || !window.XOTEAM_WS || window.XOTEAM_WS.readyState !== WebSocket.OPEN) return;
+      obj.from = (typeof XOTEAM_getClientId === "function" ? XOTEAM_getClientId() : "local");
+      window.XOTEAM_WS.send(JSON.stringify(obj));
     } catch (e) {}
   }
 
-  document.addEventListener("keydown", function (e) {
-    var key = e.key || "";
-    var code = e.keyCode || e.which;
-    if (key !== XOTEAM_TRIGGER_KEY && code !== 56 && code !== 104) return;
-
-    var target = XOTEAM_131_STATE.target || XOTEAM_131_scanNearest();
-    if (!target || !target.player) {
-      XOTEAM_131_pulseMessage("NO TARGET");
-      return;
-    }
-
-    if (XOTEAM_131_applyLocalSkin(target.player, XOTEAM_TARGET_SKIN_ID, target.id)) {
-      XOTEAM_131_STATE.applied[target.id] = true;
-      XOTEAM_131_pulseMessage("DONE 131 + NAME");
-      console.log("XOTEAM 131: local skin changed", target.name, target.id, XOTEAM_TARGET_SKIN_ID);
-    } else {
-      XOTEAM_131_pulseMessage("FAILED");
-    }
-  }, true);
-
-  window.XOTEAM_131_scanNearest = XOTEAM_131_scanNearest;
-  window.XOTEAM_131_applyLocalSkin = XOTEAM_131_applyLocalSkin;
-  window.XOTEAM_131_applyLocalName = XOTEAM_131_applyLocalName;
-  window.XOTEAM_131_STATE = XOTEAM_131_STATE;
-
-  setInterval(XOTEAM_131_updateCore, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? window.WORMXO_MOBILE_PERF.tick131 : 120);
-  setInterval(function () {
+  function XOTEAM_131_handlePacket(data) {
     try {
-      window.XOTEAM_KILL_MESSAGES = (window.XOTEAM_KILL_MESSAGES || []).filter(function (p) {
-        return p && Date.now() - p.at < 20000;
-      });
-      if (typeof XOTEAM_renderKillMessages === "function") XOTEAM_renderKillMessages(window.XOTEAM_KILL_MESSAGES);
-      if (typeof XOTEAM_updateLocalTopKill === "function") XOTEAM_updateLocalTopKill();
+      if (!data || data.channel !== XOTEAM_131_STATE.channel) return false;
+      if (data.from && typeof XOTEAM_getClientId === "function" && String(data.from) === String(XOTEAM_getClientId())) return true;
+      if (data.type === "x131_apply") { XOTEAM_131_applyById(data.id, true); return true; }
+      if (data.type === "x131_reset") { XOTEAM_131_resetById(data.id, true); return true; }
+      if (data.type === "x131_reset_all") { XOTEAM_131_resetAll(true); return true; }
     } catch (e) {}
-  }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 1800 : 1000);
+    return false;
+  }
+
+  function XOTEAM_131_togglePanel(force) {
+    var next = typeof force === "boolean" ? force : !XOTEAM_131_STATE.enabled;
+    XOTEAM_131_STATE.enabled = !!next;
+    if (!next) XOTEAM_131_resetAll(false);
+    if (typeof XOTEAM_131_renderPanel === "function") XOTEAM_131_renderPanel();
+  }
+
+  window.XOTEAM_131_nearList = XOTEAM_131_nearList;
+  window.XOTEAM_131_applyById = XOTEAM_131_applyById;
+  window.XOTEAM_131_resetById = XOTEAM_131_resetById;
+  window.XOTEAM_131_resetAll = XOTEAM_131_resetAll;
+  window.XOTEAM_131_handlePacket = XOTEAM_131_handlePacket;
+  window.XOTEAM_131_togglePanel = XOTEAM_131_togglePanel;
+
+  document.addEventListener("keydown", function (e) {
+    try {
+      var tag = (e.target && e.target.tagName ? e.target.tagName : "").toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select" || (e.target && e.target.isContentEditable)) return;
+      if (String(e.key || "").toLowerCase() !== "n") return;
+      XOTEAM_131_togglePanel();
+    } catch (err) {}
+  }, true);
 }
 
 let vO5 = {
@@ -862,6 +889,7 @@ const XOTEAM_API_USERS = "https://jkr.wormy.online/api/users";
 const XOTEAM_SOCKET = "wss://jkr.wormy.online/update";
 
 let XOTEAM_WS = null;
+try { window.XOTEAM_WS = XOTEAM_WS; } catch (e) {}
 let XOTEAM_SAVE_TIMER = null;
 let XOTEAM_TOP_HS_TIMER = null;
 
@@ -1218,6 +1246,8 @@ function XOTEAM_handleSocketMessage(event) {
   try {
     var data = JSON.parse(event.data);
 
+    if (typeof XOTEAM_131_handlePacket === "function" && XOTEAM_131_handlePacket(data)) return;
+
     if (data && data.type === "top_hs_list" && Array.isArray(data.list)) {
       window.XOTEAM_TOP_HS_ONLINE = data.list
         .filter(function (p) {
@@ -1321,6 +1351,7 @@ function XOTEAM_startAutoSave() {
     }
 
     XOTEAM_WS = new WebSocket(XOTEAM_SOCKET);
+    try { window.XOTEAM_WS = XOTEAM_WS; } catch (e0) {}
 
     XOTEAM_WS.onopen = function () {
       console.log("XOTEAM WebSocket connected");
@@ -1728,6 +1759,64 @@ for (let i = 0; i < 5; i++) {
 }
 vO7.containerCountInfo.addChild(vO7.killMsgContainer);
 
+/* WORMXO 131 SELECT PANEL - under Top10 / N */
+vO7.x131MenuContainer = new PIXI.Container();
+vO7.x131MenuContainer.x = -2;
+vO7.x131MenuContainer.y = 405;
+vO7.x131MenuContainer.visible = false;
+vO7.x131MenuTitle = new PIXI.Text("N 131 NEAR", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
+vO7.x131MenuTitle.x = 0;
+vO7.x131MenuTitle.y = 0;
+vO7.x131MenuContainer.addChild(vO7.x131MenuTitle);
+vO7.x131MenuRows = [];
+for (let i = 0; i < 5; i++) {
+  let r = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
+  r.x = 0;
+  r.y = 18 + i * 15;
+  r.interactive = true;
+  r.buttonMode = true;
+  r.__x131Index = i;
+  r.on && r.on("pointertap", function () {
+    try {
+      var item = (window.XOTEAM_131_STATE && window.XOTEAM_131_STATE.rows) ? window.XOTEAM_131_STATE.rows[this.__x131Index] : null;
+      if (item && typeof XOTEAM_131_applyById === "function") XOTEAM_131_applyById(item.id, false);
+      if (typeof XOTEAM_131_renderPanel === "function") XOTEAM_131_renderPanel();
+    } catch (e) {}
+  });
+  vO7.x131MenuRows.push(r);
+  vO7.x131MenuContainer.addChild(r);
+}
+vO7.containerCountInfo.addChild(vO7.x131MenuContainer);
+function XOTEAM_131_renderPanel() {
+  try {
+    var st = window.XOTEAM_131_STATE || {};
+    if (!vO7.x131MenuContainer) return;
+    vO7.x131MenuContainer.visible = !!st.enabled;
+    if (!st.enabled) return;
+    var now = Date.now();
+    if (!st.rows || !st.lastList || now - st.lastList > 350) {
+      st.rows = (typeof XOTEAM_131_nearList === "function") ? XOTEAM_131_nearList(5) : [];
+      st.lastList = now;
+    }
+    for (let i = 0; i < 5; i++) {
+      var row = vO7.x131MenuRows[i];
+      var item = st.rows[i];
+      if (!row) continue;
+      if (item) {
+        var done = st.applied && st.applied[String(item.id)] ? " ✓" : "";
+        row.alpha = 1;
+        row.text = (i + 1) + ". " + XOTEAM_cutTopName(item.name || "Player", 10) + done;
+      } else {
+        row.alpha = 0.55;
+        row.text = (i + 1) + ". ---";
+      }
+    }
+  } catch (e) {}
+}
+window.XOTEAM_131_renderPanel = XOTEAM_131_renderPanel;
+setInterval(function () { try { XOTEAM_131_renderPanel(); } catch (e) {} }, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 650 : 320);
+
+
 function XOTEAM_renderTopHS(list) {
   try {
     list = Array.isArray(list) ? list : [];
@@ -1946,7 +2035,7 @@ function XOTEAM_updateZigZagDetect() {
     if (!st.showZigZag) { XOTEAM_clearZigZagLabels(); return; }
     var now = Date.now();
     var perf = window.WORMXO_MOBILE_PERF || {};
-    var delay = perf.low ? 520 : 260;
+    var delay = perf.low ? 620 : 220;
     var core = window.WORMXO_ZIGZAG_CORE;
     if (now - core.lastScan < delay) return;
     core.lastScan = now;
@@ -1961,36 +2050,40 @@ function XOTEAM_updateZigZagDetect() {
       var id = XOTEAM_getZigPlayerId(p, key);
       aliveIds[id] = true;
       var old = core.samples[id];
+      var angle = 0;
+      try { angle = Number(p.sk || p.angle || (p.Mb && (p.Mb.sk || p.Mb.angle)) || 0); } catch (e) { angle = 0; }
       if (!old) {
-        core.samples[id] = { x: pos.x, y: pos.y, t: now, vx: 0, vy: 0, turns: 0, markUntil: 0, speed: 0 };
+        core.samples[id] = { x: pos.x, y: pos.y, t: now, a: angle, lastMoveAngle: 0, turns: 0, markUntil: 0, speed: 0 };
         return;
       }
       var dt = Math.max(16, now - old.t);
       var dx = pos.x - old.x;
       var dy = pos.y - old.y;
       var dist = Math.sqrt(dx * dx + dy * dy);
-      var vx = dx / dt;
-      var vy = dy / dt;
       var speed = dist / dt;
-      var dot = vx * old.vx + vy * old.vy;
-      var mag = Math.sqrt(vx * vx + vy * vy) * Math.sqrt(old.vx * old.vx + old.vy * old.vy);
-      var turn = mag > 0.0001 ? Math.acos(Math.max(-1, Math.min(1, dot / mag))) : 0;
-      if (speed > 0.18 && turn > 1.05) old.turns = Math.min(8, old.turns + 1); else old.turns = Math.max(0, old.turns - 0.45);
-      old.x = pos.x; old.y = pos.y; old.t = now; old.vx = vx; old.vy = vy; old.speed = speed;
-      if (old.turns >= 2.5 || speed > 0.72) old.markUntil = now + 1800;
+      var moveAngle = dist > 1 ? Math.atan2(dy, dx) : old.lastMoveAngle;
+      function adiff(a, b) { var d = Math.abs(a - b) % (Math.PI * 2); return d > Math.PI ? Math.PI * 2 - d : d; }
+      var turnMove = adiff(moveAngle, old.lastMoveAngle || moveAngle);
+      var turnBody = adiff(angle, old.a || angle);
+      var turn = Math.max(turnMove, turnBody);
+      if (speed > 0.045 && turn > 0.55) old.turns = Math.min(10, old.turns + (turn > 1.2 ? 1.65 : 1));
+      else old.turns = Math.max(0, old.turns - 0.35);
+      old.x = pos.x; old.y = pos.y; old.t = now; old.a = angle; old.lastMoveAngle = moveAngle; old.speed = speed;
+      if (old.turns >= 2.0 || (speed > 0.50 && turn > 0.38)) old.markUntil = now + 2200;
       if (old.markUntil > now) {
         var label = XOTEAM_getZigLabel(id);
         if (label) {
           label.c.visible = true;
           label.c.x = pos.x;
-          label.c.y = pos.y - 70;
-          label.s.text = (speed > 0.72 ? "SPEED" : "ZIG") + " " + Math.round(speed * 100);
+          label.c.y = pos.y - 74;
+          label.t.text = turn > 0.75 ? "⚡ZIG" : "↯TURN";
+          label.s.text = "TURN " + Math.round(turn * 100) + " / SPD " + Math.round(speed * 100);
           label.last = now;
         }
       }
     });
     Object.keys(core.labels).forEach(function (id) {
-      if (!aliveIds[id] || now - core.labels[id].last > 2400) {
+      if (!aliveIds[id] || now - core.labels[id].last > 2600) {
         try { if (core.labels[id].c && core.labels[id].c.parent) core.labels[id].c.parent.removeChild(core.labels[id].c); } catch (e) {}
         delete core.labels[id];
       }
