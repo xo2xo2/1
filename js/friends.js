@@ -4689,9 +4689,9 @@ vF172.prototype.Se = function (p281) {
           v214.beginFill("black", 0.28);
           v214.drawCircle(0, 0, this.Kf);
           v214.endFill();
-          v214.lineStyle(1, 16225317);
+          v214.lineStyle(2, 16225317);
           v214.drawCircle(0, 0, this.Kf);
-          v214.lineStyle(0.75, 0xffd24a, 0.38);
+          v214.lineStyle(2, 16225317);
           v214.moveTo(0, -this.Kf);
           v214.lineTo(0, +this.Kf);
           v214.moveTo(-this.Kf, 0);
