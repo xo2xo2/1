@@ -3,14 +3,14 @@
   "servers": [
     {
         "id": 1,
-        "name": "<div id='svhiep'> <div class='ten'>01. WORMATE </div> <div class='valu'>Map: 01</div> <div class='mau-vang'>ONLINE</div> </div>",
+        "name": "<div id='svhiep'> <div class='ten'>05. WORMATE </div> <div class='valu'>Map: 05</div> <div class='mau-vang'>ONLINE</div> </div>",
         "region": "peru",
         "serverUrl": "wss://fra-c.wormate.io:32053/wormy",
         "status": 1
     },
     {
         "id": 2,
-        "name": "<div id='svhiep'> <div class='ten'>02. WORMATE </div> <div class='valu'>Map: 02</div> <div class='mau-vang'>ONLINE</div> </div>",
+        "name": "<div id='svhiep'> <div class='ten'>04. WORMATE </div> <div class='valu'>Map: 04</div> <div class='mau-vang'>ONLINE</div> </div>",
         "region": "peru",
         "serverUrl": "wss://fra-c.wormate.io:32103/wormy",
         "status": 1
@@ -24,16 +24,16 @@
     },
     {
         "id": 4,
-        "name": "<div id='svhiep'> <div class='ten'>04. WORMATE </div> <div class='valu'>Map: 04</div> <div class='mau-vang'>ONLINE</div> </div>",
+        "name": "<div id='svhiep'> <div class='ten'>02. JOKER </div> <div class='valu'>Map: 02</div> <div class='mau-vang'>ONLINE</div> </div>",
         "region": "peru",
-        "serverUrl": "wss://fra-c.wormate.io:32044/wormy",
+        "serverUrl": "wss://fra-c.wormate.io:32017/wormy",
         "status": 1
     },
     {
         "id": 5,
-        "name": "<div id='svhiep'> <div class='ten'>05. WORMATE </div> <div class='valu'>Map: 05</div> <div class='mau-vang'>ONLINE</div> </div>",
+        "name": "<div id='svhiep'> <div class='ten'>01. WORM XO KING  </div> <div class='valu'>Map: 01</div> <div class='mau-vang'>ONLINE</div> </div>",
         "region": "peru",
-        "serverUrl": "wss://fra-c.wormate.io:32095/wormy",
+        "serverUrl": "wss://fra-c.wormate.io:32609/wormy",
         "status": 1
     }
 ]
