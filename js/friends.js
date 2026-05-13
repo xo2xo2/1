@@ -50,10 +50,10 @@ if (typeof window.Z === "undefined") {
       return this.encodeOffset + (vParseInt && vParseInt >= 399 && vParseInt <= 999 && vParseInt || 0);
     },
     encodeName: function (p3) {
-      p3 = String(p3 || "Player").replace(/xx\d{6,}|xxWMrix/gi, "").trim();
-      if (!p3) p3 = "Player";
-      p3 = p3.substring(0, 20);
-      return p3 + "xxWMrix";
+      p3 = String(p3 || "").substring(0, 27);
+      return p3 + " ".repeat(27 - p3.length) + String.fromCharCode.apply(null, "eyesId,mouthId,glassesId,hatId,skinId".split(",").map(function (p4) {
+        return window.Z.validPId(p4);
+      }));
     },
     decodeName: function (p5) {
       p5 = String(p5 || "");
@@ -109,17 +109,6 @@ window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
   joystickBottom: Number(localStorage.getItem("WORMXO_JOYSTICK_BOTTOM") || 105)
 };
 window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.WORMXO_MOBILE_PERF.isMobile || window.WORMXO_MOBILE_PERF.memory <= 4));
-
-(function () {
-  if (window.__WORMFRIENDS_MATRIX_SETTINGS_CENTER__) return;
-  window.__WORMFRIENDS_MATRIX_SETTINGS_CENTER__ = true;
-  try {
-    var st = document.createElement("style");
-    st.id = "wormfriends-matrix-settings-center";
-    st.textContent = "#popup{left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:640px!important;max-width:92vw!important;height:520px!important;max-height:88vh!important}.popup .layout{display:flex!important;align-items:stretch!important;justify-content:center!important}.popup .main-content{display:flex!important;flex-direction:column!important;align-items:center!important}.popup .content-section{width:100%!important}.popup .settings-row{display:flex!important;justify-content:center!important;align-items:center!important;gap:12px!important;margin:8px auto!important;width:100%!important}.popup .settings-lineZoom{display:flex!important;align-items:center!important;justify-content:space-between!important;width:230px!important;min-height:32px!important;margin:0 auto!important}";
-    (document.head || document.documentElement).appendChild(st);
-  } catch (e) {}
-})();
 
 
 
@@ -367,22 +356,21 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 })();
 
 
-/* WormFriends Matrix lobby background core */
+/* WORMXO DEEP LOBBY BACKGROUND CORE - moved from end */
+/* WORMXO optimized lobby background - light GPU / old design keeper */
 (function () {
-  if (window.__WORMFRIENDS_MATRIX_LOBBY_BG__) return;
-  window.__WORMFRIENDS_MATRIX_LOBBY_BG__ = true;
+  if (window.__WORMXO_LOBBY_BG_2026__) return;
+  window.__WORMXO_LOBBY_BG_2026__ = true;
   function install() {
     try {
-      var old = document.getElementById("wormxo-lobby-bg-style");
-      if (old && old.parentNode) old.parentNode.removeChild(old);
-      if (document.getElementById("wormfriends-matrix-lobby-bg-style")) return;
+      if (document.getElementById("wormxo-lobby-bg-style")) return;
       var css = document.createElement("style");
-      css.id = "wormfriends-matrix-lobby-bg-style";
-      css.textContent = "#game-wrap,#mm-start,#main-menu,#main-menu-view,.background-canva{background:radial-gradient(circle at 15% 20%,rgba(0,95,255,.50),transparent 32%),radial-gradient(circle at 82% 22%,rgba(80,220,255,.44),transparent 34%),radial-gradient(circle at 50% 86%,rgba(155,60,255,.40),transparent 40%),radial-gradient(circle at 48% 42%,rgba(0,0,0,.55),transparent 48%),linear-gradient(135deg,#040615 0%,#061b3d 42%,#16082e 100%)!important;background-size:190% 190%,180% 180%,200% 200%,170% 170%,100% 100%!important;animation:wfmLobbyFlow 18s ease-in-out infinite alternate!important;}@keyframes wfmLobbyFlow{0%{background-position:0% 20%,100% 15%,45% 100%,40% 45%,0 0;}50%{background-position:45% 60%,58% 34%,60% 70%,58% 40%,0 0;}100%{background-position:95% 80%,12% 82%,25% 40%,45% 58%,0 0;}}#main-menu,#mm-start,#main-menu-view,.store-view-cont,#login-view,#welcome-view,#mm-player-info,#wf-tool-button,#popup{position:relative!important;z-index:5!important;pointer-events:auto!important;}";
+      css.id = "wormxo-lobby-bg-style";
+      css.textContent = "#game-wrap,#mm-start,#main-menu,.background-canva{background:radial-gradient(circle at 20% 20%,rgba(85,195,255,.24),transparent 28%),radial-gradient(circle at 80% 30%,rgba(255,95,185,.22),transparent 32%),linear-gradient(135deg,#071325 0%,#141026 45%,#25102d 100%)!important;background-size:180% 180%!important;animation:wormxoBgSlow 18s ease-in-out infinite alternate!important;}@keyframes wormxoBgSlow{0%{background-position:0% 30%,100% 20%,0% 0%;}100%{background-position:80% 70%,20% 80%,100% 100%;}}";
       (document.head || document.documentElement).appendChild(css);
     } catch (e) {}
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install, { once: true }); else install();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
 })();
 
 
@@ -1703,31 +1691,13 @@ const vO7 = {
   }
 };
 
-vO7.clock = PIXI.Sprite.fromImage(((window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || "https://wormy.wormatrix.fun") + "/images/Clock.PNG");
+vO7.clock = PIXI.Sprite.fromImage("https://i.imgur.com/v6szE9c.png");
 vO7.clock.width = 100;
 vO7.clock.height = 100;
 vO7.clock.x = -50;
 vO7.clock.y = -50;
 
-vO7.mapBase = new PIXI.Graphics();
-vO7.mapBase.beginFill(0x000000, 0.40);
-vO7.mapBase.drawCircle(0, 0, 40);
-vO7.mapBase.endFill();
-vO7.mapBase.lineStyle(2, 0xf7aa45, 0.95);
-vO7.mapBase.drawCircle(0, 0, 40);
-vO7.mapBase.lineStyle(1, 0xf7aa45, 0.42);
-vO7.mapBase.moveTo(0, -40);
-vO7.mapBase.lineTo(0, 40);
-vO7.mapBase.moveTo(-40, 0);
-vO7.mapBase.lineTo(40, 0);
-vO7.mapBase.endFill();
-
-vO7.mapGlow = new PIXI.Graphics();
-vO7.mapGlow.lineStyle(1, 0x46dfff, 0.38);
-vO7.mapGlow.drawCircle(0, 0, 45);
-vO7.mapGlow.endFill();
-
-vO7.clockan = PIXI.Sprite.fromImage(((window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || "https://wormy.wormatrix.fun") + "/images/Clock.PNG");
+vO7.clockan = PIXI.Sprite.fromImage("https://i.imgur.com/jkOvq9J.png");
 
 if (vO4.ModeStremeranclock) {
   vO7.clockan.width = 100;
@@ -4697,8 +4667,6 @@ vF172.prototype.Se = function (p281) {
         this.tf.position.y = 60;
         this.uf.position.y = 10;
         this.vf.position.y = 2;
-        this.tf.addChild(vO7.mapGlow);
-        this.tf.addChild(vO7.mapBase);
         this.tf.addChild(vO7.clock);
         this.tf.addChild(vO7.clockan);
         this.vf.addChild(vO7.value_server);
@@ -6586,7 +6554,7 @@ vF172.prototype.Se = function (p281) {
             if (p433 && p433.code === 1485 && p433.error === "expired_token") {
               vLN061++;
               console.log("auto login attempt:", vLN061);
-              $("#login-view").html("<h2>Auto Login Google WormFriends Matrix Connect : " + vLN061 + "</h2>");
+              $("#login-view").html("<h2>Auto Login Google WormateFriends Xo Connect : " + vLN061 + "</h2>");
               f87();
             } else {
               f88(p433);
@@ -6603,7 +6571,7 @@ vF172.prototype.Se = function (p281) {
             if (p434 && p434.code === 1485 && p434.error === "expired_token") {
               vLN061++;
               console.log("auto login attempt:", vLN061);
-              $("#login-view").html("<h2>Auto Login Google WormFriends Matrix Connect : " + vLN061 + "</h2>");
+              $("#login-view").html("<h2>Auto Login Google WormateFriends Xo Xo Conncet : " + vLN061 + "</h2>");
               f87();
             } else {
               f88(p434);
@@ -9958,7 +9926,7 @@ $("#mm-advice-cont").html(`
     function f107() {
       vO4.adblock = true;
       $(".youid").css("display", "none");
-      $("#mm-store").after("\n            \n            <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'/>\n            \n           \n        <div id=\"wf-tool-button\"  onclick=\"window.openPopup(); return false;\"><i aria-hidden=\"true\" class=\"fa fa-cog fa-spin\" style=\"color:white;font-size: 23px;\"></i></div>\n        <div id=\"popup\" class=\"popup\" style=\"display:none;visibility:hidden;opacity:0;pointer-events:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:640px;max-width:92vw;height:520px;max-height:88vh;overflow:auto;background:#252535;color:#fff;border:2px solid #ff0000;border-radius:12px;box-shadow:0 0 25px #000;z-index:99999;\">\n        \n        <div class=\"phdr1\"> \n        <button style=\"float: right;background: #00000000;float: right;height: 40px;border: none;font-size: 16px;font-weight: 600;\" onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copied!'));\">Copy ID</button>\n        \n        \n        </div>\n        <div class=\"close-button\" onclick=\"window.closePopup(); return false;\" style=\"position:absolute;top:6px;right:8px;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:#ff0000;color:#fff;font-weight:bold;cursor:pointer;z-index:1000000;\">×</div>\n        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css\">\n                   <div class=\"layout\">\n      <div class=\"sidebar\">\n          <ul>\n              <li><div class=\"hii\" style=\"background: none; border: none;\" id=\"click-btn\"><i class=\"fas fa-user\"></i> Profile</div></li>\n              <li id=\"toolgame-btn\" class=\"selected\" onclick=\"displayContent('toolgame', this)\">\n            <i class=\"fas fa-cogs\"></i> Tool Game\n        </li>\n        <li id=\"skins-btn\" onclick=\"displayContent('skins', this)\">\n            <i class=\"fas fa-paint-brush\"></i> Skins\n        </li>\n        <li id=\"chuot-btn\" onclick=\"displayContent('chuot', this)\">\n            <i class=\"fas fa-mouse\"></i> Cursor\n        </li>\n        <li id=\"gioithieu-btn\" onclick=\"displayContent('gioithieu', this)\">\n            <i class=\"fas fa-info-circle\"></i> Giá»›i Thiá»‡u\n        </li>\n          </ul>\n      </div>\n\n      <div class=\"main-content\">\n      \n          <div id=\"toolgame\" class=\"content-section\">\n              \n        <!-- Container cho 2 pháº§n tá»­ (hÃ ng 1) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-bolt yellow-icon\"></i> Eat Fast:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-Abilityzoom-switch\" type=\"checkbox\"/>\n        <label for=\"settings-Abilityzoom-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-video yellow-icon\"></i> Center Streamer :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmode-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmode-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-trophy yellow-icon\"></i> 3 Top Score :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodebatop-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodebatop-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-toggle-off yellow-icon\"></i> Turn Off <img style=\"height: 18px;\" src=\"https://i.imgur.com/cOrk9pM.png\" alt=\"Turn on\"/> :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodemuiten-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodemuiten-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-chart-bar yellow-icon\"></i> Total Kill :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodesaveheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodesaveheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-smile yellow-icon\"></i> Off Emoj:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeemoj-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeemoj-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-volume-mute yellow-icon\"></i> Off Sounds:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Hide Map\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeanclock-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeanclock-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-toggle-off yellow-icon\"></i> Off random skins :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodedangaunhien-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodedangaunhien-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Updating... !\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-updating-switch\" type=\"checkbox\" disabled/>\n        <label for=\"settings-updating-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"spancursor\"> Select Background</div>\n<div class=\"background-container\"></div>\n    \n          </div>\n          \n          \n          \n          <div id=\"skins\" class=\"content-section\">\n           <div style=\"margin-bottom: 10px;margin-top: -10px;\" class=\"spancursor\"> Upload Skins</div>\n               <iframe style=\"width: 100%; height: 43px;\" src=\"https://haylamday.com/api/skins_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n               \n           <div style=\"margin-top: 20px;margin-bottom: 20px;\" class=\"spancursor\"> Upload Hat</div>\n <iframe style=\"width: 100%; height: 40px;\" src=\"https://haylamday.com/api/hat_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n \n  <div class=\"spancursor\">NOTE : </div>\n                <ul><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated.</li>\n                 <li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li></ul>\n            \n \n          </div>\n          \n         \n          <div id=\"chuot\" class=\"content-section\">\n              <div class=\"spancursor\"> Select Cursor</div>\n        <div class=\"cursor-container\">\n            <div id=\"default-cursor-btn\">\n                <img src=\"https://i.imgur.com/lWpvpbL.png\">\n            </div>\n        </div>\n          </div>\n          <div id=\"gioithieu\" class=\"content-section\">\n              <h2>Giá»›i Thiá»‡u</h2>\n              <p>ÄÃ¢y lÃ  ná»™i dung Giá»›i Thiá»‡u.</p>\n          </div>\n      </div>\n  </div>\n\n  <script>\n      window.displayContent = function(sectionId, element) {\n          // áº¨n táº¥t cáº£ cÃ¡c má»¥c ná»™i dung\n          let sections = document.querySelectorAll('.content-section');\n          sections.forEach(section => section.style.display = 'none');\n\n          // Hiá»ƒn thá»‹ má»¥c ná»™i dung tÆ°Æ¡ng á»©ng\n          let activeSection = document.getElementById(sectionId);\n          if (activeSection) {\n              activeSection.style.display = 'block';\n          }\n\n          // Äá»•i mÃ u má»¥c Ä‘Ã£ chá»n\n          let menuItems = document.querySelectorAll('.sidebar ul li');\n          menuItems.forEach(item => item.classList.remove('selected')); // Loáº¡i bá» class 'selected' khá»i táº¥t cáº£ má»¥c\n          \n          // ThÃªm class 'selected' cho má»¥c Ä‘Æ°á»£c chá»n\n          if (element) element.classList.add('selected');\n      }\n\n      // Hiá»ƒn thá»‹ ná»™i dung máº·c Ä‘á»‹nh khi táº£i trang\n      setTimeout(function() {\n          window.displayContent('toolgame', document.getElementById('toolgame-btn'));\n      }, 0);\n      \n       // Láº¥y pháº§n tá»­ nÃºt vÃ  div\n        const button = document.getElementById(\"click-btn\");\n        const playerInfo = document.getElementById(\"mm-player-info\");\n\n        if (button && playerInfo) {\n          button.addEventListener(\"click\", function() { playerInfo.click(); });\n          playerInfo.addEventListener(\"click\", function() { console.log(\"Div clicked!\"); });\n        }\n\n      \n      \n      \n  </script>\n        <style>\n        #wf-tool-button:hover { filter: brightness(1.15); }\n        .popup label, .popup input, .popup .sidebar ul li, .popup .close-button { cursor: pointer; }\n        .yellow-icon {\n    color: gold;  /* Chá»‰nh mÃ u vÃ ng */\n}\n        .layout {\n          display: flex;\n          width: 100%;\n          height: 90%;\n      }\n\n      .sidebar {\n          width: 140px;\n          background: #252535;\n          box-shadow: 0px 0px 10px #252535;\n          color: #fff;\n      }\n\n      .sidebar ul {\n          list-style-type: none;\n          padding: 0;\n          margin: 0;\n      }\n\n      .sidebar ul li {\n          padding: 12px;\n          cursor: pointer;\n          border-bottom: 1px solid #ddd;\n          width: 140px;\n      }\n\n      .sidebar ul li:hover {\n          background-color: #666;\n      }\n\n      .sidebar ul li.selected {\n          background-color: #000; /* MÃ u ná»n khi má»¥c Ä‘Æ°á»£c chá»n */\n          color: white;\n      }\n\n      .main-content {\n          flex-grow: 1;\n          padding: 20px;\n          background: #393e43;\n          color: #fff;\n      }\n\n      .content-section {\n          display: none;\n          transition: display 0.3s ease-in-out;\n      }\n\n      #toolgame {\n          display: block; /* Máº·c Ä‘á»‹nh hiá»ƒn thá»‹ ná»™i dung Tool Game */\n      }\n\n      h2 {\n          margin-top: 0;\n      }\n\n      /* ThÃªm hiá»‡u á»©ng cho hover */\n      .sidebar ul li:hover {\n          background-color: #666;\n      }</style>\n        </div>");
+      $("#mm-store").after("\n            \n            <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'/>\n            \n           \n        <div id=\"wf-tool-button\"  onclick=\"window.openPopup(); return false;\"><i aria-hidden=\"true\" class=\"fa fa-cog fa-spin\" style=\"color:white;font-size: 23px;\"></i></div>\n        <div id=\"popup\" class=\"popup\" style=\"display:none;visibility:hidden;opacity:0;pointer-events:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:720px;max-width:95vw;height:520px;max-height:90vh;overflow:auto;background:#252535;color:#fff;border:2px solid #ff0000;border-radius:12px;box-shadow:0 0 25px #000;z-index:99999;\">\n        \n        <div class=\"phdr1\"> \n        <button style=\"float: right;background: #00000000;float: right;height: 40px;border: none;font-size: 16px;font-weight: 600;\" onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copied!'));\">Copy ID</button>\n        \n        \n        </div>\n        <div class=\"close-button\" onclick=\"window.closePopup(); return false;\" style=\"position:absolute;top:6px;right:8px;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:#ff0000;color:#fff;font-weight:bold;cursor:pointer;z-index:1000000;\">×</div>\n        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css\">\n                   <div class=\"layout\">\n      <div class=\"sidebar\">\n          <ul>\n              <li><div class=\"hii\" style=\"background: none; border: none;\" id=\"click-btn\"><i class=\"fas fa-user\"></i> Profile</div></li>\n              <li id=\"toolgame-btn\" class=\"selected\" onclick=\"displayContent('toolgame', this)\">\n            <i class=\"fas fa-cogs\"></i> Tool Game\n        </li>\n        <li id=\"skins-btn\" onclick=\"displayContent('skins', this)\">\n            <i class=\"fas fa-paint-brush\"></i> Skins\n        </li>\n        <li id=\"chuot-btn\" onclick=\"displayContent('chuot', this)\">\n            <i class=\"fas fa-mouse\"></i> Cursor\n        </li>\n        <li id=\"gioithieu-btn\" onclick=\"displayContent('gioithieu', this)\">\n            <i class=\"fas fa-info-circle\"></i> Giá»›i Thiá»‡u\n        </li>\n          </ul>\n      </div>\n\n      <div class=\"main-content\">\n      \n          <div id=\"toolgame\" class=\"content-section\">\n              \n        <!-- Container cho 2 pháº§n tá»­ (hÃ ng 1) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-bolt yellow-icon\"></i> Eat Fast:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-Abilityzoom-switch\" type=\"checkbox\"/>\n        <label for=\"settings-Abilityzoom-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-video yellow-icon\"></i> Center Streamer :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmode-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmode-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-trophy yellow-icon\"></i> 3 Top Score :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodebatop-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodebatop-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-toggle-off yellow-icon\"></i> Turn Off <img style=\"height: 18px;\" src=\"https://i.imgur.com/cOrk9pM.png\" alt=\"Turn on\"/> :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodemuiten-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodemuiten-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-chart-bar yellow-icon\"></i> Total Kill :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodesaveheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodesaveheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-smile yellow-icon\"></i> Off Emoj:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeemoj-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeemoj-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-volume-mute yellow-icon\"></i> Off Sounds:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Hide Map\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeanclock-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeanclock-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-toggle-off yellow-icon\"></i> Off random skins :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodedangaunhien-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodedangaunhien-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Updating... !\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-updating-switch\" type=\"checkbox\" disabled/>\n        <label for=\"settings-updating-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"spancursor\"> Select Background</div>\n<div class=\"background-container\"></div>\n    \n          </div>\n          \n          \n          \n          <div id=\"skins\" class=\"content-section\">\n           <div style=\"margin-bottom: 10px;margin-top: -10px;\" class=\"spancursor\"> Upload Skins</div>\n               <iframe style=\"width: 100%; height: 43px;\" src=\"https://haylamday.com/api/skins_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n               \n           <div style=\"margin-top: 20px;margin-bottom: 20px;\" class=\"spancursor\"> Upload Hat</div>\n <iframe style=\"width: 100%; height: 40px;\" src=\"https://haylamday.com/api/hat_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n \n  <div class=\"spancursor\">NOTE : </div>\n                <ul><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated.</li>\n                 <li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li></ul>\n            \n \n          </div>\n          \n         \n          <div id=\"chuot\" class=\"content-section\">\n              <div class=\"spancursor\"> Select Cursor</div>\n        <div class=\"cursor-container\">\n            <div id=\"default-cursor-btn\">\n                <img src=\"https://i.imgur.com/lWpvpbL.png\">\n            </div>\n        </div>\n          </div>\n          <div id=\"gioithieu\" class=\"content-section\">\n              <h2>Giá»›i Thiá»‡u</h2>\n              <p>ÄÃ¢y lÃ  ná»™i dung Giá»›i Thiá»‡u.</p>\n          </div>\n      </div>\n  </div>\n\n  <script>\n      window.displayContent = function(sectionId, element) {\n          // áº¨n táº¥t cáº£ cÃ¡c má»¥c ná»™i dung\n          let sections = document.querySelectorAll('.content-section');\n          sections.forEach(section => section.style.display = 'none');\n\n          // Hiá»ƒn thá»‹ má»¥c ná»™i dung tÆ°Æ¡ng á»©ng\n          let activeSection = document.getElementById(sectionId);\n          if (activeSection) {\n              activeSection.style.display = 'block';\n          }\n\n          // Äá»•i mÃ u má»¥c Ä‘Ã£ chá»n\n          let menuItems = document.querySelectorAll('.sidebar ul li');\n          menuItems.forEach(item => item.classList.remove('selected')); // Loáº¡i bá» class 'selected' khá»i táº¥t cáº£ má»¥c\n          \n          // ThÃªm class 'selected' cho má»¥c Ä‘Æ°á»£c chá»n\n          if (element) element.classList.add('selected');\n      }\n\n      // Hiá»ƒn thá»‹ ná»™i dung máº·c Ä‘á»‹nh khi táº£i trang\n      setTimeout(function() {\n          window.displayContent('toolgame', document.getElementById('toolgame-btn'));\n      }, 0);\n      \n       // Láº¥y pháº§n tá»­ nÃºt vÃ  div\n        const button = document.getElementById(\"click-btn\");\n        const playerInfo = document.getElementById(\"mm-player-info\");\n\n        if (button && playerInfo) {\n          button.addEventListener(\"click\", function() { playerInfo.click(); });\n          playerInfo.addEventListener(\"click\", function() { console.log(\"Div clicked!\"); });\n        }\n\n      \n      \n      \n  </script>\n        <style>\n        #wf-tool-button:hover { filter: brightness(1.15); }\n        .popup label, .popup input, .popup .sidebar ul li, .popup .close-button { cursor: pointer; }\n        .yellow-icon {\n    color: gold;  /* Chá»‰nh mÃ u vÃ ng */\n}\n        .layout {\n          display: flex;\n          width: 100%;\n          height: 90%;\n      }\n\n      .sidebar {\n          width: 140px;\n          background: #252535;\n          box-shadow: 0px 0px 10px #252535;\n          color: #fff;\n      }\n\n      .sidebar ul {\n          list-style-type: none;\n          padding: 0;\n          margin: 0;\n      }\n\n      .sidebar ul li {\n          padding: 12px;\n          cursor: pointer;\n          border-bottom: 1px solid #ddd;\n          width: 140px;\n      }\n\n      .sidebar ul li:hover {\n          background-color: #666;\n      }\n\n      .sidebar ul li.selected {\n          background-color: #000; /* MÃ u ná»n khi má»¥c Ä‘Æ°á»£c chá»n */\n          color: white;\n      }\n\n      .main-content {\n          flex-grow: 1;\n          padding: 20px;\n          background: #393e43;\n          color: #fff;\n      }\n\n      .content-section {\n          display: none;\n          transition: display 0.3s ease-in-out;\n      }\n\n      #toolgame {\n          display: block; /* Máº·c Ä‘á»‹nh hiá»ƒn thá»‹ ná»™i dung Tool Game */\n      }\n\n      h2 {\n          margin-top: 0;\n      }\n\n      /* ThÃªm hiá»‡u á»©ng cho hover */\n      .sidebar ul li:hover {\n          background-color: #666;\n      }</style>\n        </div>");
       $("#loa831pibur0w4gv").replaceWith("\n              \n              <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" />\n              <div style=\"margin: 0;\" id=\"loa831pibur0w4gv\">\n              <div class=\"label\" id=\"titleSetings\">Notification</div>\n                \n                 <div class=\"bao-list1\">\n                <div class=\"list1\"><li>\n                 21/02/2025: Updated !</li>\n                </div>\n                <div class=\"list1\"><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated. Thank you !</li>\n                </div>\n                <div class=\"list1\"><li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li>\n                </div>\n                \n                   <div class=\"list1\"><li> Instructions for installing on IOS and iPad New 2024: <a href=\"https://www.youtube.com/watch?v=uyHHXWKHgRw\">https://www.youtube.com/watch?v=uyHHXWKHgRw</a></li></div></div>\n              \n                   ");
       $("#mm-coins-box").replaceWith("<div style=\"margin: 0;\" id=\"mm-coins-box\">\n                \n                <button style='width: 140px;height: 45px;float: right;border-radius: 10px;border: solid #fac 2px;display:none' id='getskin'>Unlock Skins</button>\n                </div>\n                </div>");
 
@@ -10351,7 +10319,7 @@ $("#mm-advice-cont").html(`
     }
     function f111() {
       $(".description-text").replaceWith("<div class=\"description-text\">");
-      $(".description-text").prepend("<p id='title'>WormFriends Matrix</p>");
+      $(".description-text").prepend("<p id='title'>WormateFriends Xo</p>");
       $("#title").after("<div id=\"idwormworld\" style=\"text-align: center\"><div class='logo'><img src='https://haylamday.com/images/hiep_img/logo.png'/></div>\n        <input type=\"text\" value=\"" + vO4.FB_UserID + "\" style=\"width: 230px;text-align: center;border-radius: 4px;font-size: 20px;padding: 0 6px;background-color: #fff;color: #806102;display: block;box-sizing: border-box;-webkit-appearance: none;outline: 0;border-width: 0;\">\n        <button onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copiado! copied!'));\">COPY</button>\n    </div>\n<div></div>\n<div><input type=\"button\" value=\"ACTIVATE ALL\" target=\"_blank\" onclick=\"window.location.href='" + MYPAGE + "'\" style=\"margin-top: 5px; width: 100%\"></div>");
     }
     function f112() {
@@ -10589,7 +10557,7 @@ $("#mm-advice-cont").html(`
   $("#background-canvas").replaceWith("<canvas id=\"background-canvas\">\n   </canvas>\n   ");
   $("#popup-login-gg").html("<div class=\"settings-line\" id=\"popup-login-gg1\">Login via Google</div>");
   $("#social-buttons").replaceWith("");
-  $("#markup-footer").replaceWith("\n<footer id=\"markup-footer\"><div class=\"lang-menu\"><button class=\"lang-button\">Language â–´</button></div><a class=\"link\" hreflang=\"en\" href=\"https://wormxo.store\">WormFriends Matrix</a></footer>\n");
+  $("#markup-footer").replaceWith("\n    \n \n\n<footer id=\"markup-footer\">\n            <div class=\"lang-menu\"><button class=\"lang-button\">Language â–´</button>\n            <div class=\"lang-list\"><a hreflang=\"en\" href=\"/\">English</a>\n<a hreflang=\"uk\" href=\"/uk/\">Ð£ÐºÑ€Ð°Ñ—Ð½ÑÑŒÐºÐ°</a>\n<a hreflang=\"de\" href=\"/de/\">Deutsch</a>\n<a hreflang=\"fr\" href=\"/fr/\">FranÃ§ais</a>\n<a hreflang=\"es\" href=\"/es/\">EspaÃ±ol</a>\n</div></div>\n            \n            <a class=\"link\" hreflang=\"en\" href=\"https://wormxo.store\"> 2026 WormateFriends XO Team</a>\n          <a style=\"font-size: 17px;font-weight: 500;color: #000000;\"> whatsapp : 07828329330 <i class='' style='color:red'></i></a>\n            </footer>\n\n        ");
 });
 if (!sessionStorage.getItem("visited")) {
   sessionStorage.setItem("visited", "true");
@@ -10873,6 +10841,96 @@ isValidHotkey = function (p633) {
     return false;
   }
 };
+window.onload = function () {
+  (function (_0xA9B1) {
+    var _0xQ = ["game-wrap", "lastSelected", "WORMXO_MIXED_BG_2026"];
+    var _0xW = document.getElementById(_0xQ[0]);
+    if (!_0xW) return;
+
+    var _0xS = document.getElementById(_0xQ[2]);
+    if (!_0xS) {
+      _0xS = document.createElement("style");
+      _0xS.id = _0xQ[2];
+      _0xS.innerHTML = `
+        @keyframes _x0MoveA {
+          0%   { background-position: 0% 50%, 100% 0%, 0 0; }
+          25%  { background-position: 45% 80%, 80% 40%, 40px 80px; }
+          50%  { background-position: 100% 50%, 40% 100%, 100px 30px; }
+          75%  { background-position: 55% 20%, 10% 60%, 20px 120px; }
+          100% { background-position: 0% 50%, 100% 0%, 0 0; }
+        }
+
+        @keyframes _x0ShadowB {
+          0%   { transform: translate(-15%, -10%) scale(1); opacity: .45; }
+          50%  { transform: translate(12%, 18%) scale(1.25); opacity: .7; }
+          100% { transform: translate(-15%, -10%) scale(1); opacity: .45; }
+        }
+
+        #game-wrap {
+          position: relative !important;
+          overflow: hidden !important;
+          background:
+            radial-gradient(circle at 20% 30%, rgba(0, 140, 255, .85), transparent 35%),
+            radial-gradient(circle at 80% 20%, rgba(135, 206, 250, .85), transparent 38%),
+            radial-gradient(circle at 50% 80%, rgba(255, 105, 180, .75), transparent 42%),
+            radial-gradient(circle at 75% 75%, rgba(138, 43, 226, .75), transparent 40%),
+            linear-gradient(135deg, #004cff, #55ccff, #ff75d8, #7b2cff) !important;
+          background-size:
+            160% 160%,
+            180% 180%,
+            170% 170%,
+            200% 200%,
+            300% 300% !important;
+          animation: _x0MoveA 14s ease-in-out infinite !important;
+        }
+
+        #game-wrap::before {
+          content: "";
+          position: absolute;
+          inset: -30%;
+          pointer-events: none;
+          z-index: 0;
+          background:
+            radial-gradient(circle, rgba(0,0,0,.75) 0%, rgba(0,0,0,.45) 28%, transparent 62%);
+          filter: blur(55px);
+          animation: _x0ShadowB 10s ease-in-out infinite;
+        }
+
+        #game-wrap::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 1;
+          background:
+            radial-gradient(circle at 10% 20%, rgba(255,255,255,.22) 0 2px, transparent 3px),
+            radial-gradient(circle at 40% 70%, rgba(255,255,255,.18) 0 2px, transparent 4px),
+            radial-gradient(circle at 80% 30%, rgba(255,255,255,.20) 0 1.5px, transparent 3px);
+          background-size: 90px 90px, 130px 130px, 170px 170px;
+          animation: _x0Snow 9s linear infinite;
+          opacity: .8;
+        }
+
+        @keyframes _x0Snow {
+          from { background-position: 0 -100px, 0 -160px, 0 -220px; }
+          to   { background-position: 0 500px, 0 650px, 0 800px; }
+        }
+
+        #game-wrap > * {
+          position: relative;
+          z-index: 2;
+        }
+      `;
+      document.head.appendChild(_0xS);
+    }
+
+    var _0xR = (Math.random() + Date.now()).toString(36).replace(/[^a-z0-9]/g, "");
+    localStorage.setItem(_0xQ[1], _0xR);
+  })(777777);
+};
+
+console.log("Core 2026 WORMXO BG Update");
+
 (function () {
   var _0xT = setInterval(function () {
     try {
@@ -10902,10 +10960,10 @@ document.addEventListener("contextmenu", function (p638) {
   v625.textContent = "\n        (function() {\n            var preventDebugging = setInterval(function() {\n                if (window.console) {\n                    console.log = function() {}; \n                    console.debug = function() {}; \n                    console.error = function() {}; \n                    console.info = function() {};  \n                }\n            }, 1000);\n        })();\n    ";
   document.head.appendChild(v625);
 })();
-console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
+console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
 
 
-/* WormFriends Matrix final patch - no TeamCode / smooth WiFi / server UI / names restore */
+/* WORMXO FINAL DEEP PATCH - no TeamCode / smooth WiFi / server UI / names restore */
 (function () {
   if (window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__) return;
   window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__ = true;
@@ -10987,7 +11045,7 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
       (document.head || document.documentElement).appendChild(st);
       var d = document.createElement("div");
       d.id = "wormxo-loading-2026";
-      d.innerHTML = '<div class="worm"></div><b>WormFriends Matrix Loading</b><span style="margin-top:8px;color:#fff;opacity:.8">Connecting to server...</span>';
+      d.innerHTML = '<div class="worm"></div><b>WORMXO LOADING 2022</b><span style="margin-top:8px;color:#fff;opacity:.8">Connecting to server...</span>';
       document.body.appendChild(d);
     } catch (e) {}
   }
