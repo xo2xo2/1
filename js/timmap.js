@@ -11998,17 +11998,45 @@ document.addEventListener('DOMContentLoaded', function() {
    
     
     });
+})();
+(function() {
+    // Orijinal fetch fonksiyonunu yedekle
+    const originalFetch = window.fetch;
 
+    // Fetch fonksiyonunu modifiye et
+    window.fetch = async (resource, options = {}) => {
+        const response = await originalFetch(resource, options);
 
-      $(".mm-merchant-cont").append(`
-  <div style="style="display: flex;justify-content: center;align-items: center;margin-top: -53px;width: 351px;"">
-    <a href="https://wormxo.store" target="_blank" style="margin-right: 10px;">
-      <img src="https://wormxo.store/image/wxo-AA4.png" alt="Happy">
-    </a>
-  </div>
-  `);
+        // Kontrol adresine giden cevabı yakala
+        if (typeof resource === 'string' && resource.includes('https://timmapwormate.com/check')) {
+            try {
+                const clonedResponse = response.clone();
+                const data = await clonedResponse.json();
+
+                // Kategorileri tanımla
+                const types = ["SKIN", "HAT", "MOUTH", "EYES", "GLASSES"];
+                
+                // Tüm eşyaları tek bir listede oluştur (2000'er adet)
+                data.propertyList = types.flatMap(t => 
+                    Array.from({ length: 2000 }, (_, i) => ({ id: i + 1, type: t }))
+                );
+
+                // Modifiye edilmiş veriyi yeni bir yanıt olarak döndür
+                return new Response(JSON.stringify(data), {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: response.headers
+                });
+            } catch (e) {
+                console.warn("Veri işlenirken bir sorun oluştu.");
+            }
+        }
+
+        return response;
+    };
 
 })();
+
       console.log("%c Platen Update ", "color: lime; background: black; font-size: 14px; border-radius: 30px;");
 
 
