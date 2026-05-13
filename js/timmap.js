@@ -5996,10 +5996,12 @@ function f(p) {
       var vThis64 = this;
       var v1557 = v1646.get()[0];
       v1641.toggle(vO46.co.bo);
-      v1637.text(vO47.U(vO47.a("322a9a2153bfd6ae5b2699634caa73a42e272a212fa364bc")));
-      var v1637 = $("#final-continue");
+        // 1. ÖNCE değişkeni tanımla ve elementi seç
+      var v1637 = $("#final-continue"); 
+      
+      // 2. SONRA bu değişken üzerinde işlem yap
       v1637.html("Continue (Home)");
-      v1637.after("<div id='final-replay'>Replay</div>")
+      v1637.after("<div id='final-replay'>Replay</div>");
       v1638.text(vO47.U(vO47.a("4078ecf721eda8702974efb53ef8fd6a3c55bcc03bcbe24e365cff")));
       v1638.click(function () {
         ooo.ij.if();
