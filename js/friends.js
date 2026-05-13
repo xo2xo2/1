@@ -84,7 +84,7 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
   streamer: localStorage.getItem("XOTEAM_STREAMER_MODE") === "true",
   hideTopKill: localStorage.getItem("XOTEAM_HIDE_TOP_KILL") === "true",
   hideTopHS: localStorage.getItem("XOTEAM_HIDE_TOP_HS") === "true",
-  maskNames: localStorage.getItem("XOTEAM_MASK_NAMES") === "true",
+  maskNames: false,
   showZigZag: localStorage.getItem("XOTEAM_SHOW_ZIGZAG") === "true",
   lowPerf: true
 };
@@ -108,6 +108,8 @@ window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
   joystickBottom: Number(localStorage.getItem("WORMXO_JOYSTICK_BOTTOM") || 105)
 };
 window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.WORMXO_MOBILE_PERF.isMobile || window.WORMXO_MOBILE_PERF.memory <= 4));
+
+
 
 
 /* WORMXO DEEP REGISTRY MERGE CORE - moved from end */
@@ -872,7 +874,19 @@ if (!window.__XOTEAM_N131_DEEP_CORE__) {
     try {
       var tag = (e.target && e.target.tagName ? e.target.tagName : "").toLowerCase();
       if (tag === "input" || tag === "textarea" || tag === "select" || (e.target && e.target.isContentEditable)) return;
-      if (String(e.key || "").toLowerCase() !== "n") return;
+      var k = String(e.key || "").toLowerCase();
+      var kc = e.keyCode || e.which || 0;
+      if (window.XOTEAM_131_STATE && window.XOTEAM_131_STATE.enabled && (/^[1-5]$/.test(k) || (kc >= 49 && kc <= 53) || (kc >= 97 && kc <= 101))) {
+        var idx = /^[1-5]$/.test(k) ? (Number(k) - 1) : ((kc >= 97 ? kc - 97 : kc - 49));
+        var rows = window.XOTEAM_131_STATE.rows || [];
+        var item = rows[idx];
+        if (item && typeof XOTEAM_131_applyById === "function") {
+          XOTEAM_131_applyById(item.id, false);
+          if (typeof XOTEAM_131_renderPanel === "function") XOTEAM_131_renderPanel();
+        }
+        return;
+      }
+      if (k !== "n") return;
       XOTEAM_131_togglePanel();
     } catch (err) {}
   }, true);
@@ -1914,12 +1928,33 @@ vO7.containerCountInfo.addChild(vO7.x131MenuContainer);
 function XOTEAM_131_renderPanel() {
   try {
     var st = window.XOTEAM_131_STATE || {};
-    if (vO7 && vO7.x131MenuContainer) vO7.x131MenuContainer.visible = false;
-    if (!st.enabled) return;
+    if (!vO7 || !vO7.x131MenuContainer) return;
+    vO7.x131MenuContainer.visible = !!st.enabled;
+    if (!st.enabled) {
+      if (vO7.x131MenuRows) for (let i = 0; i < vO7.x131MenuRows.length; i++) vO7.x131MenuRows[i].text = (i + 1) + ". ---";
+      return;
+    }
     var now = Date.now();
     if (!st.rows || !st.lastList || now - st.lastList > 350) {
       st.rows = (typeof XOTEAM_131_nearList === "function") ? XOTEAM_131_nearList(5) : [];
       st.lastList = now;
+    }
+    if (vO7.x131MenuTitle) {
+      vO7.x131MenuTitle.text = "Player Wormy";
+      vO7.x131MenuTitle.alpha = 1;
+    }
+    for (let i = 0; i < 5; i++) {
+      var row = vO7.x131MenuRows && vO7.x131MenuRows[i];
+      if (!row) continue;
+      var item = st.rows && st.rows[i];
+      if (item) {
+        var nm = (typeof XOTEAM_cutTopName === "function") ? XOTEAM_cutTopName(item.name || "Player", 9) : String(item.name || "Player").slice(0, 9);
+        row.text = (i + 1) + ". " + nm;
+        row.alpha = 1;
+      } else {
+        row.text = (i + 1) + ". ---";
+        row.alpha = 0.65;
+      }
     }
   } catch (e) {}
 }
@@ -1994,6 +2029,54 @@ function XOTEAM_renderKillMessages(list) {
 
 window.XOTEAM_renderTopKill = XOTEAM_renderTopKill;
 window.XOTEAM_renderKillMessages = XOTEAM_renderKillMessages;
+
+/* WORMXO COORDS UI CORE - kill messages removed */
+try {
+  if (vO7.killMsgContainer) {
+    vO7.killMsgContainer.removeChildren && vO7.killMsgContainer.removeChildren();
+    vO7.killMsgContainer.x = -2;
+    vO7.killMsgContainer.y = 244;
+    vO7.coordBox = new PIXI.Graphics();
+    vO7.coordBox.lineStyle(1, 0xff8a00, 0.72);
+    vO7.coordBox.beginFill(0x000000, 0.28);
+    vO7.coordBox.drawRoundedRect(0, 0, 126, 28, 6);
+    vO7.coordBox.endFill();
+    vO7.coordText = new PIXI.Text("X:0  Z:0  Y:0", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
+    vO7.coordText.x = 7;
+    vO7.coordText.y = 7;
+    vO7.coordText.style.fill = "#ffffff";
+    vO7.coordText.style.fontWeight = "900";
+    vO7.coordText.style.strokeThickness = 0;
+    vO7.killMsgContainer.addChild(vO7.coordBox);
+    vO7.killMsgContainer.addChild(vO7.coordText);
+  }
+} catch (e) {}
+
+function WORMXO_getSelfHead() {
+  try {
+    var g = window.anApp;
+    if (g && g.o && g.o.N) {
+      if (typeof g.o.N.Gf === "function") return g.o.N.Gf();
+      if (typeof g.o.N.Hb !== "undefined" && typeof g.o.N.Ib !== "undefined") return { x: g.o.N.Hb, y: g.o.N.Ib };
+    }
+  } catch (e) {}
+  return { x: 0, y: 0 };
+}
+
+function WORMXO_renderCoordsBox() {
+  try {
+    if (!vO7 || !vO7.coordText) return;
+    var p = WORMXO_getSelfHead();
+    var x = Math.round(Number(p.x || 0));
+    var y = Math.round(Number(p.y || 0));
+    var z = Math.round(Math.sqrt(x * x + y * y) % 9999);
+    vO7.coordText.text = "X:" + x + "  Z:" + z + "  Y:" + y;
+  } catch (e) {}
+}
+
+function XOTEAM_renderKillMessages(list) { WORMXO_renderCoordsBox(); }
+window.XOTEAM_renderKillMessages = XOTEAM_renderKillMessages;
+setInterval(WORMXO_renderCoordsBox, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 1300 : 650);
 
 /* WORMXO HeadShot-only board finalizer */
 try {
@@ -10877,3 +10960,149 @@ document.addEventListener("contextmenu", function (p638) {
   document.head.appendChild(v625);
 })();
 console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
+
+
+/* WORMXO FINAL DEEP PATCH - no TeamCode / smooth WiFi / server UI / names restore */
+(function () {
+  if (window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__) return;
+  window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__ = true;
+
+  try {
+    localStorage.setItem("XOTEAM_MASK_NAMES", "false");
+    if (window.WORMXO_UI_STATE) window.WORMXO_UI_STATE.maskNames = false;
+  } catch (e) {}
+
+  function xoRestoreNames() {
+    try {
+      if (window.WORMXO_UI_STATE) window.WORMXO_UI_STATE.maskNames = false;
+      var game = window.anApp;
+      if (!game || !game.o || !game.o.hb) return;
+      Object.keys(game.o.hb).forEach(function (id) {
+        var p = game.o.hb[id];
+        [p && p.qj, p && p.nameText, p && p.nickname].forEach(function (t) {
+          if (!t || typeof t.text === "undefined") return;
+          if (typeof t.__XOTEAM_REAL_TEXT !== "undefined") {
+            t.text = t.__XOTEAM_REAL_TEXT;
+            delete t.__XOTEAM_REAL_TEXT;
+          }
+          if (/^0[-_]{2,}/.test(String(t.text || ""))) {
+            var name = "Player";
+            try { if (p && p.Mb && p.Mb.ad) name = String(p.Mb.ad).trim() || name; } catch (e0) {}
+            t.text = name;
+          }
+        });
+      });
+    } catch (e) {}
+  }
+
+  window.XOTEAM_maskOneName = function () {};
+  window.XOTEAM_applyNameMask = xoRestoreNames;
+  setInterval(xoRestoreNames, 900);
+
+  function addHeadHint(rel, href) {
+    try {
+      if (document.querySelector('link[rel="' + rel + '"][href="' + href + '"]')) return;
+      var l = document.createElement("link");
+      l.rel = rel;
+      l.href = href;
+      if (rel === "preconnect") l.crossOrigin = "anonymous";
+      (document.head || document.documentElement).appendChild(l);
+    } catch (e) {}
+  }
+  ["https://cdnjs.cloudflare.com", "https://static.cloudflareinsights.com", "https://resources.wormate.io", "https://wormxo.store", "https://wm.wormy.online", "https://jkr.wormy.online"].forEach(function (h) {
+    addHeadHint("preconnect", h);
+    addHeadHint("dns-prefetch", h);
+  });
+
+  function xoApplyPerf() {
+    try {
+      var low = (navigator.connection && /2g|3g|slow-2g/i.test(navigator.connection.effectiveType || "")) || Number(navigator.deviceMemory || 4) <= 4;
+      if (window.vO4) {
+        vO4.smoothCamera = low ? 0.30 : Math.min(Number(vO4.smoothCamera || 0.5), 0.42);
+        vO4.eat_animation = low ? 0.002 : Math.min(Number(vO4.eat_animation || 0.005), 0.0035);
+        vO4.FoodShadow = low ? 0 : vO4.FoodShadow;
+        vO4.FoodSize = low ? Math.min(Number(vO4.FoodSize || 2), 1.1) : Math.min(Number(vO4.FoodSize || 2), 1.5);
+        vO4.PortionSize = low ? Math.min(Number(vO4.PortionSize || 2), 1.25) : Math.min(Number(vO4.PortionSize || 2), 1.6);
+        vO4.PortionAura = low ? 0.65 : Math.min(Number(vO4.PortionAura || 1.2), 0.9);
+      }
+      if (window.PIXI && PIXI.settings) {
+        PIXI.settings.ROUND_PIXELS = true;
+        PIXI.settings.RESOLUTION = low ? 0.85 : 1;
+        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES && PIXI.SCALE_MODES.LINEAR;
+      }
+    } catch (e) {}
+  }
+  xoApplyPerf();
+  try { if (navigator.connection) navigator.connection.addEventListener("change", xoApplyPerf); } catch (e) {}
+
+  function installLoading2022() {
+    try {
+      if (document.getElementById("wormxo-loading-2022-style")) return;
+      var st = document.createElement("style");
+      st.id = "wormxo-loading-2022-style";
+      st.textContent = "#wormxo-loading-2022{position:fixed;inset:0;z-index:999998;background:radial-gradient(circle at 50% 42%,#2b1b10 0,#110b08 48%,#030303 100%);display:none;align-items:center;justify-content:center;flex-direction:column;color:#ffb545;font-family:Arial,Tahoma,sans-serif}#wormxo-loading-2022 .worm{width:96px;height:96px;border:5px solid rgba(255,150,0,.18);border-top-color:#ff8a00;border-radius:50%;animation:wormxoSpin .9s linear infinite}#wormxo-loading-2022 b{margin-top:16px;font-size:19px;letter-spacing:2px;text-shadow:0 0 12px #ff8a00}@keyframes wormxoSpin{to{transform:rotate(360deg)}}.description-text-hiep{background:rgba(8,8,12,.78)!important;border:1px solid rgba(255,153,0,.5)!important;border-radius:14px!important;box-shadow:0 0 22px rgba(255,138,0,.18)!important;padding:8px!important}.title-wormate-friends-connect{color:#ffb13b!important;text-shadow:0 0 10px rgba(255,138,0,.6)!important;font-weight:900!important}.servers-container p.selectSala{background:linear-gradient(90deg,rgba(255,138,0,.14),rgba(255,255,255,.04))!important;border:1px solid rgba(255,170,0,.32)!important;border-radius:10px!important;margin:6px 4px!important;padding:8px 10px!important;color:#fff!important;font-weight:900!important;transition:.12s!important;box-shadow:inset 0 0 8px rgba(255,138,0,.08)!important}.servers-container p.selectSala:hover{transform:translateX(3px);background:linear-gradient(90deg,rgba(255,138,0,.32),rgba(255,255,255,.08))!important;border-color:#ffb13b!important}.ui-tabs-nav .ui-tabs-tab{border-radius:9px!important;background:rgba(255,255,255,.06)!important}.ui-tabs-nav .ui-tab-active{background:rgba(255,138,0,.28)!important;box-shadow:0 0 10px rgba(255,138,0,.32)!important}";
+      (document.head || document.documentElement).appendChild(st);
+      var d = document.createElement("div");
+      d.id = "wormxo-loading-2022";
+      d.innerHTML = '<div class="worm"></div><b>WORMXO LOADING 2022</b><span style="margin-top:8px;color:#fff;opacity:.8">Connecting to server...</span>';
+      document.body.appendChild(d);
+    } catch (e) {}
+  }
+  function showLoad(v) { try { installLoading2022(); document.getElementById("wormxo-loading-2022").style.display = v ? "flex" : "none"; } catch (e) {} }
+  window.WORMXO_showLoading2022 = showLoad;
+  document.addEventListener("click", function (ev) {
+    try {
+      var el = ev.target && ev.target.closest ? ev.target.closest("#mm-action-play,.selectSala") : null;
+      if (!el) return;
+      showLoad(true);
+      setTimeout(function () { showLoad(false); }, 9000);
+    } catch (e) {}
+  }, true);
+  setInterval(function () {
+    try {
+      var lv = document.getElementById("loading-view");
+      var gameCanvas = document.querySelector("canvas");
+      if (lv && getComputedStyle(lv).display === "none") showLoad(false);
+      if (gameCanvas && window.anApp && window.anApp.o) showLoad(false);
+    } catch (e) {}
+  }, 800);
+
+  function offlineToast(txt) {
+    try {
+      var id = "wormxo-offline-toast";
+      var d = document.getElementById(id);
+      if (!d) {
+        d = document.createElement("div");
+        d.id = id;
+        d.style.cssText = "position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:999999;background:rgba(0,0,0,.82);color:#ffb13b;border:1px solid #ff8a00;border-radius:12px;padding:10px 16px;font:bold 14px Arial;box-shadow:0 0 18px rgba(255,138,0,.35)";
+        document.body.appendChild(d);
+      }
+      d.textContent = txt || "فقد الاتصال بالخادم";
+      d.style.display = "block";
+      setTimeout(function () { d.style.display = "none"; }, 4200);
+    } catch (e) {}
+  }
+  window.WORMXO_offlineToast = offlineToast;
+  window.addEventListener("offline", function () { offlineToast("فقد اتصال الإنترنت / Wi-Fi ضعيف"); showLoad(false); });
+
+  var OldWS = window.WebSocket;
+  if (OldWS && !OldWS.__WORMXO_SAFE__) {
+    function SafeWS(url, protocols) {
+      var ws = protocols ? new OldWS(url, protocols) : new OldWS(url);
+      var opened = false;
+      var timer = setTimeout(function () {
+        if (!opened || ws.readyState !== 1) {
+          try { offlineToast("فقد الاتصال بالخادم"); showLoad(false); } catch (e) {}
+        }
+      }, 6500);
+      ws.addEventListener("open", function () { opened = true; clearTimeout(timer); showLoad(false); });
+      ws.addEventListener("close", function () { if (!opened) offlineToast("السيرفر لا يستجيب"); showLoad(false); });
+      ws.addEventListener("error", function () { offlineToast("فقد الاتصال بالخادم"); showLoad(false); });
+      return ws;
+    }
+    SafeWS.prototype = OldWS.prototype;
+    SafeWS.CONNECTING = OldWS.CONNECTING; SafeWS.OPEN = OldWS.OPEN; SafeWS.CLOSING = OldWS.CLOSING; SafeWS.CLOSED = OldWS.CLOSED;
+    SafeWS.__WORMXO_SAFE__ = true;
+    window.WebSocket = SafeWS;
+  }
+})();
