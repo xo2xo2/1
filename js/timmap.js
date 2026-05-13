@@ -11996,7 +11996,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     });
 
-    setTimeout(function () {
+
       $(".mm-merchant-cont").append(`
   <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px;">
     <a href="https://wormxo.store" target="_blank" style="margin-right: 10px;">
