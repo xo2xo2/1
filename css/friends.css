@@ -868,9 +868,10 @@ body {display:block !important;}
 }
 #game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons {
   float: right;
-  margin-right: -31px;
-  /* width: 105px; */
-  margin-top: -20px;
+  margin-right: -103px;
+  margin-top: -42px;
+  transform: scale(1.15); /* تكبير 15% */
+  transform-origin: top right;
 }
 #game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons #mm-settings {
 
@@ -955,54 +956,14 @@ body {display:block !important;}
 }
 #game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons #mm-settings:focus {outline:none;}
 #game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons #mm-settings * {vertical-align:middle;}
-#game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons #mm-leaders {
+#game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons #mm-leaders {color: #fff;overflow: hidden;height: 50px;background-image: linear-gradient(45deg, #FF9800, #FF6F00);line-height: 50px;font-size: 20px;padding: 0 10px;box-sizing: border-box;border-radius: 5px;border: 0;outline: 0;margin-top: -5px;text-align: center;text-shadow: 0 0 1px #000;cursor: pointer;min-width: 96px;display: inline-block;margin-right: 10px;
 
-    color: #fff;
-
-    overflow: hidden;
-
-    height: 50px;
-
-    background-image: linear-gradient(45deg, #FF9800, #FF6F00);
-
-    line-height: 50px;
-
-    font-size: 20px;
-
-    padding: 0 10px;
-
-    box-sizing: border-box;
-
-    border-radius: 5px;
-
-    border: 0;
-
-    outline: 0;
-
-    text-align: center;
-
-    text-shadow: 0 0 1px #000;
-
-    cursor: pointer;
-
-    min-width: 90px;
-
-    display: inline-block;
-
-    margin-right: 10px;
-
-    /* تحسينات */
-    background-size: 200% 200%;
-
-    box-shadow:
-        0 2px 6px rgba(0,0,0,0.25);
-
-    transition:
+    /* تحسينات */background-size: 200% 200%;box-shadow:
+        0 2px 6px rgba(0,0,0,0.25);transition:
         background-position 0.4s ease,
         box-shadow 0.35s ease,
         filter 0.35s ease,
-        transform 0.25s ease;
-}
+        transform 0.25s ease;}
 
 
 /* Hover جميل */
@@ -4338,7 +4299,9 @@ button:hover{
     background-size: 200% 200%;
 }
 
-
+#mm-bottom-buttons{
+  gap: 5px;
+}
 /* Hover جميل وناعم بدون تكبير */
 .fullscreen_button:hover,
 .fullscreen_respawn:hover,
