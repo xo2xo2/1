@@ -1034,56 +1034,14 @@ body {display:block !important;}
 }
 #game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons #mm-leaders:focus {outline:none;}
 #game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons #mm-leaders * {vertical-align:middle;}
-#game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons #mm-store {
+#game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons #mm-store {color: #fff;overflow: hidden;height: 50px;background-image: linear-gradient(45deg, #558B2F, #28ff38);margin-left: 14px;line-height: 50px;font-size: 20px;box-sizing: border-box;border-radius: 5px;border: 0;outline: 0;margin-top: 4px;text-align: center;text-shadow: 0 0 1px #000;cursor: pointer;min-width: 90px;display: inline-block;float: right;margin-right: 78px;
 
-    color: #fff;
-
-    overflow: hidden;
-
-    height: 50px;
-
-    background-image: linear-gradient(45deg, #558B2F, #28ff38);
-
-    margin-left: 14px;
-
-    line-height: 50px;
-
-    font-size: 20px;
-
-    box-sizing: border-box;
-
-    border-radius: 5px;
-
-    border: 0;
-
-    outline: 0;
-
-    text-align: center;
-
-    text-shadow: 0 0 1px #000;
-
-    cursor: pointer;
-
-    min-width: 90px;
-
-    display: inline-block;
-
-    float: right;
-
-    margin-right: 78px;
-
-    /* تحسينات */
-    background-size: 200% 200%;
-
-    box-shadow:
-        0 2px 6px rgba(0,0,0,0.25);
-
-    transition:
+    /* تحسينات */background-size: 200% 200%;box-shadow:
+        0 2px 6px rgba(0,0,0,0.25);transition:
         background-position 0.4s ease,
         box-shadow 0.35s ease,
         filter 0.35s ease,
-        transform 0.25s ease;
-}
+        transform 0.25s ease;}
 
 
 /* Hover جميل */
@@ -1124,9 +1082,19 @@ body {display:block !important;}
     margin-top: 5px;
     line-height: 50px;
     text-align: center;
-    background-image: linear-gradient(#ff0000 , #8f0000);
+     background-image: linear-gradient(45deg, #1800ff, #2196F3);
     border-radius: 5px;
+  /* تحسينات */
+    background-size: 200% 200%;
 
+    box-shadow:
+        0 2px 6px rgba(0,0,0,0.25);
+
+    transition:
+        background-position 0.4s ease,
+        box-shadow 0.35s ease,
+        filter 0.35s ease,
+        transform 0.25s ease;
     z-index: 99998;
     cursor: pointer;
 }
@@ -1139,9 +1107,9 @@ body {display:block !important;}
 
     /* Glow أخضر */
     box-shadow:
-        0 0 6px rgba(255, 40, 40, 0.45),
-        0 0 14px rgba(139, 47, 47, 0.35),
-        0 4px 12px rgba(51, 6, 6, 0.35);
+        0 0 6px rgb(40 40 255 / 45%),
+        0 0 14px #3f51b573,
+        0 4px 12px #2196f359;
 
     /* حركة بسيطة */
     transform: translateY(-1px);
