@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>WormXO - WXO | إعادة إحياء الأسطورة</title>
+<title>WormXO - الإضافة الأسطورية لـ Wormate</title>
 <link rel="icon" type="image/png" sizes="16x16" href="https://wormxo.store/image/wxo.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://wormxo.store/image/wxo.png">
 <link rel="icon" type="image/png" sizes="48x48" href="https://wormxo.store/image/wxo.png">
@@ -11,69 +11,64 @@
 <link rel="shortcut icon" href="https://wormxo.store/image/wxo.png">
 <link rel="apple-touch-icon" sizes="128x128" href="https://wormxo.store/image/wxo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Plus Jakarta Sans', 'Segoe UI', 'Cairo', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Cairo', 'Segoe UI', 'Tahoma', system-ui, sans-serif;
   }
 
   body {
     min-height: 100vh;
-    background: #0e0b14;
-    color: #efecf5;
+    background: #0c0a14;
+    color: #edeef5;
     overflow-x: hidden;
-    position: relative;
   }
 
-  /* خلفية عصرية أنيقة بتدرج نيلي وأرجواني */
-  .elegant-bg {
+  /* خلفية ساحرة بتدرجات ليلية */
+  .stellar-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -2;
-    background: radial-gradient(ellipse at 30% 45%, #18122b, #0a0710, #03010a);
+    background: radial-gradient(ellipse at 30% 40%, #16122b, #0b0820, #04030c);
   }
 
-  /* دوائر ضبابية أنيقة بألوان نيلي، زمردي هادئ، ياقوتي ناعم، ذهبي خفيف - راقية جداً */
-  .aura-orb {
+  /* دوائر ضبابية راقية */
+  .nebula-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(120px);
+    filter: blur(130px);
     opacity: 0.4;
     pointer-events: none;
-    will-change: transform;
-    animation: gentleFloat 100s infinite alternate ease-in-out;
-    transition: left 16s cubic-bezier(0.2, 0.85, 0.4, 1), top 16s cubic-bezier(0.2, 0.85, 0.4, 1);
+    animation: celestialDrift 110s infinite alternate ease-in-out;
+    transition: left 18s cubic-bezier(0.2, 0.9, 0.3, 1), top 18s cubic-bezier(0.2, 0.9, 0.3, 1);
   }
 
-  @keyframes gentleFloat {
+  @keyframes celestialDrift {
     0% { transform: translate(0, 0) scale(1); }
-    30% { transform: translate(2%, -1.5%) scale(1.01); }
-    70% { transform: translate(-1.5%, 2%) scale(0.99); }
-    100% { transform: translate(1%, 1%) scale(1); }
+    100% { transform: translate(2%, -1%) scale(1.02); }
   }
 
-  /* الهيدر راقي وشفاف */
+  /* الهيدر الشفاف */
   .header {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(12, 9, 20, 0.7);
-    backdrop-filter: blur(20px);
+    background: rgba(12, 9, 22, 0.75);
+    backdrop-filter: blur(24px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 48px;
+    padding: 16px 56px;
     z-index: 1000;
-    border-bottom: 1px solid rgba(160, 120, 255, 0.35);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(160, 130, 255, 0.4);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 15px;
   }
 
   .logo {
@@ -83,26 +78,18 @@
   }
 
   .logo img {
-    width: 48px;
-    height: 48px;
-    border-radius: 20px;
-    background: #1e1a2f;
+    width: 52px;
+    height: 52px;
+    border-radius: 24px;
+    background: #211d33;
     padding: 5px;
-    box-shadow: 0 0 16px #ab8eff66;
-    transition: 0.2s;
+    box-shadow: 0 0 18px #b794ff;
   }
 
   .logo h1 {
-    font-size: 32px;
+    font-size: 34px;
     font-weight: 800;
-    background: linear-gradient(125deg, #d9c9ff, #a97cff, #dbb6ff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    letter-spacing: -0.3px;
-  }
-  .logo h1 span {
-    background: linear-gradient(135deg, #f4e6ff, #c9aef0);
+    background: linear-gradient(125deg, #e6d9ff, #bc97ff, #e5cfff);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -110,424 +97,357 @@
 
   .nav {
     display: flex;
-    gap: 20px;
-    align-items: center;
+    gap: 22px;
     flex-wrap: wrap;
   }
+
   .nav a {
     text-decoration: none;
     font-weight: 600;
-    color: #e3dafc;
-    padding: 8px 26px;
-    border-radius: 50px;
+    color: #ddd2ff;
+    padding: 8px 28px;
+    border-radius: 60px;
+    background: rgba(30, 24, 55, 0.6);
+    border: 1px solid rgba(160, 120, 255, 0.5);
     transition: 0.25s;
-    background: rgba(30, 25, 55, 0.5);
-    border: 1px solid rgba(170, 130, 255, 0.5);
-    font-size: 0.95rem;
-    backdrop-filter: blur(4px);
-  }
-  .nav a i {
-    margin-left: 6px;
-  }
-  .nav a:hover {
-    background: #8f6eff;
-    color: #0f0b1c;
-    border-color: #cbb2ff;
-    box-shadow: 0 0 20px #b77eff;
-    transform: translateY(-2px);
+    font-size: 1rem;
   }
 
-  /* المحتوى الرئيسي بتصميم جديد أنيق */
+  .nav a i {
+    margin-left: 8px;
+  }
+
+  .nav a:hover {
+    background: #8f6eff;
+    color: #0d0920;
+    border-color: #d9baff;
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px #aa88ff;
+  }
+
+  /* المحتوى الرئيسي */
   .hero {
-    padding: 145px 24px 85px;
+    padding: 150px 24px 80px;
     display: flex;
     justify-content: center;
-    position: relative;
     z-index: 10;
+    position: relative;
   }
-  .glass-card {
-    max-width: 1280px;
+
+  .glass-panel {
+    max-width: 1300px;
     width: 100%;
-    background: rgba(18, 14, 28, 0.5);
-    backdrop-filter: blur(20px);
-    border-radius: 72px;
-    padding: 52px 48px;
-    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(170, 130, 255, 0.3);
+    background: rgba(18, 14, 32, 0.55);
+    backdrop-filter: blur(22px);
+    border-radius: 80px;
+    padding: 55px 48px;
+    box-shadow: 0 45px 85px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(160, 130, 255, 0.35);
     text-align: center;
-    border: 1px solid rgba(140, 100, 230, 0.5);
-    transition: all 0.3s;
+    border: 1px solid rgba(150, 110, 250, 0.5);
   }
-  .title {
-    font-size: 70px;
-    font-weight: 850;
-    background: linear-gradient(145deg, #e2d4ff, #b68eff, #f0dcff);
+
+  .main-title {
+    font-size: 74px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #ede2ff, #bd96ff, #f2e3ff);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    margin-bottom: 12px;
-  }
-  .website-image img {
-    max-width: 210px;
-    width: 65%;
-    border-radius: 56px;
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), 0 0 0 3px #b07effaa;
-    background: #221e30;
-    transition: 0.25s;
-  }
-  .website-image img:hover {
-    transform: scale(1.02);
-    box-shadow: 0 25px 45px #aa88ff66;
-  }
-  .badge-modern {
-    background: rgba(130, 90, 220, 0.2);
-    display: inline-block;
-    padding: 10px 32px;
-    border-radius: 80px;
-    margin: 16px 0 10px;
-    font-weight: 700;
-    color: #cfbcff;
-    border: 1px solid #aa88ff;
-    backdrop-filter: blur(8px);
-    font-size: 1rem;
-  }
-  .sub {
-    font-size: 1.35rem;
-    color: #e7defc;
-    margin: 18px 0 10px;
-    font-weight: 500;
-    line-height: 1.55;
+    margin-bottom: 10px;
   }
 
-  /* زرين فاخرين مع علامة التحميل */
-  .button-group {
+  .brand-icon {
+    margin: 20px auto;
+  }
+
+  .brand-icon img {
+    max-width: 200px;
+    width: 65%;
+    border-radius: 60px;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), 0 0 0 3px #b48effaa;
+    background: #28223f;
+  }
+
+  .prestige-badge {
+    background: rgba(140, 100, 230, 0.2);
+    display: inline-block;
+    padding: 10px 36px;
+    border-radius: 100px;
+    margin: 18px 0 12px;
+    font-weight: 700;
+    color: #cfbcff;
+    border: 1px solid #b48eff;
+    font-size: 1rem;
+  }
+
+  .hero-description {
+    font-size: 1.38rem;
+    color: #e3dafc;
+    margin: 22px 0 15px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  /* الأزرار */
+  .action-buttons {
     display: flex;
     gap: 35px;
     justify-content: center;
     flex-wrap: wrap;
-    margin: 45px 0 35px;
+    margin: 45px 0 40px;
   }
-  .btn-luxury {
-    padding: 16px 44px;
+
+  .btn-cosmic {
+    padding: 18px 48px;
     border-radius: 100px;
     font-weight: 800;
-    font-size: 1.25rem;
+    font-size: 1.28rem;
     text-decoration: none;
-    transition: 0.3s;
     display: inline-flex;
     align-items: center;
     gap: 14px;
-    background: rgba(12, 8, 22, 0.7);
-    border: 1.5px solid #b38eff;
-    color: #ede4ff;
-    backdrop-filter: blur(8px);
-  }
-  .btn-primary-lux {
-    background: linear-gradient(115deg, #936eff, #7a4fcf);
-    border: none;
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    box-shadow: 0 12px 25px #6b3fcc77;
-  }
-  .btn-luxury i {
-    font-size: 1.5rem;
-  }
-  .btn-luxury:hover {
-    transform: translateY(-5px);
-    filter: brightness(1.05);
-    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.4), 0 0 20px #c9adff;
+    background: rgba(15, 11, 28, 0.7);
+    border: 1.5px solid #bc97ff;
+    color: #efe6ff;
+    backdrop-filter: blur(6px);
+    transition: 0.3s;
   }
 
-  /* ميزات بتصميم أنيق عصري */
-  .features-grid {
+  .btn-primary-cosmic {
+    background: linear-gradient(105deg, #8f6eff, #6a47c2);
+    border: none;
+    color: white;
+    box-shadow: 0 12px 28px #5e3fc0aa;
+  }
+
+  .btn-cosmic i {
+    font-size: 1.55rem;
+  }
+
+  .btn-cosmic:hover {
+    transform: translateY(-6px);
+    filter: brightness(1.07);
+    box-shadow: 0 28px 38px rgba(0, 0, 0, 0.5), 0 0 18px #cbb2ff;
+  }
+
+  /* بطاقات الميزات */
+  .features-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    margin-top: 65px;
+    gap: 32px;
+    margin-top: 70px;
     text-align: right;
   }
-  .modern-card {
-    background: rgba(26, 21, 42, 0.65);
+
+  .feature-card {
+    background: rgba(26, 21, 48, 0.7);
     backdrop-filter: blur(10px);
-    border-radius: 48px;
-    padding: 30px 26px;
-    border-right: 4px solid #b48cff;
+    border-radius: 52px;
+    padding: 32px 28px;
+    border-right: 5px solid #b994ff;
     transition: 0.2s;
-    border-bottom: 1px solid #aa88ff40;
   }
-  .modern-card:hover {
-    background: rgba(40, 32, 62, 0.8);
+
+  .feature-card:hover {
+    background: rgba(44, 36, 72, 0.85);
     transform: translateY(-5px);
-    border-right-color: #dbbaff;
+    border-right-color: #e1cbff;
   }
-  .modern-card h3 {
-    font-size: 1.75rem;
-    color: #ddc9ff;
-    margin-bottom: 14px;
+
+  .feature-card h3 {
+    font-size: 1.8rem;
+    color: #e0ceff;
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
     gap: 12px;
   }
-  .modern-card p {
-    color: #dcd4f0;
+
+  .feature-card p {
+    color: #ddd1f5;
     line-height: 1.65;
     font-weight: 450;
   }
 
+  /* التذييل */
   .footer {
     text-align: center;
-    padding: 35px;
-    color: #b9a8e6;
+    padding: 36px;
+    color: #b5a1e6;
     font-weight: 500;
-    border-top: 1px solid #9b7bef30;
-    background: rgba(0, 0, 0, 0.35);
-    margin-top: 35px;
+    border-top: 1px solid #8f6eff40;
+    background: rgba(0, 0, 0, 0.4);
+    margin-top: 40px;
     font-size: 0.95rem;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
   }
 
   @media (max-width: 800px) {
     .header {
       padding: 12px 24px;
     }
-    .title {
+    .main-title {
       font-size: 48px;
     }
-    .glass-card {
-      padding: 38px 22px;
+    .glass-panel {
+      padding: 38px 24px;
     }
-    .btn-luxury {
-      padding: 12px 32px;
-      font-size: 1rem;
+    .btn-cosmic {
+      padding: 12px 34px;
+      font-size: 1.05rem;
     }
-    .modern-card h3 {
-      font-size: 1.5rem;
-    }
-    .sub {
+    .hero-description {
       font-size: 1.1rem;
     }
   }
+
   @media (max-width: 550px) {
-    .title {
-      font-size: 36px;
+    .main-title {
+      font-size: 38px;
     }
-    .button-group {
-      gap: 18px;
+    .action-buttons {
+      gap: 20px;
+    }
+    .feature-card h3 {
+      font-size: 1.45rem;
     }
   }
 </style>
 </head>
 <body>
 
-<!-- خلفية أنيقة بالكامل (بدون ألوان مقرفة) -->
-<div class="elegant-bg" id="elegantBg"></div>
+<div class="stellar-bg" id="stellarBg"></div>
 
 <header class="header">
   <div class="logo">
-    <img src="https://wormxo.store/image/wxo.png" alt="WormXO">
+    <img src="https://wormxo.store/image/wxo.png" alt="شعار WormXO">
     <h1>Worm<span>XO</span></h1>
   </div>
   <nav class="nav">
-    <a href="#" id="home-link"><i class="fas fa-compass"></i> الاستكشاف</a>
-    <a href="https://wormxo.store/file/wormxo.zip" id="download-link"><i class="fas fa-cloud-download-alt"></i> التحميل</a>
-    <a href="https://discord.gg/wb8pD5ybs" target="_blank" id="discord-link"><i class="fab fa-discord"></i> المجتمع</a>
+    <a href="#"><i class="fas fa-rocket"></i> الرئيسية</a>
+    <a href="https://wormxo.store/file/wormxo.zip"><i class="fas fa-download"></i> التحميل</a>
+    <a href="https://discord.gg/wb8pD5ybs" target="_blank"><i class="fab fa-discord"></i> ديسكورد</a>
   </nav>
 </header>
 
 <section class="hero">
-  <div class="glass-card">
-    <div class="badge-modern" id="badge-text">🌙 إضافة WormXO | ثورة في عالم Wormate 🌙</div>
-    <h1 class="title">Worm<span>XO</span> <i class="fa-regular fa-gem"></i></h1>
-    <div class="website-image">
-      <img src="https://wormxo.store/image/wxo.png" alt="رمز WormXO">
+  <div class="glass-panel">
+    <div class="prestige-badge"><i class="fas fa-crown"></i> إضافة WormXO الرسمية | أسطورة Wormate <i class="fas fa-crown"></i></div>
+    <h1 class="main-title">Worm<span style="background:linear-gradient(135deg,#f4e6ff,#c9aef0);-webkit-background-clip:text;background-clip:text;color:transparent;">XO</span> <i class="fa-regular fa-star"></i></h1>
+    <div class="brand-icon">
+      <img src="https://wormxo.store/image/wxo.png" alt="WormXO">
     </div>
-    <p class="sub" id="sub-text">✨ إضافة WormXO تمنحك تحكماً أسطورياً وسرعة كونية وتجربة حصرية في wormate.io ✨</p>
+    <p class="hero-description">✨ إضافة WormXO تمنحك القوة المطلقة في wormate.io: سكنات خيالية، سرعة كونية، وتقنيات لا تُقهر ✨</p>
 
-    <div class="button-group">
-      <a href="https://wormxo.store/file/wormxo.zip" class="btn-luxury btn-primary-lux" id="wormxoDownloadBtn">
+    <div class="action-buttons">
+      <a href="https://wormxo.store/file/wormxo.zip" class="btn-cosmic btn-primary-cosmic" id="btnWormxo">
         <i class="fas fa-download"></i> تحميل WormXO
       </a>
-      <a href="https://wormxo.store/file/wormfmx.zip" class="btn-luxury" id="wormFriendMatrixBtn">
+      <a href="https://wormxo.store/file/wormfmx.zip" class="btn-cosmic" id="btnMatrix">
         <i class="fas fa-download"></i> WormFriendMatrix
       </a>
     </div>
 
-    <div class="features-grid">
-      <div class="modern-card">
-        <h3><i class="fas fa-palette"></i> سكنات فريدة</h3>
-        <p>أكثر من 70 سكناً أسطورياً غير متوفر في اللعبة الأصلية، ألوان وتأثيرات نادرة تجعل هويتك مميزة.</p>
+    <div class="features-container">
+      <div class="feature-card">
+        <h3><i class="fas fa-dragon"></i> كنوز السكنات</h3>
+        <p>أكثر من 75 سكناً حصرياً لم ترها من قبل، تصاميم أسطورية وألوان ساحرة تجعل هويتك فريدة.</p>
       </div>
-      <div class="modern-card">
-        <h3><i class="fas fa-bolt"></i> سرعة وتحكم خارق</h3>
-        <p>قفزات سريعة، زوم متطور، واستجابة فائقة تجعلك تتفوق على الجميع بكل سلاسة.</p>
+      <div class="feature-card">
+        <h3><i class="fas fa-bolt"></i> سرعة خارقة</h3>
+        <p>تحكم فوري، سرعة فائقة، وزوم متطور - تفوّق على الجميع بسلاسة مطلقة.</p>
       </div>
-      <div class="modern-card">
-        <h3><i class="fas fa-shield-alt"></i> تقنية Nebula</h3>
-        <p>اتصال فائق الثبات حتى مع أضعف الشبكات، استمتع باللعب بدون تقطيع أو تأخير.</p>
+      <div class="feature-card">
+        <h3><i class="fas fa-shield-haltered"></i> تقنية Nova</h3>
+        <p>اتصال فائق الثبات بدون أي تقطيع، حتى مع أضعف شبكات الإنترنت.</p>
       </div>
-      <div class="modern-card">
-        <h3><i class="fas fa-mobile-android"></i> متعدد المنصات</h3>
-        <p>يعمل على ويندوز، ماك، أندرويد، iOS - جميع الأجهزة مدعومة بأناقة.</p>
+      <div class="feature-card">
+        <h3><i class="fas fa-mobile-screen"></i> دعم شامل</h3>
+        <p>يعمل على جميع الأجهزة: حواسيب، جوالات، أجهزة لوحية - الكل يستمتع.</p>
       </div>
-      <div class="modern-card">
-        <h3><i class="fas fa-infinity"></i> مجاني + تحديثات دائمة</h3>
-        <p>الإضافة مجانية بالكامل مع تحديثات مستمرة وجديدة دائماً لتبقى الأفضل بلا منافس.</p>
+      <div class="feature-card">
+        <h3><i class="fas fa-gift"></i> مجاني + تحديثات أبدية</h3>
+        <p>الإضافة مجانية بالكامل، ونُحدّثها باستمرار لنبقى الخيار الأمثل دائماً.</p>
       </div>
     </div>
   </div>
 </section>
 
 <footer class="footer">
-  <span id="footer-text">© 2026 <strong style="color:#c9aeff;">WormXO</strong> — أرقى إضافة لـ wormate.io على الإطلاق<br>✨ اصنع مجدك مع WormXO، حمّل الآن ✨</span>
+  <span>© 2026 <strong style="color: #c9aeff;">WormXO</strong> — التحفة الفريدة لعشاق wormate.io<br>🚀 حمّل الإضافة الآن واصنع مجدك 🚀</span>
 </footer>
 
 <script>
-  // دوائر ضبابية بألوان أنيقة وعصرية جداً (نيلي، لافندر ناعم، زمردي فاتح، ياقوتي هادئ، أزرق أوركيد)
-  const elegantColors = [
-    'radial-gradient(circle at 40% 50%, rgba(130, 80, 220, 0.6), rgba(80, 40, 160, 0.25))',
-    'radial-gradient(circle at 65% 35%, rgba(170, 130, 255, 0.65), rgba(100, 70, 200, 0.3))',
-    'radial-gradient(circle at 20% 70%, rgba(100, 210, 170, 0.55), rgba(60, 150, 120, 0.25))',
-    'radial-gradient(circle at 80% 60%, rgba(210, 120, 210, 0.6), rgba(150, 70, 150, 0.3))',
-    'radial-gradient(circle at 45% 25%, rgba(80, 150, 220, 0.6), rgba(40, 90, 170, 0.25))',
-    'radial-gradient(circle at 70% 80%, rgba(200, 160, 240, 0.55), rgba(120, 80, 180, 0.3))'
+  // ألوان دوائر نبيلا (نيلي، ياقوتي هادئ، زمردي ناعم، لافندر فاتح، أزرق أوركيد)
+  const nebulaColors = [
+    'radial-gradient(circle at 35% 55%, rgba(120, 80, 220, 0.6), rgba(70, 40, 160, 0.25))',
+    'radial-gradient(circle at 65% 30%, rgba(170, 120, 255, 0.65), rgba(100, 60, 200, 0.3))',
+    'radial-gradient(circle at 20% 75%, rgba(80, 200, 160, 0.55), rgba(50, 140, 110, 0.25))',
+    'radial-gradient(circle at 80% 65%, rgba(210, 110, 200, 0.6), rgba(150, 65, 140, 0.3))',
+    'radial-gradient(circle at 45% 25%, rgba(100, 160, 230, 0.6), rgba(50, 100, 180, 0.25))'
   ];
 
-  const bgContainer = document.getElementById('elegantBg');
+  const bgLayer = document.getElementById('stellarBg');
 
-  function createElegantOrbs() {
-    const orbCount = 6;
-    for (let i = 0; i < orbCount; i++) {
+  function createNebulaOrbs() {
+    for (let i = 0; i < 6; i++) {
       const orb = document.createElement('div');
-      orb.classList.add('aura-orb');
-      // أحجام كبيرة ولكن متناسبة مع الشاشة
-      let size = Math.min(window.innerWidth * 0.7, 820);
-      size = Math.max(size, 540);
+      orb.classList.add('nebula-orb');
+      let size = Math.min(window.innerWidth * 0.72, 850);
+      size = Math.max(size, 550);
       orb.style.width = size + 'px';
       orb.style.height = size + 'px';
-      orb.style.background = elegantColors[i % elegantColors.length];
-      orb.style.opacity = 0.38 + Math.random() * 0.25;
-      orb.style.filter = 'blur(110px)';
-      const leftPos = Math.random() * 70 + 5;
-      const topPos = Math.random() * 70 + 5;
-      orb.style.left = leftPos + '%';
-      orb.style.top = topPos + '%';
+      orb.style.background = nebulaColors[i % nebulaColors.length];
+      orb.style.opacity = 0.4 + Math.random() * 0.25;
+      orb.style.left = (Math.random() * 70 + 5) + '%';
+      orb.style.top = (Math.random() * 70 + 5) + '%';
       orb.style.position = 'absolute';
       orb.style.zIndex = '-1';
-      orb.style.animation = `gentleFloat ${100 + i * 8}s infinite alternate ease-in-out`;
-      bgContainer.appendChild(orb);
+      bgLayer.appendChild(orb);
       
-      // تغيير هادئ للألوان كل 18 ثانية
+      // تغيير لون ناعم كل 15 ثانية
       setInterval(() => {
-        if (orb) {
-          const newColor = elegantColors[Math.floor(Math.random() * elegantColors.length)];
-          orb.style.transition = 'background 10s ease-in-out';
-          orb.style.background = newColor;
-        }
-      }, 18000 + i * 2500);
+        const newColor = nebulaColors[Math.floor(Math.random() * nebulaColors.length)];
+        orb.style.transition = 'background 11s ease-in-out';
+        orb.style.background = newColor;
+      }, 15000 + i * 2000);
     }
   }
 
-  function resizeOrbs() {
-    const orbs = document.querySelectorAll('.aura-orb');
-    const baseSize = Math.min(window.innerWidth * 0.65, 780);
+  function adjustOrbSizes() {
+    const orbs = document.querySelectorAll('.nebula-orb');
+    const newSize = Math.min(window.innerWidth * 0.65, 780);
     orbs.forEach(orb => {
-      let newSize = Math.max(baseSize, 480);
       orb.style.width = newSize + 'px';
       orb.style.height = newSize + 'px';
     });
   }
 
-  createElegantOrbs();
-  window.addEventListener('resize', () => {
-    resizeOrbs();
-  });
-  resizeOrbs();
+  createNebulaOrbs();
+  window.addEventListener('resize', adjustOrbSizes);
+  adjustOrbSizes();
 
-  // تحريك بطيء جداً لمواقع الدوائر كل 17 ثانية (حركة ناعمة)
+  // تحريك الدوائر بشكل بطيء جداً كل 16 ثانية
   setInterval(() => {
-    const orbs = document.querySelectorAll('.aura-orb');
+    const orbs = document.querySelectorAll('.nebula-orb');
     orbs.forEach(orb => {
-      const newLeft = Math.random() * 75 + 5;
-      const newTop = Math.random() * 75 + 5;
-      orb.style.transition = 'left 17s ease-in-out, top 17s ease-in-out';
+      const newLeft = Math.random() * 78 + 5;
+      const newTop = Math.random() * 78 + 5;
+      orb.style.transition = 'left 18s cubic-bezier(0.2,0.9,0.3,1), top 18s cubic-bezier(0.2,0.9,0.3,1)';
       orb.style.left = newLeft + '%';
       orb.style.top = newTop + '%';
     });
-  }, 17000);
+  }, 16000);
 
-  // ========== نصوص عربية فصحى عصرية ==========
-  const contentArabic = {
-    homeLink: "الاستكشاف",
-    downloadLink: "التحميل",
-    discordLink: "المجتمع",
-    badge: "💫 إضافة WormXO | نقلة نوعية في Wormate 💫",
-    sub: "🚀 استمتع بأداء فائق وسكنات حصرية وتقنيات ثورية - حول تجربتك في wormate.io إلى ملحمة.",
-    footer: "© 2026 <strong style='color:#c9aeff;'>WormXO</strong> — إبداع بلا حدود، لعبة بلا منافس.<br>🌀 حمّل الإضافة وتسلق قمة المتعة.",
-    feature1: "سكنات حصرية نادرة",
-    desc1: "أكثر من 70 سكناً أسطورياً بتصاميم غير مسبوقة، ألوان ساحرة وأناقة لا تُقاوم.",
-    feature2: "تسارع وتحكم فائق",
-    desc2: "العب بسرعة البرق، زوم ديناميكي، استجابة لحظية - تفوق على الجميع بسهولة.",
-    feature3: "تقنية Orion المستقرة",
-    desc3: "اتصال خارق الثبات بدون تقطيع، حتى مع شبكات الجيل الثالث والرابع، وانسي اللاج.",
-    feature4: "دعم كامل لكل الأجهزة",
-    desc4: "يعمل بسلاسة على الحاسوب، اللابتوب، الجوال، والتابلت. الجميع مرحب به.",
-    feature5: "مجاني للأبد وتحديثات",
-    desc5: "إضافة مجانية 100% مع تحديثات مستمرة وولاء للمستخدمين، نصنع معاً الأفضل."
-  };
-
-  document.getElementById("home-link").innerHTML = `<i class="fas fa-compass"></i> ${contentArabic.homeLink}`;
-  document.getElementById("download-link").innerHTML = `<i class="fas fa-cloud-download-alt"></i> ${contentArabic.downloadLink}`;
-  document.getElementById("discord-link").innerHTML = `<i class="fab fa-discord"></i> ${contentArabic.discordLink}`;
-  document.getElementById("badge-text").innerText = contentArabic.badge;
-  document.getElementById("sub-text").innerHTML = contentArabic.sub;
-  document.getElementById("footer-text").innerHTML = contentArabic.footer;
-
-  // تحديث الميزات الجديدة
-  const featureTitles = document.querySelectorAll(".modern-card h3");
-  const featureDescs = document.querySelectorAll(".modern-card p");
-  const newTitles = [
-    `<i class="fas fa-palette"></i> ${contentArabic.feature1}`,
-    `<i class="fas fa-bolt"></i> ${contentArabic.feature2}`,
-    `<i class="fas fa-shield-alt"></i> ${contentArabic.feature3}`,
-    `<i class="fas fa-mobile-android"></i> ${contentArabic.feature4}`,
-    `<i class="fas fa-infinity"></i> ${contentArabic.feature5}`
-  ];
-  const newDesc = [contentArabic.desc1, contentArabic.desc2, contentArabic.desc3, contentArabic.desc4, contentArabic.desc5];
+  // تثبيت الروابط يدوياً
+  const btn1 = document.getElementById('btnWormxo');
+  const btn2 = document.getElementById('btnMatrix');
+  if (btn1) btn1.href = 'https://wormxo.store/file/wormxo.zip';
+  if (btn2) btn2.href = 'https://wormxo.store/file/wormfmx.zip';
   
-  for (let i = 0; i < featureTitles.length && i < newTitles.length; i++) {
-    featureTitles[i].innerHTML = newTitles[i];
-    featureDescs[i].innerText = newDesc[i];
-  }
-
-  // تثبيت الروابط والعلامات لكل زر
-  const wormBtn = document.getElementById("wormxoDownloadBtn");
-  if (wormBtn) {
-    wormBtn.setAttribute("href", "https://wormxo.store/file/wormxo.zip");
-    wormBtn.setAttribute("target", "_blank");
-    wormBtn.innerHTML = `<i class="fas fa-download"></i> تحميل WormXO`;
-  }
-  
-  const friendBtn = document.getElementById("wormFriendMatrixBtn");
-  if (friendBtn) {
-    friendBtn.setAttribute("href", "https://wormxo.store/file/wormfmx.zip");
-    friendBtn.setAttribute("target", "_blank");
-    friendBtn.innerHTML = `<i class="fas fa-download"></i> WormFriendMatrix`;
-  }
-
-  // توجيه RTL وتحسينات
-  document.documentElement.setAttribute("dir", "rtl");
-  document.documentElement.setAttribute("lang", "ar");
-  document.body.style.direction = "rtl";
-  const extraStyle = document.createElement('style');
-  extraStyle.textContent = `
-    .modern-card { text-align: right; border-right: 4px solid #b48cff; border-left: none; }
-    .btn-luxury i, .nav a i { margin-left: 8px; margin-right: 0; }
-    .button-group .btn-luxury i { margin-left: 12px; }
-    .aura-orb { transition: left 16s cubic-bezier(0.2, 0.9, 0.3, 1), top 16s cubic-bezier(0.2, 0.9, 0.3, 1); }
-  `;
-  document.head.appendChild(extraStyle);
-  
-  // إزالة أي ألوان مقرفة تماماً والتأكيد على ديكور جديد كلياً
-  console.log("WormXO - ثورية بتصميم فاخر وألوان أنيقة وحركة دوائر هادئة");
+  // توجيه RTL كامل
+  document.documentElement.setAttribute('dir', 'rtl');
+  document.body.style.direction = 'rtl';
 </script>
 </body>
 </html>
