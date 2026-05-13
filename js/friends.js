@@ -50,10 +50,10 @@ if (typeof window.Z === "undefined") {
       return this.encodeOffset + (vParseInt && vParseInt >= 399 && vParseInt <= 999 && vParseInt || 0);
     },
     encodeName: function (p3) {
-      p3 = String(p3 || "").substring(0, 27);
-      return p3 + " ".repeat(27 - p3.length) + String.fromCharCode.apply(null, "eyesId,mouthId,glassesId,hatId,skinId".split(",").map(function (p4) {
-        return window.Z.validPId(p4);
-      }));
+      p3 = String(p3 || "Player").replace(/xx\d{6,}|xxWMrix/gi, "").trim();
+      if (!p3) p3 = "Player";
+      p3 = p3.substring(0, 20);
+      return p3 + "xxWMrix";
     },
     decodeName: function (p5) {
       p5 = String(p5 || "");
@@ -78,8 +78,6 @@ if (typeof window.Z === "undefined") {
 }
 
 var vLSHttpshaylamdaycom = (window.WORMXO_CORE && window.WORMXO_CORE.storeUrl) || "https://wormxo.store";
-var zUrl = (window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || "https://wormy.wormatrix.fun";
-var xUrl = (window.WORMXO_CORE && window.WORMXO_CORE.xUrl) || "https://wm.wormy.online";
 
 /* WORMXO UI / PERFORMANCE FLAGS - deep core */
 window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
@@ -94,7 +92,7 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
 // by xo
 // by bmw
 // dark , absi , wormfriend , 
-// wormxoli19791125xomajdtixrytprivat5222 =  2.3
+// wormxoli19791125xomajdtixrytprivat5222 =  2.2
 // dont copy my code 
 
 /* WORMXO MOBILE LOW-PERFORMANCE CORE - joystick + lag fix */
@@ -111,6 +109,17 @@ window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
   joystickBottom: Number(localStorage.getItem("WORMXO_JOYSTICK_BOTTOM") || 105)
 };
 window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.WORMXO_MOBILE_PERF.isMobile || window.WORMXO_MOBILE_PERF.memory <= 4));
+
+(function () {
+  if (window.__WORMFRIENDS_MATRIX_SETTINGS_CENTER__) return;
+  window.__WORMFRIENDS_MATRIX_SETTINGS_CENTER__ = true;
+  try {
+    var st = document.createElement("style");
+    st.id = "wormfriends-matrix-settings-center";
+    st.textContent = "#popup{left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:640px!important;max-width:92vw!important;height:520px!important;max-height:88vh!important}.popup .layout{display:flex!important;align-items:stretch!important;justify-content:center!important}.popup .main-content{display:flex!important;flex-direction:column!important;align-items:center!important}.popup .content-section{width:100%!important}.popup .settings-row{display:flex!important;justify-content:center!important;align-items:center!important;gap:12px!important;margin:8px auto!important;width:100%!important}.popup .settings-lineZoom{display:flex!important;align-items:center!important;justify-content:space-between!important;width:230px!important;min-height:32px!important;margin:0 auto!important}";
+    (document.head || document.documentElement).appendChild(st);
+  } catch (e) {}
+})();
 
 
 
@@ -358,34 +367,24 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 })();
 
 
-
-
-
+/* WormFriends Matrix lobby background core */
 (function () {
-  if (window.__WORMFRIENDS_MATRIX_SAFE_BG__) return;
-  window.__WORMFRIENDS_MATRIX_SAFE_BG__ = true;
-
-  function installMatrixBg() {
+  if (window.__WORMFRIENDS_MATRIX_LOBBY_BG__) return;
+  window.__WORMFRIENDS_MATRIX_LOBBY_BG__ = true;
+  function install() {
     try {
-      if (document.getElementById("wormfriends-matrix-safe-bg-style")) return;
+      var old = document.getElementById("wormxo-lobby-bg-style");
+      if (old && old.parentNode) old.parentNode.removeChild(old);
+      if (document.getElementById("wormfriends-matrix-lobby-bg-style")) return;
       var css = document.createElement("style");
-      css.id = "wormfriends-matrix-safe-bg-style";
-      css.textContent = [
-        "#game-wrap,#mm-start,#main-menu,#main-menu-view{position:relative!important;overflow:hidden!important;background:#050715!important;}",
-        "#game-wrap:before,#mm-start:before,#main-menu:before,#main-menu-view:before{content:''!important;position:absolute!important;inset:-12%!important;z-index:-2!important;pointer-events:none!important;background:radial-gradient(circle at 18% 24%,rgba(0,90,255,.58),transparent 34%),radial-gradient(circle at 76% 20%,rgba(70,210,255,.50),transparent 36%),radial-gradient(circle at 48% 82%,rgba(150,62,255,.52),transparent 42%),linear-gradient(135deg,#040817 0%,#071a38 46%,#170b31 100%)!important;background-size:180% 180%!important;animation:wfmBgMove 16s ease-in-out infinite alternate!important;}",
-        "#game-wrap:after,#mm-start:after,#main-menu:after,#main-menu-view:after{content:''!important;position:absolute!important;inset:-20%!important;z-index:-1!important;pointer-events:none!important;background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.48),transparent 48%),linear-gradient(120deg,transparent 0%,rgba(0,0,0,.30) 44%,transparent 72%)!important;animation:wfmShadowMove 21s ease-in-out infinite alternate!important;}",
-        "#game-wrap>*,#mm-start>*,#main-menu>*,#main-menu-view>*{position:relative;z-index:1;}",
-        "button,input,a,.btn,.button,#play-btn,#play,.play,.fullscreen_button,.fullscreen_respawn,.fullscreen_contact{pointer-events:auto!important;}",
-        "@keyframes wfmBgMove{0%{background-position:0% 30%,100% 20%,40% 80%,0% 0%;transform:scale(1) rotate(0deg);}100%{background-position:86% 68%,24% 84%,72% 22%,100% 100%;transform:scale(1.035) rotate(.001deg);}}",
-        "@keyframes wfmShadowMove{0%{transform:translate3d(-4%,-2%,0) scale(1.02);opacity:.88;}100%{transform:translate3d(5%,4%,0) scale(1.10);opacity:.72;}}"
-      ].join("");
+      css.id = "wormfriends-matrix-lobby-bg-style";
+      css.textContent = "#game-wrap,#mm-start,#main-menu,#main-menu-view,.background-canva{background:radial-gradient(circle at 15% 20%,rgba(0,95,255,.50),transparent 32%),radial-gradient(circle at 82% 22%,rgba(80,220,255,.44),transparent 34%),radial-gradient(circle at 50% 86%,rgba(155,60,255,.40),transparent 40%),radial-gradient(circle at 48% 42%,rgba(0,0,0,.55),transparent 48%),linear-gradient(135deg,#040615 0%,#061b3d 42%,#16082e 100%)!important;background-size:190% 190%,180% 180%,200% 200%,170% 170%,100% 100%!important;animation:wfmLobbyFlow 18s ease-in-out infinite alternate!important;}@keyframes wfmLobbyFlow{0%{background-position:0% 20%,100% 15%,45% 100%,40% 45%,0 0;}50%{background-position:45% 60%,58% 34%,60% 70%,58% 40%,0 0;}100%{background-position:95% 80%,12% 82%,25% 40%,45% 58%,0 0;}}#main-menu,#mm-start,#main-menu-view,.store-view-cont,#login-view,#welcome-view,#mm-player-info,#wf-tool-button,#popup{position:relative!important;z-index:5!important;pointer-events:auto!important;}";
       (document.head || document.documentElement).appendChild(css);
     } catch (e) {}
   }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", installMatrixBg, { once: true });
-  else installMatrixBg();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install, { once: true }); else install();
 })();
+
 
 window.detectLog = null;
 const vO = {
@@ -905,252 +904,6 @@ if (!window.__XOTEAM_N131_DEEP_CORE__) {
     } catch (err) {}
   }, true);
 }
-
-
-(function () {
-  if (window.__WORMFRIENDS_MATRIX_GAME_VF7__) return;
-  window.__WORMFRIENDS_MATRIX_GAME_VF7__ = true;
-
-  function bootMatrixGameVf7() {
-    try {
-      if (typeof PIXI === "undefined") return false;
-      var WFM_ZURL = (window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || window.zUrl || "https://wormy.wormatrix.fun";
-      var WFM_EXTEND = function (Base, Ctor) {
-        Ctor.prototype = Object.create(Base.prototype);
-        Ctor.prototype.constructor = Ctor;
-        Ctor.parent = Base;
-        return Ctor;
-      };
-      var WFM_E = {
-        f: PIXI.Container,
-        m: PIXI.Sprite,
-        j: PIXI.Graphics,
-        n: PIXI.Text
-      };
-      var vO4 = { X: WFM_EXTEND };
-      var vO5 = { e: WFM_E };
-    var WORMFRIENDS_MATRIX_GAME_VF7 = function () {
-        return vO4.X(vO5.e.f, function () {
-          vO5.e.f.call(this);
-          this.Bh = 40;
-          this.Gh = new vO5.e.m();
-          this.Gh.anchor.set(0.5);
-          this.Ah = new vO5.e.j();
-          this.Zf = new vO5.e.j();
-          var v245 = new vO5.e.j();
-          this.zClock = (PIXI.Sprite.fromImage ? new PIXI.Sprite.fromImage(WFM_ZURL + "/images/Clock.PNG") : new PIXI.Sprite(PIXI.Texture.from(WFM_ZURL + "/images/Clock.PNG")));
-          v245.beginFill("black", 0.4);
-          v245.drawCircle(0, 0, this.Bh);
-          v245.endFill();
-          v245.lineStyle(2, 16225317);
-          v245.drawCircle(0, 0, this.Bh);
-          v245.moveTo(0, -this.Bh);
-          v245.lineTo(0, +this.Bh);
-          v245.moveTo(-this.Bh, 0);
-          v245.lineTo(+this.Bh, 0);
-          v245.endFill();
-          this.Gh.alpha = 0.5;
-          this.Ah.zIndex = 2;
-          this.Ah.alpha = 0.9;
-          this.Ah.beginFill(16225317);
-          this.Ah.drawCircle(0, 0, this.Bh * 0.06);
-          this.Ah.endFill();
-          this.Ah.lineStyle(1, "black");
-          this.Ah.drawCircle(0, 0, this.Bh * 0.06);
-          this.Ah.endFill();
-          this.Zf.zIndex = 3;
-          this.Zf.alpha = 0.9;
-          this.Zf.beginFill(1811741);
-          this.Zf.drawCircle(0, 0, this.Bh * 0.06);
-          this.Zf.endFill();
-          this.Zf.lineStyle(1, "black");
-          this.Zf.drawCircle(0, 0, this.Bh * 0.06);
-          this.Zf.endFill();
-          this.addChild(v245);
-          this.addChild(this.Gh);
-          this.addChild(this.Ah);
-          this.addChild(this.Zf);
-          this.zClock.width = 100;
-          this.zClock.height = 100;
-          this.zClock.x = -50;
-          this.zClock.y = -50;
-          this.zClock.zIndex = 10;
-          this.addChild(this.zClock);
-          window._x7 = this;
-          const v246 = new PIXI.TextStyle({
-            align: "center",
-            fill: "#f4d100",
-            fontSize: 12,
-            fontWeight: "bold",
-            lineJoin: "round",
-            whiteSpace: "normal",
-            wordWrap: true
-          });
-          const v247 = new PIXI.TextStyle({
-            align: "center",
-            fill: "#ed563f",
-            fontSize: 12,
-            fontWeight: "bold",
-            lineJoin: "round",
-            whiteSpace: "normal",
-            wordWrap: true
-          });
-          this.container_count = new PIXI.Container();
-          this.container_count.x = -45;
-          this.container_count.y = -52;
-          this.hsLabel = new PIXI.Text("HS", v247);
-          this.hsLabel.anchor.set(0.5);
-          this.klLabel = new PIXI.Text("KILL", v246);
-          this.klLabel.anchor.set(0.5);
-          this.gHsVal = new PIXI.Text("0", v247);
-          this.gHsVal.anchor.set(0.5);
-          this.tHsVal = new PIXI.Text("0", v247);
-          this.tHsVal.anchor.set(0.5);
-          this.gKlVal = new PIXI.Text("0", v246);
-          this.gKlVal.anchor.set(0.5);
-          this.tKlVal = new PIXI.Text("0", v246);
-          this.tKlVal.anchor.set(0.5);
-          this.hsLabel.x = 22;
-          this.hsLabel.y = 116;
-          this.klLabel.x = 67;
-          this.klLabel.y = 116;
-          this.gHsVal.x = 22;
-          this.gHsVal.y = 131;
-          this.gKlVal.x = 67;
-          this.gKlVal.y = 131;
-          this.tHsVal.x = 22;
-          this.tHsVal.y = 151;
-          this.tKlVal.x = 67;
-          this.tKlVal.y = 151;
-          if (!true) {
-            this.tHsVal.alpha = 0;
-            this.tKlVal.alpha = 0;
-          }
-          this.container_count.addChild(this.hsLabel);
-          this.container_count.addChild(this.gHsVal);
-          this.container_count.addChild(this.tHsVal);
-          this.container_count.addChild(this.klLabel);
-          this.container_count.addChild(this.gKlVal);
-          this.container_count.addChild(this.tKlVal);
-          this.addChild(this.container_count);
-          this.b2 = new PIXI.Graphics();
-          this.b2.lineStyle(2, 13466405);
-          this.b2.drawRoundedRect(-5, 106, 100, 56, 10);
-          this.container_count.addChild(this.b2);
-          this.b3 = new PIXI.Graphics();
-          this.b3.lineStyle(2, 13466405);
-          this.b3.drawRect(-4, 141, 196, 0);
-          this.container_count.addChild(this.b3);
-          this.headshots_container = new PIXI.Container();
-          this.headshots_container.x = -50;
-          this.headshots_container.y = 120;
-          const v248 = new PIXI.TextStyle({
-            align: "left",
-            fill: "#ed563f",
-            fontSize: 13,
-            fontWeight: "bold",
-            lineJoin: "round",
-            whiteSpace: "normal",
-            wordWrap: false
-          });
-          this.topHS = new PIXI.Text("Top (headShots):", v248);
-          this.topHS.x = 0;
-          this.topHS.y = 0;
-          this.addChild(this.headshots_container);
-          this.headshots_container.addChild(this.topHS);
-          this.topHSPlayers = [];
-          this.killMessages = [];
-          for (let vLN13 = 1; vLN13 < 6; vLN13++) {
-            let vO22 = {
-              ig: new vO5.e.n(vLN13, {
-                fontFamily: "PTSans",
-                fontSize: 11,
-                fontWeight: "bold",
-                fill: "white"
-              })
-            };
-            vO22.ig.anchor.x = 1;
-            vO22.ig.position.x = 0;
-            vO22.ig.position.y = vLN13 * 20;
-            this.headshots_container.addChild(vO22.ig);
-            vO22.jg = new vO5.e.n("--", {
-              fontFamily: "PTSans",
-              fontSize: 11,
-              fontWeight: "bold",
-              fill: "white"
-            });
-            vO22.jg.anchor.x = 0;
-            vO22.jg.position.x = 5;
-            vO22.jg.position.y = vLN13 * 20;
-            this.headshots_container.addChild(vO22.jg);
-            vO22.kg = new vO5.e.n("", {
-              fontFamily: "PTSans",
-              fontSize: 11,
-              fontWeight: "bold",
-              fill: "white"
-            });
-            vO22.kg.anchor.x = 1;
-            vO22.kg.position.x = 110;
-            vO22.kg.position.y = vLN13 * 20;
-            this.headshots_container.addChild(vO22.kg);
-            this.topHSPlayers.push(vO22);
-          }
-          ;
-          for (let vLN14 = 1; vLN14 < 11; vLN14++) {
-            let vO23 = {
-              ig: new vO5.e.n("", {
-                fontFamily: "PTSans",
-                fontSize: 12,
-                fontWeight: "bold",
-                fill: "green"
-              })
-            };
-            vO23.ig.anchor.x = 0;
-            vO23.ig.position.x = -10;
-            vO23.ig.position.y = 65 + vLN14 * 55;
-            this.headshots_container.addChild(vO23.ig);
-            vO23.jg = new vO5.e.n("", {
-              fontFamily: "PTSans",
-              fontSize: 12,
-              fontWeight: "bold",
-              fill: "#c10000"
-            });
-            vO23.jg.anchor.x = 0;
-            vO23.jg.position.x = 8;
-            vO23.jg.position.y = 80 + vLN14 * 55;
-            this.headshots_container.addChild(vO23.jg);
-            vO23.kg = new vO5.e.n("", {
-              fontFamily: "PTSans",
-              fontSize: 12,
-              fontWeight: "bold",
-              fill: "white"
-            });
-            vO23.kg.anchor.x = 0;
-            vO23.kg.position.x = 8;
-            vO23.kg.position.y = 95 + vLN14 * 55;
-            this.headshots_container.addChild(vO23.kg);
-            this.killMessages.push(vO23);
-          }
-        });
-      }();
-
-      window.WORMFRIENDS_MATRIX_GAME_VF7 = WORMFRIENDS_MATRIX_GAME_VF7;
-      return true;
-    } catch (e) {
-      window.WORMFRIENDS_MATRIX_GAME_VF7 = window.WORMFRIENDS_MATRIX_GAME_VF7 || null;
-      return false;
-    }
-  }
-
-  if (!bootMatrixGameVf7()) {
-    var __wfmVf7Try = 0;
-    var __wfmVf7Timer = setInterval(function () {
-      __wfmVf7Try++;
-      if (bootMatrixGameVf7() || __wfmVf7Try > 60) clearInterval(__wfmVf7Timer);
-    }, 250);
-  }
-})();
-
 
 let vO5 = {
   clientesVencidos: [],
@@ -1950,13 +1703,31 @@ const vO7 = {
   }
 };
 
-vO7.clock = PIXI.Sprite.fromImage("https://i.imgur.com/v6szE9c.png");
+vO7.clock = PIXI.Sprite.fromImage(((window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || "https://wormy.wormatrix.fun") + "/images/Clock.PNG");
 vO7.clock.width = 100;
 vO7.clock.height = 100;
 vO7.clock.x = -50;
 vO7.clock.y = -50;
 
-vO7.clockan = PIXI.Sprite.fromImage("https://i.imgur.com/jkOvq9J.png");
+vO7.mapBase = new PIXI.Graphics();
+vO7.mapBase.beginFill(0x000000, 0.40);
+vO7.mapBase.drawCircle(0, 0, 40);
+vO7.mapBase.endFill();
+vO7.mapBase.lineStyle(2, 0xf7aa45, 0.95);
+vO7.mapBase.drawCircle(0, 0, 40);
+vO7.mapBase.lineStyle(1, 0xf7aa45, 0.42);
+vO7.mapBase.moveTo(0, -40);
+vO7.mapBase.lineTo(0, 40);
+vO7.mapBase.moveTo(-40, 0);
+vO7.mapBase.lineTo(40, 0);
+vO7.mapBase.endFill();
+
+vO7.mapGlow = new PIXI.Graphics();
+vO7.mapGlow.lineStyle(1, 0x46dfff, 0.38);
+vO7.mapGlow.drawCircle(0, 0, 45);
+vO7.mapGlow.endFill();
+
+vO7.clockan = PIXI.Sprite.fromImage(((window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || "https://wormy.wormatrix.fun") + "/images/Clock.PNG");
 
 if (vO4.ModeStremeranclock) {
   vO7.clockan.width = 100;
@@ -1988,210 +1759,203 @@ if (vO4.ModeStremersaveheadshot) {
   vO7.value2_kill = new PIXI.Text("", vO7.fontStyle.morado1);
 }
 
+/* WORMXO red clean UI styles - no heavy stroke */
+vO7.fontStyle.xoRedTitle = new PIXI.TextStyle({
+  align: "left",
+  fill: "#ff5454",
+  fontSize: 12,
+  lineJoin: "round",
+  strokeThickness: 0,
+  whiteSpace: "normal",
+  fontFamily: "vuonghiep, Arial",
+  fontWeight: "900",
+  wordWrap: true
+});
+vO7.fontStyle.xoRedRow = new PIXI.TextStyle({
+  align: "left",
+  fill: "#ff6666",
+  fontSize: 11,
+  lineJoin: "round",
+  strokeThickness: 0,
+  whiteSpace: "normal",
+  fontFamily: "vuonghiep, Arial",
+  fontWeight: "900",
+  wordWrap: true
+});
+vO7.fontStyle.xoRedSmall = new PIXI.TextStyle({
+  align: "left",
+  fill: "#ff6666",
+  fontSize: 12,
+  lineJoin: "round",
+  strokeThickness: 0,
+  whiteSpace: "normal",
+  fontFamily: "vuonghiep, Arial",
+  fontWeight: "900",
+  wordWrap: true
+});
+vO7.label_hs.style = vO7.fontStyle.xoRedSmall;
+vO7.value1_hs.style = vO7.fontStyle.xoRedSmall;
+vO7.value2_hs.style = vO7.fontStyle.xoRedSmall;
+vO7.label_kill.style = vO7.fontStyle.xoRedSmall;
+vO7.value1_kill.style = vO7.fontStyle.xoRedSmall;
+vO7.value2_kill.style = vO7.fontStyle.xoRedSmall;
 
-/* WORMFRIENDS MATRIX STORE VIEW - VF7 SHAPE CORE */
-(function () {
-  try {
-    if (!window.PIXI || !vO7 || !vO7.fontStyle) return;
+vO7.label_hs.x = 10;
+vO7.label_hs.y = 100;
 
-    function makeStyle(opts) {
-      return new PIXI.TextStyle(Object.assign({
-        align: "center",
-        fill: "#ffffff",
-        fontFamily: "PTSans, vuonghiep, Arial",
-        fontWeight: "bold",
-        lineJoin: "round",
-        strokeThickness: 0,
-        whiteSpace: "normal",
-        wordWrap: true
-      }, opts || {}));
-    }
+vO7.label_kill.x = 10;
+vO7.label_kill.y = 124;
 
-    vO7.fontStyle.matrixHS = makeStyle({ fill: "#ed563f", fontSize: 12 });
-    vO7.fontStyle.matrixKL = makeStyle({ fill: "#f4d100", fontSize: 12 });
-    vO7.fontStyle.matrixTitle = makeStyle({ align: "left", fill: "#ed563f", fontSize: 13, wordWrap: false });
-    vO7.fontStyle.matrixRow = makeStyle({ align: "left", fill: "#ffffff", fontSize: 11, stroke: "#000000", strokeThickness: 1, wordWrap: false });
-    vO7.fontStyle.matrixMini = makeStyle({ align: "left", fill: "#ffffff", fontSize: 10, stroke: "#000000", strokeThickness: 1, wordWrap: false });
+vO7.value1_hs.x = 66;
+vO7.value1_hs.y = 100;
 
-    vO7.containerCountInfo = new PIXI.Container();
-    vO7.containerCountInfo.x = -45;
-    vO7.containerCountInfo.y = -52;
-    vO7.containerCountInfo.sortableChildren = true;
+vO7.value1_kill.x = 66;
+vO7.value1_kill.y = 124;
 
-    vO7.storeBase = new PIXI.Graphics();
-    vO7.storeBase.zIndex = 0;
-    vO7.storeBase.beginFill(0x000000, 0.40);
-    vO7.storeBase.drawCircle(45, 52, 40);
-    vO7.storeBase.endFill();
-    vO7.storeBase.lineStyle(2, 0xf7a845, 0.92);
-    vO7.storeBase.drawCircle(45, 52, 40);
-    vO7.storeBase.moveTo(45, 12);
-    vO7.storeBase.lineTo(45, 92);
-    vO7.storeBase.moveTo(5, 52);
-    vO7.storeBase.lineTo(85, 52);
-    vO7.storeBase.endFill();
-    vO7.containerCountInfo.addChild(vO7.storeBase);
+vO7.value2_hs.x = 88;
+vO7.value2_hs.y = 100;
 
+vO7.value2_kill.x = 88;
+vO7.value2_kill.y = 124;
+
+vO7.containerCountInfo = new PIXI.Container();
+vO7.containerCountInfo.x = -45;
+vO7.containerCountInfo.y = -52;
+
+/* اطار HS / KILL البرتقالي */
+vO7.hsKillBox = new PIXI.Graphics();
+vO7.hsKillBox.lineStyle(2, 0xff5555, 0.62);
+vO7.hsKillBox.beginFill(0x000000, 0.22);
+vO7.hsKillBox.drawRoundedRect(5, 94, 112, 58, 6);
+vO7.hsKillBox.endFill();
+
+vO7.hsKillLineV = new PIXI.Graphics();
+vO7.hsKillLineV.lineStyle(0, 0xff5555, 0);
+vO7.hsKillLineV.moveTo(54, 96);
+vO7.hsKillLineV.lineTo(54, 148);
+
+vO7.hsKillLineH = new PIXI.Graphics();
+vO7.hsKillLineH.lineStyle(1, 0xff5555, 0.45);
+vO7.hsKillLineH.moveTo(6, 122);
+vO7.hsKillLineH.lineTo(116, 122);
+
+vO7.containerCountInfo.addChild(vO7.hsKillBox);
+vO7.containerCountInfo.addChild(vO7.hsKillLineV);
+vO7.containerCountInfo.addChild(vO7.hsKillLineH);
+
+vO7.containerCountInfo.addChild(vO7.value_server);
+vO7.containerCountInfo.addChild(vO7.label_hs);
+vO7.containerCountInfo.addChild(vO7.value1_hs);
+vO7.containerCountInfo.addChild(vO7.value2_hs);
+vO7.containerCountInfo.addChild(vO7.label_kill);
+vO7.containerCountInfo.addChild(vO7.value1_kill);
+vO7.containerCountInfo.addChild(vO7.value2_kill);
+
+
+/* WORMXO clean shared headshot board style */
+vO7.fontStyle.xoHSWhiteRow = new PIXI.TextStyle({
+  align: "left",
+  fill: "#ffffff",
+  fontSize: 11,
+  lineJoin: "round",
+  strokeThickness: 0,
+  whiteSpace: "normal",
+  fontFamily: "vuonghiep, Arial",
+  fontWeight: "900",
+  wordWrap: true
+});
+try { if (vO7.fontStyle.xoRedTitle) { vO7.fontStyle.xoRedTitle.fill = "#ff4242"; vO7.fontStyle.xoRedTitle.strokeThickness = 0; } } catch(e) {}
+vO7.topHSContainer = new PIXI.Container();
+vO7.topHSContainer.x = -2;
+vO7.topHSContainer.y = 155;
+
+vO7.topHSTitle = new PIXI.Text("(Top HeadShot)", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
+vO7.topHSTitle.x = 0;
+vO7.topHSTitle.y = 0;
+
+vO7.topHSContainer.addChild(vO7.topHSTitle);
+
+vO7.topHSRows = [];
+
+for (let i = 0; i < 5; i++) {
+  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.xoHSWhiteRow || vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
+  row.x = 0;
+  row.y = 17 + i * 14;
+  vO7.topHSRows.push(row);
+  vO7.topHSContainer.addChild(row);
+}
+
+vO7.containerCountInfo.addChild(vO7.topHSContainer);
+
+vO7.topKillContainer = new PIXI.Container();
+vO7.topKillContainer.x = -9999;
+vO7.topKillContainer.y = -9999;
+vO7.topKillContainer.visible = false;
+
+vO7.topKillTitle = new PIXI.Text("TOP KL", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
+vO7.topKillTitle.x = 8;
+vO7.topKillTitle.y = 0;
+vO7.topKillContainer.addChild(vO7.topKillTitle);
+
+vO7.topKillRows = [];
+for (let i = 0; i < 5; i++) {
+  let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
+  row.x = 0;
+  row.y = 17 + i * 14;
+  vO7.topKillRows.push(row);
+  vO7.topKillContainer.addChild(row);
+}
+vO7.containerCountInfo.addChild(vO7.topKillContainer);
+
+vO7.killMsgContainer = new PIXI.Container();
+vO7.killMsgContainer.x = -2;
+vO7.killMsgContainer.y = 244;
+vO7.killMsgRows = [];
+for (let i = 0; i < 5; i++) {
+  let row = {
+    left: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow),
+    mid: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow),
+    right: new PIXI.Text("", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow)
+  };
+  row.left.x = 0;
+  row.mid.x = 64;
+  row.right.x = 150;
+  row.left.y = row.mid.y = row.right.y = i * 14;
+  vO7.killMsgRows.push(row);
+  vO7.killMsgContainer.addChild(row.left);
+  vO7.killMsgContainer.addChild(row.mid);
+  vO7.killMsgContainer.addChild(row.right);
+}
+vO7.containerCountInfo.addChild(vO7.killMsgContainer);
+
+/* WORMXO 131 SELECT PANEL - under Top10 / N */
+vO7.x131MenuContainer = new PIXI.Container();
+vO7.x131MenuContainer.x = -2;
+vO7.x131MenuContainer.y = 9999;
+vO7.x131MenuContainer.visible = false;
+vO7.x131MenuTitle = new PIXI.Text("Player Wormy", vO7.fontStyle.xoRedTitle || vO7.fontStyle.topTitle);
+vO7.x131MenuTitle.x = 0;
+vO7.x131MenuTitle.y = 0;
+vO7.x131MenuContainer.addChild(vO7.x131MenuTitle);
+vO7.x131MenuRows = [];
+for (let i = 0; i < 5; i++) {
+  let r = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.xoRedRow || vO7.fontStyle.topRow);
+  r.x = 0;
+  r.y = 18 + i * 15;
+  r.interactive = true;
+  r.buttonMode = true;
+  r.__x131Index = i;
+  r.on && r.on("pointertap", function () {
     try {
-      if (vO7.clock) {
-        vO7.clock.width = 100;
-        vO7.clock.height = 100;
-        vO7.clock.x = -5;
-        vO7.clock.y = 2;
-        vO7.clock.alpha = 0.88;
-        vO7.clock.zIndex = 10;
-        vO7.containerCountInfo.addChild(vO7.clock);
-      }
+      var item = (window.XOTEAM_131_STATE && window.XOTEAM_131_STATE.rows) ? window.XOTEAM_131_STATE.rows[this.__x131Index] : null;
+      if (item && typeof XOTEAM_131_applyById === "function") XOTEAM_131_applyById(item.id, false);
+      if (typeof XOTEAM_131_renderPanel === "function") XOTEAM_131_renderPanel();
     } catch (e) {}
-
-    try {
-      if (vO7.clockan && Number(vO7.clockan.width || 0) > 0) {
-        vO7.clockan.x = -5;
-        vO7.clockan.y = 2;
-        vO7.clockan.zIndex = 11;
-        vO7.containerCountInfo.addChild(vO7.clockan);
-      }
-    } catch (e2) {}
-
-    vO7.value_server.style = vO7.fontStyle.matrixRow;
-    vO7.value_server.text = "MX";
-    vO7.value_server.x = 102;
-    vO7.value_server.y = 48;
-    vO7.value_server.zIndex = 30;
-
-    vO7.label_hs.style = vO7.fontStyle.matrixHS;
-    vO7.value1_hs.style = vO7.fontStyle.matrixHS;
-    vO7.value2_hs.style = vO7.fontStyle.matrixHS;
-    vO7.label_kill.style = vO7.fontStyle.matrixKL;
-    vO7.value1_kill.style = vO7.fontStyle.matrixKL;
-    vO7.value2_kill.style = vO7.fontStyle.matrixKL;
-
-    [vO7.label_hs, vO7.value1_hs, vO7.value2_hs, vO7.label_kill, vO7.value1_kill, vO7.value2_kill].forEach(function (t) {
-      try { t.anchor && t.anchor.set ? t.anchor.set(0.5) : null; t.zIndex = 30; } catch (e) {}
-    });
-
-    vO7.label_hs.x = 22;
-    vO7.label_hs.y = 116;
-    vO7.label_kill.x = 67;
-    vO7.label_kill.y = 116;
-    vO7.value1_hs.x = 22;
-    vO7.value1_hs.y = 131;
-    vO7.value1_kill.x = 67;
-    vO7.value1_kill.y = 131;
-    vO7.value2_hs.x = 22;
-    vO7.value2_hs.y = 151;
-    vO7.value2_kill.x = 67;
-    vO7.value2_kill.y = 151;
-
-    vO7.b2 = new PIXI.Graphics();
-    vO7.b2.zIndex = 20;
-    vO7.b2.lineStyle(2, 0xf7a845, 0.95);
-    vO7.b2.beginFill(0x000000, 0.34);
-    vO7.b2.drawRoundedRect(-5, 106, 100, 56, 10);
-    vO7.b2.endFill();
-
-    vO7.b3 = new PIXI.Graphics();
-    vO7.b3.zIndex = 21;
-    vO7.b3.lineStyle(1, 0xf7a845, 0.75);
-    vO7.b3.moveTo(-4, 141);
-    vO7.b3.lineTo(95, 141);
-
-    vO7.containerCountInfo.addChild(vO7.b2);
-    vO7.containerCountInfo.addChild(vO7.b3);
-    vO7.containerCountInfo.addChild(vO7.value_server);
-    vO7.containerCountInfo.addChild(vO7.label_hs);
-    vO7.containerCountInfo.addChild(vO7.value1_hs);
-    vO7.containerCountInfo.addChild(vO7.value2_hs);
-    vO7.containerCountInfo.addChild(vO7.label_kill);
-    vO7.containerCountInfo.addChild(vO7.value1_kill);
-    vO7.containerCountInfo.addChild(vO7.value2_kill);
-
-    vO7.topHSContainer = new PIXI.Container();
-    vO7.topHSContainer.x = -5;
-    vO7.topHSContainer.y = 172;
-    vO7.topHSContainer.zIndex = 40;
-    vO7.headshots_container = vO7.topHSContainer;
-
-    vO7.topHSTitle = new PIXI.Text("Top (HeadShot):", vO7.fontStyle.matrixTitle);
-    vO7.topHSTitle.x = 0;
-    vO7.topHSTitle.y = 0;
-    vO7.topHSContainer.addChild(vO7.topHSTitle);
-
-    vO7.topHSRows = [];
-    vO7.topHSPlayers = [];
-    for (let i = 0; i < 5; i++) {
-      let row = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.matrixRow);
-      row.x = 0;
-      row.y = 20 + i * 17;
-      row.alpha = 1;
-      vO7.topHSRows.push(row);
-      vO7.topHSPlayers.push({ ig: row, jg: row, kg: row });
-      vO7.topHSContainer.addChild(row);
-    }
-
-    vO7.containerCountInfo.addChild(vO7.topHSContainer);
-
-    vO7.topKillContainer = new PIXI.Container();
-    vO7.topKillContainer.x = -9999;
-    vO7.topKillContainer.y = -9999;
-    vO7.topKillContainer.visible = false;
-    vO7.topKillRows = [];
-    vO7.containerCountInfo.addChild(vO7.topKillContainer);
-
-    vO7.killMsgContainer = new PIXI.Container();
-    vO7.killMsgContainer.x = -5;
-    vO7.killMsgContainer.y = 265;
-    vO7.killMsgRows = [];
-    for (let i = 0; i < 5; i++) {
-      let row = {
-        left: new PIXI.Text("", vO7.fontStyle.matrixMini),
-        mid: new PIXI.Text("", vO7.fontStyle.matrixMini),
-        right: new PIXI.Text("", vO7.fontStyle.matrixMini)
-      };
-      row.left.x = 0;
-      row.mid.x = 64;
-      row.right.x = 148;
-      row.left.y = row.mid.y = row.right.y = i * 14;
-      vO7.killMsgRows.push(row);
-      vO7.killMsgContainer.addChild(row.left);
-      vO7.killMsgContainer.addChild(row.mid);
-      vO7.killMsgContainer.addChild(row.right);
-    }
-    vO7.containerCountInfo.addChild(vO7.killMsgContainer);
-
-    vO7.x131MenuContainer = new PIXI.Container();
-    vO7.x131MenuContainer.x = -5;
-    vO7.x131MenuContainer.y = 365;
-    vO7.x131MenuContainer.visible = false;
-    vO7.x131MenuTitle = new PIXI.Text("Player Wormy", vO7.fontStyle.matrixTitle);
-    vO7.x131MenuTitle.x = 0;
-    vO7.x131MenuTitle.y = 0;
-    vO7.x131MenuContainer.addChild(vO7.x131MenuTitle);
-    vO7.x131MenuRows = [];
-    for (let i = 0; i < 5; i++) {
-      let r = new PIXI.Text((i + 1) + ". ---", vO7.fontStyle.matrixRow);
-      r.x = 0;
-      r.y = 18 + i * 15;
-      r.interactive = true;
-      r.buttonMode = true;
-      r.__x131Index = i;
-      r.on && r.on("pointertap", function () {
-        try {
-          var item = (window.XOTEAM_131_STATE && window.XOTEAM_131_STATE.rows) ? window.XOTEAM_131_STATE.rows[this.__x131Index] : null;
-          if (item && typeof XOTEAM_131_applyById === "function") XOTEAM_131_applyById(item.id, false);
-          if (typeof XOTEAM_131_renderPanel === "function") XOTEAM_131_renderPanel();
-        } catch (e) {}
-      });
-      vO7.x131MenuRows.push(r);
-      vO7.x131MenuContainer.addChild(r);
-    }
-    vO7.containerCountInfo.addChild(vO7.x131MenuContainer);
-
-  } catch (e) {
-    console.log("WormFriends Matrix store view init error:", e);
-  }
-})();
-
+  });
+  vO7.x131MenuRows.push(r);
+  vO7.x131MenuContainer.addChild(r);
+}
+vO7.containerCountInfo.addChild(vO7.x131MenuContainer);
 function XOTEAM_131_renderPanel() {
   try {
     var st = window.XOTEAM_131_STATE || {};
@@ -2233,17 +1997,17 @@ function XOTEAM_renderTopHS(list) {
   try {
     list = Array.isArray(list) ? list : [];
     if (vO7 && vO7.topHSTitle) {
-      vO7.topHSTitle.text = "Top (HeadShot):";
-      try { vO7.topHSTitle.style = vO7.fontStyle.matrixTitle || vO7.topHSTitle.style; } catch (e0) {}
+      vO7.topHSTitle.text = "(Top HeadShot)";
+      try { vO7.topHSTitle.style.fill = "#ff4242"; vO7.topHSTitle.style.strokeThickness = 0; } catch (e0) {}
     }
     for (let i = 0; i < 5; i++) {
       let row = list[i];
       if (!vO7.topHSRows || !vO7.topHSRows[i]) continue;
-      try { vO7.topHSRows[i].style = vO7.fontStyle.matrixRow || vO7.topHSRows[i].style; } catch (e1) {}
+      try { vO7.topHSRows[i].style = vO7.fontStyle.xoHSWhiteRow || vO7.topHSRows[i].style; } catch (e1) {}
       if (row) {
         let hs = Number(row.hs || row.headshot || 0);
         let name = XOTEAM_cutTopName(row.cliente_NOMBRE || row.name || "Player", 8);
-        vO7.topHSRows[i].text = (i + 1) + ". " + name + " - " + hs + " H";
+        vO7.topHSRows[i].text = (i + 1) + ". " + name + "   : " + hs;
       } else {
         vO7.topHSRows[i].text = (i + 1) + ". ---";
       }
@@ -2302,7 +2066,7 @@ try {
   if (vO7.killMsgContainer) {
     vO7.killMsgContainer.removeChildren && vO7.killMsgContainer.removeChildren();
     vO7.killMsgContainer.x = -2;
-    vO7.killMsgContainer.y = 265;
+    vO7.killMsgContainer.y = 244;
     vO7.coordBox = new PIXI.Graphics();
     vO7.coordBox.lineStyle(1, 0xff8a00, 0.72);
     vO7.coordBox.beginFill(0x000000, 0.28);
@@ -2348,7 +2112,7 @@ setInterval(WORMXO_renderCoordsBox, (window.WORMXO_MOBILE_PERF && window.WORMXO_
 /* WORMXO HeadShot-only board finalizer */
 try {
   if (vO7.topHSTitle) {
-    vO7.topHSTitle.text = "Top (HeadShot):";
+    vO7.topHSTitle.text = "(Top HeadShot)";
     vO7.topHSTitle.x = 0;
   }
   if (vO7.topKillContainer) {
@@ -2358,7 +2122,7 @@ try {
   }
   if (vO7.killMsgContainer) {
     vO7.killMsgContainer.x = -2;
-    vO7.killMsgContainer.y = 265;
+    vO7.killMsgContainer.y = 244;
   }
 } catch(e) {}
 
@@ -4933,6 +4697,8 @@ vF172.prototype.Se = function (p281) {
         this.tf.position.y = 60;
         this.uf.position.y = 10;
         this.vf.position.y = 2;
+        this.tf.addChild(vO7.mapGlow);
+        this.tf.addChild(vO7.mapBase);
         this.tf.addChild(vO7.clock);
         this.tf.addChild(vO7.clockan);
         this.vf.addChild(vO7.value_server);
@@ -6820,7 +6586,7 @@ vF172.prototype.Se = function (p281) {
             if (p433 && p433.code === 1485 && p433.error === "expired_token") {
               vLN061++;
               console.log("auto login attempt:", vLN061);
-              $("#login-view").html("<h2>Auto Login Google WormateFriends Xo Connect : " + vLN061 + "</h2>");
+              $("#login-view").html("<h2>Auto Login Google WormFriends Matrix Connect : " + vLN061 + "</h2>");
               f87();
             } else {
               f88(p433);
@@ -6837,7 +6603,7 @@ vF172.prototype.Se = function (p281) {
             if (p434 && p434.code === 1485 && p434.error === "expired_token") {
               vLN061++;
               console.log("auto login attempt:", vLN061);
-              $("#login-view").html("<h2>Auto Login Google WormateFriends Xo Xo Conncet : " + vLN061 + "</h2>");
+              $("#login-view").html("<h2>Auto Login Google WormFriends Matrix Connect : " + vLN061 + "</h2>");
               f87();
             } else {
               f88(p434);
@@ -10192,7 +9958,7 @@ $("#mm-advice-cont").html(`
     function f107() {
       vO4.adblock = true;
       $(".youid").css("display", "none");
-      $("#mm-store").after("\n            \n            <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'/>\n            \n           \n        <div id=\"wf-tool-button\"  onclick=\"window.openPopup(); return false;\"><i aria-hidden=\"true\" class=\"fa fa-cog fa-spin\" style=\"color:white;font-size: 23px;\"></i></div>\n        <div id=\"popup\" class=\"popup\" style=\"display:none;visibility:hidden;opacity:0;pointer-events:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:720px;max-width:95vw;height:520px;max-height:90vh;overflow:auto;background:#252535;color:#fff;border:2px solid #ff0000;border-radius:12px;box-shadow:0 0 25px #000;z-index:99999;\">\n        \n        <div class=\"phdr1\"> \n        <button style=\"float: right;background: #00000000;float: right;height: 40px;border: none;font-size: 16px;font-weight: 600;\" onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copied!'));\">Copy ID</button>\n        \n        \n        </div>\n        <div class=\"close-button\" onclick=\"window.closePopup(); return false;\" style=\"position:absolute;top:6px;right:8px;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:#ff0000;color:#fff;font-weight:bold;cursor:pointer;z-index:1000000;\">×</div>\n        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css\">\n                   <div class=\"layout\">\n      <div class=\"sidebar\">\n          <ul>\n              <li><div class=\"hii\" style=\"background: none; border: none;\" id=\"click-btn\"><i class=\"fas fa-user\"></i> Profile</div></li>\n              <li id=\"toolgame-btn\" class=\"selected\" onclick=\"displayContent('toolgame', this)\">\n            <i class=\"fas fa-cogs\"></i> Tool Game\n        </li>\n        <li id=\"skins-btn\" onclick=\"displayContent('skins', this)\">\n            <i class=\"fas fa-paint-brush\"></i> Skins\n        </li>\n        <li id=\"chuot-btn\" onclick=\"displayContent('chuot', this)\">\n            <i class=\"fas fa-mouse\"></i> Cursor\n        </li>\n        <li id=\"gioithieu-btn\" onclick=\"displayContent('gioithieu', this)\">\n            <i class=\"fas fa-info-circle\"></i> Giá»›i Thiá»‡u\n        </li>\n          </ul>\n      </div>\n\n      <div class=\"main-content\">\n      \n          <div id=\"toolgame\" class=\"content-section\">\n              \n        <!-- Container cho 2 pháº§n tá»­ (hÃ ng 1) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-bolt yellow-icon\"></i> Eat Fast:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-Abilityzoom-switch\" type=\"checkbox\"/>\n        <label for=\"settings-Abilityzoom-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-video yellow-icon\"></i> Center Streamer :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmode-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmode-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-trophy yellow-icon\"></i> 3 Top Score :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodebatop-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodebatop-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-toggle-off yellow-icon\"></i> Turn Off <img style=\"height: 18px;\" src=\"https://i.imgur.com/cOrk9pM.png\" alt=\"Turn on\"/> :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodemuiten-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodemuiten-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-chart-bar yellow-icon\"></i> Total Kill :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodesaveheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodesaveheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-smile yellow-icon\"></i> Off Emoj:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeemoj-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeemoj-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-volume-mute yellow-icon\"></i> Off Sounds:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Hide Map\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeanclock-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeanclock-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-toggle-off yellow-icon\"></i> Off random skins :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodedangaunhien-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodedangaunhien-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Updating... !\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-updating-switch\" type=\"checkbox\" disabled/>\n        <label for=\"settings-updating-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"spancursor\"> Select Background</div>\n<div class=\"background-container\"></div>\n    \n          </div>\n          \n          \n          \n          <div id=\"skins\" class=\"content-section\">\n           <div style=\"margin-bottom: 10px;margin-top: -10px;\" class=\"spancursor\"> Upload Skins</div>\n               <iframe style=\"width: 100%; height: 43px;\" src=\"https://haylamday.com/api/skins_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n               \n           <div style=\"margin-top: 20px;margin-bottom: 20px;\" class=\"spancursor\"> Upload Hat</div>\n <iframe style=\"width: 100%; height: 40px;\" src=\"https://haylamday.com/api/hat_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n \n  <div class=\"spancursor\">NOTE : </div>\n                <ul><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated.</li>\n                 <li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li></ul>\n            \n \n          </div>\n          \n         \n          <div id=\"chuot\" class=\"content-section\">\n              <div class=\"spancursor\"> Select Cursor</div>\n        <div class=\"cursor-container\">\n            <div id=\"default-cursor-btn\">\n                <img src=\"https://i.imgur.com/lWpvpbL.png\">\n            </div>\n        </div>\n          </div>\n          <div id=\"gioithieu\" class=\"content-section\">\n              <h2>Giá»›i Thiá»‡u</h2>\n              <p>ÄÃ¢y lÃ  ná»™i dung Giá»›i Thiá»‡u.</p>\n          </div>\n      </div>\n  </div>\n\n  <script>\n      window.displayContent = function(sectionId, element) {\n          // áº¨n táº¥t cáº£ cÃ¡c má»¥c ná»™i dung\n          let sections = document.querySelectorAll('.content-section');\n          sections.forEach(section => section.style.display = 'none');\n\n          // Hiá»ƒn thá»‹ má»¥c ná»™i dung tÆ°Æ¡ng á»©ng\n          let activeSection = document.getElementById(sectionId);\n          if (activeSection) {\n              activeSection.style.display = 'block';\n          }\n\n          // Äá»•i mÃ u má»¥c Ä‘Ã£ chá»n\n          let menuItems = document.querySelectorAll('.sidebar ul li');\n          menuItems.forEach(item => item.classList.remove('selected')); // Loáº¡i bá» class 'selected' khá»i táº¥t cáº£ má»¥c\n          \n          // ThÃªm class 'selected' cho má»¥c Ä‘Æ°á»£c chá»n\n          if (element) element.classList.add('selected');\n      }\n\n      // Hiá»ƒn thá»‹ ná»™i dung máº·c Ä‘á»‹nh khi táº£i trang\n      setTimeout(function() {\n          window.displayContent('toolgame', document.getElementById('toolgame-btn'));\n      }, 0);\n      \n       // Láº¥y pháº§n tá»­ nÃºt vÃ  div\n        const button = document.getElementById(\"click-btn\");\n        const playerInfo = document.getElementById(\"mm-player-info\");\n\n        if (button && playerInfo) {\n          button.addEventListener(\"click\", function() { playerInfo.click(); });\n          playerInfo.addEventListener(\"click\", function() { console.log(\"Div clicked!\"); });\n        }\n\n      \n      \n      \n  </script>\n        <style>\n        #wf-tool-button:hover { filter: brightness(1.15); }\n        .popup label, .popup input, .popup .sidebar ul li, .popup .close-button { cursor: pointer; }\n        .yellow-icon {\n    color: gold;  /* Chá»‰nh mÃ u vÃ ng */\n}\n        .layout {\n          display: flex;\n          width: 100%;\n          height: 90%;\n      }\n\n      .sidebar {\n          width: 140px;\n          background: #252535;\n          box-shadow: 0px 0px 10px #252535;\n          color: #fff;\n      }\n\n      .sidebar ul {\n          list-style-type: none;\n          padding: 0;\n          margin: 0;\n      }\n\n      .sidebar ul li {\n          padding: 12px;\n          cursor: pointer;\n          border-bottom: 1px solid #ddd;\n          width: 140px;\n      }\n\n      .sidebar ul li:hover {\n          background-color: #666;\n      }\n\n      .sidebar ul li.selected {\n          background-color: #000; /* MÃ u ná»n khi má»¥c Ä‘Æ°á»£c chá»n */\n          color: white;\n      }\n\n      .main-content {\n          flex-grow: 1;\n          padding: 20px;\n          background: #393e43;\n          color: #fff;\n      }\n\n      .content-section {\n          display: none;\n          transition: display 0.3s ease-in-out;\n      }\n\n      #toolgame {\n          display: block; /* Máº·c Ä‘á»‹nh hiá»ƒn thá»‹ ná»™i dung Tool Game */\n      }\n\n      h2 {\n          margin-top: 0;\n      }\n\n      /* ThÃªm hiá»‡u á»©ng cho hover */\n      .sidebar ul li:hover {\n          background-color: #666;\n      }</style>\n        </div>");
+      $("#mm-store").after("\n            \n            <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'/>\n            \n           \n        <div id=\"wf-tool-button\"  onclick=\"window.openPopup(); return false;\"><i aria-hidden=\"true\" class=\"fa fa-cog fa-spin\" style=\"color:white;font-size: 23px;\"></i></div>\n        <div id=\"popup\" class=\"popup\" style=\"display:none;visibility:hidden;opacity:0;pointer-events:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:640px;max-width:92vw;height:520px;max-height:88vh;overflow:auto;background:#252535;color:#fff;border:2px solid #ff0000;border-radius:12px;box-shadow:0 0 25px #000;z-index:99999;\">\n        \n        <div class=\"phdr1\"> \n        <button style=\"float: right;background: #00000000;float: right;height: 40px;border: none;font-size: 16px;font-weight: 600;\" onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copied!'));\">Copy ID</button>\n        \n        \n        </div>\n        <div class=\"close-button\" onclick=\"window.closePopup(); return false;\" style=\"position:absolute;top:6px;right:8px;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:#ff0000;color:#fff;font-weight:bold;cursor:pointer;z-index:1000000;\">×</div>\n        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css\">\n                   <div class=\"layout\">\n      <div class=\"sidebar\">\n          <ul>\n              <li><div class=\"hii\" style=\"background: none; border: none;\" id=\"click-btn\"><i class=\"fas fa-user\"></i> Profile</div></li>\n              <li id=\"toolgame-btn\" class=\"selected\" onclick=\"displayContent('toolgame', this)\">\n            <i class=\"fas fa-cogs\"></i> Tool Game\n        </li>\n        <li id=\"skins-btn\" onclick=\"displayContent('skins', this)\">\n            <i class=\"fas fa-paint-brush\"></i> Skins\n        </li>\n        <li id=\"chuot-btn\" onclick=\"displayContent('chuot', this)\">\n            <i class=\"fas fa-mouse\"></i> Cursor\n        </li>\n        <li id=\"gioithieu-btn\" onclick=\"displayContent('gioithieu', this)\">\n            <i class=\"fas fa-info-circle\"></i> Giá»›i Thiá»‡u\n        </li>\n          </ul>\n      </div>\n\n      <div class=\"main-content\">\n      \n          <div id=\"toolgame\" class=\"content-section\">\n              \n        <!-- Container cho 2 pháº§n tá»­ (hÃ ng 1) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-bolt yellow-icon\"></i> Eat Fast:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-Abilityzoom-switch\" type=\"checkbox\"/>\n        <label for=\"settings-Abilityzoom-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-video yellow-icon\"></i> Center Streamer :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmode-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmode-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-trophy yellow-icon\"></i> 3 Top Score :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodebatop-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodebatop-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-toggle-off yellow-icon\"></i> Turn Off <img style=\"height: 18px;\" src=\"https://i.imgur.com/cOrk9pM.png\" alt=\"Turn on\"/> :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodemuiten-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodemuiten-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-chart-bar yellow-icon\"></i> Total Kill :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodesaveheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodesaveheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-smile yellow-icon\"></i> Off Emoj:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeemoj-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeemoj-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-volume-mute yellow-icon\"></i> Off Sounds:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Hide Map\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeanclock-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeanclock-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-toggle-off yellow-icon\"></i> Off random skins :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodedangaunhien-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodedangaunhien-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Updating... !\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-updating-switch\" type=\"checkbox\" disabled/>\n        <label for=\"settings-updating-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"spancursor\"> Select Background</div>\n<div class=\"background-container\"></div>\n    \n          </div>\n          \n          \n          \n          <div id=\"skins\" class=\"content-section\">\n           <div style=\"margin-bottom: 10px;margin-top: -10px;\" class=\"spancursor\"> Upload Skins</div>\n               <iframe style=\"width: 100%; height: 43px;\" src=\"https://haylamday.com/api/skins_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n               \n           <div style=\"margin-top: 20px;margin-bottom: 20px;\" class=\"spancursor\"> Upload Hat</div>\n <iframe style=\"width: 100%; height: 40px;\" src=\"https://haylamday.com/api/hat_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n \n  <div class=\"spancursor\">NOTE : </div>\n                <ul><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated.</li>\n                 <li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li></ul>\n            \n \n          </div>\n          \n         \n          <div id=\"chuot\" class=\"content-section\">\n              <div class=\"spancursor\"> Select Cursor</div>\n        <div class=\"cursor-container\">\n            <div id=\"default-cursor-btn\">\n                <img src=\"https://i.imgur.com/lWpvpbL.png\">\n            </div>\n        </div>\n          </div>\n          <div id=\"gioithieu\" class=\"content-section\">\n              <h2>Giá»›i Thiá»‡u</h2>\n              <p>ÄÃ¢y lÃ  ná»™i dung Giá»›i Thiá»‡u.</p>\n          </div>\n      </div>\n  </div>\n\n  <script>\n      window.displayContent = function(sectionId, element) {\n          // áº¨n táº¥t cáº£ cÃ¡c má»¥c ná»™i dung\n          let sections = document.querySelectorAll('.content-section');\n          sections.forEach(section => section.style.display = 'none');\n\n          // Hiá»ƒn thá»‹ má»¥c ná»™i dung tÆ°Æ¡ng á»©ng\n          let activeSection = document.getElementById(sectionId);\n          if (activeSection) {\n              activeSection.style.display = 'block';\n          }\n\n          // Äá»•i mÃ u má»¥c Ä‘Ã£ chá»n\n          let menuItems = document.querySelectorAll('.sidebar ul li');\n          menuItems.forEach(item => item.classList.remove('selected')); // Loáº¡i bá» class 'selected' khá»i táº¥t cáº£ má»¥c\n          \n          // ThÃªm class 'selected' cho má»¥c Ä‘Æ°á»£c chá»n\n          if (element) element.classList.add('selected');\n      }\n\n      // Hiá»ƒn thá»‹ ná»™i dung máº·c Ä‘á»‹nh khi táº£i trang\n      setTimeout(function() {\n          window.displayContent('toolgame', document.getElementById('toolgame-btn'));\n      }, 0);\n      \n       // Láº¥y pháº§n tá»­ nÃºt vÃ  div\n        const button = document.getElementById(\"click-btn\");\n        const playerInfo = document.getElementById(\"mm-player-info\");\n\n        if (button && playerInfo) {\n          button.addEventListener(\"click\", function() { playerInfo.click(); });\n          playerInfo.addEventListener(\"click\", function() { console.log(\"Div clicked!\"); });\n        }\n\n      \n      \n      \n  </script>\n        <style>\n        #wf-tool-button:hover { filter: brightness(1.15); }\n        .popup label, .popup input, .popup .sidebar ul li, .popup .close-button { cursor: pointer; }\n        .yellow-icon {\n    color: gold;  /* Chá»‰nh mÃ u vÃ ng */\n}\n        .layout {\n          display: flex;\n          width: 100%;\n          height: 90%;\n      }\n\n      .sidebar {\n          width: 140px;\n          background: #252535;\n          box-shadow: 0px 0px 10px #252535;\n          color: #fff;\n      }\n\n      .sidebar ul {\n          list-style-type: none;\n          padding: 0;\n          margin: 0;\n      }\n\n      .sidebar ul li {\n          padding: 12px;\n          cursor: pointer;\n          border-bottom: 1px solid #ddd;\n          width: 140px;\n      }\n\n      .sidebar ul li:hover {\n          background-color: #666;\n      }\n\n      .sidebar ul li.selected {\n          background-color: #000; /* MÃ u ná»n khi má»¥c Ä‘Æ°á»£c chá»n */\n          color: white;\n      }\n\n      .main-content {\n          flex-grow: 1;\n          padding: 20px;\n          background: #393e43;\n          color: #fff;\n      }\n\n      .content-section {\n          display: none;\n          transition: display 0.3s ease-in-out;\n      }\n\n      #toolgame {\n          display: block; /* Máº·c Ä‘á»‹nh hiá»ƒn thá»‹ ná»™i dung Tool Game */\n      }\n\n      h2 {\n          margin-top: 0;\n      }\n\n      /* ThÃªm hiá»‡u á»©ng cho hover */\n      .sidebar ul li:hover {\n          background-color: #666;\n      }</style>\n        </div>");
       $("#loa831pibur0w4gv").replaceWith("\n              \n              <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" />\n              <div style=\"margin: 0;\" id=\"loa831pibur0w4gv\">\n              <div class=\"label\" id=\"titleSetings\">Notification</div>\n                \n                 <div class=\"bao-list1\">\n                <div class=\"list1\"><li>\n                 21/02/2025: Updated !</li>\n                </div>\n                <div class=\"list1\"><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated. Thank you !</li>\n                </div>\n                <div class=\"list1\"><li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li>\n                </div>\n                \n                   <div class=\"list1\"><li> Instructions for installing on IOS and iPad New 2024: <a href=\"https://www.youtube.com/watch?v=uyHHXWKHgRw\">https://www.youtube.com/watch?v=uyHHXWKHgRw</a></li></div></div>\n              \n                   ");
       $("#mm-coins-box").replaceWith("<div style=\"margin: 0;\" id=\"mm-coins-box\">\n                \n                <button style='width: 140px;height: 45px;float: right;border-radius: 10px;border: solid #fac 2px;display:none' id='getskin'>Unlock Skins</button>\n                </div>\n                </div>");
 
@@ -10585,7 +10351,7 @@ $("#mm-advice-cont").html(`
     }
     function f111() {
       $(".description-text").replaceWith("<div class=\"description-text\">");
-      $(".description-text").prepend("<p id='title'>WormateFriends Xo</p>");
+      $(".description-text").prepend("<p id='title'>WormFriends Matrix</p>");
       $("#title").after("<div id=\"idwormworld\" style=\"text-align: center\"><div class='logo'><img src='https://haylamday.com/images/hiep_img/logo.png'/></div>\n        <input type=\"text\" value=\"" + vO4.FB_UserID + "\" style=\"width: 230px;text-align: center;border-radius: 4px;font-size: 20px;padding: 0 6px;background-color: #fff;color: #806102;display: block;box-sizing: border-box;-webkit-appearance: none;outline: 0;border-width: 0;\">\n        <button onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copiado! copied!'));\">COPY</button>\n    </div>\n<div></div>\n<div><input type=\"button\" value=\"ACTIVATE ALL\" target=\"_blank\" onclick=\"window.location.href='" + MYPAGE + "'\" style=\"margin-top: 5px; width: 100%\"></div>");
     }
     function f112() {
@@ -10823,7 +10589,7 @@ $("#mm-advice-cont").html(`
   $("#background-canvas").replaceWith("<canvas id=\"background-canvas\">\n   </canvas>\n   ");
   $("#popup-login-gg").html("<div class=\"settings-line\" id=\"popup-login-gg1\">Login via Google</div>");
   $("#social-buttons").replaceWith("");
-  $("#markup-footer").replaceWith("\n    \n \n\n<footer id=\"markup-footer\">\n            <div class=\"lang-menu\"><button class=\"lang-button\">Language â–´</button>\n            <div class=\"lang-list\"><a hreflang=\"en\" href=\"/\">English</a>\n<a hreflang=\"uk\" href=\"/uk/\">Ð£ÐºÑ€Ð°Ñ—Ð½ÑÑŒÐºÐ°</a>\n<a hreflang=\"de\" href=\"/de/\">Deutsch</a>\n<a hreflang=\"fr\" href=\"/fr/\">FranÃ§ais</a>\n<a hreflang=\"es\" href=\"/es/\">EspaÃ±ol</a>\n</div></div>\n            \n            <a class=\"link\" hreflang=\"en\" href=\"https://wormxo.store\"> 2026 WormateFriends XO Team</a>\n          <a style=\"font-size: 17px;font-weight: 500;color: #000000;\"> whatsapp : 07828329330 <i class='' style='color:red'></i></a>\n            </footer>\n\n        ");
+  $("#markup-footer").replaceWith("\n<footer id=\"markup-footer\"><div class=\"lang-menu\"><button class=\"lang-button\">Language â–´</button></div><a class=\"link\" hreflang=\"en\" href=\"https://wormxo.store\">WormFriends Matrix</a></footer>\n");
 });
 if (!sessionStorage.getItem("visited")) {
   sessionStorage.setItem("visited", "true");
@@ -11107,96 +10873,6 @@ isValidHotkey = function (p633) {
     return false;
   }
 };
-window.onload = function () {
-  (function (_0xA9B1) {
-    var _0xQ = ["game-wrap", "lastSelected", "WORMXO_MIXED_BG_2026"];
-    var _0xW = document.getElementById(_0xQ[0]);
-    if (!_0xW) return;
-
-    var _0xS = document.getElementById(_0xQ[2]);
-    if (!_0xS) {
-      _0xS = document.createElement("style");
-      _0xS.id = _0xQ[2];
-      _0xS.innerHTML = `
-        @keyframes _x0MoveA {
-          0%   { background-position: 0% 50%, 100% 0%, 0 0; }
-          25%  { background-position: 45% 80%, 80% 40%, 40px 80px; }
-          50%  { background-position: 100% 50%, 40% 100%, 100px 30px; }
-          75%  { background-position: 55% 20%, 10% 60%, 20px 120px; }
-          100% { background-position: 0% 50%, 100% 0%, 0 0; }
-        }
-
-        @keyframes _x0ShadowB {
-          0%   { transform: translate(-15%, -10%) scale(1); opacity: .45; }
-          50%  { transform: translate(12%, 18%) scale(1.25); opacity: .7; }
-          100% { transform: translate(-15%, -10%) scale(1); opacity: .45; }
-        }
-
-        #game-wrap {
-          position: relative !important;
-          overflow: hidden !important;
-          background:
-            radial-gradient(circle at 20% 30%, rgba(0, 140, 255, .85), transparent 35%),
-            radial-gradient(circle at 80% 20%, rgba(135, 206, 250, .85), transparent 38%),
-            radial-gradient(circle at 50% 80%, rgba(255, 105, 180, .75), transparent 42%),
-            radial-gradient(circle at 75% 75%, rgba(138, 43, 226, .75), transparent 40%),
-            linear-gradient(135deg, #004cff, #55ccff, #ff75d8, #7b2cff) !important;
-          background-size:
-            160% 160%,
-            180% 180%,
-            170% 170%,
-            200% 200%,
-            300% 300% !important;
-          animation: _x0MoveA 14s ease-in-out infinite !important;
-        }
-
-        #game-wrap::before {
-          content: "";
-          position: absolute;
-          inset: -30%;
-          pointer-events: none;
-          z-index: 0;
-          background:
-            radial-gradient(circle, rgba(0,0,0,.75) 0%, rgba(0,0,0,.45) 28%, transparent 62%);
-          filter: blur(55px);
-          animation: _x0ShadowB 10s ease-in-out infinite;
-        }
-
-        #game-wrap::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          z-index: 1;
-          background:
-            radial-gradient(circle at 10% 20%, rgba(255,255,255,.22) 0 2px, transparent 3px),
-            radial-gradient(circle at 40% 70%, rgba(255,255,255,.18) 0 2px, transparent 4px),
-            radial-gradient(circle at 80% 30%, rgba(255,255,255,.20) 0 1.5px, transparent 3px);
-          background-size: 90px 90px, 130px 130px, 170px 170px;
-          animation: _x0Snow 9s linear infinite;
-          opacity: .8;
-        }
-
-        @keyframes _x0Snow {
-          from { background-position: 0 -100px, 0 -160px, 0 -220px; }
-          to   { background-position: 0 500px, 0 650px, 0 800px; }
-        }
-
-        #game-wrap > * {
-          position: relative;
-          z-index: 2;
-        }
-      `;
-      document.head.appendChild(_0xS);
-    }
-
-    var _0xR = (Math.random() + Date.now()).toString(36).replace(/[^a-z0-9]/g, "");
-    localStorage.setItem(_0xQ[1], _0xR);
-  })(777777);
-};
-
-console.log("Core 2026 WORMXO BG Update");
-
 (function () {
   var _0xT = setInterval(function () {
     try {
@@ -11226,10 +10902,10 @@ document.addEventListener("contextmenu", function (p638) {
   v625.textContent = "\n        (function() {\n            var preventDebugging = setInterval(function() {\n                if (window.console) {\n                    console.log = function() {}; \n                    console.debug = function() {}; \n                    console.error = function() {}; \n                    console.info = function() {};  \n                }\n            }, 1000);\n        })();\n    ";
   document.head.appendChild(v625);
 })();
-console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
+console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
 
 
-/* WORMXO FINAL DEEP PATCH - no TeamCode / smooth WiFi / server UI / names restore */
+/* WormFriends Matrix final patch - no TeamCode / smooth WiFi / server UI / names restore */
 (function () {
   if (window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__) return;
   window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__ = true;
@@ -11311,7 +10987,7 @@ console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bo
       (document.head || document.documentElement).appendChild(st);
       var d = document.createElement("div");
       d.id = "wormxo-loading-2026";
-      d.innerHTML = '<div class="worm"></div><b>WORMXO LOADING 2022</b><span style="margin-top:8px;color:#fff;opacity:.8">Connecting to server...</span>';
+      d.innerHTML = '<div class="worm"></div><b>WormFriends Matrix Loading</b><span style="margin-top:8px;color:#fff;opacity:.8">Connecting to server...</span>';
       document.body.appendChild(d);
     } catch (e) {}
   }
