@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>WormXO - WXO | تحفة Wormate البصرية</title>
+<title>WormXO - WXO | إعادة إحياء الأسطورة</title>
 <link rel="icon" type="image/png" sizes="16x16" href="https://wormxo.store/image/wxo.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://wormxo.store/image/wxo.png">
 <link rel="icon" type="image/png" sizes="48x48" href="https://wormxo.store/image/wxo.png">
@@ -17,85 +17,63 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', 'Segoe UI', 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', 'Cairo', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   body {
     min-height: 100vh;
-    background: #0a080c;
-    color: #f5efe7;
+    background: #0e0b14;
+    color: #efecf5;
     overflow-x: hidden;
     position: relative;
   }
 
-  /* خلفية سحرية مع كرات عملاقة تدور ببطء شديد */
-  .cosmic-bg {
+  /* خلفية عصرية أنيقة بتدرج نيلي وأرجواني */
+  .elegant-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -2;
-    overflow: hidden;
-    background: radial-gradient(ellipse at 40% 50%, #0e0a12, #020105);
+    background: radial-gradient(ellipse at 30% 45%, #18122b, #0a0710, #03010a);
   }
 
-  .giant-orb {
+  /* دوائر ضبابية أنيقة بألوان نيلي، زمردي هادئ، ياقوتي ناعم، ذهبي خفيف - راقية جداً */
+  .aura-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(110px);
-    opacity: 0.55;
+    filter: blur(120px);
+    opacity: 0.4;
     pointer-events: none;
     will-change: transform;
-    animation: slowDrift 80s infinite alternate ease-in-out;
-    box-shadow: 0 0 180px rgba(255,140,0,0.2);
+    animation: gentleFloat 100s infinite alternate ease-in-out;
+    transition: left 16s cubic-bezier(0.2, 0.85, 0.4, 1), top 16s cubic-bezier(0.2, 0.85, 0.4, 1);
   }
 
-  /* دوران بطيء جداً لكل كرة مع حركة مدارية هادئة */
-  @keyframes slowDrift {
-    0% {
-      transform: translate(0, 0) scale(1);
-    }
-    25% {
-      transform: translate(3%, 2%) scale(1.02);
-    }
-    50% {
-      transform: translate(-2%, 4%) scale(0.98);
-    }
-    75% {
-      transform: translate(4%, -1%) scale(1.01);
-    }
-    100% {
-      transform: translate(-1%, -3%) scale(1);
-    }
+  @keyframes gentleFloat {
+    0% { transform: translate(0, 0) scale(1); }
+    30% { transform: translate(2%, -1.5%) scale(1.01); }
+    70% { transform: translate(-1.5%, 2%) scale(0.99); }
+    100% { transform: translate(1%, 1%) scale(1); }
   }
 
-  /* دوران إضافي بطيء جداً لدائري مختلف */
-  .giant-orb:nth-child(odd) {
-    animation-duration: 110s;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .giant-orb:nth-child(even) {
-    animation-duration: 130s;
-    animation-direction: alternate-reverse;
-  }
-
-  /* الهيدر الشفاف الفاخر */
+  /* الهيدر راقي وشفاف */
   .header {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(8, 6, 12, 0.65);
+    background: rgba(12, 9, 20, 0.7);
     backdrop-filter: blur(20px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 48px;
+    padding: 16px 48px;
     z-index: 1000;
-    border-bottom: 1px solid rgba(255, 130, 30, 0.5);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    border-bottom: 1px solid rgba(160, 120, 255, 0.35);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     flex-wrap: wrap;
-    gap: 14px;
+    gap: 12px;
   }
 
   .logo {
@@ -105,30 +83,26 @@
   }
 
   .logo img {
-    width: 52px;
-    height: 52px;
-    border-radius: 24px;
-    background: rgba(0,0,0,0.5);
+    width: 48px;
+    height: 48px;
+    border-radius: 20px;
+    background: #1e1a2f;
     padding: 5px;
-    box-shadow: 0 0 20px #ffaa44;
-    transition: transform 0.3s;
-  }
-  .logo img:hover {
-    transform: scale(1.05);
+    box-shadow: 0 0 16px #ab8eff66;
+    transition: 0.2s;
   }
 
   .logo h1 {
-    font-size: 34px;
-    font-weight: 900;
-    background: linear-gradient(125deg, #ffcc77, #ff8822, #ffcc55);
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(125deg, #d9c9ff, #a97cff, #dbb6ff);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    letter-spacing: -0.5px;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    letter-spacing: -0.3px;
   }
   .logo h1 span {
-    background: linear-gradient(135deg, #ffe6b3, #ffaa66);
+    background: linear-gradient(135deg, #f4e6ff, #c9aef0);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -142,442 +116,418 @@
   }
   .nav a {
     text-decoration: none;
-    font-weight: 700;
-    color: #fff2e4;
-    padding: 8px 24px;
-    border-radius: 60px;
+    font-weight: 600;
+    color: #e3dafc;
+    padding: 8px 26px;
+    border-radius: 50px;
     transition: 0.25s;
-    background: rgba(20, 18, 28, 0.6);
-    border: 1px solid rgba(255, 130, 0, 0.5);
+    background: rgba(30, 25, 55, 0.5);
+    border: 1px solid rgba(170, 130, 255, 0.5);
+    font-size: 0.95rem;
     backdrop-filter: blur(4px);
-    font-size: 1rem;
+  }
+  .nav a i {
+    margin-left: 6px;
   }
   .nav a:hover {
-    background: #ff8c2e;
-    color: #0a0602;
-    border-color: #ffdd99;
-    box-shadow: 0 0 18px #ffaa55;
+    background: #8f6eff;
+    color: #0f0b1c;
+    border-color: #cbb2ff;
+    box-shadow: 0 0 20px #b77eff;
     transform: translateY(-2px);
   }
 
-  /* المحتوى الرئيسي - تحفة */
+  /* المحتوى الرئيسي بتصميم جديد أنيق */
   .hero {
-    padding: 140px 24px 80px;
+    padding: 145px 24px 85px;
     display: flex;
     justify-content: center;
     position: relative;
     z-index: 10;
   }
-  .card {
-    max-width: 1250px;
+  .glass-card {
+    max-width: 1280px;
     width: 100%;
-    background: rgba(12, 10, 18, 0.55);
-    backdrop-filter: blur(18px);
-    border-radius: 80px;
-    padding: 55px 45px;
-    box-shadow: 0 40px 70px rgba(0,0,0,0.6), 0 0 0 1px rgba(255, 140, 0, 0.3);
+    background: rgba(18, 14, 28, 0.5);
+    backdrop-filter: blur(20px);
+    border-radius: 72px;
+    padding: 52px 48px;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(170, 130, 255, 0.3);
     text-align: center;
-    border: 1px solid rgba(255, 122, 0, 0.6);
+    border: 1px solid rgba(140, 100, 230, 0.5);
     transition: all 0.3s;
   }
   .title {
-    font-size: 74px;
-    font-weight: 900;
-    background: linear-gradient(145deg, #ffbc6e, #ff7a2e, #ffd966);
+    font-size: 70px;
+    font-weight: 850;
+    background: linear-gradient(145deg, #e2d4ff, #b68eff, #f0dcff);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    margin-bottom: 8px;
-    letter-spacing: -1px;
-  }
-  .website-image {
-    margin: 20px auto 18px;
+    margin-bottom: 12px;
   }
   .website-image img {
-    max-width: 240px;
-    width: 70%;
-    border-radius: 60px;
-    box-shadow: 0 25px 45px rgba(0,0,0,0.6), 0 0 0 4px #ffaa44aa;
-    background: #1e1914;
-    transition: 0.3s;
+    max-width: 210px;
+    width: 65%;
+    border-radius: 56px;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), 0 0 0 3px #b07effaa;
+    background: #221e30;
+    transition: 0.25s;
   }
   .website-image img:hover {
-    transform: scale(1.02) rotate(1deg);
-    box-shadow: 0 30px 50px #ff7700aa;
+    transform: scale(1.02);
+    box-shadow: 0 25px 45px #aa88ff66;
   }
-
-  .badge {
-    background: linear-gradient(115deg, #ff7a0022, #ffaa3322);
+  .badge-modern {
+    background: rgba(130, 90, 220, 0.2);
     display: inline-block;
-    padding: 12px 32px;
-    border-radius: 100px;
-    margin: 12px 0 10px;
-    font-weight: 800;
-    color: #ffe0b5;
-    border: 1px solid #ffaa55;
+    padding: 10px 32px;
+    border-radius: 80px;
+    margin: 16px 0 10px;
+    font-weight: 700;
+    color: #cfbcff;
+    border: 1px solid #aa88ff;
     backdrop-filter: blur(8px);
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   .sub {
-    font-size: 1.45rem;
-    color: #f7efdf;
-    margin: 20px 0 15px;
-    font-weight: 600;
-    line-height: 1.6;
-    text-shadow: 0 1px 3px black;
+    font-size: 1.35rem;
+    color: #e7defc;
+    margin: 18px 0 10px;
+    font-weight: 500;
+    line-height: 1.55;
   }
 
-  /* زرين فاخرين مع ايقونات التحميل */
-  .double-buttons {
+  /* زرين فاخرين مع علامة التحميل */
+  .button-group {
     display: flex;
-    gap: 32px;
+    gap: 35px;
     justify-content: center;
     flex-wrap: wrap;
-    margin: 45px 0 30px;
+    margin: 45px 0 35px;
   }
-  .btn-premium {
-    padding: 18px 42px;
-    border-radius: 80px;
+  .btn-luxury {
+    padding: 16px 44px;
+    border-radius: 100px;
     font-weight: 800;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     text-decoration: none;
-    transition: 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    transition: 0.3s;
     display: inline-flex;
     align-items: center;
     gap: 14px;
-    background: rgba(0,0,0,0.65);
-    border: 2px solid #ffaa44;
-    color: #ffddbb;
-    backdrop-filter: blur(6px);
-    letter-spacing: 0.5px;
+    background: rgba(12, 8, 22, 0.7);
+    border: 1.5px solid #b38eff;
+    color: #ede4ff;
+    backdrop-filter: blur(8px);
   }
-  .btn-glow {
-    background: linear-gradient(105deg, #ff8c2e, #ffb347);
+  .btn-primary-lux {
+    background: linear-gradient(115deg, #936eff, #7a4fcf);
     border: none;
-    color: #231d12;
-    font-weight: 900;
-    box-shadow: 0 12px 28px #ff7a00aa;
-    text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    box-shadow: 0 12px 25px #6b3fcc77;
   }
-  .btn-premium i {
-    font-size: 1.6rem;
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+  .btn-luxury i {
+    font-size: 1.5rem;
   }
-  .btn-premium:hover {
-    transform: translateY(-7px) scale(1.02);
-    box-shadow: 0 28px 40px rgba(0,0,0,0.5), 0 0 25px #ffaa55;
-    border-color: #ffdd99;
+  .btn-luxury:hover {
+    transform: translateY(-5px);
+    filter: brightness(1.05);
+    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.4), 0 0 20px #c9adff;
   }
 
-  /* ميزات أنيقة جداً */
-  .features {
+  /* ميزات بتصميم أنيق عصري */
+  .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 32px;
-    margin-top: 70px;
+    gap: 30px;
+    margin-top: 65px;
     text-align: right;
   }
-  .feature-card {
-    background: rgba(18, 16, 24, 0.7);
+  .modern-card {
+    background: rgba(26, 21, 42, 0.65);
     backdrop-filter: blur(10px);
     border-radius: 48px;
-    padding: 30px 24px;
-    border-right: 5px solid #ffaa44;
-    transition: 0.25s;
-    border-bottom: 1px solid #ffaa4440;
+    padding: 30px 26px;
+    border-right: 4px solid #b48cff;
+    transition: 0.2s;
+    border-bottom: 1px solid #aa88ff40;
   }
-  .feature-card:hover {
-    background: rgba(28, 24, 36, 0.85);
-    transform: translateY(-6px);
-    border-right-color: #ffcc77;
-    box-shadow: 0 20px 30px rgba(0,0,0,0.4);
+  .modern-card:hover {
+    background: rgba(40, 32, 62, 0.8);
+    transform: translateY(-5px);
+    border-right-color: #dbbaff;
   }
-  .feature-card h3 {
-    font-size: 1.8rem;
-    color: #ffc176;
-    margin-bottom: 15px;
+  .modern-card h3 {
+    font-size: 1.75rem;
+    color: #ddc9ff;
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
     gap: 12px;
   }
-  .feature-card p {
-    color: #e9dfd1;
+  .modern-card p {
+    color: #dcd4f0;
     line-height: 1.65;
-    font-weight: 500;
+    font-weight: 450;
   }
 
   .footer {
     text-align: center;
-    padding: 32px;
-    color: #ccb699;
-    font-weight: 600;
-    border-top: 1px solid #ffa04040;
-    background: rgba(0,0,0,0.5);
-    margin-top: 30px;
-    font-size: 1rem;
-    backdrop-filter: blur(5px);
+    padding: 35px;
+    color: #b9a8e6;
+    font-weight: 500;
+    border-top: 1px solid #9b7bef30;
+    background: rgba(0, 0, 0, 0.35);
+    margin-top: 35px;
+    font-size: 0.95rem;
+    backdrop-filter: blur(4px);
   }
 
-  @media (max-width: 750px) {
+  @media (max-width: 800px) {
     .header {
-      padding: 12px 20px;
+      padding: 12px 24px;
     }
     .title {
       font-size: 48px;
     }
-    .card {
-      padding: 35px 20px;
+    .glass-card {
+      padding: 38px 22px;
     }
-    .btn-premium {
-      padding: 14px 28px;
-      font-size: 1.1rem;
+    .btn-luxury {
+      padding: 12px 32px;
+      font-size: 1rem;
     }
-    .feature-card h3 {
+    .modern-card h3 {
       font-size: 1.5rem;
     }
     .sub {
       font-size: 1.1rem;
     }
   }
-
   @media (max-width: 550px) {
     .title {
-      font-size: 38px;
+      font-size: 36px;
     }
-    .double-buttons {
-      gap: 20px;
+    .button-group {
+      gap: 18px;
     }
   }
 </style>
 </head>
 <body>
 
-<!-- خلفية بأكبر الدوائر الضبابية التي تدور ببطء شديد وجمال خرافي -->
-<div class="cosmic-bg" id="cosmicBg"></div>
+<!-- خلفية أنيقة بالكامل (بدون ألوان مقرفة) -->
+<div class="elegant-bg" id="elegantBg"></div>
 
 <header class="header">
   <div class="logo">
-    <img src="https://wormxo.store/image/wxo.png" alt="WormXO emblem">
+    <img src="https://wormxo.store/image/wxo.png" alt="WormXO">
     <h1>Worm<span>XO</span></h1>
   </div>
   <nav class="nav">
-    <a href="#" id="home-link"><i class="fas fa-home"></i> الرئيسية</a>
-    <a href="https://wormxo.store/file/wormxo.zip" id="download-link"><i class="fas fa-download"></i> التحميل</a>
-    <a href="https://discord.gg/wb8pD5ybs" target="_blank" id="discord-link"><i class="fab fa-discord"></i> ديسكورد</a>
+    <a href="#" id="home-link"><i class="fas fa-compass"></i> الاستكشاف</a>
+    <a href="https://wormxo.store/file/wormxo.zip" id="download-link"><i class="fas fa-cloud-download-alt"></i> التحميل</a>
+    <a href="https://discord.gg/wb8pD5ybs" target="_blank" id="discord-link"><i class="fab fa-discord"></i> المجتمع</a>
   </nav>
 </header>
 
 <section class="hero">
-  <div class="card">
-    <div class="badge" id="badge-text">🌀 نافذة الأساطير | WormXO الذهبية 🌀</div>
-    <h1 class="title">Worm<span>XO</span> <i class="fa-solid fa-worm"></i></h1>
-    
+  <div class="glass-card">
+    <div class="badge-modern" id="badge-text">🌙 إضافة WormXO | ثورة في عالم Wormate 🌙</div>
+    <h1 class="title">Worm<span>XO</span> <i class="fa-regular fa-gem"></i></h1>
     <div class="website-image">
-      <img src="https://wormxo.store/image/wxo.png" alt="رمز WormXO المتألق">
+      <img src="https://wormxo.store/image/wxo.png" alt="رمز WormXO">
     </div>
+    <p class="sub" id="sub-text">✨ إضافة WormXO تمنحك تحكماً أسطورياً وسرعة كونية وتجربة حصرية في wormate.io ✨</p>
 
-    <p class="sub" id="sub-text">✨ إضافة WormXO تمنحك نقلة نوعية في wormate.io: سرعة كونية، ثبات خارق، وساحات من السكنات الأسطورية ✨</p>
-
-    <!-- زرين مع أيقونات التحميل بجانب كل واحد حسب الطلب -->
-    <div class="double-buttons">
-      <a href="https://wormxo.store/file/wormxo.zip" class="btn-premium btn-glow" id="wormxoDownloadBtn">
+    <div class="button-group">
+      <a href="https://wormxo.store/file/wormxo.zip" class="btn-luxury btn-primary-lux" id="wormxoDownloadBtn">
         <i class="fas fa-download"></i> تحميل WormXO
       </a>
-      <a href="https://wormxo.store/file/wormfmx.zip" class="btn-premium" id="wormFriendMatrixBtn">
+      <a href="https://wormxo.store/file/wormfmx.zip" class="btn-luxury" id="wormFriendMatrixBtn">
         <i class="fas fa-download"></i> WormFriendMatrix
       </a>
     </div>
 
-    <div class="features">
-      <div class="feature-card">
-        <h3><i class="fas fa-dragon"></i> كنوز السكنات</h3>
-        <p>أكثر من 70 سكناً حصرياً غير مسبوق، بألوان وتأثيرات نادرة تجعل دودتك ملك الحلبة.</p>
+    <div class="features-grid">
+      <div class="modern-card">
+        <h3><i class="fas fa-palette"></i> سكنات فريدة</h3>
+        <p>أكثر من 70 سكناً أسطورياً غير متوفر في اللعبة الأصلية، ألوان وتأثيرات نادرة تجعل هويتك مميزة.</p>
       </div>
-      <div class="feature-card">
-        <h3><i class="fas fa-tachometer-alt"></i> تسارع مطلق</h3>
-        <p>تحكم فائق السرعة، وزوم سينمائي، وأداء خرافي يفوق الخيال - الجميع سينبهرون.</p>
+      <div class="modern-card">
+        <h3><i class="fas fa-bolt"></i> سرعة وتحكم خارق</h3>
+        <p>قفزات سريعة، زوم متطور، واستجابة فائقة تجعلك تتفوق على الجميع بكل سلاسة.</p>
       </div>
-      <div class="feature-card">
-        <h3><i class="fas fa-microchip"></i> تقنية Quantum</h3>
-        <p>اتصال ثابت كالصخر، حتى مع أضعف الشبكات. العب بدون تقطيع وبسلاسة مبهرة.</p>
+      <div class="modern-card">
+        <h3><i class="fas fa-shield-alt"></i> تقنية Nebula</h3>
+        <p>اتصال فائق الثبات حتى مع أضعف الشبكات، استمتع باللعب بدون تقطيع أو تأخير.</p>
       </div>
-      <div class="feature-card">
-        <h3><i class="fas fa-mobile-alt"></i> شامل لكل الأجهزة</h3>
-        <p>حاسوب، لابتوب، جوال، جهاز لوحي - الإضافة تعمل كالسحر في كل مكان.</p>
+      <div class="modern-card">
+        <h3><i class="fas fa-mobile-android"></i> متعدد المنصات</h3>
+        <p>يعمل على ويندوز، ماك، أندرويد، iOS - جميع الأجهزة مدعومة بأناقة.</p>
       </div>
-      <div class="feature-card">
-        <h3><i class="fas fa-gem"></i> مجاني أبداً + تحديثات</h3>
-        <p>إضافة مجانية بالكامل مع تحديثات مستمرة لنصنع معاً أعظم إضافة في wormate.io.</p>
+      <div class="modern-card">
+        <h3><i class="fas fa-infinity"></i> مجاني + تحديثات دائمة</h3>
+        <p>الإضافة مجانية بالكامل مع تحديثات مستمرة وجديدة دائماً لتبقى الأفضل بلا منافس.</p>
       </div>
     </div>
   </div>
 </section>
 
 <footer class="footer">
-  <span id="footer-text">© 2026 <strong style="color:#ffbb66;">WormXO</strong> — أبهى إضافة في تاريخ wormate.io <br> ✨ تجربة لعب لا تُقاوم، حمّل الآن وانطلق ✨</span>
+  <span id="footer-text">© 2026 <strong style="color:#c9aeff;">WormXO</strong> — أرقى إضافة لـ wormate.io على الإطلاق<br>✨ اصنع مجدك مع WormXO، حمّل الآن ✨</span>
 </footer>
 
 <script>
-  // إنشاء دوائر عملاقة ضبابية بقطر أقصى (800px - 1100px) تدور ببطء شديد جداً
-  const bgContainer = document.getElementById('cosmicBg');
-  // ألوان خرافية: برتقالي، أصفر ذهبي، أخضر زمردي، وردي سحري، سماوي عميق
-  const magicalColors = [
-    'radial-gradient(circle at 35% 45%, rgba(255, 130, 30, 0.7), rgba(220, 80, 0, 0.25))',
-    'radial-gradient(circle at 65% 55%, rgba(255, 210, 70, 0.75), rgba(255, 160, 20, 0.3))',
-    'radial-gradient(circle at 25% 70%, rgba(80, 240, 120, 0.65), rgba(40, 180, 70, 0.3))',
-    'radial-gradient(circle at 75% 30%, rgba(255, 110, 190, 0.7), rgba(210, 60, 130, 0.35))',
-    'radial-gradient(circle at 50% 80%, rgba(50, 210, 250, 0.7), rgba(0, 150, 210, 0.3))',
-    'radial-gradient(circle at 20% 40%, rgba(255, 90, 50, 0.65), rgba(200, 60, 20, 0.3))',
-    'radial-gradient(circle at 85% 65%, rgba(255, 200, 80, 0.7), rgba(255, 130, 20, 0.3))'
+  // دوائر ضبابية بألوان أنيقة وعصرية جداً (نيلي، لافندر ناعم، زمردي فاتح، ياقوتي هادئ، أزرق أوركيد)
+  const elegantColors = [
+    'radial-gradient(circle at 40% 50%, rgba(130, 80, 220, 0.6), rgba(80, 40, 160, 0.25))',
+    'radial-gradient(circle at 65% 35%, rgba(170, 130, 255, 0.65), rgba(100, 70, 200, 0.3))',
+    'radial-gradient(circle at 20% 70%, rgba(100, 210, 170, 0.55), rgba(60, 150, 120, 0.25))',
+    'radial-gradient(circle at 80% 60%, rgba(210, 120, 210, 0.6), rgba(150, 70, 150, 0.3))',
+    'radial-gradient(circle at 45% 25%, rgba(80, 150, 220, 0.6), rgba(40, 90, 170, 0.25))',
+    'radial-gradient(circle at 70% 80%, rgba(200, 160, 240, 0.55), rgba(120, 80, 180, 0.3))'
   ];
 
-  function createGiantOrbs() {
-    const orbCount = 7; // 7 دوائر عملاقة لملء الشاشة بجمال
+  const bgContainer = document.getElementById('elegantBg');
+
+  function createElegantOrbs() {
+    const orbCount = 6;
     for (let i = 0; i < orbCount; i++) {
       const orb = document.createElement('div');
-      orb.classList.add('giant-orb');
-      // جعل الدوائر بأقصى حجم: بين 700px و 1100px
-      const maxSize = Math.min(window.innerWidth * 0.8, 1100);
-      const minSize = 650;
-      let size = Math.floor(Math.random() * (maxSize - minSize + 1) + minSize);
-      if (window.innerWidth < 800) size = Math.min(600, size);
+      orb.classList.add('aura-orb');
+      // أحجام كبيرة ولكن متناسبة مع الشاشة
+      let size = Math.min(window.innerWidth * 0.7, 820);
+      size = Math.max(size, 540);
       orb.style.width = size + 'px';
       orb.style.height = size + 'px';
-      // اختيار لون عشوائي من البليتة
-      const colorIdx = i % magicalColors.length;
-      orb.style.background = magicalColors[colorIdx];
-      orb.style.opacity = 0.45 + Math.random() * 0.25;
+      orb.style.background = elegantColors[i % elegantColors.length];
+      orb.style.opacity = 0.38 + Math.random() * 0.25;
       orb.style.filter = 'blur(110px)';
-      // توزيع عشوائي أولي
-      const leftPos = Math.random() * 70 + 5; // %
+      const leftPos = Math.random() * 70 + 5;
       const topPos = Math.random() * 70 + 5;
       orb.style.left = leftPos + '%';
       orb.style.top = topPos + '%';
       orb.style.position = 'absolute';
       orb.style.zIndex = '-1';
-      // إضافة حركة دوران دائري بطيء أيضاً من خلال animation، و transition إضافي للون
-      orb.style.animation = `slowDrift ${80 + Math.random() * 50}s infinite alternate ease-in-out`;
+      orb.style.animation = `gentleFloat ${100 + i * 8}s infinite alternate ease-in-out`;
       bgContainer.appendChild(orb);
       
-      // إضافة تغيير لون هادئ كل 14 ثانية بشكل تدريجي
+      // تغيير هادئ للألوان كل 18 ثانية
       setInterval(() => {
         if (orb) {
-          const newColor = magicalColors[Math.floor(Math.random() * magicalColors.length)];
-          orb.style.transition = 'background 9s ease-in-out';
+          const newColor = elegantColors[Math.floor(Math.random() * elegantColors.length)];
+          orb.style.transition = 'background 10s ease-in-out';
           orb.style.background = newColor;
         }
-      }, 14000 + i * 2000);
+      }, 18000 + i * 2500);
     }
   }
 
-  // إعادة ضبط الأحجام عند تغيير حجم الشاشة قليلاً للحفاظ على الجمال
   function resizeOrbs() {
-    const orbs = document.querySelectorAll('.giant-orb');
-    if (window.innerWidth < 800) {
-      orbs.forEach(orb => {
-        let newSize = Math.min(540, window.innerWidth * 0.7);
-        orb.style.width = newSize + 'px';
-        orb.style.height = newSize + 'px';
-      });
-    } else {
-      orbs.forEach(orb => {
-        let size = Math.min(1000, Math.max(700, window.innerWidth * 0.55));
-        orb.style.width = size + 'px';
-        orb.style.height = size + 'px';
-      });
-    }
+    const orbs = document.querySelectorAll('.aura-orb');
+    const baseSize = Math.min(window.innerWidth * 0.65, 780);
+    orbs.forEach(orb => {
+      let newSize = Math.max(baseSize, 480);
+      orb.style.width = newSize + 'px';
+      orb.style.height = newSize + 'px';
+    });
   }
 
-  createGiantOrbs();
+  createElegantOrbs();
   window.addEventListener('resize', () => {
     resizeOrbs();
   });
   resizeOrbs();
 
-  // ========== كل النصوص بالعربية الفصحى مع تحسينات ==========
-  const arabicTexts = {
-    homeLink: "الرئيسية",
-    downloadLink: "التحميل",
-    discordLink: "ديسكورد",
-    badge: "💎 التحفة الذهبية لعالم Wormate | إضافة WormXO 💎",
-    sub: "⚡ إضافة WormXO الفريدة تمنحك أدوات متطورة للسيطرة المطلقة في wormate.io، مع سحر الأداء وسرعة الأساطير ⚡",
-    footerText: "© 2026 <strong style='color:#ffbb66;'>WormXO</strong> — إضافة لا تُضاهى، صُنعت بكل فخر لعشاق Wormate.<br>🚀 جرب المستحيل، وحمّل الآن وكن ملك الديدان.",
-    feature1Title: "🐉 سكنات أسطورية حصرية",
-    feature1Desc: "أكثر من سبعين سكناً جديداً لم ترها من قبل، بألوان خرافية وتأثيرات مدهشة تجعل شخصيتك أيقونة.",
-    feature2Title: "🚀 سباق الضوء وتحكم كامل",
-    feature2Desc: "العب بسرعة كونية، تحكم فوري، زوم ديناميكي - الأعداء لن يصدقوا سرعتك.",
-    feature3Title: "🔗 تقنية WormXO الخارقة",
-    feature3Desc: "استمتع باتصال خارق الثبات دون أدنى تقطيع، حتى في أصعب ظروف الشبكة.",
-    feature4Title: "📱 يعمل على كل الأنظمة",
-    feature4Desc: "جميع الأجهزة: كمبيوتر، لابتوب، جوال، آيباد. واجهة ذكية وسهلة للجميع.",
-    feature5Title: "🎁 مجاني 100% وتحديثات للأبد",
-    feature5Desc: "الإضافة مجانية بالكامل، ونعمل دائماً على تقديم معجزات جديدة لك."
-  };
-
-  document.getElementById("home-link").innerHTML = `<i class="fas fa-home"></i> ${arabicTexts.homeLink}`;
-  document.getElementById("download-link").innerHTML = `<i class="fas fa-download"></i> ${arabicTexts.downloadLink}`;
-  document.getElementById("discord-link").innerHTML = `<i class="fab fa-discord"></i> ${arabicTexts.discordLink}`;
-  document.getElementById("badge-text").innerText = arabicTexts.badge;
-  document.getElementById("sub-text").innerHTML = arabicTexts.sub;
-  document.getElementById("footer-text").innerHTML = arabicTexts.footerText;
-  
-  // الميزات
-  document.getElementById("feature1-title").innerHTML = `<i class="fas fa-dragon"></i> ${arabicTexts.feature1Title}`;
-  document.getElementById("feature1-desc").innerText = arabicTexts.feature1Desc;
-  document.getElementById("feature2-title").innerHTML = `<i class="fas fa-tachometer-alt"></i> ${arabicTexts.feature2Title}`;
-  document.getElementById("feature2-desc").innerText = arabicTexts.feature2Desc;
-  document.getElementById("feature3-title").innerHTML = `<i class="fas fa-microchip"></i> ${arabicTexts.feature3Title}`;
-  document.getElementById("feature3-desc").innerText = arabicTexts.feature3Desc;
-  document.getElementById("feature4-title").innerHTML = `<i class="fas fa-mobile-alt"></i> ${arabicTexts.feature4Title}`;
-  document.getElementById("feature4-desc").innerText = arabicTexts.feature4Desc;
-  document.getElementById("feature5-title").innerHTML = `<i class="fas fa-gem"></i> ${arabicTexts.feature5Title}`;
-  document.getElementById("feature5-desc").innerText = arabicTexts.feature5Desc;
-
-  // تثبيت رابط الزرين وعلامات التحميل بجانبهما بشكل مؤكد
-  const wormxoBtn = document.getElementById("wormxoDownloadBtn");
-  if (wormxoBtn) {
-    wormxoBtn.setAttribute("href", "https://wormxo.store/file/wormxo.zip");
-    wormxoBtn.setAttribute("target", "_blank");
-    wormxoBtn.innerHTML = `<i class="fas fa-download"></i> تحميل WormXO`;
-  }
-  
-  const friendMatrixBtn = document.getElementById("wormFriendMatrixBtn");
-  if (friendMatrixBtn) {
-    friendMatrixBtn.setAttribute("href", "https://wormxo.store/file/wormfmx.zip");
-    friendMatrixBtn.setAttribute("target", "_blank");
-    friendMatrixBtn.innerHTML = `<i class="fas fa-download"></i> WormFriendMatrix`;
-  }
-
-  // تعديل اتجاه الصفحة rtl كامل والتأكيد على أن كل شيء متناسق
-  document.documentElement.setAttribute("dir", "rtl");
-  document.documentElement.setAttribute("lang", "ar");
-  document.body.style.direction = "rtl";
-  const styleEnhance = document.createElement('style');
-  styleEnhance.textContent = `
-    .feature-card { text-align: right; border-right: 5px solid #ffaa44; border-left: none; }
-    .nav a i, .btn-premium i { margin-left: 8px; margin-right: 0; }
-    .double-buttons .btn-premium i { margin-left: 12px; }
-    .giant-orb { transition: left 14s cubic-bezier(0.2,0.8,0.3,1), top 14s cubic-bezier(0.2,0.8,0.3,1); }
-  `;
-  document.head.appendChild(styleEnhance);
-
-  // إضافة حركة بطيئة جداً لتغيير مواقع الدوائر أيضاً بطريقة عضوية كل 18 ثانية
-  const giantOrbs = document.querySelectorAll('.giant-orb');
-  function slowOrbitShift() {
-    giantOrbs.forEach(orb => {
+  // تحريك بطيء جداً لمواقع الدوائر كل 17 ثانية (حركة ناعمة)
+  setInterval(() => {
+    const orbs = document.querySelectorAll('.aura-orb');
+    orbs.forEach(orb => {
       const newLeft = Math.random() * 75 + 5;
       const newTop = Math.random() * 75 + 5;
-      orb.style.transition = 'left 18s ease-in-out, top 18s ease-in-out';
+      orb.style.transition = 'left 17s ease-in-out, top 17s ease-in-out';
       orb.style.left = newLeft + '%';
       orb.style.top = newTop + '%';
     });
-  }
-  setInterval(() => {
-    slowOrbitShift();
-  }, 18000);
+  }, 17000);
+
+  // ========== نصوص عربية فصحى عصرية ==========
+  const contentArabic = {
+    homeLink: "الاستكشاف",
+    downloadLink: "التحميل",
+    discordLink: "المجتمع",
+    badge: "💫 إضافة WormXO | نقلة نوعية في Wormate 💫",
+    sub: "🚀 استمتع بأداء فائق وسكنات حصرية وتقنيات ثورية - حول تجربتك في wormate.io إلى ملحمة.",
+    footer: "© 2026 <strong style='color:#c9aeff;'>WormXO</strong> — إبداع بلا حدود، لعبة بلا منافس.<br>🌀 حمّل الإضافة وتسلق قمة المتعة.",
+    feature1: "سكنات حصرية نادرة",
+    desc1: "أكثر من 70 سكناً أسطورياً بتصاميم غير مسبوقة، ألوان ساحرة وأناقة لا تُقاوم.",
+    feature2: "تسارع وتحكم فائق",
+    desc2: "العب بسرعة البرق، زوم ديناميكي، استجابة لحظية - تفوق على الجميع بسهولة.",
+    feature3: "تقنية Orion المستقرة",
+    desc3: "اتصال خارق الثبات بدون تقطيع، حتى مع شبكات الجيل الثالث والرابع، وانسي اللاج.",
+    feature4: "دعم كامل لكل الأجهزة",
+    desc4: "يعمل بسلاسة على الحاسوب، اللابتوب، الجوال، والتابلت. الجميع مرحب به.",
+    feature5: "مجاني للأبد وتحديثات",
+    desc5: "إضافة مجانية 100% مع تحديثات مستمرة وولاء للمستخدمين، نصنع معاً الأفضل."
+  };
+
+  document.getElementById("home-link").innerHTML = `<i class="fas fa-compass"></i> ${contentArabic.homeLink}`;
+  document.getElementById("download-link").innerHTML = `<i class="fas fa-cloud-download-alt"></i> ${contentArabic.downloadLink}`;
+  document.getElementById("discord-link").innerHTML = `<i class="fab fa-discord"></i> ${contentArabic.discordLink}`;
+  document.getElementById("badge-text").innerText = contentArabic.badge;
+  document.getElementById("sub-text").innerHTML = contentArabic.sub;
+  document.getElementById("footer-text").innerHTML = contentArabic.footer;
+
+  // تحديث الميزات الجديدة
+  const featureTitles = document.querySelectorAll(".modern-card h3");
+  const featureDescs = document.querySelectorAll(".modern-card p");
+  const newTitles = [
+    `<i class="fas fa-palette"></i> ${contentArabic.feature1}`,
+    `<i class="fas fa-bolt"></i> ${contentArabic.feature2}`,
+    `<i class="fas fa-shield-alt"></i> ${contentArabic.feature3}`,
+    `<i class="fas fa-mobile-android"></i> ${contentArabic.feature4}`,
+    `<i class="fas fa-infinity"></i> ${contentArabic.feature5}`
+  ];
+  const newDesc = [contentArabic.desc1, contentArabic.desc2, contentArabic.desc3, contentArabic.desc4, contentArabic.desc5];
   
-  // تمرير أولي للجمال
-  console.log("WormXO - أجمل موقع في العالم مع دوائر عملاقة تدور بهدوء وأيقونات تنزيل فاخرة");
+  for (let i = 0; i < featureTitles.length && i < newTitles.length; i++) {
+    featureTitles[i].innerHTML = newTitles[i];
+    featureDescs[i].innerText = newDesc[i];
+  }
+
+  // تثبيت الروابط والعلامات لكل زر
+  const wormBtn = document.getElementById("wormxoDownloadBtn");
+  if (wormBtn) {
+    wormBtn.setAttribute("href", "https://wormxo.store/file/wormxo.zip");
+    wormBtn.setAttribute("target", "_blank");
+    wormBtn.innerHTML = `<i class="fas fa-download"></i> تحميل WormXO`;
+  }
+  
+  const friendBtn = document.getElementById("wormFriendMatrixBtn");
+  if (friendBtn) {
+    friendBtn.setAttribute("href", "https://wormxo.store/file/wormfmx.zip");
+    friendBtn.setAttribute("target", "_blank");
+    friendBtn.innerHTML = `<i class="fas fa-download"></i> WormFriendMatrix`;
+  }
+
+  // توجيه RTL وتحسينات
+  document.documentElement.setAttribute("dir", "rtl");
+  document.documentElement.setAttribute("lang", "ar");
+  document.body.style.direction = "rtl";
+  const extraStyle = document.createElement('style');
+  extraStyle.textContent = `
+    .modern-card { text-align: right; border-right: 4px solid #b48cff; border-left: none; }
+    .btn-luxury i, .nav a i { margin-left: 8px; margin-right: 0; }
+    .button-group .btn-luxury i { margin-left: 12px; }
+    .aura-orb { transition: left 16s cubic-bezier(0.2, 0.9, 0.3, 1), top 16s cubic-bezier(0.2, 0.9, 0.3, 1); }
+  `;
+  document.head.appendChild(extraStyle);
+  
+  // إزالة أي ألوان مقرفة تماماً والتأكيد على ديكور جديد كلياً
+  console.log("WormXO - ثورية بتصميم فاخر وألوان أنيقة وحركة دوائر هادئة");
 </script>
 </body>
 </html>
