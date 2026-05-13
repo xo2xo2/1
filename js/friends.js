@@ -92,7 +92,7 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
 // by xo
 // by bmw
 // dark , absi , wormfriend , 
-// wormxoli19791125xomajdtixrytprivat5222 =  2.0
+// wormxoli19791125xomajdtixrytprivat5222 =  2.1
 // dont copy my code 
 
 /* WORMXO MOBILE LOW-PERFORMANCE CORE - joystick + lag fix */
