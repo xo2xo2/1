@@ -351,158 +351,102 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 })();
 
 
-(function () {
-  if (window.__WORMFRIENDS_MATRIX_LOBBY_BG__) return;
-  window.__WORMFRIENDS_MATRIX_LOBBY_BG__ = true;
 
-  var MATRIX_BG = {
-    canvasId: "wormfriends-matrix-lobby-bg",
-    styleId: "wormfriends-matrix-lobby-bg-style",
-    hostIds: ["game-wrap", "mm-start", "main-menu", "main-menu-view"],
-    colors: {
-      deep: "#050715",
-      blue: "rgba(0, 92, 255, 0.72)",
-      sky: "rgba(70, 205, 255, 0.70)",
-      cyan: "rgba(0, 255, 255, 0.44)",
-      violet: "rgba(155, 66, 255, 0.62)",
-      black: "rgba(0, 0, 0, 0.46)"
-    },
-    raf: 0,
-    ready: false,
-    canvas: null,
-    ctx: null,
-    lastW: 0,
-    lastH: 0
+(function () {
+  if (window.__WORMFRIENDS_MATRIX_LOBBY_BG_SAFE__) return;
+  window.__WORMFRIENDS_MATRIX_LOBBY_BG_SAFE__ = true;
+
+  var BG = {
+    styleId: "wormfriends-matrix-safe-lobby-bg-style",
+    tick: 0,
+    timer: 0
   };
 
-  function getHost() {
-    return document.getElementById("game-wrap") || document.getElementById("main-menu") || document.body;
+  function q(id) {
+    try { return document.getElementById(id); } catch (e) { return null; }
   }
 
-  function isShown(el) {
-    if (!el) return false;
-    var st = window.getComputedStyle ? getComputedStyle(el) : el.style;
-    return st.display !== "none" && st.visibility !== "hidden" && Number(st.opacity || 1) !== 0;
-  }
-
-  function inLobby() {
-    var a = document.getElementById("main-menu");
-    var b = document.getElementById("mm-start");
-    var c = document.querySelector(".main-menu-view,.store-view-cont,#login-view,#welcome-view");
-    if (isShown(a) || isShown(b) || isShown(c)) return true;
+  function shown(el) {
     try {
-      if (document.body && /menu|lobby|store|login/i.test(document.body.className || "")) return true;
-    } catch (e) {}
-    return !document.querySelector("canvas.game-canvas-active");
+      if (!el) return false;
+      var s = window.getComputedStyle ? getComputedStyle(el) : el.style;
+      return s && s.display !== "none" && s.visibility !== "hidden" && Number(s.opacity || 1) !== 0;
+    } catch (e) { return false; }
+  }
+
+  function lobbyActive() {
+    return shown(q("main-menu")) || shown(q("mm-start")) || shown(q("main-menu-view")) || shown(q("login-view")) || shown(q("welcome-view")) || shown(document.querySelector && document.querySelector(".store-view-cont"));
   }
 
   function installStyle() {
-    if (document.getElementById(MATRIX_BG.styleId)) return;
-    var st = document.createElement("style");
-    st.id = MATRIX_BG.styleId;
-    st.textContent = "#game-wrap{position:relative!important;overflow:hidden!important;background:#050715!important;}#wormfriends-matrix-lobby-bg{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:0!important;pointer-events:none!important;opacity:1;transition:opacity .25s linear;background:radial-gradient(circle at 25% 25%,rgba(0,92,255,.52),transparent 36%),radial-gradient(circle at 75% 18%,rgba(70,205,255,.44),transparent 38%),radial-gradient(circle at 50% 85%,rgba(155,66,255,.42),transparent 42%),linear-gradient(135deg,#050715,#071632 48%,#150a2c)!important;}#main-menu,#mm-start,.main-menu-view,.store-view-cont,#login-view,#welcome-view{position:relative!important;z-index:2!important;}#background-canvas{position:relative!important;z-index:1!important;}";
-    (document.head || document.documentElement).appendChild(st);
+    if (q(BG.styleId)) return;
+    var css = document.createElement("style");
+    css.id = BG.styleId;
+    css.textContent = [
+      "#game-wrap{position:relative!important;background:#050715!important;}",
+      "#game-wrap.wormfriends-matrix-lobby-bg-on,#mm-start.wormfriends-matrix-lobby-bg-on,#main-menu.wormfriends-matrix-lobby-bg-on,#main-menu-view.wormfriends-matrix-lobby-bg-on{",
+      "background:",
+      "radial-gradient(circle at var(--wmx-a-x,18%) var(--wmx-a-y,24%),rgba(0,92,255,.55),transparent 34%),",
+      "radial-gradient(circle at var(--wmx-b-x,76%) var(--wmx-b-y,22%),rgba(80,215,255,.46),transparent 38%),",
+      "radial-gradient(circle at var(--wmx-c-x,50%) var(--wmx-c-y,78%),rgba(158,78,255,.50),transparent 44%),",
+      "radial-gradient(circle at var(--wmx-d-x,44%) var(--wmx-d-y,52%),rgba(0,255,255,.25),transparent 30%),",
+      "radial-gradient(circle at var(--wmx-s-x,48%) var(--wmx-s-y,46%),rgba(0,0,0,.58),transparent 58%),",
+      "linear-gradient(135deg,#050715 0%,#071833 48%,#1a0b33 100%)!important;",
+      "background-size:130% 130%,130% 130%,140% 140%,120% 120%,150% 150%,100% 100%!important;",
+      "}",
+      "#game-wrap.wormfriends-matrix-lobby-bg-on:before{content:\"\";position:absolute;inset:0;z-index:0;pointer-events:none!important;opacity:.28;background:linear-gradient(115deg,transparent 0%,rgba(135,206,255,.18) 45%,transparent 58%);transform:translateX(var(--wmx-line,-18%));}",
+      "#main-menu,#mm-start,#main-menu-view,.main-menu-view,.store-view-cont,#login-view,#welcome-view,#play-btn,.play-btn,button,input,a{position:relative;z-index:5;pointer-events:auto!important;}",
+      "#wormfriends-matrix-lobby-bg,#wormfriends-matrix-lobby-bg *{pointer-events:none!important;display:none!important;}",
+      "#background-canvas{pointer-events:none!important;}",
+      "#game-wrap:not(.wormfriends-matrix-lobby-bg-on) #background-canvas{pointer-events:auto!important;}"
+    ].join("");
+    (document.head || document.documentElement).appendChild(css);
   }
 
-  function makeCanvas() {
-    var host = getHost();
-    if (!host) return null;
-    var cv = document.getElementById(MATRIX_BG.canvasId);
-    if (!cv) {
-      cv = document.createElement("canvas");
-      cv.id = MATRIX_BG.canvasId;
-      host.insertBefore(cv, host.firstChild || null);
-    }
-    MATRIX_BG.canvas = cv;
-    MATRIX_BG.ctx = cv.getContext && cv.getContext("2d");
-    return cv;
-  }
-
-  function resize() {
-    var cv = MATRIX_BG.canvas || makeCanvas();
-    if (!cv) return;
-    var host = getHost();
-    var w = Math.max(320, (host && host.clientWidth) || window.innerWidth || 1280);
-    var h = Math.max(240, (host && host.clientHeight) || window.innerHeight || 720);
-    var d = Math.min(1.5, Math.max(1, window.devicePixelRatio || 1));
-    if (MATRIX_BG.lastW === w && MATRIX_BG.lastH === h && cv.width === Math.floor(w * d)) return;
-    MATRIX_BG.lastW = w;
-    MATRIX_BG.lastH = h;
-    cv.width = Math.floor(w * d);
-    cv.height = Math.floor(h * d);
-    cv.style.width = w + "px";
-    cv.style.height = h + "px";
-    if (MATRIX_BG.ctx) MATRIX_BG.ctx.setTransform(d, 0, 0, d, 0, 0);
-  }
-
-  function blob(ctx, x, y, r, color) {
-    var g = ctx.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0, color);
-    g.addColorStop(0.55, color.replace(/0\.[0-9]+\)/, "0.18)"));
-    g.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = g;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  function render(t) {
-    MATRIX_BG.raf = requestAnimationFrame(render);
-    var cv = MATRIX_BG.canvas || makeCanvas();
-    var ctx = MATRIX_BG.ctx;
-    if (!cv || !ctx) return;
-    resize();
-    var w = MATRIX_BG.lastW;
-    var h = MATRIX_BG.lastH;
-    var tm = (t || Date.now()) * 0.001;
-    cv.style.opacity = inLobby() ? "1" : "0";
-
-    var base = ctx.createLinearGradient(0, 0, w, h);
-    base.addColorStop(0, "#050715");
-    base.addColorStop(0.45, "#071632");
-    base.addColorStop(1, "#180a31");
-    ctx.fillStyle = base;
-    ctx.fillRect(0, 0, w, h);
-
-    ctx.save();
-    ctx.globalCompositeOperation = "screen";
-    blob(ctx, w * (0.18 + Math.sin(tm * 0.23) * 0.08), h * (0.24 + Math.cos(tm * 0.18) * 0.07), Math.max(w, h) * 0.42, MATRIX_BG.colors.blue);
-    blob(ctx, w * (0.78 + Math.cos(tm * 0.20) * 0.06), h * (0.22 + Math.sin(tm * 0.22) * 0.08), Math.max(w, h) * 0.36, MATRIX_BG.colors.sky);
-    blob(ctx, w * (0.52 + Math.sin(tm * 0.16) * 0.10), h * (0.78 + Math.cos(tm * 0.21) * 0.07), Math.max(w, h) * 0.46, MATRIX_BG.colors.violet);
-    blob(ctx, w * (0.38 + Math.cos(tm * 0.31) * 0.08), h * (0.52 + Math.sin(tm * 0.29) * 0.06), Math.max(w, h) * 0.30, MATRIX_BG.colors.cyan);
-    ctx.restore();
-
-    ctx.save();
-    ctx.globalCompositeOperation = "multiply";
-    blob(ctx, w * (0.48 + Math.sin(tm * 0.12) * 0.18), h * (0.47 + Math.cos(tm * 0.10) * 0.16), Math.max(w, h) * 0.55, MATRIX_BG.colors.black);
-    ctx.restore();
-
-    ctx.save();
-    ctx.globalAlpha = 0.18;
-    ctx.strokeStyle = "rgba(135,206,255,0.22)";
-    ctx.lineWidth = 1;
-    var step = 58;
-    var off = (tm * 18) % step;
-    for (var x = -step; x < w + step; x += step) {
-      ctx.beginPath();
-      ctx.moveTo(x + off, 0);
-      ctx.lineTo(x - h * 0.25 + off, h);
-      ctx.stroke();
-    }
-    ctx.restore();
+  function applyVars() {
+    try {
+      var on = lobbyActive();
+      var t = BG.tick++ * 0.022;
+      var x1 = 18 + Math.sin(t * .70) * 10;
+      var y1 = 24 + Math.cos(t * .52) * 8;
+      var x2 = 76 + Math.cos(t * .46) * 8;
+      var y2 = 22 + Math.sin(t * .60) * 9;
+      var x3 = 50 + Math.sin(t * .38) * 12;
+      var y3 = 78 + Math.cos(t * .44) * 8;
+      var x4 = 44 + Math.cos(t * .86) * 10;
+      var y4 = 52 + Math.sin(t * .82) * 7;
+      var xs = 48 + Math.sin(t * .25) * 16;
+      var ys = 46 + Math.cos(t * .21) * 13;
+      var line = -22 + ((BG.tick % 360) / 360) * 44;
+      [q("game-wrap"), q("mm-start"), q("main-menu"), q("main-menu-view")].forEach(function (el) {
+        if (!el) return;
+        if (on) el.classList.add("wormfriends-matrix-lobby-bg-on");
+        else el.classList.remove("wormfriends-matrix-lobby-bg-on");
+        el.style.setProperty("--wmx-a-x", x1.toFixed(2) + "%");
+        el.style.setProperty("--wmx-a-y", y1.toFixed(2) + "%");
+        el.style.setProperty("--wmx-b-x", x2.toFixed(2) + "%");
+        el.style.setProperty("--wmx-b-y", y2.toFixed(2) + "%");
+        el.style.setProperty("--wmx-c-x", x3.toFixed(2) + "%");
+        el.style.setProperty("--wmx-c-y", y3.toFixed(2) + "%");
+        el.style.setProperty("--wmx-d-x", x4.toFixed(2) + "%");
+        el.style.setProperty("--wmx-d-y", y4.toFixed(2) + "%");
+        el.style.setProperty("--wmx-s-x", xs.toFixed(2) + "%");
+        el.style.setProperty("--wmx-s-y", ys.toFixed(2) + "%");
+        el.style.setProperty("--wmx-line", line.toFixed(2) + "%");
+      });
+    } catch (e) {}
   }
 
   function boot() {
     installStyle();
-    makeCanvas();
-    resize();
-    if (!MATRIX_BG.raf) MATRIX_BG.raf = requestAnimationFrame(render);
+    applyVars();
+    if (!BG.timer) BG.timer = setInterval(applyVars, 50);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
   else boot();
-  window.addEventListener("resize", resize, { passive: true });
-  window.WORMFRIENDS_MATRIX_LOBBY_BG = MATRIX_BG;
+  window.addEventListener("load", boot, { once: true });
+  window.WORMFRIENDS_MATRIX_LOBBY_BG = BG;
 })();
 
 window.detectLog = null;
