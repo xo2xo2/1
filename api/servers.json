@@ -24,7 +24,7 @@
     },
     {
         "id": 4,
-        "name": "<div id='svhiep'> <div class='ten'>02.3li xo</div> <div class='valu'>Map: 02</div> <div class='mau-vang'>ONLINE</div> </div>",
+        "name": "<div id='svhiep'> <div class='ten'>02. DARK XO</div> <div class='valu'>Map: 02</div> <div class='mau-vang'>ONLINE</div> </div>",
         "region": "peru",
         "serverUrl": "wss://fra-c.wormate.io:32017/wormy",
         "status": 1
