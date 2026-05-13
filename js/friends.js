@@ -89,6 +89,12 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
   lowPerf: true
 };
 
+// by xo
+// by bmw
+// dark , absi , wormfriend , 
+// wormxoli19791125xomajdtixrytprivat5222 =  2.0
+// dont copy my code 
+
 /* WORMXO MOBILE LOW-PERFORMANCE CORE - joystick + lag fix */
 window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
   enabled: true,
@@ -103,194 +109,6 @@ window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
   joystickBottom: Number(localStorage.getItem("WORMXO_JOYSTICK_BOTTOM") || 105)
 };
 window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.WORMXO_MOBILE_PERF.isMobile || window.WORMXO_MOBILE_PERF.memory <= 4));
-
-(function () {
-  if (window.__WORMXO_CORE_INPUT_2026__) return;
-  window.__WORMXO_CORE_INPUT_2026__ = true;
-
-  window.WORMXO_PLAY = window.WORMXO_PLAY || {
-    zoom: Number(localStorage.getItem("WORMXO_ZOOM_VALUE") || 1),
-    mapHidden: false,
-    announceChannel: "wormxo-announce-v1"
-  };
-
-  function xoClamp(v, a, b) {
-    v = Number(v);
-    return Math.max(a, Math.min(b, Number.isFinite(v) ? v : 1));
-  }
-
-  function xoGame() {
-    try { return window.anApp || null; } catch (e) { return null; }
-  }
-
-  function xoApplyZoom() {
-    try {
-      var z = xoClamp(window.WORMXO_PLAY.zoom, 0.62, 1.85);
-      window.WORMXO_PLAY.zoom = z;
-      localStorage.setItem("WORMXO_ZOOM_VALUE", String(z));
-      var g = xoGame();
-      var targets = [];
-      try { if (g && g.s && g.s.H && g.s.H.wb && g.s.H.wb.rf) targets.push(g.s.H.wb.rf); } catch (e) {}
-      try { if (g && g.s && g.s.H && g.s.H.wb) targets.push(g.s.H.wb); } catch (e) {}
-      try { if (window.vO7 && vO7.containerCountInfo && vO7.containerCountInfo.parent) targets.push(vO7.containerCountInfo.parent); } catch (e) {}
-      targets.forEach(function (t) {
-        if (!t || !t.scale) return;
-        if (typeof t.scale.set === "function") t.scale.set(z);
-        else { t.scale.x = z; t.scale.y = z; }
-      });
-    } catch (e) {}
-  }
-
-  function xoToggleMap() {
-    try {
-      window.WORMXO_PLAY.mapHidden = !window.WORMXO_PLAY.mapHidden;
-      var hidden = window.WORMXO_PLAY.mapHidden;
-      ["#minimap", ".minimap", "#map", ".map", "#contadorKill_12"].forEach(function (q) {
-        try { document.querySelectorAll(q).forEach(function (el) { el.style.display = hidden ? "none" : ""; }); } catch (e) {}
-      });
-      try { if (window.vO7 && vO7.containerCountInfo) vO7.containerCountInfo.visible = !hidden; } catch (e) {}
-      try { if (window.vO7 && vO7.containerMap) vO7.containerMap.visible = !hidden; } catch (e) {}
-    } catch (e) {}
-  }
-
-  function xoSmoothCore() {
-    try {
-      var weak = (navigator.connection && /slow-2g|2g|3g/i.test(navigator.connection.effectiveType || "")) || Number(navigator.deviceMemory || 4) <= 4;
-      if (window.vO4) {
-        vO4.smoothCamera = weak ? 0.22 : 0.34;
-        vO4.eat_animation = weak ? 0.0015 : 0.0025;
-        vO4.FoodShadow = 0;
-        vO4.FoodSize = Math.min(Number(vO4.FoodSize || 2), weak ? 1.05 : 1.35);
-        vO4.PortionSize = Math.min(Number(vO4.PortionSize || 2), weak ? 1.20 : 1.45);
-        vO4.PortionAura = Math.min(Number(vO4.PortionAura || 1.2), weak ? 0.58 : 0.78);
-        vO4.FoodTransparent = Math.max(Number(vO4.FoodTransparent || 0.3), 0.5);
-        vO4.PortionTransparent = Math.max(Number(vO4.PortionTransparent || 0.8), 0.92);
-      }
-      if (window.PIXI && PIXI.settings) {
-        PIXI.settings.ROUND_PIXELS = true;
-        PIXI.settings.RESOLUTION = weak ? 0.82 : 1;
-        if (PIXI.SCALE_MODES) PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
-      }
-    } catch (e) {}
-  }
-
-  function xoRestoreNames() {
-    try {
-      if (window.WORMXO_UI_STATE) window.WORMXO_UI_STATE.maskNames = false;
-      localStorage.setItem("XOTEAM_MASK_NAMES", "false");
-      var g = xoGame();
-      if (!g || !g.o || !g.o.hb) return;
-      Object.keys(g.o.hb).forEach(function (id) {
-        var p = g.o.hb[id];
-        var name = "Player";
-        try { if (p && p.Mb && p.Mb.ad) name = String(p.Mb.ad).trim() || name; } catch (e) {}
-        [p && p.qj, p && p.nameText, p && p.nickname].forEach(function (t) {
-          if (!t || typeof t.text === "undefined") return;
-          var tx = String(t.text || "");
-          if (/^0[-_]{2,}/.test(tx)) t.text = name;
-        });
-      });
-    } catch (e) {}
-  }
-
-  function xoToast(txt) {
-    try {
-      var d = document.getElementById("wormxo-core-toast");
-      if (!d) {
-        d = document.createElement("div");
-        d.id = "wormxo-core-toast";
-        d.style.cssText = "position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:999999;background:rgba(25,0,0,.88);color:#ffb0b0;border:1px solid #d00000;border-radius:14px;padding:10px 16px;font:bold 14px Arial;box-shadow:0 0 18px rgba(255,0,0,.32)";
-        document.body.appendChild(d);
-      }
-      d.textContent = txt || "فقد الاتصال بالخادم";
-      d.style.display = "block";
-      clearTimeout(d.__t);
-      d.__t = setTimeout(function () { d.style.display = "none"; }, 3600);
-    } catch (e) {}
-  }
-
-  function xoShowAnnounce(text, color, duration) {
-    try {
-      text = String(text || "").slice(0, 120);
-      if (!text) return;
-      color = /^#[0-9a-f]{3,8}$/i.test(String(color || "")) ? color : "#ff3030";
-      duration = Math.min(15000, Math.max(3000, Number(duration || 8000)));
-      var d = document.getElementById("wormxo-announce-box");
-      if (!d) { d = document.createElement("div"); d.id = "wormxo-announce-box"; document.body.appendChild(d); }
-      d.textContent = text;
-      d.style.cssText = "position:fixed;top:14px;left:0;right:0;margin:auto;width:max-content;max-width:92vw;z-index:999996;padding:8px 18px;border-radius:16px;border:1px solid rgba(255,80,80,.55);background:rgba(0,0,0,.65);color:" + color + ";font:bold 18px Arial,Tahoma;white-space:nowrap;text-shadow:0 0 8px currentColor;box-shadow:0 0 18px rgba(255,0,0,.22);animation:wormxoAnnMove " + (duration / 1000) + "s linear 1";
-      clearTimeout(d.__hide);
-      d.__hide = setTimeout(function () { d.style.display = "none"; }, duration);
-      d.style.display = "block";
-    } catch (e) {}
-  }
-
-  function xoSendAnnounce(text, color, duration) {
-    xoShowAnnounce(text, color, duration);
-    try {
-      if (window.XOTEAM_WS && window.XOTEAM_WS.readyState === WebSocket.OPEN) {
-        window.XOTEAM_WS.send(JSON.stringify({ type: "wormxo_announce", channel: window.WORMXO_PLAY.announceChannel, text: String(text || "").slice(0,120), color: color, duration: duration, from: (typeof XOTEAM_getClientId === "function" ? XOTEAM_getClientId() : "local"), at: Date.now() }));
-      }
-    } catch (e) {}
-  }
-
-  window.WORMXO_showAnnounce = xoShowAnnounce;
-  window.WORMXO_sendAnnounce = xoSendAnnounce;
-  window.WORMXO_applyZoom = xoApplyZoom;
-  window.WORMXO_toggleMap = xoToggleMap;
-
-  document.addEventListener("keydown", function (e) {
-    try {
-      var tag = (e.target && e.target.tagName ? e.target.tagName : "").toLowerCase();
-      if (tag === "input" || tag === "textarea" || tag === "select" || (e.target && e.target.isContentEditable)) return;
-      var k = String(e.key || "").toLowerCase();
-      if (k === "z") { window.WORMXO_PLAY.zoom = xoClamp(window.WORMXO_PLAY.zoom + 0.08, 0.62, 1.85); xoApplyZoom(); e.preventDefault(); }
-      else if (k === "x") { window.WORMXO_PLAY.zoom = xoClamp(window.WORMXO_PLAY.zoom - 0.08, 0.62, 1.85); xoApplyZoom(); e.preventDefault(); }
-      else if (k === "c") { window.WORMXO_PLAY.zoom = 1; xoApplyZoom(); e.preventDefault(); }
-      else if (k === "m") { xoToggleMap(); e.preventDefault(); }
-      else if (k === "j") {
-        var t = prompt("اكتب نص الإعلان");
-        if (!t) return;
-        var col = prompt("لون الكتابة مثال #ff0000", "#ff3030") || "#ff3030";
-        var sec = Math.min(15, Math.max(3, Number(prompt("المدة بالثواني - أقصى شي 15", "8") || 8)));
-        xoSendAnnounce(t, col, sec * 1000);
-        e.preventDefault();
-      }
-    } catch (er) {}
-  }, true);
-
-  var st = document.createElement("style");
-  st.id = "wormxo-core-style-2026";
-  st.textContent = "@keyframes wormxoAnnMove{0%{transform:translateX(110vw);opacity:0}12%{opacity:1}85%{opacity:1}100%{transform:translateX(-110vw);opacity:0}}#wf-tool-button{background:linear-gradient(135deg,#5a0000,#e00000)!important;border:1px solid #300!important;border-radius:14px!important;box-shadow:0 0 14px rgba(255,0,0,.35)!important}.popup{border-radius:18px!important;border-color:#b00000!important}#settings-Abilityzoom-switch,#settings-Abilityzoom-switch+label,#settings-stremingmodeanclock-switch,#settings-stremingmodeanclock-switch+label,#settings-stremingmodeemoj-switch,#settings-stremingmodeemoj-switch+label{display:none!important}";
-  (document.head || document.documentElement).appendChild(st);
-
-  xoSmoothCore(); xoApplyZoom(); xoRestoreNames();
-  setInterval(function () { xoSmoothCore(); xoRestoreNames(); xoApplyZoom(); }, 1800);
-  window.addEventListener("offline", function () { xoToast("فقد اتصال الإنترنت / Wi-Fi ضعيف"); });
-})();
-
-(function(){
-  if (window.__WORMXO_LOADING_2022_CORE__) return;
-  window.__WORMXO_LOADING_2022_CORE__ = true;
-  function setup(){
-    try{
-      if(!document.getElementById("wormxo-loading-2022-style")){
-        var st=document.createElement("style");
-        st.id="wormxo-loading-2022-style";
-        st.textContent="#wormxo-loading-2022{position:fixed;inset:0;z-index:999998;background:radial-gradient(circle at 50% 42%,#2b1b10 0,#110b08 48%,#030303 100%);display:none;align-items:center;justify-content:center;flex-direction:column;color:#ffb545;font-family:Arial,Tahoma,sans-serif}#wormxo-loading-2022 .worm{width:92px;height:92px;border:5px solid rgba(255,150,0,.18);border-top-color:#ff8a00;border-radius:50%;animation:wormxoSpin .9s linear infinite}#wormxo-loading-2022 b{margin-top:14px;font-size:19px;letter-spacing:2px;text-shadow:0 0 12px #ff8a00}@keyframes wormxoSpin{to{transform:rotate(360deg)}}";
-        (document.head||document.documentElement).appendChild(st);
-      }
-      if(!document.getElementById("wormxo-loading-2022")){
-        var d=document.createElement("div"); d.id="wormxo-loading-2022"; d.innerHTML='<div class="worm"></div><b>WORMXO LOADING 2022</b><span style="margin-top:8px;color:#fff;opacity:.8">Connecting...</span>'; document.body.appendChild(d);
-      }
-    }catch(e){}
-  }
-  function show(v){try{setup();document.getElementById("wormxo-loading-2022").style.display=v?"flex":"none";}catch(e){}}
-  window.WORMXO_showLoading2022=show;
-  document.addEventListener("click",function(ev){try{var el=ev.target&&ev.target.closest?ev.target.closest("#mm-action-play,.selectSala"):null;if(el){show(true);setTimeout(function(){show(false);},9000);}}catch(e){}},true);
-  setInterval(function(){try{if(window.anApp&&window.anApp.o)show(false);}catch(e){}},900);
-})();
-
 
 
 
@@ -1555,11 +1373,6 @@ function XOTEAM_updateTopHSList(row) {
 function XOTEAM_handleSocketMessage(event) {
   try {
     var data = JSON.parse(event.data);
-
-    if (data && data.type === "wormxo_announce" && data.channel === (window.WORMXO_PLAY && window.WORMXO_PLAY.announceChannel)) {
-      try { if (!data.from || typeof XOTEAM_getClientId !== "function" || String(data.from) !== String(XOTEAM_getClientId())) WORMXO_showAnnounce(data.text, data.color, data.duration); } catch (e0) {}
-      return;
-    }
 
     if (typeof XOTEAM_131_handlePacket === "function" && XOTEAM_131_handlePacket(data)) return;
     if (typeof XOTEAM_applySharedTop === "function" && XOTEAM_applySharedTop(data)) return;
@@ -4667,7 +4480,7 @@ vF172.prototype.Se = function (p281) {
     this.Pe.push(vF602);
 
     if (vF602) {
-      vO4.emoji_headshot = false;
+      vO4.emoji_headshot = true;
 
       setTimeout(function () {
         vO4.emoji_headshot = false;
@@ -4682,7 +4495,7 @@ vF172.prototype.Se = function (p281) {
     this.Pe.push(vF602);
 
     if (vF602) {
-      vO4.emoji_kill = false;
+      vO4.emoji_kill = true;
 
       setTimeout(function () {
         vO4.emoji_kill = false;
@@ -10113,7 +9926,7 @@ $("#mm-advice-cont").html(`
     function f107() {
       vO4.adblock = true;
       $(".youid").css("display", "none");
-      $("#mm-store").after("\n            \n            <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'/>\n            \n           \n        <div id=\"wf-tool-button\" style=\"float: right;position: relative;min-width: 91px; min-height: 20px; margin-top: 5px; line-height: 50px; text-align:center; background:linear-gradient(135deg,#7a0000,#d40000);border:1px solid #3b0000;border-radius:14px;box-shadow:0 0 14px rgba(255,0,0,.32);z-index:99998;cursor:pointer\" onclick=\"window.openPopup(); return false;\"><i aria-hidden=\"true\" class=\"fa fa-cog fa-spin\" style=\"color:yellow;font-size: 23px;\"></i></div>\n        <div id=\"popup\" class=\"popup\" style=\"display:none;visibility:hidden;opacity:0;pointer-events:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:720px;max-width:95vw;height:520px;max-height:90vh;overflow:auto;background:#252535;color:#fff;border:2px solid #ff0000;border-radius:12px;box-shadow:0 0 25px #000;z-index:99999;\">\n        \n        <div class=\"phdr1\"> \n        <button style=\"float: right;background: #00000000;float: right;height: 40px;border: none;font-size: 16px;font-weight: 600;\" onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copied!'));\">Copy ID</button>\n        \n        \n        </div>\n        <div class=\"close-button\" onclick=\"window.closePopup(); return false;\" style=\"position:absolute;top:6px;right:8px;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:#ff0000;color:#fff;font-weight:bold;cursor:pointer;z-index:1000000;\">×</div>\n        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css\">\n                   <div class=\"layout\">\n      <div class=\"sidebar\">\n          <ul>\n              <li><div class=\"hii\" style=\"background: none; border: none;\" id=\"click-btn\"><i class=\"fas fa-user\"></i> Profile</div></li>\n              <li id=\"toolgame-btn\" class=\"selected\" onclick=\"displayContent('toolgame', this)\">\n            <i class=\"fas fa-cogs\"></i> Tool Game\n        </li>\n        <li id=\"skins-btn\" onclick=\"displayContent('skins', this)\">\n            <i class=\"fas fa-paint-brush\"></i> Skins\n        </li>\n        <li id=\"chuot-btn\" onclick=\"displayContent('chuot', this)\">\n            <i class=\"fas fa-mouse\"></i> Cursor\n        </li>\n        <li id=\"gioithieu-btn\" onclick=\"displayContent('gioithieu', this)\">\n            <i class=\"fas fa-info-circle\"></i> Giá»›i Thiá»‡u\n        </li>\n          </ul>\n      </div>\n\n      <div class=\"main-content\">\n      \n          <div id=\"toolgame\" class=\"content-section\">\n              \n        <!-- Container cho 2 pháº§n tá»­ (hÃ ng 1) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-bolt yellow-icon\"></i> \n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-Abilityzoom-switch\" type=\"checkbox\"/>\n        <label for=\"settings-Abilityzoom-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-video yellow-icon\"></i> Center Streamer :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmode-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmode-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-trophy yellow-icon\"></i> 3 Top Score :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodebatop-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodebatop-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-toggle-off yellow-icon\"></i> Turn Off <img style=\"height: 18px;\" src=\"https://i.imgur.com/cOrk9pM.png\" alt=\"Turn on\"/> :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodemuiten-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodemuiten-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-chart-bar yellow-icon\"></i> Total Kill :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodesaveheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodesaveheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-smile yellow-icon\"></i> \n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeemoj-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeemoj-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-volume-mute yellow-icon\"></i> Off Sounds:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> \n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeanclock-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeanclock-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-toggle-off yellow-icon\"></i> Off random skins :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodedangaunhien-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodedangaunhien-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Updating... !\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-updating-switch\" type=\"checkbox\" disabled/>\n        <label for=\"settings-updating-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"spancursor\"> Select Background</div>\n<div class=\"background-container\"></div>\n    \n          </div>\n          \n          \n          \n          <div id=\"skins\" class=\"content-section\">\n           <div style=\"margin-bottom: 10px;margin-top: -10px;\" class=\"spancursor\"> Upload Skins</div>\n               <iframe style=\"width: 100%; height: 43px;\" src=\"https://haylamday.com/api/skins_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n               \n           <div style=\"margin-top: 20px;margin-bottom: 20px;\" class=\"spancursor\"> Upload Hat</div>\n <iframe style=\"width: 100%; height: 40px;\" src=\"https://haylamday.com/api/hat_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n \n  <div class=\"spancursor\">NOTE : </div>\n                <ul><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated.</li>\n                 <li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li></ul>\n            \n \n          </div>\n          \n         \n          <div id=\"chuot\" class=\"content-section\">\n              <div class=\"spancursor\"> Select Cursor</div>\n        <div class=\"cursor-container\">\n            <div id=\"default-cursor-btn\">\n                <img src=\"https://i.imgur.com/lWpvpbL.png\">\n            </div>\n        </div>\n          </div>\n          <div id=\"gioithieu\" class=\"content-section\">\n              <h2>Giá»›i Thiá»‡u</h2>\n              <p>ÄÃ¢y lÃ  ná»™i dung Giá»›i Thiá»‡u.</p>\n          </div>\n      </div>\n  </div>\n\n  <script>\n      window.displayContent = function(sectionId, element) {\n          // áº¨n táº¥t cáº£ cÃ¡c má»¥c ná»™i dung\n          let sections = document.querySelectorAll('.content-section');\n          sections.forEach(section => section.style.display = 'none');\n\n          // Hiá»ƒn thá»‹ má»¥c ná»™i dung tÆ°Æ¡ng á»©ng\n          let activeSection = document.getElementById(sectionId);\n          if (activeSection) {\n              activeSection.style.display = 'block';\n          }\n\n          // Äá»•i mÃ u má»¥c Ä‘Ã£ chá»n\n          let menuItems = document.querySelectorAll('.sidebar ul li');\n          menuItems.forEach(item => item.classList.remove('selected')); // Loáº¡i bá» class 'selected' khá»i táº¥t cáº£ má»¥c\n          \n          // ThÃªm class 'selected' cho má»¥c Ä‘Æ°á»£c chá»n\n          if (element) element.classList.add('selected');\n      }\n\n      // Hiá»ƒn thá»‹ ná»™i dung máº·c Ä‘á»‹nh khi táº£i trang\n      setTimeout(function() {\n          window.displayContent('toolgame', document.getElementById('toolgame-btn'));\n      }, 0);\n      \n       // Láº¥y pháº§n tá»­ nÃºt vÃ  div\n        const button = document.getElementById(\"click-btn\");\n        const playerInfo = document.getElementById(\"mm-player-info\");\n\n        if (button && playerInfo) {\n          button.addEventListener(\"click\", function() { playerInfo.click(); });\n          playerInfo.addEventListener(\"click\", function() { console.log(\"Div clicked!\"); });\n        }\n\n      \n      \n      \n  </script>\n        <style>\n        #wf-tool-button:hover { filter: brightness(1.15); }\n        .popup label, .popup input, .popup .sidebar ul li, .popup .close-button { cursor: pointer; }\n        .yellow-icon {\n    color: gold;  /* Chá»‰nh mÃ u vÃ ng */\n}\n        .layout {\n          display: flex;\n          width: 100%;\n          height: 90%;\n      }\n\n      .sidebar {\n          width: 140px;\n          background: #252535;\n          box-shadow: 0px 0px 10px #252535;\n          color: #fff;\n      }\n\n      .sidebar ul {\n          list-style-type: none;\n          padding: 0;\n          margin: 0;\n      }\n\n      .sidebar ul li {\n          padding: 12px;\n          cursor: pointer;\n          border-bottom: 1px solid #ddd;\n          width: 140px;\n      }\n\n      .sidebar ul li:hover {\n          background-color: #666;\n      }\n\n      .sidebar ul li.selected {\n          background-color: #000; /* MÃ u ná»n khi má»¥c Ä‘Æ°á»£c chá»n */\n          color: white;\n      }\n\n      .main-content {\n          flex-grow: 1;\n          padding: 20px;\n          background: #393e43;\n          color: #fff;\n      }\n\n      .content-section {\n          display: none;\n          transition: display 0.3s ease-in-out;\n      }\n\n      #toolgame {\n          display: block; /* Máº·c Ä‘á»‹nh hiá»ƒn thá»‹ ná»™i dung Tool Game */\n      }\n\n      h2 {\n          margin-top: 0;\n      }\n\n      /* ThÃªm hiá»‡u á»©ng cho hover */\n      .sidebar ul li:hover {\n          background-color: #666;\n      }</style>\n        </div>");
+      $("#mm-store").after("\n            \n            <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'/>\n            \n           \n        <div id=\"wf-tool-button\" style=\"float: right;position: relative;min-width: 91px; min-height: 20px; margin-top: 5px; line-height: 50px; text-align:center; background:#ff0000;z-index:99998;cursor:pointer\" onclick=\"window.openPopup(); return false;\"><i aria-hidden=\"true\" class=\"fa fa-cog fa-spin\" style=\"color:yellow;font-size: 23px;\"></i></div>\n        <div id=\"popup\" class=\"popup\" style=\"display:none;visibility:hidden;opacity:0;pointer-events:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:720px;max-width:95vw;height:520px;max-height:90vh;overflow:auto;background:#252535;color:#fff;border:2px solid #ff0000;border-radius:12px;box-shadow:0 0 25px #000;z-index:99999;\">\n        \n        <div class=\"phdr1\"> \n        <button style=\"float: right;background: #00000000;float: right;height: 40px;border: none;font-size: 16px;font-weight: 600;\" onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copied!'));\">Copy ID</button>\n        \n        \n        </div>\n        <div class=\"close-button\" onclick=\"window.closePopup(); return false;\" style=\"position:absolute;top:6px;right:8px;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:#ff0000;color:#fff;font-weight:bold;cursor:pointer;z-index:1000000;\">×</div>\n        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css\">\n                   <div class=\"layout\">\n      <div class=\"sidebar\">\n          <ul>\n              <li><div class=\"hii\" style=\"background: none; border: none;\" id=\"click-btn\"><i class=\"fas fa-user\"></i> Profile</div></li>\n              <li id=\"toolgame-btn\" class=\"selected\" onclick=\"displayContent('toolgame', this)\">\n            <i class=\"fas fa-cogs\"></i> Tool Game\n        </li>\n        <li id=\"skins-btn\" onclick=\"displayContent('skins', this)\">\n            <i class=\"fas fa-paint-brush\"></i> Skins\n        </li>\n        <li id=\"chuot-btn\" onclick=\"displayContent('chuot', this)\">\n            <i class=\"fas fa-mouse\"></i> Cursor\n        </li>\n        <li id=\"gioithieu-btn\" onclick=\"displayContent('gioithieu', this)\">\n            <i class=\"fas fa-info-circle\"></i> Giá»›i Thiá»‡u\n        </li>\n          </ul>\n      </div>\n\n      <div class=\"main-content\">\n      \n          <div id=\"toolgame\" class=\"content-section\">\n              \n        <!-- Container cho 2 pháº§n tá»­ (hÃ ng 1) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-bolt yellow-icon\"></i> Eat Fast:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-Abilityzoom-switch\" type=\"checkbox\"/>\n        <label for=\"settings-Abilityzoom-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-video yellow-icon\"></i> Center Streamer :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmode-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmode-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-trophy yellow-icon\"></i> 3 Top Score :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodebatop-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodebatop-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n            <i class=\"fas fa-toggle-off yellow-icon\"></i> Turn Off <img style=\"height: 18px;\" src=\"https://i.imgur.com/cOrk9pM.png\" alt=\"Turn on\"/> :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodemuiten-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodemuiten-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-chart-bar yellow-icon\"></i> Total Kill :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodesaveheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodesaveheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-smile yellow-icon\"></i> Off Emoj:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeemoj-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeemoj-switch\"></label>\n    </div>\n</div>\n\n<!-- Container cho 2 pháº§n tá»­ (hÃ ng 2) -->\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-volume-mute yellow-icon\"></i> Off Sounds:\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeheadshot-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeheadshot-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Hide Map\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodeanclock-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodeanclock-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"settings-row\">\n     <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fas fa-toggle-off yellow-icon\"></i> Off random skins :\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-stremingmodedangaunhien-switch\" type=\"checkbox\"/>\n        <label for=\"settings-stremingmodedangaunhien-switch\"></label>\n    </div>\n\n    <div class=\"settings-lineZoom\">\n        <span class=\"settings-labelZoom\">\n             <i class=\"fa fa-eye-slash\"></i> Updating... !\n        </span>\n        <input class=\"settings-switchZoom\" id=\"settings-updating-switch\" type=\"checkbox\" disabled/>\n        <label for=\"settings-updating-switch\"></label>\n    </div>\n</div>\n\n\n<div class=\"spancursor\"> Select Background</div>\n<div class=\"background-container\"></div>\n    \n          </div>\n          \n          \n          \n          <div id=\"skins\" class=\"content-section\">\n           <div style=\"margin-bottom: 10px;margin-top: -10px;\" class=\"spancursor\"> Upload Skins</div>\n               <iframe style=\"width: 100%; height: 43px;\" src=\"https://haylamday.com/api/skins_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n               \n           <div style=\"margin-top: 20px;margin-bottom: 20px;\" class=\"spancursor\"> Upload Hat</div>\n <iframe style=\"width: 100%; height: 40px;\" src=\"https://haylamday.com/api/hat_upload.php\" scrolling=\"no\" frameborder=\"0\"></iframe>\n \n  <div class=\"spancursor\">NOTE : </div>\n                <ul><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated.</li>\n                 <li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li></ul>\n            \n \n          </div>\n          \n         \n          <div id=\"chuot\" class=\"content-section\">\n              <div class=\"spancursor\"> Select Cursor</div>\n        <div class=\"cursor-container\">\n            <div id=\"default-cursor-btn\">\n                <img src=\"https://i.imgur.com/lWpvpbL.png\">\n            </div>\n        </div>\n          </div>\n          <div id=\"gioithieu\" class=\"content-section\">\n              <h2>Giá»›i Thiá»‡u</h2>\n              <p>ÄÃ¢y lÃ  ná»™i dung Giá»›i Thiá»‡u.</p>\n          </div>\n      </div>\n  </div>\n\n  <script>\n      window.displayContent = function(sectionId, element) {\n          // áº¨n táº¥t cáº£ cÃ¡c má»¥c ná»™i dung\n          let sections = document.querySelectorAll('.content-section');\n          sections.forEach(section => section.style.display = 'none');\n\n          // Hiá»ƒn thá»‹ má»¥c ná»™i dung tÆ°Æ¡ng á»©ng\n          let activeSection = document.getElementById(sectionId);\n          if (activeSection) {\n              activeSection.style.display = 'block';\n          }\n\n          // Äá»•i mÃ u má»¥c Ä‘Ã£ chá»n\n          let menuItems = document.querySelectorAll('.sidebar ul li');\n          menuItems.forEach(item => item.classList.remove('selected')); // Loáº¡i bá» class 'selected' khá»i táº¥t cáº£ má»¥c\n          \n          // ThÃªm class 'selected' cho má»¥c Ä‘Æ°á»£c chá»n\n          if (element) element.classList.add('selected');\n      }\n\n      // Hiá»ƒn thá»‹ ná»™i dung máº·c Ä‘á»‹nh khi táº£i trang\n      setTimeout(function() {\n          window.displayContent('toolgame', document.getElementById('toolgame-btn'));\n      }, 0);\n      \n       // Láº¥y pháº§n tá»­ nÃºt vÃ  div\n        const button = document.getElementById(\"click-btn\");\n        const playerInfo = document.getElementById(\"mm-player-info\");\n\n        if (button && playerInfo) {\n          button.addEventListener(\"click\", function() { playerInfo.click(); });\n          playerInfo.addEventListener(\"click\", function() { console.log(\"Div clicked!\"); });\n        }\n\n      \n      \n      \n  </script>\n        <style>\n        #wf-tool-button:hover { filter: brightness(1.15); }\n        .popup label, .popup input, .popup .sidebar ul li, .popup .close-button { cursor: pointer; }\n        .yellow-icon {\n    color: gold;  /* Chá»‰nh mÃ u vÃ ng */\n}\n        .layout {\n          display: flex;\n          width: 100%;\n          height: 90%;\n      }\n\n      .sidebar {\n          width: 140px;\n          background: #252535;\n          box-shadow: 0px 0px 10px #252535;\n          color: #fff;\n      }\n\n      .sidebar ul {\n          list-style-type: none;\n          padding: 0;\n          margin: 0;\n      }\n\n      .sidebar ul li {\n          padding: 12px;\n          cursor: pointer;\n          border-bottom: 1px solid #ddd;\n          width: 140px;\n      }\n\n      .sidebar ul li:hover {\n          background-color: #666;\n      }\n\n      .sidebar ul li.selected {\n          background-color: #000; /* MÃ u ná»n khi má»¥c Ä‘Æ°á»£c chá»n */\n          color: white;\n      }\n\n      .main-content {\n          flex-grow: 1;\n          padding: 20px;\n          background: #393e43;\n          color: #fff;\n      }\n\n      .content-section {\n          display: none;\n          transition: display 0.3s ease-in-out;\n      }\n\n      #toolgame {\n          display: block; /* Máº·c Ä‘á»‹nh hiá»ƒn thá»‹ ná»™i dung Tool Game */\n      }\n\n      h2 {\n          margin-top: 0;\n      }\n\n      /* ThÃªm hiá»‡u á»©ng cho hover */\n      .sidebar ul li:hover {\n          background-color: #666;\n      }</style>\n        </div>");
       $("#loa831pibur0w4gv").replaceWith("\n              \n              <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" />\n              <div style=\"margin: 0;\" id=\"loa831pibur0w4gv\">\n              <div class=\"label\" id=\"titleSetings\">Notification</div>\n                \n                 <div class=\"bao-list1\">\n                <div class=\"list1\"><li>\n                 21/02/2025: Updated !</li>\n                </div>\n                <div class=\"list1\"><li>\n                 Uploading 18+ sex skins is prohibited. ID will be locked if violated. Thank you !</li>\n                </div>\n                <div class=\"list1\"><li>\n                 Vui lÃ²ng khÃ´ng táº£i lÃªn skin sex 18+. Bá»‹ phÃ¡t hiá»‡n sáº½ bá»‹ khÃ³a. Xin cáº£m Æ¡n !</li>\n                </div>\n                \n                   <div class=\"list1\"><li> Instructions for installing on IOS and iPad New 2024: <a href=\"https://www.youtube.com/watch?v=uyHHXWKHgRw\">https://www.youtube.com/watch?v=uyHHXWKHgRw</a></li></div></div>\n              \n                   ");
       $("#mm-coins-box").replaceWith("<div style=\"margin: 0;\" id=\"mm-coins-box\">\n                \n                <button style='width: 140px;height: 45px;float: right;border-radius: 10px;border: solid #fac 2px;display:none' id='getskin'>Unlock Skins</button>\n                </div>\n                </div>");
 
@@ -11148,3 +10961,149 @@ document.addEventListener("contextmenu", function (p638) {
   document.head.appendChild(v625);
 })();
 console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
+
+
+/* WORMXO FINAL DEEP PATCH - no TeamCode / smooth WiFi / server UI / names restore */
+(function () {
+  if (window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__) return;
+  window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__ = true;
+
+  try {
+    localStorage.setItem("XOTEAM_MASK_NAMES", "false");
+    if (window.WORMXO_UI_STATE) window.WORMXO_UI_STATE.maskNames = false;
+  } catch (e) {}
+
+  function xoRestoreNames() {
+    try {
+      if (window.WORMXO_UI_STATE) window.WORMXO_UI_STATE.maskNames = false;
+      var game = window.anApp;
+      if (!game || !game.o || !game.o.hb) return;
+      Object.keys(game.o.hb).forEach(function (id) {
+        var p = game.o.hb[id];
+        [p && p.qj, p && p.nameText, p && p.nickname].forEach(function (t) {
+          if (!t || typeof t.text === "undefined") return;
+          if (typeof t.__XOTEAM_REAL_TEXT !== "undefined") {
+            t.text = t.__XOTEAM_REAL_TEXT;
+            delete t.__XOTEAM_REAL_TEXT;
+          }
+          if (/^0[-_]{2,}/.test(String(t.text || ""))) {
+            var name = "Player";
+            try { if (p && p.Mb && p.Mb.ad) name = String(p.Mb.ad).trim() || name; } catch (e0) {}
+            t.text = name;
+          }
+        });
+      });
+    } catch (e) {}
+  }
+
+  window.XOTEAM_maskOneName = function () {};
+  window.XOTEAM_applyNameMask = xoRestoreNames;
+  setInterval(xoRestoreNames, 900);
+
+  function addHeadHint(rel, href) {
+    try {
+      if (document.querySelector('link[rel="' + rel + '"][href="' + href + '"]')) return;
+      var l = document.createElement("link");
+      l.rel = rel;
+      l.href = href;
+      if (rel === "preconnect") l.crossOrigin = "anonymous";
+      (document.head || document.documentElement).appendChild(l);
+    } catch (e) {}
+  }
+  ["https://cdnjs.cloudflare.com", "https://static.cloudflareinsights.com", "https://resources.wormate.io", "https://wormxo.store", "https://wm.wormy.online", "https://jkr.wormy.online"].forEach(function (h) {
+    addHeadHint("preconnect", h);
+    addHeadHint("dns-prefetch", h);
+  });
+
+  function xoApplyPerf() {
+    try {
+      var low = (navigator.connection && /2g|3g|slow-2g/i.test(navigator.connection.effectiveType || "")) || Number(navigator.deviceMemory || 4) <= 4;
+      if (window.vO4) {
+        vO4.smoothCamera = low ? 0.30 : Math.min(Number(vO4.smoothCamera || 0.5), 0.42);
+        vO4.eat_animation = low ? 0.002 : Math.min(Number(vO4.eat_animation || 0.005), 0.0035);
+        vO4.FoodShadow = low ? 0 : vO4.FoodShadow;
+        vO4.FoodSize = low ? Math.min(Number(vO4.FoodSize || 2), 1.1) : Math.min(Number(vO4.FoodSize || 2), 1.5);
+        vO4.PortionSize = low ? Math.min(Number(vO4.PortionSize || 2), 1.25) : Math.min(Number(vO4.PortionSize || 2), 1.6);
+        vO4.PortionAura = low ? 0.65 : Math.min(Number(vO4.PortionAura || 1.2), 0.9);
+      }
+      if (window.PIXI && PIXI.settings) {
+        PIXI.settings.ROUND_PIXELS = true;
+        PIXI.settings.RESOLUTION = low ? 0.85 : 1;
+        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES && PIXI.SCALE_MODES.LINEAR;
+      }
+    } catch (e) {}
+  }
+  xoApplyPerf();
+  try { if (navigator.connection) navigator.connection.addEventListener("change", xoApplyPerf); } catch (e) {}
+
+  function installLoading2022() {
+    try {
+      if (document.getElementById("wormxo-loading-2022-style")) return;
+      var st = document.createElement("style");
+      st.id = "wormxo-loading-2022-style";
+      st.textContent = "#wormxo-loading-2022{position:fixed;inset:0;z-index:999998;background:radial-gradient(circle at 50% 42%,#2b1b10 0,#110b08 48%,#030303 100%);display:none;align-items:center;justify-content:center;flex-direction:column;color:#ffb545;font-family:Arial,Tahoma,sans-serif}#wormxo-loading-2022 .worm{width:96px;height:96px;border:5px solid rgba(255,150,0,.18);border-top-color:#ff8a00;border-radius:50%;animation:wormxoSpin .9s linear infinite}#wormxo-loading-2022 b{margin-top:16px;font-size:19px;letter-spacing:2px;text-shadow:0 0 12px #ff8a00}@keyframes wormxoSpin{to{transform:rotate(360deg)}}.description-text-hiep{background:rgba(26, 26, 46, 0.36)!important;border:1px solid rgba(255,153,0,.5)!important;border-radius:14px!important;box-shadow:0 0 22px rgba(255,138,0,.18)!important;padding:8px!important}.title-wormate-friends-connect{color:# rgba(0, 0, 0, 0.6)!important;text-shadow:0 0 10px rgba(21, 21, 31, 0.6)!important;font-weight:900!important}.servers-container p.selectSala{background:linear-gradient(90deg,rgba(83, 83, 83, 0.14),rgba(255,255,255,.04))!important;border:1px solid rgba(29, 122, 110, 0.32)!important;border-radius:10px!important;margin:6px 4px!important;padding:8px 10px!important;color:#fff!important;font-weight:900!important;transition:.12s!important;box-shadow:inset 0 0 8px rgba(255,138,0,.08)!important}.servers-container p.selectSala:hover{transform:translateX(3px);background:linear-gradient(90deg,rgba(99, 99, 99, 0.32),rgba(255,255,255,.08))!important;border-color:rgb(16 87 151)!important}.ui-tabs-nav .ui-tabs-tab{border-radius:9px!important;background:rgba(255,255,255,.06)!important}.ui-tabs-nav .ui-tab-active{background:rgba(255,138,0,.28)!important;box-shadow:0 0 10px rgba(255,138,0,.32)!important}";
+      (document.head || document.documentElement).appendChild(st);
+      var d = document.createElement("div");
+      d.id = "wormxo-loading-2026";
+      d.innerHTML = '<div class="worm"></div><b>WORMXO LOADING 2022</b><span style="margin-top:8px;color:#fff;opacity:.8">Connecting to server...</span>';
+      document.body.appendChild(d);
+    } catch (e) {}
+  }
+  function showLoad(v) { try { installLoading2022(); document.getElementById("wormxo-loading-2022").style.display = v ? "flex" : "none"; } catch (e) {} }
+  window.WORMXO_showLoading2022 = showLoad;
+  document.addEventListener("click", function (ev) {
+    try {
+      var el = ev.target && ev.target.closest ? ev.target.closest("#mm-action-play,.selectSala") : null;
+      if (!el) return;
+      showLoad(true);
+      setTimeout(function () { showLoad(false); }, 9000);
+    } catch (e) {}
+  }, true);
+  setInterval(function () {
+    try {
+      var lv = document.getElementById("loading-view");
+      var gameCanvas = document.querySelector("canvas");
+      if (lv && getComputedStyle(lv).display === "none") showLoad(false);
+      if (gameCanvas && window.anApp && window.anApp.o) showLoad(false);
+    } catch (e) {}
+  }, 800);
+
+  function offlineToast(txt) {
+    try {
+      var id = "wormxo-offline-toast";
+      var d = document.getElementById(id);
+      if (!d) {
+        d = document.createElement("div");
+        d.id = id;
+        d.style.cssText = "position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:999999;background:rgba(0,0,0,.82);color:#ffb13b;border:1px solid #ff8a00;border-radius:12px;padding:10px 16px;font:bold 14px Arial;box-shadow:0 0 18px rgba(255,138,0,.35)";
+        document.body.appendChild(d);
+      }
+      d.textContent = txt || "فقد الاتصال بالخادم";
+      d.style.display = "block";
+      setTimeout(function () { d.style.display = "none"; }, 4200);
+    } catch (e) {}
+  }
+  window.WORMXO_offlineToast = offlineToast;
+  window.addEventListener("offline", function () { offlineToast("فقد اتصال الإنترنت / Wi-Fi ضعيف"); showLoad(false); });
+
+  var OldWS = window.WebSocket;
+  if (OldWS && !OldWS.__WORMXO_SAFE__) {
+    function SafeWS(url, protocols) {
+      var ws = protocols ? new OldWS(url, protocols) : new OldWS(url);
+      var opened = false;
+      var timer = setTimeout(function () {
+        if (!opened || ws.readyState !== 1) {
+          try { offlineToast("فقد الاتصال بالخادم"); showLoad(false); } catch (e) {}
+        }
+      }, 6500);
+      ws.addEventListener("open", function () { opened = true; clearTimeout(timer); showLoad(false); });
+      ws.addEventListener("close", function () { if (!opened) offlineToast("السيرفر لا يستجيب"); showLoad(false); });
+      ws.addEventListener("error", function () { offlineToast("فقد الاتصال بالخادم"); showLoad(false); });
+      return ws;
+    }
+    SafeWS.prototype = OldWS.prototype;
+    SafeWS.CONNECTING = OldWS.CONNECTING; SafeWS.OPEN = OldWS.OPEN; SafeWS.CLOSING = OldWS.CLOSING; SafeWS.CLOSED = OldWS.CLOSED;
+    SafeWS.__WORMXO_SAFE__ = true;
+    window.WebSocket = SafeWS;
+  }
+})();
