@@ -3039,7 +3039,7 @@ body {display:block !important;}
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  width:480px;
+  width:407px;
   height:360px;
   background-color:#fff;
   box-shadow:0 0 200px 100px rgba(34,34,34,.8);
@@ -4260,7 +4260,7 @@ button:hover{
 #final-replay {position: absolute;
     left: 15px;
     right: 15px;
-    background-color: #a44ac3;
+    background-color: #f7941d;
     color: #fff;
     line-height: 50px;
     border-radius: 5px;
@@ -4269,9 +4269,9 @@ button:hover{
     text-shadow: 0 0 1px #000;}
     
   #final-replay:hover {
-    background: #fff;
-    color: #1e05459c;
-    box-shadow: 0 0 3px #1e05459c, 0 0 5px #1e05459c, 0 0 10px #1e05459c, 0 0 15px #1e05459c, 0 0 20px #1e05459c, 0 0 35px #1e05459c, 0 0 30px #1e05459c;
+    background: #f7941dc4;
+    
+    
 }  
 
 
