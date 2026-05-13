@@ -357,12 +357,13 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 
 
 
+/* WORMXO VALDAY 2023 LOBBY BACKGROUND CORE */
 (function () {
-  if (window.__WORMXO_VALDAY_2023_BACKGROUND_CORE__) return;
-  window.__WORMXO_VALDAY_2023_BACKGROUND_CORE__ = true;
+  if (window.__WORMXO_VALDAY_2023_BG_CORE__) return;
+  window.__WORMXO_VALDAY_2023_BG_CORE__ = true;
 
-  var WORMXO_VALDAY_2023 = window.WORMXO_VALDAY_2023 || {
-    B: window.runtimeHash || "",
+  var WORMXO_VALDAY_ASSETS = {
+    B: window.runtimeHash,
     C: "https://gateway.wormate.io",
     D: "https://resources.wormate.io",
     F: "/images/linelogo-valday2023.png",
@@ -370,130 +371,198 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
     H: "/images/confetti-valday2023.png",
     I: "/images/bg-event-pattern-valday2023.png"
   };
-  window.WORMXO_VALDAY_2023 = WORMXO_VALDAY_2023;
+
+  window.WORMXO_VALDAY_2023_ASSETS = WORMXO_VALDAY_ASSETS;
 
   function asset(path) {
     path = String(path || "");
-    return /^https?:\/\//i.test(path) ? path : WORMXO_VALDAY_2023.D + path;
+    if (/^https?:\/\//i.test(path)) return path;
+    return WORMXO_VALDAY_ASSETS.D + path;
   }
 
-  function killOldBackgrounds() {
-    var ids = [
-      "wormxo-lobby-bg-style",
-      "WORMXO_MIXED_BG_2026",
-      "wormxo-valday2023-style"
-    ];
-    ids.forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el && el.parentNode) el.parentNode.removeChild(el);
-    });
-    document.querySelectorAll(".wormxo-valday2023-layer,.wormxo-valday2023-confetti,.wormxo-valday2023-logo,.wormxo-valday2023-glow").forEach(function (el) {
-      if (el && el.parentNode) el.parentNode.removeChild(el);
-    });
-  }
+  function exposeCoreObjects() {
+    try {
+      if (typeof window.vO3 === "object" && window.vO3) {
+        window.vO3.A = Object.assign({}, window.vO3.A || {}, WORMXO_VALDAY_ASSETS);
+      } else if (typeof vO3 === "object" && vO3) {
+        vO3.A = Object.assign({}, vO3.A || {}, WORMXO_VALDAY_ASSETS);
+      }
+    } catch (e) {}
 
-  function cssText() {
-    var pattern = asset(WORMXO_VALDAY_2023.I);
-    var confetti = asset(WORMXO_VALDAY_2023.H);
-    var logo = asset(WORMXO_VALDAY_2023.F);
-    return [
-      "@keyframes wormxoValdayPattern{0%{background-position:0 0,0 0,50% 50%;}50%{background-position:260px 130px,-180px 220px,55% 45%;}100%{background-position:520px 260px,-360px 440px,50% 50%;}}",
-      "@keyframes wormxoValdayFloat{0%{transform:translate3d(-2%,-3%,0) scale(1);opacity:.72;}50%{transform:translate3d(3%,2%,0) scale(1.08);opacity:.96;}100%{transform:translate3d(-2%,-3%,0) scale(1);opacity:.72;}}",
-      "@keyframes wormxoValdayFall{0%{background-position:0 -220px,120px -420px,40px -760px;}100%{background-position:80px 720px,-140px 900px,230px 1160px;}}",
-      "@keyframes wormxoValdayLogo{0%{transform:translate3d(0,0,0) rotate(-2deg);opacity:.34;}50%{transform:translate3d(0,-12px,0) rotate(2deg);opacity:.58;}100%{transform:translate3d(0,0,0) rotate(-2deg);opacity:.34;}}",
-      "#game-wrap,#mm-start,#main-menu,#main-menu-view,#markup-wrap,.background-canva,#background-canvas{background:radial-gradient(circle at 20% 18%,rgba(255,94,160,.28),transparent 32%),radial-gradient(circle at 82% 28%,rgba(126,73,255,.24),transparent 34%),linear-gradient(135deg,#120615 0%,#241025 42%,#371323 68%,#120713 100%)!important;background-size:160% 160%,170% 170%,100% 100%!important;}",
-      "#game-wrap{position:relative!important;overflow:hidden!important;isolation:isolate!important;}",
-      "#game-wrap>.wormxo-valday2023-layer,#game-wrap>.wormxo-valday2023-confetti,#game-wrap>.wormxo-valday2023-logo,#game-wrap>.wormxo-valday2023-glow{position:absolute!important;inset:0!important;pointer-events:none!important;z-index:0!important;}",
-      "#game-wrap>.wormxo-valday2023-layer{background-image:url('" + pattern + "'),url('" + pattern + "'),radial-gradient(circle at 50% 48%,rgba(255,190,215,.14),transparent 46%);background-repeat:repeat,repeat,no-repeat;background-size:340px 340px,220px 220px,100% 100%;mix-blend-mode:screen;opacity:.72;filter:saturate(1.08) contrast(1.04);animation:wormxoValdayPattern 34s linear infinite;}",
-      "#game-wrap>.wormxo-valday2023-confetti{background-image:url('" + confetti + "'),url('" + confetti + "'),url('" + confetti + "');background-repeat:repeat;background-size:150px 150px,210px 210px,290px 290px;opacity:.66;mix-blend-mode:screen;animation:wormxoValdayFall 22s linear infinite;}",
-      "#game-wrap>.wormxo-valday2023-glow{inset:-22%!important;background:radial-gradient(circle at 28% 28%,rgba(255,58,126,.36),transparent 32%),radial-gradient(circle at 72% 72%,rgba(120,58,255,.30),transparent 38%),radial-gradient(circle at 50% 50%,rgba(255,255,255,.10),transparent 50%);filter:blur(36px);mix-blend-mode:screen;animation:wormxoValdayFloat 13s ease-in-out infinite;}",
-      "#game-wrap>.wormxo-valday2023-logo{background-image:url('" + logo + "'),url('" + logo + "'),url('" + logo + "');background-repeat:no-repeat;background-size:210px auto,150px auto,120px auto;background-position:50% 12%,14% 72%,86% 70%;mix-blend-mode:screen;filter:drop-shadow(0 0 18px rgba(255,80,150,.65));animation:wormxoValdayLogo 8s ease-in-out infinite;}",
-      "#game-wrap>*:not(.wormxo-valday2023-layer):not(.wormxo-valday2023-confetti):not(.wormxo-valday2023-logo):not(.wormxo-valday2023-glow){position:relative;z-index:2;}",
-      "canvas{position:relative;z-index:1;}"
-    ].join("");
+    try {
+      if (window.PIXI && typeof window.vO5 === "object" && window.vO5 && !window.vO5.e) {
+        var v26 = window.PIXI;
+        var v27 = v26.BLEND_MODES || {};
+        var v28 = v26.WRAP_MODES || {};
+        window.vO5.e = {
+          f: v26.Container,
+          g: v26.BaseTexture,
+          h: v26.Texture,
+          i: v26.Renderer,
+          j: v26.Graphics,
+          k: v26.Shader,
+          l: v26.Rectangle,
+          m: v26.Sprite,
+          n: v26.Text,
+          o: v26.Geometry,
+          p: v26.Mesh,
+          q: { r: v27.ADD, s: v27.SCREEN, t: v27.MULTIPLY },
+          u: { v: v28.REPEAT },
+          w: { z: function (x) { try { if (x && x.parent) x.parent.removeChild(x); } catch (e) {} } }
+        };
+      }
+      if (window.PIXI && window.PIXI.filters && window.PIXI.filters.ColorMatrixFilter && window.vO5 && window.vO5.e && !window.vO5.e.fl) {
+        window.vO5.e.fl = new window.PIXI.filters.ColorMatrixFilter();
+        window.vO5.e.fl.matrix = [0.85, 0.1, 0.1, 0, 0, 0.1, 0.85, 0.1, 0, 0, 0.1, 0.1, 0.8, 0, 0, 0, 0, 0, 1, 0];
+      }
+    } catch (e2) {}
   }
 
   function installStyle() {
+    if (document.getElementById("wormxo-valday-2023-bg-style")) return;
     var st = document.createElement("style");
-    st.id = "wormxo-valday2023-style";
-    st.textContent = cssText();
+    st.id = "wormxo-valday-2023-bg-style";
+    st.textContent = [
+      "html,body{background:#130718!important;}",
+      "#game-wrap,#mm-start,#main-menu,#main-menu-view,#stretch-box{background-color:#16071c!important;}",
+      "#game-wrap{position:relative!important;overflow:hidden!important;}",
+      "#wormxo-valday-bg-layer{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:0!important;pointer-events:none!important;overflow:hidden!important;background:#16071c!important;}",
+      "#wormxo-valday-bg-layer canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:block!important;}",
+      "#wormxo-valday-bg-layer:before{content:'';position:absolute;inset:-18%;background:radial-gradient(circle at 18% 20%,rgba(255,91,158,.28),transparent 34%),radial-gradient(circle at 82% 26%,rgba(255,200,225,.22),transparent 36%),radial-gradient(circle at 45% 82%,rgba(96,35,94,.28),transparent 42%);filter:blur(18px);animation:wormxoValdayGlow 13s ease-in-out infinite alternate;}",
+      "#game-wrap>#wormxo-valday-bg-layer~*,#mm-start,#main-menu,#main-menu-view,#markup-wrap,#logo{position:relative!important;z-index:2!important;}",
+      "#background-canvas{position:absolute!important;inset:0!important;z-index:1!important;pointer-events:none!important;}",
+      "@keyframes wormxoValdayGlow{0%{transform:translate3d(-2%,-1%,0) scale(1)}100%{transform:translate3d(2%,1%,0) scale(1.05)}}"
+    ].join("");
     (document.head || document.documentElement).appendChild(st);
   }
 
-  function addLayer(parent, name) {
-    if (!parent || parent.querySelector("." + name)) return;
-    var d = document.createElement("div");
-    d.className = name;
-    parent.insertBefore(d, parent.firstChild || null);
+  function makeLayer() {
+    var wrap = document.getElementById("game-wrap") || document.body;
+    if (!wrap) return null;
+    var layer = document.getElementById("wormxo-valday-bg-layer");
+    if (!layer) {
+      layer = document.createElement("div");
+      layer.id = "wormxo-valday-bg-layer";
+      var canvas = document.createElement("canvas");
+      canvas.id = "wormxo-valday-bg-canvas";
+      layer.appendChild(canvas);
+      if (wrap.firstChild) wrap.insertBefore(layer, wrap.firstChild); else wrap.appendChild(layer);
+    }
+    return layer;
   }
 
-  function patchPixi() {
-    try {
-      if (!window.PIXI || window.__WORMXO_VALDAY_PIXI_PATCHED__) return;
-      window.__WORMXO_VALDAY_PIXI_PATCHED__ = true;
-      window.WORMXO_PIXI_2023 = {
-        f: PIXI.Container,
-        g: PIXI.BaseTexture,
-        h: PIXI.Texture,
-        i: PIXI.Renderer,
-        j: PIXI.Graphics,
-        k: PIXI.Shader,
-        l: PIXI.Rectangle,
-        m: PIXI.Sprite,
-        n: PIXI.Text,
-        o: PIXI.Geometry,
-        p: PIXI.Mesh,
-        q: {
-          r: PIXI.BLEND_MODES && PIXI.BLEND_MODES.ADD,
-          s: PIXI.BLEND_MODES && PIXI.BLEND_MODES.SCREEN,
-          t: PIXI.BLEND_MODES && PIXI.BLEND_MODES.MULTIPLY
-        },
-        u: {
-          v: PIXI.WRAP_MODES && PIXI.WRAP_MODES.REPEAT
+  function fitCanvas(canvas) {
+    var box = canvas.parentNode || canvas;
+    var w = Math.max(1, box.clientWidth || window.innerWidth || 1280);
+    var h = Math.max(1, box.clientHeight || window.innerHeight || 720);
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    var rw = Math.floor(w * dpr);
+    var rh = Math.floor(h * dpr);
+    if (canvas.width !== rw || canvas.height !== rh) {
+      canvas.width = rw;
+      canvas.height = rh;
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+    }
+    return { w: w, h: h, dpr: dpr };
+  }
+
+  function loadImage(src, done) {
+    var img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = function () { done(null, img); };
+    img.onerror = function () { done(new Error("image load failed: " + src)); };
+    img.src = src;
+  }
+
+  function drawFallback(ctx, size, t, patternImg, confettiImg) {
+    var w = size.w, h = size.h, dpr = size.dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+
+    var g = ctx.createLinearGradient(0, 0, w, h);
+    g.addColorStop(0, "#260716");
+    g.addColorStop(0.45, "#57183a");
+    g.addColorStop(1, "#190718");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+
+    var r1 = ctx.createRadialGradient(w * (0.2 + Math.sin(t * 0.00035) * 0.03), h * 0.22, 0, w * 0.2, h * 0.22, Math.max(w, h) * 0.55);
+    r1.addColorStop(0, "rgba(255,105,165,.42)");
+    r1.addColorStop(1, "rgba(255,105,165,0)");
+    ctx.fillStyle = r1;
+    ctx.fillRect(0, 0, w, h);
+
+    var r2 = ctx.createRadialGradient(w * 0.78, h * (0.34 + Math.cos(t * 0.0003) * 0.04), 0, w * 0.78, h * 0.34, Math.max(w, h) * 0.48);
+    r2.addColorStop(0, "rgba(255,210,225,.28)");
+    r2.addColorStop(1, "rgba(255,210,225,0)");
+    ctx.fillStyle = r2;
+    ctx.fillRect(0, 0, w, h);
+
+    if (patternImg && patternImg.width) {
+      try {
+        var pat = ctx.createPattern(patternImg, "repeat");
+        ctx.save();
+        ctx.globalAlpha = 0.52;
+        ctx.translate((t * -0.018) % patternImg.width, (t * 0.012) % patternImg.height);
+        ctx.fillStyle = pat;
+        ctx.fillRect(-patternImg.width, -patternImg.height, w + patternImg.width * 2, h + patternImg.height * 2);
+        ctx.restore();
+      } catch (e) {}
+    }
+
+    if (confettiImg && confettiImg.width) {
+      var stepX = Math.max(90, confettiImg.width * 0.9);
+      var stepY = Math.max(80, confettiImg.height * 0.9);
+      ctx.save();
+      ctx.globalAlpha = 0.82;
+      for (var y = -stepY; y < h + stepY; y += stepY) {
+        for (var x = -stepX; x < w + stepX; x += stepX) {
+          var dx = x + ((t * 0.026 + y * 0.25) % stepX);
+          var dy = y + ((t * 0.038 + x * 0.12) % stepY);
+          var sc = 0.38 + 0.08 * Math.sin((x + y + t) * 0.002);
+          ctx.drawImage(confettiImg, dx, dy, confettiImg.width * sc, confettiImg.height * sc);
         }
-      };
-      if (PIXI.filters && PIXI.filters.ColorMatrixFilter) {
-        window.WORMXO_PIXI_2023.fl = new PIXI.filters.ColorMatrixFilter();
-        window.WORMXO_PIXI_2023.fl.matrix = [0.85,0.1,0.1,0,0,0.1,0.85,0.1,0,0,0.1,0.1,0.8,0,0,0,0,0,1,0];
       }
-    } catch (e) {}
+      ctx.restore();
+    }
   }
 
-  function install() {
-    try {
-      killOldBackgrounds();
-      installStyle();
-      var wrap = document.getElementById("game-wrap") || document.getElementById("main-menu") || document.body;
-      if (wrap) {
-        addLayer(wrap, "wormxo-valday2023-glow");
-        addLayer(wrap, "wormxo-valday2023-layer");
-        addLayer(wrap, "wormxo-valday2023-confetti");
-        addLayer(wrap, "wormxo-valday2023-logo");
-      }
-      patchPixi();
-      var tries = 0;
-      var timer = setInterval(function () {
-        tries++;
-        try {
-          var w = document.getElementById("game-wrap");
-          if (w) {
-            addLayer(w, "wormxo-valday2023-glow");
-            addLayer(w, "wormxo-valday2023-layer");
-            addLayer(w, "wormxo-valday2023-confetti");
-            addLayer(w, "wormxo-valday2023-logo");
-          }
-          patchPixi();
-          if (tries > 80) clearInterval(timer);
-        } catch (e) { if (tries > 80) clearInterval(timer); }
-      }, 250);
-    } catch (e) {}
+  function startCanvas() {
+    var layer = makeLayer();
+    if (!layer) return;
+    var canvas = document.getElementById("wormxo-valday-bg-canvas");
+    if (!canvas || canvas.__wormxoRunning) return;
+    var ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
+    canvas.__wormxoRunning = true;
+
+    var patternImg = null;
+    var confettiImg = null;
+    loadImage(asset(WORMXO_VALDAY_ASSETS.I), function (err, img) { if (!err) patternImg = img; });
+    loadImage(asset(WORMXO_VALDAY_ASSETS.H), function (err, img) { if (!err) confettiImg = img; });
+
+    function frame(t) {
+      try {
+        var size = fitCanvas(canvas);
+        drawFallback(ctx, size, t || 0, patternImg, confettiImg);
+      } catch (e) {}
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install, { once: true });
-  else install();
+  function boot() {
+    exposeCoreObjects();
+    installStyle();
+    startCanvas();
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, false);
+  else boot();
+  window.addEventListener("load", boot, false);
+  window.addEventListener("resize", function () { try { fitCanvas(document.getElementById("wormxo-valday-bg-canvas")); } catch (e) {} }, false);
 })();
-
-
 
 window.detectLog = null;
 const vO = {
