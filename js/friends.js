@@ -78,8 +78,6 @@ if (typeof window.Z === "undefined") {
 }
 
 var vLSHttpshaylamdaycom = (window.WORMXO_CORE && window.WORMXO_CORE.storeUrl) || "https://wormxo.store";
-var zUrl = (window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || "https://wormy.wormatrix.fun";
-var xUrl = (window.WORMXO_CORE && window.WORMXO_CORE.xUrl) || "https://wm.wormy.online";
 
 /* WORMXO UI / PERFORMANCE FLAGS - deep core */
 window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
@@ -358,34 +356,23 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 })();
 
 
-
-
-
+/* WORMXO DEEP LOBBY BACKGROUND CORE - moved from end */
+/* WORMXO optimized lobby background - light GPU / old design keeper */
 (function () {
-  if (window.__WORMFRIENDS_MATRIX_SAFE_BG__) return;
-  window.__WORMFRIENDS_MATRIX_SAFE_BG__ = true;
-
-  function installMatrixBg() {
+  if (window.__WORMXO_LOBBY_BG_2026__) return;
+  window.__WORMXO_LOBBY_BG_2026__ = true;
+  function install() {
     try {
-      if (document.getElementById("wormfriends-matrix-safe-bg-style")) return;
+      if (document.getElementById("wormxo-lobby-bg-style")) return;
       var css = document.createElement("style");
-      css.id = "wormfriends-matrix-safe-bg-style";
-      css.textContent = [
-        "#game-wrap,#mm-start,#main-menu,#main-menu-view{position:relative!important;overflow:hidden!important;background:#050715!important;}",
-        "#game-wrap:before,#mm-start:before,#main-menu:before,#main-menu-view:before{content:''!important;position:absolute!important;inset:-12%!important;z-index:-2!important;pointer-events:none!important;background:radial-gradient(circle at 18% 24%,rgba(0,90,255,.58),transparent 34%),radial-gradient(circle at 76% 20%,rgba(70,210,255,.50),transparent 36%),radial-gradient(circle at 48% 82%,rgba(150,62,255,.52),transparent 42%),linear-gradient(135deg,#040817 0%,#071a38 46%,#170b31 100%)!important;background-size:180% 180%!important;animation:wfmBgMove 16s ease-in-out infinite alternate!important;}",
-        "#game-wrap:after,#mm-start:after,#main-menu:after,#main-menu-view:after{content:''!important;position:absolute!important;inset:-20%!important;z-index:-1!important;pointer-events:none!important;background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.48),transparent 48%),linear-gradient(120deg,transparent 0%,rgba(0,0,0,.30) 44%,transparent 72%)!important;animation:wfmShadowMove 21s ease-in-out infinite alternate!important;}",
-        "#game-wrap>*,#mm-start>*,#main-menu>*,#main-menu-view>*{position:relative;z-index:1;}",
-        "button,input,a,.btn,.button,#play-btn,#play,.play,.fullscreen_button,.fullscreen_respawn,.fullscreen_contact{pointer-events:auto!important;}",
-        "@keyframes wfmBgMove{0%{background-position:0% 30%,100% 20%,40% 80%,0% 0%;transform:scale(1) rotate(0deg);}100%{background-position:86% 68%,24% 84%,72% 22%,100% 100%;transform:scale(1.035) rotate(.001deg);}}",
-        "@keyframes wfmShadowMove{0%{transform:translate3d(-4%,-2%,0) scale(1.02);opacity:.88;}100%{transform:translate3d(5%,4%,0) scale(1.10);opacity:.72;}}"
-      ].join("");
+      css.id = "wormxo-lobby-bg-style";
+      css.textContent = "#game-wrap,#mm-start,#main-menu,.background-canva{background:radial-gradient(circle at 20% 20%,rgba(85,195,255,.24),transparent 28%),radial-gradient(circle at 80% 30%,rgba(255,95,185,.22),transparent 32%),linear-gradient(135deg,#071325 0%,#141026 45%,#25102d 100%)!important;background-size:180% 180%!important;animation:wormxoBgSlow 18s ease-in-out infinite alternate!important;}@keyframes wormxoBgSlow{0%{background-position:0% 30%,100% 20%,0% 0%;}100%{background-position:80% 70%,20% 80%,100% 100%;}}";
       (document.head || document.documentElement).appendChild(css);
     } catch (e) {}
   }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", installMatrixBg, { once: true });
-  else installMatrixBg();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
 })();
+
 
 window.detectLog = null;
 const vO = {
@@ -905,252 +892,6 @@ if (!window.__XOTEAM_N131_DEEP_CORE__) {
     } catch (err) {}
   }, true);
 }
-
-
-(function () {
-  if (window.__WORMFRIENDS_MATRIX_GAME_VF7__) return;
-  window.__WORMFRIENDS_MATRIX_GAME_VF7__ = true;
-
-  function bootMatrixGameVf7() {
-    try {
-      if (typeof PIXI === "undefined") return false;
-      var WFM_ZURL = (window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || window.zUrl || "https://wormy.wormatrix.fun";
-      var WFM_EXTEND = function (Base, Ctor) {
-        Ctor.prototype = Object.create(Base.prototype);
-        Ctor.prototype.constructor = Ctor;
-        Ctor.parent = Base;
-        return Ctor;
-      };
-      var WFM_E = {
-        f: PIXI.Container,
-        m: PIXI.Sprite,
-        j: PIXI.Graphics,
-        n: PIXI.Text
-      };
-      var vO4 = { X: WFM_EXTEND };
-      var vO5 = { e: WFM_E };
-    var WORMFRIENDS_MATRIX_GAME_VF7 = function () {
-        return vO4.X(vO5.e.f, function () {
-          vO5.e.f.call(this);
-          this.Bh = 40;
-          this.Gh = new vO5.e.m();
-          this.Gh.anchor.set(0.5);
-          this.Ah = new vO5.e.j();
-          this.Zf = new vO5.e.j();
-          var v245 = new vO5.e.j();
-          this.zClock = (PIXI.Sprite.fromImage ? new PIXI.Sprite.fromImage(WFM_ZURL + "/images/Clock.PNG") : new PIXI.Sprite(PIXI.Texture.from(WFM_ZURL + "/images/Clock.PNG")));
-          v245.beginFill("black", 0.4);
-          v245.drawCircle(0, 0, this.Bh);
-          v245.endFill();
-          v245.lineStyle(2, 16225317);
-          v245.drawCircle(0, 0, this.Bh);
-          v245.moveTo(0, -this.Bh);
-          v245.lineTo(0, +this.Bh);
-          v245.moveTo(-this.Bh, 0);
-          v245.lineTo(+this.Bh, 0);
-          v245.endFill();
-          this.Gh.alpha = 0.5;
-          this.Ah.zIndex = 2;
-          this.Ah.alpha = 0.9;
-          this.Ah.beginFill(16225317);
-          this.Ah.drawCircle(0, 0, this.Bh * 0.06);
-          this.Ah.endFill();
-          this.Ah.lineStyle(1, "black");
-          this.Ah.drawCircle(0, 0, this.Bh * 0.06);
-          this.Ah.endFill();
-          this.Zf.zIndex = 3;
-          this.Zf.alpha = 0.9;
-          this.Zf.beginFill(1811741);
-          this.Zf.drawCircle(0, 0, this.Bh * 0.06);
-          this.Zf.endFill();
-          this.Zf.lineStyle(1, "black");
-          this.Zf.drawCircle(0, 0, this.Bh * 0.06);
-          this.Zf.endFill();
-          this.addChild(v245);
-          this.addChild(this.Gh);
-          this.addChild(this.Ah);
-          this.addChild(this.Zf);
-          this.zClock.width = 100;
-          this.zClock.height = 100;
-          this.zClock.x = -50;
-          this.zClock.y = -50;
-          this.zClock.zIndex = 10;
-          this.addChild(this.zClock);
-          window._x7 = this;
-          const v246 = new PIXI.TextStyle({
-            align: "center",
-            fill: "#f4d100",
-            fontSize: 12,
-            fontWeight: "bold",
-            lineJoin: "round",
-            whiteSpace: "normal",
-            wordWrap: true
-          });
-          const v247 = new PIXI.TextStyle({
-            align: "center",
-            fill: "#ed563f",
-            fontSize: 12,
-            fontWeight: "bold",
-            lineJoin: "round",
-            whiteSpace: "normal",
-            wordWrap: true
-          });
-          this.container_count = new PIXI.Container();
-          this.container_count.x = -45;
-          this.container_count.y = -52;
-          this.hsLabel = new PIXI.Text("HS", v247);
-          this.hsLabel.anchor.set(0.5);
-          this.klLabel = new PIXI.Text("KILL", v246);
-          this.klLabel.anchor.set(0.5);
-          this.gHsVal = new PIXI.Text("0", v247);
-          this.gHsVal.anchor.set(0.5);
-          this.tHsVal = new PIXI.Text("0", v247);
-          this.tHsVal.anchor.set(0.5);
-          this.gKlVal = new PIXI.Text("0", v246);
-          this.gKlVal.anchor.set(0.5);
-          this.tKlVal = new PIXI.Text("0", v246);
-          this.tKlVal.anchor.set(0.5);
-          this.hsLabel.x = 22;
-          this.hsLabel.y = 116;
-          this.klLabel.x = 67;
-          this.klLabel.y = 116;
-          this.gHsVal.x = 22;
-          this.gHsVal.y = 131;
-          this.gKlVal.x = 67;
-          this.gKlVal.y = 131;
-          this.tHsVal.x = 22;
-          this.tHsVal.y = 151;
-          this.tKlVal.x = 67;
-          this.tKlVal.y = 151;
-          if (!true) {
-            this.tHsVal.alpha = 0;
-            this.tKlVal.alpha = 0;
-          }
-          this.container_count.addChild(this.hsLabel);
-          this.container_count.addChild(this.gHsVal);
-          this.container_count.addChild(this.tHsVal);
-          this.container_count.addChild(this.klLabel);
-          this.container_count.addChild(this.gKlVal);
-          this.container_count.addChild(this.tKlVal);
-          this.addChild(this.container_count);
-          this.b2 = new PIXI.Graphics();
-          this.b2.lineStyle(2, 13466405);
-          this.b2.drawRoundedRect(-5, 106, 100, 56, 10);
-          this.container_count.addChild(this.b2);
-          this.b3 = new PIXI.Graphics();
-          this.b3.lineStyle(2, 13466405);
-          this.b3.drawRect(-4, 141, 196, 0);
-          this.container_count.addChild(this.b3);
-          this.headshots_container = new PIXI.Container();
-          this.headshots_container.x = -50;
-          this.headshots_container.y = 120;
-          const v248 = new PIXI.TextStyle({
-            align: "left",
-            fill: "#ed563f",
-            fontSize: 13,
-            fontWeight: "bold",
-            lineJoin: "round",
-            whiteSpace: "normal",
-            wordWrap: false
-          });
-          this.topHS = new PIXI.Text("Top (headShots):", v248);
-          this.topHS.x = 0;
-          this.topHS.y = 0;
-          this.addChild(this.headshots_container);
-          this.headshots_container.addChild(this.topHS);
-          this.topHSPlayers = [];
-          this.killMessages = [];
-          for (let vLN13 = 1; vLN13 < 6; vLN13++) {
-            let vO22 = {
-              ig: new vO5.e.n(vLN13, {
-                fontFamily: "PTSans",
-                fontSize: 11,
-                fontWeight: "bold",
-                fill: "white"
-              })
-            };
-            vO22.ig.anchor.x = 1;
-            vO22.ig.position.x = 0;
-            vO22.ig.position.y = vLN13 * 20;
-            this.headshots_container.addChild(vO22.ig);
-            vO22.jg = new vO5.e.n("--", {
-              fontFamily: "PTSans",
-              fontSize: 11,
-              fontWeight: "bold",
-              fill: "white"
-            });
-            vO22.jg.anchor.x = 0;
-            vO22.jg.position.x = 5;
-            vO22.jg.position.y = vLN13 * 20;
-            this.headshots_container.addChild(vO22.jg);
-            vO22.kg = new vO5.e.n("", {
-              fontFamily: "PTSans",
-              fontSize: 11,
-              fontWeight: "bold",
-              fill: "white"
-            });
-            vO22.kg.anchor.x = 1;
-            vO22.kg.position.x = 110;
-            vO22.kg.position.y = vLN13 * 20;
-            this.headshots_container.addChild(vO22.kg);
-            this.topHSPlayers.push(vO22);
-          }
-          ;
-          for (let vLN14 = 1; vLN14 < 11; vLN14++) {
-            let vO23 = {
-              ig: new vO5.e.n("", {
-                fontFamily: "PTSans",
-                fontSize: 12,
-                fontWeight: "bold",
-                fill: "green"
-              })
-            };
-            vO23.ig.anchor.x = 0;
-            vO23.ig.position.x = -10;
-            vO23.ig.position.y = 65 + vLN14 * 55;
-            this.headshots_container.addChild(vO23.ig);
-            vO23.jg = new vO5.e.n("", {
-              fontFamily: "PTSans",
-              fontSize: 12,
-              fontWeight: "bold",
-              fill: "#c10000"
-            });
-            vO23.jg.anchor.x = 0;
-            vO23.jg.position.x = 8;
-            vO23.jg.position.y = 80 + vLN14 * 55;
-            this.headshots_container.addChild(vO23.jg);
-            vO23.kg = new vO5.e.n("", {
-              fontFamily: "PTSans",
-              fontSize: 12,
-              fontWeight: "bold",
-              fill: "white"
-            });
-            vO23.kg.anchor.x = 0;
-            vO23.kg.position.x = 8;
-            vO23.kg.position.y = 95 + vLN14 * 55;
-            this.headshots_container.addChild(vO23.kg);
-            this.killMessages.push(vO23);
-          }
-        });
-      }();
-
-      window.WORMFRIENDS_MATRIX_GAME_VF7 = WORMFRIENDS_MATRIX_GAME_VF7;
-      return true;
-    } catch (e) {
-      window.WORMFRIENDS_MATRIX_GAME_VF7 = window.WORMFRIENDS_MATRIX_GAME_VF7 || null;
-      return false;
-    }
-  }
-
-  if (!bootMatrixGameVf7()) {
-    var __wfmVf7Try = 0;
-    var __wfmVf7Timer = setInterval(function () {
-      __wfmVf7Try++;
-      if (bootMatrixGameVf7() || __wfmVf7Try > 60) clearInterval(__wfmVf7Timer);
-    }, 250);
-  }
-})();
-
 
 let vO5 = {
   clientesVencidos: [],
