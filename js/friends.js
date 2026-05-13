@@ -78,6 +78,8 @@ if (typeof window.Z === "undefined") {
 }
 
 var vLSHttpshaylamdaycom = (window.WORMXO_CORE && window.WORMXO_CORE.storeUrl) || "https://wormxo.store";
+var zUrl = (window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || "https://wormy.wormatrix.fun";
+var xUrl = (window.WORMXO_CORE && window.WORMXO_CORE.xUrl) || "https://wm.wormy.online";
 
 /* WORMXO UI / PERFORMANCE FLAGS - deep core */
 window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
@@ -89,11 +91,6 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
   lowPerf: true
 };
 
-// by xo
-// by bmw
-// dark , absi , wormfriend , 
-// wormxoli19791125xomajdtixrytprivat5222 =  2.2
-// dont copy my code 
 
 /* WORMXO MOBILE LOW-PERFORMANCE CORE - joystick + lag fix */
 window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
@@ -109,8 +106,6 @@ window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
   joystickBottom: Number(localStorage.getItem("WORMXO_JOYSTICK_BOTTOM") || 105)
 };
 window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.WORMXO_MOBILE_PERF.isMobile || window.WORMXO_MOBILE_PERF.memory <= 4));
-
-
 
 
 /* WORMXO DEEP REGISTRY MERGE CORE - moved from end */
@@ -356,212 +351,158 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 })();
 
 
-
-/* WORMXO VALDAY 2023 LOBBY BACKGROUND CORE */
 (function () {
-  if (window.__WORMXO_VALDAY_2023_BG_CORE__) return;
-  window.__WORMXO_VALDAY_2023_BG_CORE__ = true;
+  if (window.__WORMFRIENDS_MATRIX_LOBBY_BG__) return;
+  window.__WORMFRIENDS_MATRIX_LOBBY_BG__ = true;
 
-  var WORMXO_VALDAY_ASSETS = {
-    B: window.runtimeHash,
-    C: "https://gateway.wormate.io",
-    D: "https://resources.wormate.io",
-    F: "/images/linelogo-valday2023.png",
-    G: "/images/guest-avatar-valday2023.png",
-    H: "/images/confetti-valday2023.png",
-    I: "/images/bg-event-pattern-valday2023.png"
+  var MATRIX_BG = {
+    canvasId: "wormfriends-matrix-lobby-bg",
+    styleId: "wormfriends-matrix-lobby-bg-style",
+    hostIds: ["game-wrap", "mm-start", "main-menu", "main-menu-view"],
+    colors: {
+      deep: "#050715",
+      blue: "rgba(0, 92, 255, 0.72)",
+      sky: "rgba(70, 205, 255, 0.70)",
+      cyan: "rgba(0, 255, 255, 0.44)",
+      violet: "rgba(155, 66, 255, 0.62)",
+      black: "rgba(0, 0, 0, 0.46)"
+    },
+    raf: 0,
+    ready: false,
+    canvas: null,
+    ctx: null,
+    lastW: 0,
+    lastH: 0
   };
 
-  window.WORMXO_VALDAY_2023_ASSETS = WORMXO_VALDAY_ASSETS;
-
-  function asset(path) {
-    path = String(path || "");
-    if (/^https?:\/\//i.test(path)) return path;
-    return WORMXO_VALDAY_ASSETS.D + path;
+  function getHost() {
+    return document.getElementById("game-wrap") || document.getElementById("main-menu") || document.body;
   }
 
-  function exposeCoreObjects() {
-    try {
-      if (typeof window.vO3 === "object" && window.vO3) {
-        window.vO3.A = Object.assign({}, window.vO3.A || {}, WORMXO_VALDAY_ASSETS);
-      } else if (typeof vO3 === "object" && vO3) {
-        vO3.A = Object.assign({}, vO3.A || {}, WORMXO_VALDAY_ASSETS);
-      }
-    } catch (e) {}
+  function isShown(el) {
+    if (!el) return false;
+    var st = window.getComputedStyle ? getComputedStyle(el) : el.style;
+    return st.display !== "none" && st.visibility !== "hidden" && Number(st.opacity || 1) !== 0;
+  }
 
+  function inLobby() {
+    var a = document.getElementById("main-menu");
+    var b = document.getElementById("mm-start");
+    var c = document.querySelector(".main-menu-view,.store-view-cont,#login-view,#welcome-view");
+    if (isShown(a) || isShown(b) || isShown(c)) return true;
     try {
-      if (window.PIXI && typeof window.vO5 === "object" && window.vO5 && !window.vO5.e) {
-        var v26 = window.PIXI;
-        var v27 = v26.BLEND_MODES || {};
-        var v28 = v26.WRAP_MODES || {};
-        window.vO5.e = {
-          f: v26.Container,
-          g: v26.BaseTexture,
-          h: v26.Texture,
-          i: v26.Renderer,
-          j: v26.Graphics,
-          k: v26.Shader,
-          l: v26.Rectangle,
-          m: v26.Sprite,
-          n: v26.Text,
-          o: v26.Geometry,
-          p: v26.Mesh,
-          q: { r: v27.ADD, s: v27.SCREEN, t: v27.MULTIPLY },
-          u: { v: v28.REPEAT },
-          w: { z: function (x) { try { if (x && x.parent) x.parent.removeChild(x); } catch (e) {} } }
-        };
-      }
-      if (window.PIXI && window.PIXI.filters && window.PIXI.filters.ColorMatrixFilter && window.vO5 && window.vO5.e && !window.vO5.e.fl) {
-        window.vO5.e.fl = new window.PIXI.filters.ColorMatrixFilter();
-        window.vO5.e.fl.matrix = [0.85, 0.1, 0.1, 0, 0, 0.1, 0.85, 0.1, 0, 0, 0.1, 0.1, 0.8, 0, 0, 0, 0, 0, 1, 0];
-      }
-    } catch (e2) {}
+      if (document.body && /menu|lobby|store|login/i.test(document.body.className || "")) return true;
+    } catch (e) {}
+    return !document.querySelector("canvas.game-canvas-active");
   }
 
   function installStyle() {
-    if (document.getElementById("wormxo-valday-2023-bg-style")) return;
+    if (document.getElementById(MATRIX_BG.styleId)) return;
     var st = document.createElement("style");
-    st.id = "wormxo-valday-2023-bg-style";
-    st.textContent = [
-      "html,body{background:#130718!important;}",
-      "#game-wrap,#mm-start,#main-menu,#main-menu-view,#stretch-box{background-color:#16071c!important;}",
-      "#game-wrap{position:relative!important;overflow:hidden!important;}",
-      "#wormxo-valday-bg-layer{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:0!important;pointer-events:none!important;overflow:hidden!important;background:#16071c!important;}",
-      "#wormxo-valday-bg-layer canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:block!important;}",
-      "#wormxo-valday-bg-layer:before{content:'';position:absolute;inset:-18%;background:radial-gradient(circle at 18% 20%,rgba(255,91,158,.28),transparent 34%),radial-gradient(circle at 82% 26%,rgba(255,200,225,.22),transparent 36%),radial-gradient(circle at 45% 82%,rgba(96,35,94,.28),transparent 42%);filter:blur(18px);animation:wormxoValdayGlow 13s ease-in-out infinite alternate;}",
-      "#game-wrap>#wormxo-valday-bg-layer~*,#mm-start,#main-menu,#main-menu-view,#markup-wrap,#logo{position:relative!important;z-index:2!important;}",
-      "#background-canvas{position:absolute!important;inset:0!important;z-index:1!important;pointer-events:none!important;}",
-      "@keyframes wormxoValdayGlow{0%{transform:translate3d(-2%,-1%,0) scale(1)}100%{transform:translate3d(2%,1%,0) scale(1.05)}}"
-    ].join("");
+    st.id = MATRIX_BG.styleId;
+    st.textContent = "#game-wrap{position:relative!important;overflow:hidden!important;background:#050715!important;}#wormfriends-matrix-lobby-bg{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:0!important;pointer-events:none!important;opacity:1;transition:opacity .25s linear;background:radial-gradient(circle at 25% 25%,rgba(0,92,255,.52),transparent 36%),radial-gradient(circle at 75% 18%,rgba(70,205,255,.44),transparent 38%),radial-gradient(circle at 50% 85%,rgba(155,66,255,.42),transparent 42%),linear-gradient(135deg,#050715,#071632 48%,#150a2c)!important;}#main-menu,#mm-start,.main-menu-view,.store-view-cont,#login-view,#welcome-view{position:relative!important;z-index:2!important;}#background-canvas{position:relative!important;z-index:1!important;}";
     (document.head || document.documentElement).appendChild(st);
   }
 
-  function makeLayer() {
-    var wrap = document.getElementById("game-wrap") || document.body;
-    if (!wrap) return null;
-    var layer = document.getElementById("wormxo-valday-bg-layer");
-    if (!layer) {
-      layer = document.createElement("div");
-      layer.id = "wormxo-valday-bg-layer";
-      var canvas = document.createElement("canvas");
-      canvas.id = "wormxo-valday-bg-canvas";
-      layer.appendChild(canvas);
-      if (wrap.firstChild) wrap.insertBefore(layer, wrap.firstChild); else wrap.appendChild(layer);
+  function makeCanvas() {
+    var host = getHost();
+    if (!host) return null;
+    var cv = document.getElementById(MATRIX_BG.canvasId);
+    if (!cv) {
+      cv = document.createElement("canvas");
+      cv.id = MATRIX_BG.canvasId;
+      host.insertBefore(cv, host.firstChild || null);
     }
-    return layer;
+    MATRIX_BG.canvas = cv;
+    MATRIX_BG.ctx = cv.getContext && cv.getContext("2d");
+    return cv;
   }
 
-  function fitCanvas(canvas) {
-    var box = canvas.parentNode || canvas;
-    var w = Math.max(1, box.clientWidth || window.innerWidth || 1280);
-    var h = Math.max(1, box.clientHeight || window.innerHeight || 720);
-    var dpr = Math.min(2, window.devicePixelRatio || 1);
-    var rw = Math.floor(w * dpr);
-    var rh = Math.floor(h * dpr);
-    if (canvas.width !== rw || canvas.height !== rh) {
-      canvas.width = rw;
-      canvas.height = rh;
-      canvas.style.width = w + "px";
-      canvas.style.height = h + "px";
-    }
-    return { w: w, h: h, dpr: dpr };
+  function resize() {
+    var cv = MATRIX_BG.canvas || makeCanvas();
+    if (!cv) return;
+    var host = getHost();
+    var w = Math.max(320, (host && host.clientWidth) || window.innerWidth || 1280);
+    var h = Math.max(240, (host && host.clientHeight) || window.innerHeight || 720);
+    var d = Math.min(1.5, Math.max(1, window.devicePixelRatio || 1));
+    if (MATRIX_BG.lastW === w && MATRIX_BG.lastH === h && cv.width === Math.floor(w * d)) return;
+    MATRIX_BG.lastW = w;
+    MATRIX_BG.lastH = h;
+    cv.width = Math.floor(w * d);
+    cv.height = Math.floor(h * d);
+    cv.style.width = w + "px";
+    cv.style.height = h + "px";
+    if (MATRIX_BG.ctx) MATRIX_BG.ctx.setTransform(d, 0, 0, d, 0, 0);
   }
 
-  function loadImage(src, done) {
-    var img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = function () { done(null, img); };
-    img.onerror = function () { done(new Error("image load failed: " + src)); };
-    img.src = src;
-  }
-
-  function drawFallback(ctx, size, t, patternImg, confettiImg) {
-    var w = size.w, h = size.h, dpr = size.dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, w, h);
-
-    var g = ctx.createLinearGradient(0, 0, w, h);
-    g.addColorStop(0, "#260716");
-    g.addColorStop(0.45, "#57183a");
-    g.addColorStop(1, "#190718");
+  function blob(ctx, x, y, r, color) {
+    var g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, color);
+    g.addColorStop(0.55, color.replace(/0\.[0-9]+\)/, "0.18)"));
+    g.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-
-    var r1 = ctx.createRadialGradient(w * (0.2 + Math.sin(t * 0.00035) * 0.03), h * 0.22, 0, w * 0.2, h * 0.22, Math.max(w, h) * 0.55);
-    r1.addColorStop(0, "rgba(255,105,165,.42)");
-    r1.addColorStop(1, "rgba(255,105,165,0)");
-    ctx.fillStyle = r1;
-    ctx.fillRect(0, 0, w, h);
-
-    var r2 = ctx.createRadialGradient(w * 0.78, h * (0.34 + Math.cos(t * 0.0003) * 0.04), 0, w * 0.78, h * 0.34, Math.max(w, h) * 0.48);
-    r2.addColorStop(0, "rgba(255,210,225,.28)");
-    r2.addColorStop(1, "rgba(255,210,225,0)");
-    ctx.fillStyle = r2;
-    ctx.fillRect(0, 0, w, h);
-
-    if (patternImg && patternImg.width) {
-      try {
-        var pat = ctx.createPattern(patternImg, "repeat");
-        ctx.save();
-        ctx.globalAlpha = 0.52;
-        ctx.translate((t * -0.018) % patternImg.width, (t * 0.012) % patternImg.height);
-        ctx.fillStyle = pat;
-        ctx.fillRect(-patternImg.width, -patternImg.height, w + patternImg.width * 2, h + patternImg.height * 2);
-        ctx.restore();
-      } catch (e) {}
-    }
-
-    if (confettiImg && confettiImg.width) {
-      var stepX = Math.max(90, confettiImg.width * 0.9);
-      var stepY = Math.max(80, confettiImg.height * 0.9);
-      ctx.save();
-      ctx.globalAlpha = 0.82;
-      for (var y = -stepY; y < h + stepY; y += stepY) {
-        for (var x = -stepX; x < w + stepX; x += stepX) {
-          var dx = x + ((t * 0.026 + y * 0.25) % stepX);
-          var dy = y + ((t * 0.038 + x * 0.12) % stepY);
-          var sc = 0.38 + 0.08 * Math.sin((x + y + t) * 0.002);
-          ctx.drawImage(confettiImg, dx, dy, confettiImg.width * sc, confettiImg.height * sc);
-        }
-      }
-      ctx.restore();
-    }
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
   }
 
-  function startCanvas() {
-    var layer = makeLayer();
-    if (!layer) return;
-    var canvas = document.getElementById("wormxo-valday-bg-canvas");
-    if (!canvas || canvas.__wormxoRunning) return;
-    var ctx = canvas.getContext("2d", { alpha: true });
-    if (!ctx) return;
-    canvas.__wormxoRunning = true;
+  function render(t) {
+    MATRIX_BG.raf = requestAnimationFrame(render);
+    var cv = MATRIX_BG.canvas || makeCanvas();
+    var ctx = MATRIX_BG.ctx;
+    if (!cv || !ctx) return;
+    resize();
+    var w = MATRIX_BG.lastW;
+    var h = MATRIX_BG.lastH;
+    var tm = (t || Date.now()) * 0.001;
+    cv.style.opacity = inLobby() ? "1" : "0";
 
-    var patternImg = null;
-    var confettiImg = null;
-    loadImage(asset(WORMXO_VALDAY_ASSETS.I), function (err, img) { if (!err) patternImg = img; });
-    loadImage(asset(WORMXO_VALDAY_ASSETS.H), function (err, img) { if (!err) confettiImg = img; });
+    var base = ctx.createLinearGradient(0, 0, w, h);
+    base.addColorStop(0, "#050715");
+    base.addColorStop(0.45, "#071632");
+    base.addColorStop(1, "#180a31");
+    ctx.fillStyle = base;
+    ctx.fillRect(0, 0, w, h);
 
-    function frame(t) {
-      try {
-        var size = fitCanvas(canvas);
-        drawFallback(ctx, size, t || 0, patternImg, confettiImg);
-      } catch (e) {}
-      requestAnimationFrame(frame);
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    blob(ctx, w * (0.18 + Math.sin(tm * 0.23) * 0.08), h * (0.24 + Math.cos(tm * 0.18) * 0.07), Math.max(w, h) * 0.42, MATRIX_BG.colors.blue);
+    blob(ctx, w * (0.78 + Math.cos(tm * 0.20) * 0.06), h * (0.22 + Math.sin(tm * 0.22) * 0.08), Math.max(w, h) * 0.36, MATRIX_BG.colors.sky);
+    blob(ctx, w * (0.52 + Math.sin(tm * 0.16) * 0.10), h * (0.78 + Math.cos(tm * 0.21) * 0.07), Math.max(w, h) * 0.46, MATRIX_BG.colors.violet);
+    blob(ctx, w * (0.38 + Math.cos(tm * 0.31) * 0.08), h * (0.52 + Math.sin(tm * 0.29) * 0.06), Math.max(w, h) * 0.30, MATRIX_BG.colors.cyan);
+    ctx.restore();
+
+    ctx.save();
+    ctx.globalCompositeOperation = "multiply";
+    blob(ctx, w * (0.48 + Math.sin(tm * 0.12) * 0.18), h * (0.47 + Math.cos(tm * 0.10) * 0.16), Math.max(w, h) * 0.55, MATRIX_BG.colors.black);
+    ctx.restore();
+
+    ctx.save();
+    ctx.globalAlpha = 0.18;
+    ctx.strokeStyle = "rgba(135,206,255,0.22)";
+    ctx.lineWidth = 1;
+    var step = 58;
+    var off = (tm * 18) % step;
+    for (var x = -step; x < w + step; x += step) {
+      ctx.beginPath();
+      ctx.moveTo(x + off, 0);
+      ctx.lineTo(x - h * 0.25 + off, h);
+      ctx.stroke();
     }
-    requestAnimationFrame(frame);
+    ctx.restore();
   }
 
   function boot() {
-    exposeCoreObjects();
     installStyle();
-    startCanvas();
+    makeCanvas();
+    resize();
+    if (!MATRIX_BG.raf) MATRIX_BG.raf = requestAnimationFrame(render);
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, false);
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
   else boot();
-  window.addEventListener("load", boot, false);
-  window.addEventListener("resize", function () { try { fitCanvas(document.getElementById("wormxo-valday-bg-canvas")); } catch (e) {} }, false);
+  window.addEventListener("resize", resize, { passive: true });
+  window.WORMFRIENDS_MATRIX_LOBBY_BG = MATRIX_BG;
 })();
 
 window.detectLog = null;
@@ -1082,6 +1023,221 @@ if (!window.__XOTEAM_N131_DEEP_CORE__) {
     } catch (err) {}
   }, true);
 }
+
+
+(function () {
+  if (window.__WORMFRIENDS_MATRIX_GAME_VF7__) return;
+  window.__WORMFRIENDS_MATRIX_GAME_VF7__ = true;
+  try {
+    if (typeof PIXI === "undefined" || typeof vO4 === "undefined" || typeof vO5 === "undefined" || !vO4.X || !vO5.e) return;
+var WORMFRIENDS_MATRIX_GAME_VF7 = function () {
+        return vO4.X(vO5.e.f, function () {
+          vO5.e.f.call(this);
+          this.Bh = 40;
+          this.Gh = new vO5.e.m();
+          this.Gh.anchor.set(0.5);
+          this.Ah = new vO5.e.j();
+          this.Zf = new vO5.e.j();
+          var v245 = new vO5.e.j();
+          this.zClock = new PIXI.Sprite.fromImage(((window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || "https://wormy.wormatrix.fun") + "/images/Clock.PNG");
+          v245.beginFill("black", 0.4);
+          v245.drawCircle(0, 0, this.Bh);
+          v245.endFill();
+          v245.lineStyle(2, 16225317);
+          v245.drawCircle(0, 0, this.Bh);
+          v245.moveTo(0, -this.Bh);
+          v245.lineTo(0, +this.Bh);
+          v245.moveTo(-this.Bh, 0);
+          v245.lineTo(+this.Bh, 0);
+          v245.endFill();
+          this.Gh.alpha = 0.5;
+          this.Ah.zIndex = 2;
+          this.Ah.alpha = 0.9;
+          this.Ah.beginFill(16225317);
+          this.Ah.drawCircle(0, 0, this.Bh * 0.06);
+          this.Ah.endFill();
+          this.Ah.lineStyle(1, "black");
+          this.Ah.drawCircle(0, 0, this.Bh * 0.06);
+          this.Ah.endFill();
+          this.Zf.zIndex = 3;
+          this.Zf.alpha = 0.9;
+          this.Zf.beginFill(1811741);
+          this.Zf.drawCircle(0, 0, this.Bh * 0.06);
+          this.Zf.endFill();
+          this.Zf.lineStyle(1, "black");
+          this.Zf.drawCircle(0, 0, this.Bh * 0.06);
+          this.Zf.endFill();
+          this.addChild(v245);
+          this.addChild(this.Gh);
+          this.addChild(this.Ah);
+          this.addChild(this.Zf);
+          this.zClock.width = 100;
+          this.zClock.height = 100;
+          this.zClock.x = -50;
+          this.zClock.y = -50;
+          this.zClock.zIndex = 10;
+          this.addChild(this.zClock);
+          window._x7 = this;
+          const v246 = new PIXI.TextStyle({
+            align: "center",
+            fill: "#f4d100",
+            fontSize: 12,
+            fontWeight: "bold",
+            lineJoin: "round",
+            whiteSpace: "normal",
+            wordWrap: true
+          });
+          const v247 = new PIXI.TextStyle({
+            align: "center",
+            fill: "#ed563f",
+            fontSize: 12,
+            fontWeight: "bold",
+            lineJoin: "round",
+            whiteSpace: "normal",
+            wordWrap: true
+          });
+          this.container_count = new PIXI.Container();
+          this.container_count.x = -45;
+          this.container_count.y = -52;
+          this.hsLabel = new PIXI.Text("HS", v247);
+          this.hsLabel.anchor.set(0.5);
+          this.klLabel = new PIXI.Text("KILL", v246);
+          this.klLabel.anchor.set(0.5);
+          this.gHsVal = new PIXI.Text("0", v247);
+          this.gHsVal.anchor.set(0.5);
+          this.tHsVal = new PIXI.Text("0", v247);
+          this.tHsVal.anchor.set(0.5);
+          this.gKlVal = new PIXI.Text("0", v246);
+          this.gKlVal.anchor.set(0.5);
+          this.tKlVal = new PIXI.Text("0", v246);
+          this.tKlVal.anchor.set(0.5);
+          this.hsLabel.x = 22;
+          this.hsLabel.y = 116;
+          this.klLabel.x = 67;
+          this.klLabel.y = 116;
+          this.gHsVal.x = 22;
+          this.gHsVal.y = 131;
+          this.gKlVal.x = 67;
+          this.gKlVal.y = 131;
+          this.tHsVal.x = 22;
+          this.tHsVal.y = 151;
+          this.tKlVal.x = 67;
+          this.tKlVal.y = 151;
+          if (!true) {
+            this.tHsVal.alpha = 0;
+            this.tKlVal.alpha = 0;
+          }
+          this.container_count.addChild(this.hsLabel);
+          this.container_count.addChild(this.gHsVal);
+          this.container_count.addChild(this.tHsVal);
+          this.container_count.addChild(this.klLabel);
+          this.container_count.addChild(this.gKlVal);
+          this.container_count.addChild(this.tKlVal);
+          this.addChild(this.container_count);
+          this.b2 = new PIXI.Graphics();
+          this.b2.lineStyle(2, 13466405);
+          this.b2.drawRoundedRect(-5, 106, 100, 56, 10);
+          this.container_count.addChild(this.b2);
+          this.b3 = new PIXI.Graphics();
+          this.b3.lineStyle(2, 13466405);
+          this.b3.drawRect(-4, 141, 196, 0);
+          this.container_count.addChild(this.b3);
+          this.headshots_container = new PIXI.Container();
+          this.headshots_container.x = -50;
+          this.headshots_container.y = 120;
+          const v248 = new PIXI.TextStyle({
+            align: "left",
+            fill: "#ed563f",
+            fontSize: 13,
+            fontWeight: "bold",
+            lineJoin: "round",
+            whiteSpace: "normal",
+            wordWrap: false
+          });
+          this.topHS = new PIXI.Text("Top (headShots):", v248);
+          this.topHS.x = 0;
+          this.topHS.y = 0;
+          this.addChild(this.headshots_container);
+          this.headshots_container.addChild(this.topHS);
+          this.topHSPlayers = [];
+          this.killMessages = [];
+          for (let vLN13 = 1; vLN13 < 6; vLN13++) {
+            let vO22 = {
+              ig: new vO5.e.n(vLN13, {
+                fontFamily: "PTSans",
+                fontSize: 11,
+                fontWeight: "bold",
+                fill: "white"
+              })
+            };
+            vO22.ig.anchor.x = 1;
+            vO22.ig.position.x = 0;
+            vO22.ig.position.y = vLN13 * 20;
+            this.headshots_container.addChild(vO22.ig);
+            vO22.jg = new vO5.e.n("--", {
+              fontFamily: "PTSans",
+              fontSize: 11,
+              fontWeight: "bold",
+              fill: "white"
+            });
+            vO22.jg.anchor.x = 0;
+            vO22.jg.position.x = 5;
+            vO22.jg.position.y = vLN13 * 20;
+            this.headshots_container.addChild(vO22.jg);
+            vO22.kg = new vO5.e.n("", {
+              fontFamily: "PTSans",
+              fontSize: 11,
+              fontWeight: "bold",
+              fill: "white"
+            });
+            vO22.kg.anchor.x = 1;
+            vO22.kg.position.x = 110;
+            vO22.kg.position.y = vLN13 * 20;
+            this.headshots_container.addChild(vO22.kg);
+            this.topHSPlayers.push(vO22);
+          }
+          ;
+          for (let vLN14 = 1; vLN14 < 11; vLN14++) {
+            let vO23 = {
+              ig: new vO5.e.n("", {
+                fontFamily: "PTSans",
+                fontSize: 12,
+                fontWeight: "bold",
+                fill: "green"
+              })
+            };
+            vO23.ig.anchor.x = 0;
+            vO23.ig.position.x = -10;
+            vO23.ig.position.y = 65 + vLN14 * 55;
+            this.headshots_container.addChild(vO23.ig);
+            vO23.jg = new vO5.e.n("", {
+              fontFamily: "PTSans",
+              fontSize: 12,
+              fontWeight: "bold",
+              fill: "#c10000"
+            });
+            vO23.jg.anchor.x = 0;
+            vO23.jg.position.x = 8;
+            vO23.jg.position.y = 80 + vLN14 * 55;
+            this.headshots_container.addChild(vO23.jg);
+            vO23.kg = new vO5.e.n("", {
+              fontFamily: "PTSans",
+              fontSize: 12,
+              fontWeight: "bold",
+              fill: "white"
+            });
+            vO23.kg.anchor.x = 0;
+            vO23.kg.position.x = 8;
+            vO23.kg.position.y = 95 + vLN14 * 55;
+            this.headshots_container.addChild(vO23.kg);
+            this.killMessages.push(vO23);
+          }
+        });
+      }();
+ 
+    window.WORMFRIENDS_MATRIX_GAME_VF7 = WORMFRIENDS_MATRIX_GAME_VF7;
+  } catch (e) { window.WORMFRIENDS_MATRIX_GAME_VF7 = null; }
+})();
 
 let vO5 = {
   clientesVencidos: [],
@@ -6744,7 +6900,7 @@ vF172.prototype.Se = function (p281) {
             if (p433 && p433.code === 1485 && p433.error === "expired_token") {
               vLN061++;
               console.log("auto login attempt:", vLN061);
-              $("#login-view").html("<h2>Auto Login Google WormateFriends Xo Connect : " + vLN061 + "</h2>");
+              $("#login-view").html("<h2>Auto Login Google WormFriends Matrix Connect : " + vLN061 + "</h2>");
               f87();
             } else {
               f88(p433);
@@ -6761,7 +6917,7 @@ vF172.prototype.Se = function (p281) {
             if (p434 && p434.code === 1485 && p434.error === "expired_token") {
               vLN061++;
               console.log("auto login attempt:", vLN061);
-              $("#login-view").html("<h2>Auto Login Google WormateFriends Xo Xo Conncet : " + vLN061 + "</h2>");
+              $("#login-view").html("<h2>Auto Login Google WormFriends Matrix Conncet : " + vLN061 + "</h2>");
               f87();
             } else {
               f88(p434);
@@ -10509,7 +10665,7 @@ $("#mm-advice-cont").html(`
     }
     function f111() {
       $(".description-text").replaceWith("<div class=\"description-text\">");
-      $(".description-text").prepend("<p id='title'>WormateFriends Xo</p>");
+      $(".description-text").prepend("<p id='title'>WormFriends Matrix</p>");
       $("#title").after("<div id=\"idwormworld\" style=\"text-align: center\"><div class='logo'><img src='https://haylamday.com/images/hiep_img/logo.png'/></div>\n        <input type=\"text\" value=\"" + vO4.FB_UserID + "\" style=\"width: 230px;text-align: center;border-radius: 4px;font-size: 20px;padding: 0 6px;background-color: #fff;color: #806102;display: block;box-sizing: border-box;-webkit-appearance: none;outline: 0;border-width: 0;\">\n        <button onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copiado! copied!'));\">COPY</button>\n    </div>\n<div></div>\n<div><input type=\"button\" value=\"ACTIVATE ALL\" target=\"_blank\" onclick=\"window.location.href='" + MYPAGE + "'\" style=\"margin-top: 5px; width: 100%\"></div>");
     }
     function f112() {
@@ -10747,7 +10903,7 @@ $("#mm-advice-cont").html(`
   $("#background-canvas").replaceWith("<canvas id=\"background-canvas\">\n   </canvas>\n   ");
   $("#popup-login-gg").html("<div class=\"settings-line\" id=\"popup-login-gg1\">Login via Google</div>");
   $("#social-buttons").replaceWith("");
-  $("#markup-footer").replaceWith("\n    \n \n\n<footer id=\"markup-footer\">\n            <div class=\"lang-menu\"><button class=\"lang-button\">Language â–´</button>\n            <div class=\"lang-list\"><a hreflang=\"en\" href=\"/\">English</a>\n<a hreflang=\"uk\" href=\"/uk/\">Ð£ÐºÑ€Ð°Ñ—Ð½ÑÑŒÐºÐ°</a>\n<a hreflang=\"de\" href=\"/de/\">Deutsch</a>\n<a hreflang=\"fr\" href=\"/fr/\">FranÃ§ais</a>\n<a hreflang=\"es\" href=\"/es/\">EspaÃ±ol</a>\n</div></div>\n            \n            <a class=\"link\" hreflang=\"en\" href=\"https://wormxo.store\"> 2026 WormateFriends XO Team</a>\n          <a style=\"font-size: 17px;font-weight: 500;color: #000000;\"> whatsapp : 07828329330 <i class='' style='color:red'></i></a>\n            </footer>\n\n        ");
+  $("#markup-footer").replaceWith("\n    \n \n\n<footer id=\"markup-footer\">\n            <div class=\"lang-menu\"><button class=\"lang-button\">Language â–´</button>\n            <div class=\"lang-list\"><a hreflang=\"en\" href=\"/\">English</a>\n<a hreflang=\"uk\" href=\"/uk/\">Ð£ÐºÑ€Ð°Ñ—Ð½ÑÑŒÐºÐ°</a>\n<a hreflang=\"de\" href=\"/de/\">Deutsch</a>\n<a hreflang=\"fr\" href=\"/fr/\">FranÃ§ais</a>\n<a hreflang=\"es\" href=\"/es/\">EspaÃ±ol</a>\n</div></div>\n            \n            <a class=\"link\" hreflang=\"en\" href=\"https://wormxo.store\"> 2026 WormFriends Matrix Team</a>\n          <a style=\"font-size: 17px;font-weight: 500;color: #000000;\"> whatsapp : 07828329330 <i class='' style='color:red'></i></a>\n            </footer>\n\n        ");
 });
 if (!sessionStorage.getItem("visited")) {
   sessionStorage.setItem("visited", "true");
@@ -11031,29 +11187,6 @@ isValidHotkey = function (p633) {
     return false;
   }
 };
-
-document.addEventListener("keydown", function (p637) {
-  if (p637.key === "") {
-    p637.preventDefault();
-  }
-  if (p637.ctrlKey && p637.shiftKey && p637.key === "I") {
-    p637.preventDefault();
-  }
-  if (p637.ctrlKey && p637.key === "U") {
-    p637.preventDefault();
-  }
-});
-document.addEventListener("contextmenu", function (p638) {
-  p638.preventDefault();
-});
-(function () {
-  var v625 = document.createElement("script");
-  v625.textContent = "\n        (function() {\n            var preventDebugging = setInterval(function() {\n                if (window.console) {\n                    console.log = function() {}; \n                    console.debug = function() {}; \n                    console.error = function() {}; \n                    console.info = function() {};  \n                }\n            }, 1000);\n        })();\n    ";
-  document.head.appendChild(v625);
-})();
-console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
-
-
 /* WORMXO FINAL DEEP PATCH - no TeamCode / smooth WiFi / server UI / names restore */
 (function () {
   if (window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__) return;
