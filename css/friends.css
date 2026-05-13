@@ -1113,6 +1113,44 @@ body {display:block !important;}
 
     filter: brightness(0.95);
 }
+
+
+#wf-tool-button{
+
+    float: right;
+    position: relative;
+    min-width: 90px;
+    min-height: 20px;
+    margin-top: 5px;
+    line-height: 50px;
+    text-align: center;
+    background-image: linear-gradient(#ff0000 , #8f0000);
+    border-radius: 5px;
+
+    z-index: 99998;
+    cursor: pointer;
+}
+#wf-tool-button:hover{
+     /* إضاءة خفيفة */
+    filter: brightness(1.08);
+
+    /* حركة للجرادينت */
+    background-position: right center;
+
+    /* Glow أخضر */
+    box-shadow:
+        0 0 6px rgba(255, 40, 40, 0.45),
+        0 0 14px rgba(139, 47, 47, 0.35),
+        0 4px 12px rgba(51, 6, 6, 0.35);
+
+    /* حركة بسيطة */
+    transform: translateY(-1px);
+}
+#wf-tool-button:active{
+   transform: translateY(1px);
+
+    filter: brightness(0.95);
+}
 #game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons #mm-store:focus {outline:none;}
 #game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom #mm-bottom-buttons #mm-store * {vertical-align:middle;}
 #game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom .mm-merchant-cont {
