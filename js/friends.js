@@ -356,22 +356,143 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 })();
 
 
-/* WORMXO DEEP LOBBY BACKGROUND CORE - moved from end */
-/* WORMXO optimized lobby background - light GPU / old design keeper */
+
 (function () {
-  if (window.__WORMXO_LOBBY_BG_2026__) return;
-  window.__WORMXO_LOBBY_BG_2026__ = true;
-  function install() {
+  if (window.__WORMXO_VALDAY_2023_BACKGROUND_CORE__) return;
+  window.__WORMXO_VALDAY_2023_BACKGROUND_CORE__ = true;
+
+  var WORMXO_VALDAY_2023 = window.WORMXO_VALDAY_2023 || {
+    B: window.runtimeHash || "",
+    C: "https://gateway.wormate.io",
+    D: "https://resources.wormate.io",
+    F: "/images/linelogo-valday2023.png",
+    G: "/images/guest-avatar-valday2023.png",
+    H: "/images/confetti-valday2023.png",
+    I: "/images/bg-event-pattern-valday2023.png"
+  };
+  window.WORMXO_VALDAY_2023 = WORMXO_VALDAY_2023;
+
+  function asset(path) {
+    path = String(path || "");
+    return /^https?:\/\//i.test(path) ? path : WORMXO_VALDAY_2023.D + path;
+  }
+
+  function killOldBackgrounds() {
+    var ids = [
+      "wormxo-lobby-bg-style",
+      "WORMXO_MIXED_BG_2026",
+      "wormxo-valday2023-style"
+    ];
+    ids.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && el.parentNode) el.parentNode.removeChild(el);
+    });
+    document.querySelectorAll(".wormxo-valday2023-layer,.wormxo-valday2023-confetti,.wormxo-valday2023-logo,.wormxo-valday2023-glow").forEach(function (el) {
+      if (el && el.parentNode) el.parentNode.removeChild(el);
+    });
+  }
+
+  function cssText() {
+    var pattern = asset(WORMXO_VALDAY_2023.I);
+    var confetti = asset(WORMXO_VALDAY_2023.H);
+    var logo = asset(WORMXO_VALDAY_2023.F);
+    return [
+      "@keyframes wormxoValdayPattern{0%{background-position:0 0,0 0,50% 50%;}50%{background-position:260px 130px,-180px 220px,55% 45%;}100%{background-position:520px 260px,-360px 440px,50% 50%;}}",
+      "@keyframes wormxoValdayFloat{0%{transform:translate3d(-2%,-3%,0) scale(1);opacity:.72;}50%{transform:translate3d(3%,2%,0) scale(1.08);opacity:.96;}100%{transform:translate3d(-2%,-3%,0) scale(1);opacity:.72;}}",
+      "@keyframes wormxoValdayFall{0%{background-position:0 -220px,120px -420px,40px -760px;}100%{background-position:80px 720px,-140px 900px,230px 1160px;}}",
+      "@keyframes wormxoValdayLogo{0%{transform:translate3d(0,0,0) rotate(-2deg);opacity:.34;}50%{transform:translate3d(0,-12px,0) rotate(2deg);opacity:.58;}100%{transform:translate3d(0,0,0) rotate(-2deg);opacity:.34;}}",
+      "#game-wrap,#mm-start,#main-menu,#main-menu-view,#markup-wrap,.background-canva,#background-canvas{background:radial-gradient(circle at 20% 18%,rgba(255,94,160,.28),transparent 32%),radial-gradient(circle at 82% 28%,rgba(126,73,255,.24),transparent 34%),linear-gradient(135deg,#120615 0%,#241025 42%,#371323 68%,#120713 100%)!important;background-size:160% 160%,170% 170%,100% 100%!important;}",
+      "#game-wrap{position:relative!important;overflow:hidden!important;isolation:isolate!important;}",
+      "#game-wrap>.wormxo-valday2023-layer,#game-wrap>.wormxo-valday2023-confetti,#game-wrap>.wormxo-valday2023-logo,#game-wrap>.wormxo-valday2023-glow{position:absolute!important;inset:0!important;pointer-events:none!important;z-index:0!important;}",
+      "#game-wrap>.wormxo-valday2023-layer{background-image:url('" + pattern + "'),url('" + pattern + "'),radial-gradient(circle at 50% 48%,rgba(255,190,215,.14),transparent 46%);background-repeat:repeat,repeat,no-repeat;background-size:340px 340px,220px 220px,100% 100%;mix-blend-mode:screen;opacity:.72;filter:saturate(1.08) contrast(1.04);animation:wormxoValdayPattern 34s linear infinite;}",
+      "#game-wrap>.wormxo-valday2023-confetti{background-image:url('" + confetti + "'),url('" + confetti + "'),url('" + confetti + "');background-repeat:repeat;background-size:150px 150px,210px 210px,290px 290px;opacity:.66;mix-blend-mode:screen;animation:wormxoValdayFall 22s linear infinite;}",
+      "#game-wrap>.wormxo-valday2023-glow{inset:-22%!important;background:radial-gradient(circle at 28% 28%,rgba(255,58,126,.36),transparent 32%),radial-gradient(circle at 72% 72%,rgba(120,58,255,.30),transparent 38%),radial-gradient(circle at 50% 50%,rgba(255,255,255,.10),transparent 50%);filter:blur(36px);mix-blend-mode:screen;animation:wormxoValdayFloat 13s ease-in-out infinite;}",
+      "#game-wrap>.wormxo-valday2023-logo{background-image:url('" + logo + "'),url('" + logo + "'),url('" + logo + "');background-repeat:no-repeat;background-size:210px auto,150px auto,120px auto;background-position:50% 12%,14% 72%,86% 70%;mix-blend-mode:screen;filter:drop-shadow(0 0 18px rgba(255,80,150,.65));animation:wormxoValdayLogo 8s ease-in-out infinite;}",
+      "#game-wrap>*:not(.wormxo-valday2023-layer):not(.wormxo-valday2023-confetti):not(.wormxo-valday2023-logo):not(.wormxo-valday2023-glow){position:relative;z-index:2;}",
+      "canvas{position:relative;z-index:1;}"
+    ].join("");
+  }
+
+  function installStyle() {
+    var st = document.createElement("style");
+    st.id = "wormxo-valday2023-style";
+    st.textContent = cssText();
+    (document.head || document.documentElement).appendChild(st);
+  }
+
+  function addLayer(parent, name) {
+    if (!parent || parent.querySelector("." + name)) return;
+    var d = document.createElement("div");
+    d.className = name;
+    parent.insertBefore(d, parent.firstChild || null);
+  }
+
+  function patchPixi() {
     try {
-      if (document.getElementById("wormxo-lobby-bg-style")) return;
-      var css = document.createElement("style");
-      css.id = "wormxo-lobby-bg-style";
-      css.textContent = "#game-wrap,#mm-start,#main-menu,.background-canva{background:radial-gradient(circle at 20% 20%,rgba(85,195,255,.24),transparent 28%),radial-gradient(circle at 80% 30%,rgba(255,95,185,.22),transparent 32%),linear-gradient(135deg,#071325 0%,#141026 45%,#25102d 100%)!important;background-size:180% 180%!important;animation:wormxoBgSlow 18s ease-in-out infinite alternate!important;}@keyframes wormxoBgSlow{0%{background-position:0% 30%,100% 20%,0% 0%;}100%{background-position:80% 70%,20% 80%,100% 100%;}}";
-      (document.head || document.documentElement).appendChild(css);
+      if (!window.PIXI || window.__WORMXO_VALDAY_PIXI_PATCHED__) return;
+      window.__WORMXO_VALDAY_PIXI_PATCHED__ = true;
+      window.WORMXO_PIXI_2023 = {
+        f: PIXI.Container,
+        g: PIXI.BaseTexture,
+        h: PIXI.Texture,
+        i: PIXI.Renderer,
+        j: PIXI.Graphics,
+        k: PIXI.Shader,
+        l: PIXI.Rectangle,
+        m: PIXI.Sprite,
+        n: PIXI.Text,
+        o: PIXI.Geometry,
+        p: PIXI.Mesh,
+        q: {
+          r: PIXI.BLEND_MODES && PIXI.BLEND_MODES.ADD,
+          s: PIXI.BLEND_MODES && PIXI.BLEND_MODES.SCREEN,
+          t: PIXI.BLEND_MODES && PIXI.BLEND_MODES.MULTIPLY
+        },
+        u: {
+          v: PIXI.WRAP_MODES && PIXI.WRAP_MODES.REPEAT
+        }
+      };
+      if (PIXI.filters && PIXI.filters.ColorMatrixFilter) {
+        window.WORMXO_PIXI_2023.fl = new PIXI.filters.ColorMatrixFilter();
+        window.WORMXO_PIXI_2023.fl.matrix = [0.85,0.1,0.1,0,0,0.1,0.85,0.1,0,0,0.1,0.1,0.8,0,0,0,0,0,1,0];
+      }
     } catch (e) {}
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
+
+  function install() {
+    try {
+      killOldBackgrounds();
+      installStyle();
+      var wrap = document.getElementById("game-wrap") || document.getElementById("main-menu") || document.body;
+      if (wrap) {
+        addLayer(wrap, "wormxo-valday2023-glow");
+        addLayer(wrap, "wormxo-valday2023-layer");
+        addLayer(wrap, "wormxo-valday2023-confetti");
+        addLayer(wrap, "wormxo-valday2023-logo");
+      }
+      patchPixi();
+      var tries = 0;
+      var timer = setInterval(function () {
+        tries++;
+        try {
+          var w = document.getElementById("game-wrap");
+          if (w) {
+            addLayer(w, "wormxo-valday2023-glow");
+            addLayer(w, "wormxo-valday2023-layer");
+            addLayer(w, "wormxo-valday2023-confetti");
+            addLayer(w, "wormxo-valday2023-logo");
+          }
+          patchPixi();
+          if (tries > 80) clearInterval(timer);
+        } catch (e) { if (tries > 80) clearInterval(timer); }
+      }, 250);
+    } catch (e) {}
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install, { once: true });
+  else install();
 })();
+
 
 
 window.detectLog = null;
@@ -10841,106 +10962,7 @@ isValidHotkey = function (p633) {
     return false;
   }
 };
-window.onload = function () {
-  (function (_0xA9B1) {
-    var _0xQ = ["game-wrap", "lastSelected", "WORMXO_MIXED_BG_2026"];
-    var _0xW = document.getElementById(_0xQ[0]);
-    if (!_0xW) return;
 
-    var _0xS = document.getElementById(_0xQ[2]);
-    if (!_0xS) {
-      _0xS = document.createElement("style");
-      _0xS.id = _0xQ[2];
-      _0xS.innerHTML = `
-        @keyframes _x0MoveA {
-          0%   { background-position: 0% 50%, 100% 0%, 0 0; }
-          25%  { background-position: 45% 80%, 80% 40%, 40px 80px; }
-          50%  { background-position: 100% 50%, 40% 100%, 100px 30px; }
-          75%  { background-position: 55% 20%, 10% 60%, 20px 120px; }
-          100% { background-position: 0% 50%, 100% 0%, 0 0; }
-        }
-
-        @keyframes _x0ShadowB {
-          0%   { transform: translate(-15%, -10%) scale(1); opacity: .45; }
-          50%  { transform: translate(12%, 18%) scale(1.25); opacity: .7; }
-          100% { transform: translate(-15%, -10%) scale(1); opacity: .45; }
-        }
-
-        #game-wrap {
-          position: relative !important;
-          overflow: hidden !important;
-          background:
-            radial-gradient(circle at 20% 30%, rgba(0, 140, 255, .85), transparent 35%),
-            radial-gradient(circle at 80% 20%, rgba(135, 206, 250, .85), transparent 38%),
-            radial-gradient(circle at 50% 80%, rgba(255, 105, 180, .75), transparent 42%),
-            radial-gradient(circle at 75% 75%, rgba(138, 43, 226, .75), transparent 40%),
-            linear-gradient(135deg, #004cff, #55ccff, #ff75d8, #7b2cff) !important;
-          background-size:
-            160% 160%,
-            180% 180%,
-            170% 170%,
-            200% 200%,
-            300% 300% !important;
-          animation: _x0MoveA 14s ease-in-out infinite !important;
-        }
-
-        #game-wrap::before {
-          content: "";
-          position: absolute;
-          inset: -30%;
-          pointer-events: none;
-          z-index: 0;
-          background:
-            radial-gradient(circle, rgba(0,0,0,.75) 0%, rgba(0,0,0,.45) 28%, transparent 62%);
-          filter: blur(55px);
-          animation: _x0ShadowB 10s ease-in-out infinite;
-        }
-
-        #game-wrap::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          z-index: 1;
-          background:
-            radial-gradient(circle at 10% 20%, rgba(255,255,255,.22) 0 2px, transparent 3px),
-            radial-gradient(circle at 40% 70%, rgba(255,255,255,.18) 0 2px, transparent 4px),
-            radial-gradient(circle at 80% 30%, rgba(255,255,255,.20) 0 1.5px, transparent 3px);
-          background-size: 90px 90px, 130px 130px, 170px 170px;
-          animation: _x0Snow 9s linear infinite;
-          opacity: .8;
-        }
-
-        @keyframes _x0Snow {
-          from { background-position: 0 -100px, 0 -160px, 0 -220px; }
-          to   { background-position: 0 500px, 0 650px, 0 800px; }
-        }
-
-        #game-wrap > * {
-          position: relative;
-          z-index: 2;
-        }
-      `;
-      document.head.appendChild(_0xS);
-    }
-
-    var _0xR = (Math.random() + Date.now()).toString(36).replace(/[^a-z0-9]/g, "");
-    localStorage.setItem(_0xQ[1], _0xR);
-  })(777777);
-};
-
-console.log("Core 2026 WORMXO BG Update");
-
-(function () {
-  var _0xT = setInterval(function () {
-    try {
-      var _0xE = document.getElementById("game-wrap");
-      if (_0xE && !_0xE.dataset.wormxoBgOk) {
-        _0xE.dataset.wormxoBgOk = "1";
-      }
-    } catch (_0xErr) {}
-  }, 100);
-})();
 document.addEventListener("keydown", function (p637) {
   if (p637.key === "") {
     p637.preventDefault();
