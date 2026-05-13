@@ -157,7 +157,7 @@ function f(p) {
       re: false,
       dg: null
     };
-    let v574 = localStorage.getItem("tmwSaveGame");
+    let v574 = localStorage.getItem("wxoSaveGame");
     if (v574 && v574 !== "null") {
       let v575 = JSON.parse(v574);
       for (let v576 in v575) {
@@ -178,17 +178,17 @@ function f(p) {
     let vF42 = function (p825) {
       vO50.joystick ||= vO49.joystick;
       vO50.joystick.checked = p825.checked;
-      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
     };
     let vF43 = function (p826) {
       vO50.joystick ||= vO49.joystick;
       vO50.joystick.color = p826.value;
-      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
     };
     let vF44 = function (p827) {
       vO50.joystick ||= vO49.joystick;
       vO50.joystick.mode = p827.value;
-      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
     };
     let vF45 = function (p828) {
       vO50.joystick ||= vO49.joystick;
@@ -203,7 +203,7 @@ function f(p) {
         };
       }
       vO50.joystick.positionMode = p828.value;
-      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
     };
     let vF46 = function (p829) {
       vO50.joystick ||= vO49.joystick;
@@ -218,12 +218,12 @@ function f(p) {
         };
       }
       vO50.joystick.pxy = p829.value;
-      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
     };
     let vF47 = function (p830) {
       vO50.joystick ||= vO49.joystick;
       vO50.joystick.size = p830.value;
-      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
     };
     let vF48 = function (p831, p832, p833, p834, p835, p836) {
       let vO51 = {
@@ -508,9 +508,9 @@ function f(p) {
     localStorage.setItem("ccg_0", "Kill and Headshot stats will be removed?");
     localStorage.setItem("ccg_1", "There was a problem connecting!");
     localStorage.setItem("ccg_2", "Your account has been locked.");
-    var v945 = localStorage.getItem("tmwsw");
-    var v946 = localStorage.getItem("tmwi") != null ? localStorage.getItem("tmwi").split(",") : localStorage.getItem("tmwi");
-    var v984 = localStorage.getItem("tmwit");
+    var v945 = localStorage.getItem("wxosw");
+    var v946 = localStorage.getItem("wxoi") != null ? localStorage.getItem("wxoi").split(",") : localStorage.getItem("wxoi");
+    var v984 = localStorage.getItem("wxoit");
     var v990 = localStorage.getItem("custom_wear");
     var v991 = localStorage.getItem("custom_skin");
     $("<input type=\"hidden\" id=\"port_id\" value=\"\">").insertAfter(".description-text");
@@ -538,10 +538,10 @@ function f(p) {
         })
       }).then(async function (p844) {
         v946 = (p844 = await p844.json()).i.split(".");
-        localStorage.setItem("tmwi", v946);
-        localStorage.setItem("tmwit", p844.vs);
+        localStorage.setItem("wxoi", v946);
+        localStorage.setItem("wxoit", p844.vs);
         vO50.v_z = p844.vs;
-        localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+        localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
         window.location.reload();
       }).catch(function (p845) {});
     }
@@ -594,8 +594,8 @@ function f(p) {
     v1025.alpha = 0.25;
     v1027.alpha = 0.25;
     v1026.alpha = 0.25;
-    var v1028 = new PIXI.Text("Map: ?", {
-      fontFamily: "PTSans",
+    var v1028 = new PIXI.Text("?", {
+      fontFamily: "WormXO",
       fill: "#fff009",
       fontSize: 12
     });
@@ -2198,8 +2198,8 @@ function f(p) {
                 }
               }
               ;
-              localStorage.setItem("tmwsw", JSON.stringify(p1114));
-              localStorage.setItem("tmwit", vO50.v_z);
+              localStorage.setItem("wxosw", JSON.stringify(p1114));
+              localStorage.setItem("wxoit", vO50.v_z);
               if (v991 || v990 || Array.isArray(vO50.dg) && vO50.dg.length > 0) {
                 p1114 = await Ysw(p1114);
               }
@@ -4306,7 +4306,7 @@ function f(p) {
           vO50.pm = {
             ...this
           };
-          localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+          localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
         }
         switch (p1285) {
           case vO37._j.$j:
@@ -8702,16 +8702,16 @@ function f(p) {
                 $("#port_name_s").val(vVF36);
                 vO50.pi = v1879;
                 vO50.pn = vVF36;  
-                localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Wxo: " + vVF36;
+                localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+                v1028.text = " " + vVF36;
                 vO75.Mh.Dq(v1879, v1872);
               } else {
                 $("#port_id_s").val($("#port_id").val());
                 $("#port_name_s").val($("#port_name").val());
                 vO50.pi = $("#port_id").val();
                 vO50.pn = $("#port_name").val();
-                localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Wxo: " + $("#port_name").val();
+                localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+                v1028.text = " " + $("#port_name").val();
                 vO75.Mh.Dq($("#port_id").val(), v1872);
               }
             }
@@ -8739,16 +8739,16 @@ function f(p) {
                 $("#port_name_s").val(vVF362);
                 vO50.pi = v1883;
                 vO50.pn = vVF362;
-                localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Wxo: " + vVF362;
+                localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+                v1028.text = " " + vVF362;
                 vO75.Mh.Eq(v1883, v1880, v1881);
               } else {
                 $("#port_id_s").val($("#port_id").val());
                 $("#port_name_s").val($("#port_name").val());
                 vO50.pi = $("#port_id").val();
                 vO50.pn = $("#port_name").val();
-                localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Wxo: " + $("#port_name").val();
+                localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+                v1028.text = " " + $("#port_name").val();
                 vO75.Mh.Eq($("#port_id").val(), v1880, v1881);
               }
             }
@@ -9259,7 +9259,7 @@ function f(p) {
         p1582.saveGame = this.checked;
         p1583.value2_hs.alpha = this.checked ? 1 : 0;
         p1583.value2_kill.alpha = this.checked ? 1 : 0;
-        localStorage.setItem("tmwSaveGame", this.checked ? JSON.stringify(p1582) : null);
+        localStorage.setItem("wxoSaveGame", this.checked ? JSON.stringify(p1582) : null);
       });
     };
     let vF58 = function (p1584, p1585, p1586, p1587) {
@@ -9321,7 +9321,7 @@ function f(p) {
         p1584.s_headshot = 0;
         p1584.died = 0;
       }
-      localStorage.setItem("tmwSaveGame", JSON.stringify(p1584));
+      localStorage.setItem("wxoSaveGame", JSON.stringify(p1584));
     };
     let vF61 = function (p1592, p1593, p1594, p1595, p1596, p1597) {
       var v1919;
@@ -9772,7 +9772,7 @@ function f(p) {
         p1592.pk6 = "";
         vF62(p1592.pk0, p1592.pk1, p1592.pk2, p1592.pk3, p1592.pk4, p1592.pk5, p1592.pk6);
       }
-      localStorage.setItem("tmwSaveGame", JSON.stringify(p1592));
+      localStorage.setItem("wxoSaveGame", JSON.stringify(p1592));
     };
     let vF63 = function () {
       clearInterval(v999);
@@ -10256,7 +10256,7 @@ function f(p) {
       if (v1944 != null) {
         v1944.remove();
       }
-      var v1958 = document.getElementById("modal_tmw");
+      var v1958 = document.getElementById("modal_wxo");
       if (v1958 != null) {
         v1958.remove();
       }
@@ -10264,7 +10264,7 @@ function f(p) {
       if (v1950 != null) {
         v1950.remove();
       }
-      var v1959 = document.getElementById("op_tmw");
+      var v1959 = document.getElementById("op_wxo");
       if (v1959 != null) {
         v1959.remove();
       }
@@ -10285,14 +10285,14 @@ function f(p) {
       });
       vO50.pL = [];
       vO50.v_z = v1948.vs;
-      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
       if (vO50.dg != null && v1948.dsg.join() != vO50.dg.join() || vO50.dg == null && v1948.dsg.join() != "") {
         vO50.dg = v1948.dsg;
-        localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+        localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
         window.location.reload();
       }
             if (v984 != vO50.v_z) {
-        localStorage.removeItem("tmwsw");
+        localStorage.removeItem("wxosw");
        // window.location.reload();
       }
       document.getElementById("loa831pibur0w4gv");
@@ -10375,11 +10375,11 @@ function f(p) {
         vO50.pL = [...v1948.propertyList];
       }
       function _0x4bb5d0() {
-        $(".description-text").append("\n<div class=\"title-wormate-server\">\n          🗺️ ALL SERVERS  \n        </div>\n        \n        <div class=\"description-text-hiep\">\n \n    <div style=\"position:sticky; top:0; z-index:100; background:#242424;\">\n    <BR>\n    <ul style=\"margin-top:5px\" class=\"ui-tabs-nav\">\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive0 ui-tab-active\" style=\"margin:-5px\">\n        <a><span class=\"flag br\" value=\"' + vO50.s_l + '/images/server-flags/tur.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive1\" style=\"margin:-5px\">\n        <a><span class=\"flag mx\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/mx.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive2\" style=\"margin:-5px\">\n        <a><span class=\"flag us\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/us.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive3\" style=\"margin:-5px\">\n        <a><span class=\"flag ca\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/ca.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive4\" style=\"margin:-5px\">\n        <a><span class=\"flag de\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/de.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive5\" style=\"margin:-5px\">\n        <a><span class=\"flag fr\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/fr.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive6\" style=\"margin:-5px\">\n        <a><span class=\"flag sg\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/sg.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive7\" style=\"margin:-5px\">\n        <a><span class=\"flag jp\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/jp.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive8\" style=\"margin:-5px\">\n        <a><span class=\"flag au\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/au.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive9\" style=\"margin:-5px\">\n        <a><span class=\"flag gb\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/gb.png\"></span></a>\n      </li>\n    </ul>\n      \n      <!-- زر التبديل أسفل الأعلام مباشرة -->\n      <div style=\"text-align: center; margin: 2px 0; padding: 2px;\">\n              \n      <div class=\"gachngang\"></div>\n                    </div>\n      <div class=\"gachngang\"></div>\n    </div>\n    \n    <!-- إضافة صورة الخلفية هنا قبل حاوية السيرفرات -->\n        \n    <div class=\"servers-container\">\n      <div class=\"servers-peru\"></div>\n      <div class=\"servers-mexico\" style=\"display:none\"></div>\n      <div class=\"servers-eeuu\" style=\"display:none\"></div>\n      <div class=\"servers-canada\" style=\"display:none\"></div>\n      <div class=\"servers-germania\" style=\"display:none\"></div>\n      <div class=\"servers-francia\" style=\"display:none\"></div>\n      <div class=\"servers-singapur\" style=\"display:none\"></div>\n      <div class=\"servers-japon\" style=\"display:none\"></div>\n      <div class=\"servers-australia\" style=\"display:none\"></div>\n      <div class=\"servers-granbretana\" style=\"display:none\"></div>\n    </div>\n  </div>\n</div>\n  ");
+        $(".description-text").append("\n<div class=\"title-wormate-server\">\n          S E R V E R S  \n        </div>\n        \n        <div class=\"description-text-hiep\">\n \n    <div style=\"position:sticky; top:0; z-index:100; background:#242424;\">\n    <BR>\n    <ul style=\"margin-top:5px\" class=\"ui-tabs-nav\">\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive0 ui-tab-active\" style=\"margin:-5px\">\n        <a><span class=\"flag br\" value=\"' + vO50.s_l + '/images/server-flags/tur.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive1\" style=\"margin:-5px\">\n        <a><span class=\"flag mx\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/mx.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive2\" style=\"margin:-5px\">\n        <a><span class=\"flag us\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/us.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive3\" style=\"margin:-5px\">\n        <a><span class=\"flag ca\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/ca.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive4\" style=\"margin:-5px\">\n        <a><span class=\"flag de\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/de.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive5\" style=\"margin:-5px\">\n        <a><span class=\"flag fr\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/fr.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive6\" style=\"margin:-5px\">\n        <a><span class=\"flag sg\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/sg.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive7\" style=\"margin:-5px\">\n        <a><span class=\"flag jp\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/jp.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive8\" style=\"margin:-5px\">\n        <a><span class=\"flag au\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/au.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive9\" style=\"margin:-5px\">\n        <a><span class=\"flag gb\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/gb.png\"></span></a>\n      </li>\n    </ul>\n      \n      <!-- زر التبديل أسفل الأعلام مباشرة -->\n      <div style=\"text-align: center; margin: 2px 0; padding: 2px;\">\n              \n      <div class=\"gachngang\"></div>\n                    </div>\n      <div class=\"gachngang\"></div>\n    </div>\n    \n    <!-- إضافة صورة الخلفية هنا قبل حاوية السيرفرات -->\n        \n    <div class=\"servers-container\">\n      <div class=\"servers-peru\"></div>\n      <div class=\"servers-mexico\" style=\"display:none\"></div>\n      <div class=\"servers-eeuu\" style=\"display:none\"></div>\n      <div class=\"servers-canada\" style=\"display:none\"></div>\n      <div class=\"servers-germania\" style=\"display:none\"></div>\n      <div class=\"servers-francia\" style=\"display:none\"></div>\n      <div class=\"servers-singapur\" style=\"display:none\"></div>\n      <div class=\"servers-japon\" style=\"display:none\"></div>\n      <div class=\"servers-australia\" style=\"display:none\"></div>\n      <div class=\"servers-granbretana\" style=\"display:none\"></div>\n    </div>\n  </div>\n</div>\n  ");
         _0xe8047c();
       }
       function _0x33c7d0() {
-        $(".description-text").html("\n<div class=\"title-wormate-server\">\n          🗺️ ALL SERVERS  \n        </div>\n        \n        <div class=\"description-text-hiep\">\n \n    <div style=\"position:sticky; top:0; z-index:100; background:#242424;\">\n    <BR>\n    <ul style=\"margin-top:5px\" class=\"ui-tabs-nav\">\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive0 ui-tab-active\" style=\"margin:-5px\">\n        <a><span class=\"flag br\" value=\"' + vO50.s_l + '/images/server-flags/tur.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive1\" style=\"margin:-5px\">\n        <a><span class=\"flag mx\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/mx.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive2\" style=\"margin:-5px\">\n        <a><span class=\"flag us\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/us.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive3\" style=\"margin:-5px\">\n        <a><span class=\"flag ca\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/ca.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive4\" style=\"margin:-5px\">\n        <a><span class=\"flag de\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/de.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive5\" style=\"margin:-5px\">\n        <a><span class=\"flag fr\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/fr.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive6\" style=\"margin:-5px\">\n        <a><span class=\"flag sg\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/sg.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive7\" style=\"margin:-5px\">\n        <a><span class=\"flag jp\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/jp.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive8\" style=\"margin:-5px\">\n        <a><span class=\"flag au\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/au.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive9\" style=\"margin:-5px\">\n        <a><span class=\"flag gb\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/gb.png\"></span></a>\n      </li>\n    </ul>\n      \n      <!-- زر التبديل أسفل الأعلام مباشرة -->\n      <div style=\"text-align: center; margin: 2px 0; padding: 2px;\">\n              \n      <div class=\"gachngang\"></div>\n                    </div>\n      <div class=\"gachngang\"></div>\n    </div>\n    \n    <!-- إضافة صورة الخلفية هنا قبل حاوية السيرفرات -->\n        \n    <div class=\"servers-container\">\n      <div class=\"servers-peru\"></div>\n      <div class=\"servers-mexico\" style=\"display:none\"></div>\n      <div class=\"servers-eeuu\" style=\"display:none\"></div>\n      <div class=\"servers-canada\" style=\"display:none\"></div>\n      <div class=\"servers-germania\" style=\"display:none\"></div>\n      <div class=\"servers-francia\" style=\"display:none\"></div>\n      <div class=\"servers-singapur\" style=\"display:none\"></div>\n      <div class=\"servers-japon\" style=\"display:none\"></div>\n      <div class=\"servers-australia\" style=\"display:none\"></div>\n      <div class=\"servers-granbretana\" style=\"display:none\"></div>\n    </div>\n  </div>\n</div>\n  ");
+        $(".description-text").html("\n<div class=\"title-wormate-server\">\n          S E R V E R S \n        </div>\n        \n        <div class=\"description-text-hiep\">\n \n    <div style=\"position:sticky; top:0; z-index:100; background:#242424;\">\n    <BR>\n    <ul style=\"margin-top:5px\" class=\"ui-tabs-nav\">\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive0 ui-tab-active\" style=\"margin:-5px\">\n        <a><span class=\"flag br\" value=\"' + vO50.s_l + '/images/server-flags/tur.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive1\" style=\"margin:-5px\">\n        <a><span class=\"flag mx\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/mx.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive2\" style=\"margin:-5px\">\n        <a><span class=\"flag us\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/us.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive3\" style=\"margin:-5px\">\n        <a><span class=\"flag ca\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/ca.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive4\" style=\"margin:-5px\">\n        <a><span class=\"flag de\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/de.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive5\" style=\"margin:-5px\">\n        <a><span class=\"flag fr\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/fr.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive6\" style=\"margin:-5px\">\n        <a><span class=\"flag sg\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/sg.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive7\" style=\"margin:-5px\">\n        <a><span class=\"flag jp\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/jp.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive8\" style=\"margin:-5px\">\n        <a><span class=\"flag au\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/au.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive9\" style=\"margin:-5px\">\n        <a><span class=\"flag gb\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/gb.png\"></span></a>\n      </li>\n    </ul>\n      \n      <!-- زر التبديل أسفل الأعلام مباشرة -->\n      <div style=\"text-align: center; margin: 2px 0; padding: 2px;\">\n              \n      <div class=\"gachngang\"></div>\n                    </div>\n      <div class=\"gachngang\"></div>\n    </div>\n    \n    <!-- إضافة صورة الخلفية هنا قبل حاوية السيرفرات -->\n        \n    <div class=\"servers-container\">\n      <div class=\"servers-peru\"></div>\n      <div class=\"servers-mexico\" style=\"display:none\"></div>\n      <div class=\"servers-eeuu\" style=\"display:none\"></div>\n      <div class=\"servers-canada\" style=\"display:none\"></div>\n      <div class=\"servers-germania\" style=\"display:none\"></div>\n      <div class=\"servers-francia\" style=\"display:none\"></div>\n      <div class=\"servers-singapur\" style=\"display:none\"></div>\n      <div class=\"servers-japon\" style=\"display:none\"></div>\n      <div class=\"servers-australia\" style=\"display:none\"></div>\n      <div class=\"servers-granbretana\" style=\"display:none\"></div>\n    </div>\n  </div>\n</div>\n  ");
         _0xe8047c();
       }
       function _0xe8047c() {
@@ -10859,7 +10859,7 @@ function f(p) {
         });
       }
       if (vO50.s_w) {
-        $("<button id=\"btn_crsw\" style=\"display: none;\">" + v1948.ccg[34] + "</button> <button id=\"op_tmw\">" + v1948.ccg[6] + "</button> <div id=\"modal_tmw\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">" + v1948.ccg[6] + "</h2>     </div>     <div id=\"modal_tmw_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">" + v1948.ccg[7] + "</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">" + v1948.ccg[8] + "</span>" + v1948.ccg[9] + "         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">" + v1948.ccg[10] + "</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_crsw\" style=\"display: none;\">         Skin_Wear_file (.json) &nbsp;         <input type=\"file\" accept=\".json\" id=\"fileSkin\" />         <button id=\"btn_clear_file\">Clear file</button>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">" + v1948.ccg[11] + " &nbsp;         <label for=\"saveGame\">(" + v1948.ccg[12] + ")</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"tmwsound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"tmwspeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"tmwiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">" + v1948.ccg[13] + "</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
+        $("<button id=\"btn_crsw\" style=\"display: none;\">" + v1948.ccg[34] + "</button> <button id=\"op_wxo\">" + v1948.ccg[6] + "</button> <div id=\"modal_wxo\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">" + v1948.ccg[6] + "</h2>     </div>     <div id=\"modal_wxo_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">" + v1948.ccg[7] + "</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">" + v1948.ccg[8] + "</span>" + v1948.ccg[9] + "         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">" + v1948.ccg[10] + "</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_crsw\" style=\"display: none;\">         Skin_Wear_file (.json) &nbsp;         <input type=\"file\" accept=\".json\" id=\"fileSkin\" />         <button id=\"btn_clear_file\">Clear file</button>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">" + v1948.ccg[11] + " &nbsp;         <label for=\"saveGame\">(" + v1948.ccg[12] + ")</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"wxosound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"wxospeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"wxoiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">" + v1948.ccg[13] + "</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
         $("#btn_clear_file").click(function () {
           localStorage.removeItem("custom_wear");
           localStorage.removeItem("custom_skin");
@@ -10886,7 +10886,7 @@ function f(p) {
           v1956.readAsText(p1616.target.files[0]);
         });
       } else {
-        $("<button id=\"op_tmw\">" + v1948.ccg[6] + "</button> <div id=\"modal_tmw\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">" + v1948.ccg[6] + "</h2>     </div>     <div id=\"modal_tmw_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">" + v1948.ccg[7] + "</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">" + v1948.ccg[8] + "</span>" + v1948.ccg[9] + "         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">" + v1948.ccg[10] + "</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">" + v1948.ccg[11] + " &nbsp;         <label for=\"saveGame\">(" + v1948.ccg[12] + ")</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"tmwsound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"tmwspeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"tmwiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">" + v1948.ccg[13] + "</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
+        $("<button id=\"op_wxo\">" + v1948.ccg[6] + "</button> <div id=\"modal_wxo\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">" + v1948.ccg[6] + "</h2>     </div>     <div id=\"modal_wxo_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">" + v1948.ccg[7] + "</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">" + v1948.ccg[8] + "</span>" + v1948.ccg[9] + "         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">" + v1948.ccg[10] + "</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">" + v1948.ccg[11] + " &nbsp;         <label for=\"saveGame\">(" + v1948.ccg[12] + ")</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"wxosound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"wxospeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"wxoiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">" + v1948.ccg[13] + "</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
       }
       ;
       $("#btn_copy").click(function () {
@@ -10903,8 +10903,8 @@ function f(p) {
         $("#myTooltip").css("visibility", "visible");
         $("#myTooltip").css("opacity", "0");
       });
-      var v1958 = document.getElementById("modal_tmw");
-      var v1959 = document.getElementById("op_tmw");
+      var v1958 = document.getElementById("modal_wxo");
+      var v1959 = document.getElementById("op_wxo");
       var v1960 = document.getElementsByClassName("close")[0];
       v1959.onclick = function () {
         v1958.style.display = "block";
@@ -11002,7 +11002,7 @@ function f(p) {
           method: "POST",
           body: JSON.stringify(vO80)
         });
-        localStorage.removeItem("tmwsw");
+        localStorage.removeItem("wxosw");
         window.location.reload();
       };
       var v1975 = false;
@@ -11025,7 +11025,7 @@ function f(p) {
           var v1979 = ooo.Xg.Kf.Wg.Ah;
           v1961.style.display = "block";
           v1962.style.display = "inline-block";
-          var v$25 = $("#tmwsound");
+          var v$25 = $("#wxosound");
           v$25.prop("checked", vO50.vh);
           v$25.change(function () {
             if (this.checked) {
@@ -11033,10 +11033,10 @@ function f(p) {
             } else {
               vO50.vh = false;
             }
-            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
           });
           v1963.style.display = "inline-block";
-          var v$26 = $("#tmwspeed");
+          var v$26 = $("#wxospeed");
           v$26.prop("checked", vO50.vp);
           v$26.change(function () {
             if (this.checked) {
@@ -11044,13 +11044,13 @@ function f(p) {
             } else {
               vO50.vp = false;
             }
-            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
           });
           $("#div_zigzag").css("display", "inline-block");
           $("#sel_zigzag").val(vO50.flx || 0);
           $("#sel_zigzag").change(function () {
             vO50.flx = parseInt($(this).val());
-            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
           });
           v1963.style.display = "inline-block";
           v1964.style.display = "inline-block";
@@ -11062,7 +11062,7 @@ function f(p) {
             } else {
               vO50.vp = false;
             }
-            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
           });
           if (vO50.mobile) {
             v1965.style.display = "none";
@@ -11079,24 +11079,24 @@ function f(p) {
               if (vO50.sc == 2) {
                 vO50.wi = 0;
               }
-              localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+              localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
             };
           }
           v1966.style.display = "inline-block";
           sel_sm.value = vO50.sm;
           sel_sm.onchange = function () {
             vO50.sm = parseInt(sel_sm.value);
-            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
           };
           v1968.style.display = "inline-block";
           v1969.value = vO50.to;
           v1969.onchange = function () {
             vO50.to = parseInt(v1969.value);
-            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
           };
           if (v1972.value == "iq") {
             v1970.style.display = "inline-block";
-            var v$29 = $("#tmwiq");
+            var v$29 = $("#wxoiq");
             v$29.prop("checked", vO50.iq);
             v$29.change(function () {
               if (this.checked) {
@@ -11104,7 +11104,7 @@ function f(p) {
               } else {
                 vO50.iq = false;
               }
-              localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+              localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
             });
           } else {
             vO50.iq = false;
@@ -11165,10 +11165,10 @@ function f(p) {
           ;
           vO50.c_3 = v1948.extension;
           v1980.value = vO50.background || vA31[0].uri;
-          $("#backgroundArena").tmwsle({
+          $("#backgroundArena").wxosle({
             onSelected: function () {
               vO50.background = $("#backgroundArena-value").val();
-              localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+              localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
               ooo.ef.F_bg = new PIXI.Texture(ooo.ef.fn_o(vO50.background));
             }
           });
@@ -11259,7 +11259,7 @@ function f(p) {
         ;
         if (v1948.ccc && v1948.ccc != "gb" && v1948.ccc != v944) {
           localStorage.setItem("oco", v1948.ccc);
-          localStorage.removeItem("tmwsw");
+          localStorage.removeItem("wxosw");
           window.location.reload();
         }
         if (!v944) {
@@ -11267,7 +11267,7 @@ function f(p) {
         }
       }
       ;
-      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
     };
     Ysw = async function (p1617) {
       var v1988 = await p1617;
@@ -11297,7 +11297,7 @@ function f(p) {
             var vLN0258 = 0;
             for (var v1992 in v991.csg["0"]) {
               for (var v1994 = v991.csg["1"][v1992].split("|"), vLN0264 = 0; vLN0264 < v1994.length; vLN0264++) {
-                v1988.textureDict["t_tmw_" + (vO50.g / 9 * 1000 + vLN0258)] = {
+                v1988.textureDict["t_wxo_" + (vO50.g / 9 * 1000 + vLN0258)] = {
                   custom: true,
                   file: "data:image/png;base64," + v1994[vLN0264].substr(v1994[vLN0264].length - vO50.c_v, vO50.c_v) + v1994[vLN0264].substr(0, v1994[vLN0264].length - vO50.c_v)
                 };
@@ -11327,7 +11327,7 @@ function f(p) {
                     glow: v1995[v2004]
                   };
                   for (var vLN0264 = 0; vLN0264 < v1995[v2004].length; vLN0264++) {
-                    vO83.base.push("s_tmw_" + (vO50.g / 9 * 1000 + vLN0256) + "_" + (v1995[v2004].length - vLN0264));
+                    vO83.base.push("s_wxo_" + (vO50.g / 9 * 1000 + vLN0256) + "_" + (v1995[v2004].length - vLN0264));
                   }
                   ;
                   v1988.skinArrayDict.push(vO83);
@@ -11379,9 +11379,9 @@ function f(p) {
                   glow: v1995[v2004]
                 };
                 for (var vLN0264 = 0; vLN0264 < v1995[v2004].length; vLN0264++) {
-                  vO83.base.push("s_tmw_" + vO83.id + "_" + (v1995[v2004].length - vLN0264));
-                  v1988.regionDict["s_tmw_" + vO83.id + "_" + (vLN0264 + 1)] = {
-                    texture: "t_tmw_" + vO83.id,
+                  vO83.base.push("s_wxo_" + vO83.id + "_" + (v1995[v2004].length - vLN0264));
+                  v1988.regionDict["s_wxo_" + vO83.id + "_" + (vLN0264 + 1)] = {
+                    texture: "t_wxo_" + vO83.id,
                     h: 96,
                     w: 96,
                     x: (vLN0264 || 0) * 99,
@@ -11444,7 +11444,7 @@ function f(p) {
               body: JSON.stringify(vO84)
             }).then(async function (p1618) {
               p1618 = await p1618.json();
-              v1988.textureDict["t_tmw_" + v2005["0"] + "_skin_g"] = {
+              v1988.textureDict["t_wxo_" + v2005["0"] + "_skin_g"] = {
                 custom: true,
                 relativePath: p1618.csg["1"]["0"]
               };
@@ -11475,9 +11475,9 @@ function f(p) {
                   glow: v2006[v2009]
                 };
                 for (var vLN0267 = 0; vLN0267 < v2006[v2009].length; vLN0267++) {
-                  vO85.base.push("s_tmw_" + vO85.id + "_" + (v2006[v2009].length - vLN0267));
-                  v1988.regionDict["s_tmw_" + vO85.id + "_" + (vLN0267 + 1)] = {
-                    texture: "t_tmw_" + v2005["0"] + "_skin_g",
+                  vO85.base.push("s_wxo_" + vO85.id + "_" + (v2006[v2009].length - vLN0267));
+                  v1988.regionDict["s_wxo_" + vO85.id + "_" + (vLN0267 + 1)] = {
+                    texture: "t_wxo_" + v2005["0"] + "_skin_g",
                     h: 96,
                     w: 96,
                     x: (vLN0267 || 0) * 99,
@@ -11506,7 +11506,7 @@ function f(p) {
       s_h.pause();
     }
     (function (p1620) {
-      p1620.fn.tmwsle = function (p1621) {
+      p1620.fn.wxosle = function (p1621) {
         if (vO86[p1621]) {
           return vO86[p1621].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof p1621 != "object" && p1621) {
@@ -11813,10 +11813,10 @@ function f(p) {
       // Find the render container - try multiple paths
       let renderContainer = null;
       
-      if (window._tmw && window._tmw._anApp && window._tmw._anApp.og && 
-          window._tmw._anApp.og.af && window._tmw._anApp.og.af.ng && 
-          window._tmw._anApp.og.af.ng.Qg) {
-        renderContainer = window._tmw._anApp.og.af.ng.Qg; // Snake container
+      if (window._wxo && window._wxo._anApp && window._wxo._anApp.og && 
+          window._wxo._anApp.og.af && window._wxo._anApp.og.af.ng && 
+          window._wxo._anApp.og.af.ng.Qg) {
+        renderContainer = window._wxo._anApp.og.af.ng.Qg; // Snake container
       } else if (window._1f8817 && window._1f8817.og && window._1f8817.og.af && 
                  window._1f8817.og.af.ng && window._1f8817.og.af.ng.Qg) {
         renderContainer = window._1f8817.og.af.ng.Qg;
@@ -11850,7 +11850,7 @@ function f(p) {
       linesGraphics.clear();
 
       // Get the game instance
-      const gameInstance = window._tmw?._anApp?.dh || window._1f8817?.dh;
+      const gameInstance = window._wxo?._anApp?.dh || window._1f8817?.dh;
       if (!gameInstance || !gameInstance.Fh) return;
 
       // Set line style
@@ -11944,7 +11944,7 @@ function f(p) {
       return;
     }
     
-    if (!window._tmw && !window._1f8817) {
+    if (!window._wxo && !window._1f8817) {
       console.log('Waiting for game to load...');
       setTimeout(init, 1000);
       return;
@@ -11982,7 +11982,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Settings panel interactive features....
   setTimeout(() => {
-    const copyBtn = document.querySelector('#mm-tmw-close').parentElement.querySelector('button[onclick*="clipboard"]');
+    const copyBtn = document.querySelector('#mm-wxo-close').parentElement.querySelector('button[onclick*="clipboard"]');
     const idInput = document.getElementById('wormate_id');
     const clearBtn = document.querySelector('button[onclick*="fileSkin.value"]');
     const fileInput = document.getElementById('fileSkin');
