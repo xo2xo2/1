@@ -78,8 +78,6 @@ if (typeof window.Z === "undefined") {
 }
 
 var vLSHttpshaylamdaycom = (window.WORMXO_CORE && window.WORMXO_CORE.storeUrl) || "https://wormxo.store";
-var zUrl = (window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || "https://wormy.wormatrix.fun";
-var xUrl = (window.WORMXO_CORE && window.WORMXO_CORE.xUrl) || "https://wm.wormy.online";
 
 /* WORMXO UI / PERFORMANCE FLAGS - deep core */
 window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
@@ -91,6 +89,11 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
   lowPerf: true
 };
 
+// by xo
+// by bmw
+// dark , absi , wormfriend , 
+// wormxoli19791125xomajdtixrytprivat5222 =  2.2
+// dont copy my code 
 
 /* WORMXO MOBILE LOW-PERFORMANCE CORE - joystick + lag fix */
 window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
@@ -106,6 +109,8 @@ window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
   joystickBottom: Number(localStorage.getItem("WORMXO_JOYSTICK_BOTTOM") || 105)
 };
 window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.WORMXO_MOBILE_PERF.isMobile || window.WORMXO_MOBILE_PERF.memory <= 4));
+
+
 
 
 /* WORMXO DEEP REGISTRY MERGE CORE - moved from end */
@@ -351,103 +356,23 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 })();
 
 
-
+/* WORMXO DEEP LOBBY BACKGROUND CORE - moved from end */
+/* WORMXO optimized lobby background - light GPU / old design keeper */
 (function () {
-  if (window.__WORMFRIENDS_MATRIX_LOBBY_BG_SAFE__) return;
-  window.__WORMFRIENDS_MATRIX_LOBBY_BG_SAFE__ = true;
-
-  var BG = {
-    styleId: "wormfriends-matrix-safe-lobby-bg-style",
-    tick: 0,
-    timer: 0
-  };
-
-  function q(id) {
-    try { return document.getElementById(id); } catch (e) { return null; }
-  }
-
-  function shown(el) {
+  if (window.__WORMXO_LOBBY_BG_2026__) return;
+  window.__WORMXO_LOBBY_BG_2026__ = true;
+  function install() {
     try {
-      if (!el) return false;
-      var s = window.getComputedStyle ? getComputedStyle(el) : el.style;
-      return s && s.display !== "none" && s.visibility !== "hidden" && Number(s.opacity || 1) !== 0;
-    } catch (e) { return false; }
-  }
-
-  function lobbyActive() {
-    return shown(q("main-menu")) || shown(q("mm-start")) || shown(q("main-menu-view")) || shown(q("login-view")) || shown(q("welcome-view")) || shown(document.querySelector && document.querySelector(".store-view-cont"));
-  }
-
-  function installStyle() {
-    if (q(BG.styleId)) return;
-    var css = document.createElement("style");
-    css.id = BG.styleId;
-    css.textContent = [
-      "#game-wrap{position:relative!important;background:#050715!important;}",
-      "#game-wrap.wormfriends-matrix-lobby-bg-on,#mm-start.wormfriends-matrix-lobby-bg-on,#main-menu.wormfriends-matrix-lobby-bg-on,#main-menu-view.wormfriends-matrix-lobby-bg-on{",
-      "background:",
-      "radial-gradient(circle at var(--wmx-a-x,18%) var(--wmx-a-y,24%),rgba(0,92,255,.55),transparent 34%),",
-      "radial-gradient(circle at var(--wmx-b-x,76%) var(--wmx-b-y,22%),rgba(80,215,255,.46),transparent 38%),",
-      "radial-gradient(circle at var(--wmx-c-x,50%) var(--wmx-c-y,78%),rgba(158,78,255,.50),transparent 44%),",
-      "radial-gradient(circle at var(--wmx-d-x,44%) var(--wmx-d-y,52%),rgba(0,255,255,.25),transparent 30%),",
-      "radial-gradient(circle at var(--wmx-s-x,48%) var(--wmx-s-y,46%),rgba(0,0,0,.58),transparent 58%),",
-      "linear-gradient(135deg,#050715 0%,#071833 48%,#1a0b33 100%)!important;",
-      "background-size:130% 130%,130% 130%,140% 140%,120% 120%,150% 150%,100% 100%!important;",
-      "}",
-      "#game-wrap.wormfriends-matrix-lobby-bg-on:before{content:\"\";position:absolute;inset:0;z-index:0;pointer-events:none!important;opacity:.28;background:linear-gradient(115deg,transparent 0%,rgba(135,206,255,.18) 45%,transparent 58%);transform:translateX(var(--wmx-line,-18%));}",
-      "#main-menu,#mm-start,#main-menu-view,.main-menu-view,.store-view-cont,#login-view,#welcome-view,#play-btn,.play-btn,button,input,a{position:relative;z-index:5;pointer-events:auto!important;}",
-      "#wormfriends-matrix-lobby-bg,#wormfriends-matrix-lobby-bg *{pointer-events:none!important;display:none!important;}",
-      "#background-canvas{pointer-events:none!important;}",
-      "#game-wrap:not(.wormfriends-matrix-lobby-bg-on) #background-canvas{pointer-events:auto!important;}"
-    ].join("");
-    (document.head || document.documentElement).appendChild(css);
-  }
-
-  function applyVars() {
-    try {
-      var on = lobbyActive();
-      var t = BG.tick++ * 0.022;
-      var x1 = 18 + Math.sin(t * .70) * 10;
-      var y1 = 24 + Math.cos(t * .52) * 8;
-      var x2 = 76 + Math.cos(t * .46) * 8;
-      var y2 = 22 + Math.sin(t * .60) * 9;
-      var x3 = 50 + Math.sin(t * .38) * 12;
-      var y3 = 78 + Math.cos(t * .44) * 8;
-      var x4 = 44 + Math.cos(t * .86) * 10;
-      var y4 = 52 + Math.sin(t * .82) * 7;
-      var xs = 48 + Math.sin(t * .25) * 16;
-      var ys = 46 + Math.cos(t * .21) * 13;
-      var line = -22 + ((BG.tick % 360) / 360) * 44;
-      [q("game-wrap"), q("mm-start"), q("main-menu"), q("main-menu-view")].forEach(function (el) {
-        if (!el) return;
-        if (on) el.classList.add("wormfriends-matrix-lobby-bg-on");
-        else el.classList.remove("wormfriends-matrix-lobby-bg-on");
-        el.style.setProperty("--wmx-a-x", x1.toFixed(2) + "%");
-        el.style.setProperty("--wmx-a-y", y1.toFixed(2) + "%");
-        el.style.setProperty("--wmx-b-x", x2.toFixed(2) + "%");
-        el.style.setProperty("--wmx-b-y", y2.toFixed(2) + "%");
-        el.style.setProperty("--wmx-c-x", x3.toFixed(2) + "%");
-        el.style.setProperty("--wmx-c-y", y3.toFixed(2) + "%");
-        el.style.setProperty("--wmx-d-x", x4.toFixed(2) + "%");
-        el.style.setProperty("--wmx-d-y", y4.toFixed(2) + "%");
-        el.style.setProperty("--wmx-s-x", xs.toFixed(2) + "%");
-        el.style.setProperty("--wmx-s-y", ys.toFixed(2) + "%");
-        el.style.setProperty("--wmx-line", line.toFixed(2) + "%");
-      });
+      if (document.getElementById("wormxo-lobby-bg-style")) return;
+      var css = document.createElement("style");
+      css.id = "wormxo-lobby-bg-style";
+      css.textContent = "#game-wrap,#mm-start,#main-menu,.background-canva{background:radial-gradient(circle at 20% 20%,rgba(85,195,255,.24),transparent 28%),radial-gradient(circle at 80% 30%,rgba(255,95,185,.22),transparent 32%),linear-gradient(135deg,#071325 0%,#141026 45%,#25102d 100%)!important;background-size:180% 180%!important;animation:wormxoBgSlow 18s ease-in-out infinite alternate!important;}@keyframes wormxoBgSlow{0%{background-position:0% 30%,100% 20%,0% 0%;}100%{background-position:80% 70%,20% 80%,100% 100%;}}";
+      (document.head || document.documentElement).appendChild(css);
     } catch (e) {}
   }
-
-  function boot() {
-    installStyle();
-    applyVars();
-    if (!BG.timer) BG.timer = setInterval(applyVars, 50);
-  }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
-  else boot();
-  window.addEventListener("load", boot, { once: true });
-  window.WORMFRIENDS_MATRIX_LOBBY_BG = BG;
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
 })();
+
 
 window.detectLog = null;
 const vO = {
@@ -967,221 +892,6 @@ if (!window.__XOTEAM_N131_DEEP_CORE__) {
     } catch (err) {}
   }, true);
 }
-
-
-(function () {
-  if (window.__WORMFRIENDS_MATRIX_GAME_VF7__) return;
-  window.__WORMFRIENDS_MATRIX_GAME_VF7__ = true;
-  try {
-    if (typeof PIXI === "undefined" || typeof vO4 === "undefined" || typeof vO5 === "undefined" || !vO4.X || !vO5.e) return;
-var WORMFRIENDS_MATRIX_GAME_VF7 = function () {
-        return vO4.X(vO5.e.f, function () {
-          vO5.e.f.call(this);
-          this.Bh = 40;
-          this.Gh = new vO5.e.m();
-          this.Gh.anchor.set(0.5);
-          this.Ah = new vO5.e.j();
-          this.Zf = new vO5.e.j();
-          var v245 = new vO5.e.j();
-          this.zClock = new PIXI.Sprite.fromImage(((window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || "https://wormy.wormatrix.fun") + "/images/Clock.PNG");
-          v245.beginFill("black", 0.4);
-          v245.drawCircle(0, 0, this.Bh);
-          v245.endFill();
-          v245.lineStyle(2, 16225317);
-          v245.drawCircle(0, 0, this.Bh);
-          v245.moveTo(0, -this.Bh);
-          v245.lineTo(0, +this.Bh);
-          v245.moveTo(-this.Bh, 0);
-          v245.lineTo(+this.Bh, 0);
-          v245.endFill();
-          this.Gh.alpha = 0.5;
-          this.Ah.zIndex = 2;
-          this.Ah.alpha = 0.9;
-          this.Ah.beginFill(16225317);
-          this.Ah.drawCircle(0, 0, this.Bh * 0.06);
-          this.Ah.endFill();
-          this.Ah.lineStyle(1, "black");
-          this.Ah.drawCircle(0, 0, this.Bh * 0.06);
-          this.Ah.endFill();
-          this.Zf.zIndex = 3;
-          this.Zf.alpha = 0.9;
-          this.Zf.beginFill(1811741);
-          this.Zf.drawCircle(0, 0, this.Bh * 0.06);
-          this.Zf.endFill();
-          this.Zf.lineStyle(1, "black");
-          this.Zf.drawCircle(0, 0, this.Bh * 0.06);
-          this.Zf.endFill();
-          this.addChild(v245);
-          this.addChild(this.Gh);
-          this.addChild(this.Ah);
-          this.addChild(this.Zf);
-          this.zClock.width = 100;
-          this.zClock.height = 100;
-          this.zClock.x = -50;
-          this.zClock.y = -50;
-          this.zClock.zIndex = 10;
-          this.addChild(this.zClock);
-          window._x7 = this;
-          const v246 = new PIXI.TextStyle({
-            align: "center",
-            fill: "#f4d100",
-            fontSize: 12,
-            fontWeight: "bold",
-            lineJoin: "round",
-            whiteSpace: "normal",
-            wordWrap: true
-          });
-          const v247 = new PIXI.TextStyle({
-            align: "center",
-            fill: "#ed563f",
-            fontSize: 12,
-            fontWeight: "bold",
-            lineJoin: "round",
-            whiteSpace: "normal",
-            wordWrap: true
-          });
-          this.container_count = new PIXI.Container();
-          this.container_count.x = -45;
-          this.container_count.y = -52;
-          this.hsLabel = new PIXI.Text("HS", v247);
-          this.hsLabel.anchor.set(0.5);
-          this.klLabel = new PIXI.Text("KILL", v246);
-          this.klLabel.anchor.set(0.5);
-          this.gHsVal = new PIXI.Text("0", v247);
-          this.gHsVal.anchor.set(0.5);
-          this.tHsVal = new PIXI.Text("0", v247);
-          this.tHsVal.anchor.set(0.5);
-          this.gKlVal = new PIXI.Text("0", v246);
-          this.gKlVal.anchor.set(0.5);
-          this.tKlVal = new PIXI.Text("0", v246);
-          this.tKlVal.anchor.set(0.5);
-          this.hsLabel.x = 22;
-          this.hsLabel.y = 116;
-          this.klLabel.x = 67;
-          this.klLabel.y = 116;
-          this.gHsVal.x = 22;
-          this.gHsVal.y = 131;
-          this.gKlVal.x = 67;
-          this.gKlVal.y = 131;
-          this.tHsVal.x = 22;
-          this.tHsVal.y = 151;
-          this.tKlVal.x = 67;
-          this.tKlVal.y = 151;
-          if (!true) {
-            this.tHsVal.alpha = 0;
-            this.tKlVal.alpha = 0;
-          }
-          this.container_count.addChild(this.hsLabel);
-          this.container_count.addChild(this.gHsVal);
-          this.container_count.addChild(this.tHsVal);
-          this.container_count.addChild(this.klLabel);
-          this.container_count.addChild(this.gKlVal);
-          this.container_count.addChild(this.tKlVal);
-          this.addChild(this.container_count);
-          this.b2 = new PIXI.Graphics();
-          this.b2.lineStyle(2, 13466405);
-          this.b2.drawRoundedRect(-5, 106, 100, 56, 10);
-          this.container_count.addChild(this.b2);
-          this.b3 = new PIXI.Graphics();
-          this.b3.lineStyle(2, 13466405);
-          this.b3.drawRect(-4, 141, 196, 0);
-          this.container_count.addChild(this.b3);
-          this.headshots_container = new PIXI.Container();
-          this.headshots_container.x = -50;
-          this.headshots_container.y = 120;
-          const v248 = new PIXI.TextStyle({
-            align: "left",
-            fill: "#ed563f",
-            fontSize: 13,
-            fontWeight: "bold",
-            lineJoin: "round",
-            whiteSpace: "normal",
-            wordWrap: false
-          });
-          this.topHS = new PIXI.Text("Top (headShots):", v248);
-          this.topHS.x = 0;
-          this.topHS.y = 0;
-          this.addChild(this.headshots_container);
-          this.headshots_container.addChild(this.topHS);
-          this.topHSPlayers = [];
-          this.killMessages = [];
-          for (let vLN13 = 1; vLN13 < 6; vLN13++) {
-            let vO22 = {
-              ig: new vO5.e.n(vLN13, {
-                fontFamily: "PTSans",
-                fontSize: 11,
-                fontWeight: "bold",
-                fill: "white"
-              })
-            };
-            vO22.ig.anchor.x = 1;
-            vO22.ig.position.x = 0;
-            vO22.ig.position.y = vLN13 * 20;
-            this.headshots_container.addChild(vO22.ig);
-            vO22.jg = new vO5.e.n("--", {
-              fontFamily: "PTSans",
-              fontSize: 11,
-              fontWeight: "bold",
-              fill: "white"
-            });
-            vO22.jg.anchor.x = 0;
-            vO22.jg.position.x = 5;
-            vO22.jg.position.y = vLN13 * 20;
-            this.headshots_container.addChild(vO22.jg);
-            vO22.kg = new vO5.e.n("", {
-              fontFamily: "PTSans",
-              fontSize: 11,
-              fontWeight: "bold",
-              fill: "white"
-            });
-            vO22.kg.anchor.x = 1;
-            vO22.kg.position.x = 110;
-            vO22.kg.position.y = vLN13 * 20;
-            this.headshots_container.addChild(vO22.kg);
-            this.topHSPlayers.push(vO22);
-          }
-          ;
-          for (let vLN14 = 1; vLN14 < 11; vLN14++) {
-            let vO23 = {
-              ig: new vO5.e.n("", {
-                fontFamily: "PTSans",
-                fontSize: 12,
-                fontWeight: "bold",
-                fill: "green"
-              })
-            };
-            vO23.ig.anchor.x = 0;
-            vO23.ig.position.x = -10;
-            vO23.ig.position.y = 65 + vLN14 * 55;
-            this.headshots_container.addChild(vO23.ig);
-            vO23.jg = new vO5.e.n("", {
-              fontFamily: "PTSans",
-              fontSize: 12,
-              fontWeight: "bold",
-              fill: "#c10000"
-            });
-            vO23.jg.anchor.x = 0;
-            vO23.jg.position.x = 8;
-            vO23.jg.position.y = 80 + vLN14 * 55;
-            this.headshots_container.addChild(vO23.jg);
-            vO23.kg = new vO5.e.n("", {
-              fontFamily: "PTSans",
-              fontSize: 12,
-              fontWeight: "bold",
-              fill: "white"
-            });
-            vO23.kg.anchor.x = 0;
-            vO23.kg.position.x = 8;
-            vO23.kg.position.y = 95 + vLN14 * 55;
-            this.headshots_container.addChild(vO23.kg);
-            this.killMessages.push(vO23);
-          }
-        });
-      }();
- 
-    window.WORMFRIENDS_MATRIX_GAME_VF7 = WORMFRIENDS_MATRIX_GAME_VF7;
-  } catch (e) { window.WORMFRIENDS_MATRIX_GAME_VF7 = null; }
-})();
 
 let vO5 = {
   clientesVencidos: [],
@@ -6844,7 +6554,7 @@ vF172.prototype.Se = function (p281) {
             if (p433 && p433.code === 1485 && p433.error === "expired_token") {
               vLN061++;
               console.log("auto login attempt:", vLN061);
-              $("#login-view").html("<h2>Auto Login Google WormFriends Matrix Connect : " + vLN061 + "</h2>");
+              $("#login-view").html("<h2>Auto Login Google WormateFriends Xo Connect : " + vLN061 + "</h2>");
               f87();
             } else {
               f88(p433);
@@ -6861,7 +6571,7 @@ vF172.prototype.Se = function (p281) {
             if (p434 && p434.code === 1485 && p434.error === "expired_token") {
               vLN061++;
               console.log("auto login attempt:", vLN061);
-              $("#login-view").html("<h2>Auto Login Google WormFriends Matrix Conncet : " + vLN061 + "</h2>");
+              $("#login-view").html("<h2>Auto Login Google WormateFriends Xo Xo Conncet : " + vLN061 + "</h2>");
               f87();
             } else {
               f88(p434);
@@ -10609,7 +10319,7 @@ $("#mm-advice-cont").html(`
     }
     function f111() {
       $(".description-text").replaceWith("<div class=\"description-text\">");
-      $(".description-text").prepend("<p id='title'>WormFriends Matrix</p>");
+      $(".description-text").prepend("<p id='title'>WormateFriends Xo</p>");
       $("#title").after("<div id=\"idwormworld\" style=\"text-align: center\"><div class='logo'><img src='https://haylamday.com/images/hiep_img/logo.png'/></div>\n        <input type=\"text\" value=\"" + vO4.FB_UserID + "\" style=\"width: 230px;text-align: center;border-radius: 4px;font-size: 20px;padding: 0 6px;background-color: #fff;color: #806102;display: block;box-sizing: border-box;-webkit-appearance: none;outline: 0;border-width: 0;\">\n        <button onclick=\"navigator.clipboard.writeText('" + vO4.FB_UserID + "').then(()=> alert('You ID " + vO4.FB_UserID + " copiado! copied!'));\">COPY</button>\n    </div>\n<div></div>\n<div><input type=\"button\" value=\"ACTIVATE ALL\" target=\"_blank\" onclick=\"window.location.href='" + MYPAGE + "'\" style=\"margin-top: 5px; width: 100%\"></div>");
     }
     function f112() {
@@ -10847,7 +10557,7 @@ $("#mm-advice-cont").html(`
   $("#background-canvas").replaceWith("<canvas id=\"background-canvas\">\n   </canvas>\n   ");
   $("#popup-login-gg").html("<div class=\"settings-line\" id=\"popup-login-gg1\">Login via Google</div>");
   $("#social-buttons").replaceWith("");
-  $("#markup-footer").replaceWith("\n    \n \n\n<footer id=\"markup-footer\">\n            <div class=\"lang-menu\"><button class=\"lang-button\">Language â–´</button>\n            <div class=\"lang-list\"><a hreflang=\"en\" href=\"/\">English</a>\n<a hreflang=\"uk\" href=\"/uk/\">Ð£ÐºÑ€Ð°Ñ—Ð½ÑÑŒÐºÐ°</a>\n<a hreflang=\"de\" href=\"/de/\">Deutsch</a>\n<a hreflang=\"fr\" href=\"/fr/\">FranÃ§ais</a>\n<a hreflang=\"es\" href=\"/es/\">EspaÃ±ol</a>\n</div></div>\n            \n            <a class=\"link\" hreflang=\"en\" href=\"https://wormxo.store\"> 2026 WormFriends Matrix Team</a>\n          <a style=\"font-size: 17px;font-weight: 500;color: #000000;\"> whatsapp : 07828329330 <i class='' style='color:red'></i></a>\n            </footer>\n\n        ");
+  $("#markup-footer").replaceWith("\n    \n \n\n<footer id=\"markup-footer\">\n            <div class=\"lang-menu\"><button class=\"lang-button\">Language â–´</button>\n            <div class=\"lang-list\"><a hreflang=\"en\" href=\"/\">English</a>\n<a hreflang=\"uk\" href=\"/uk/\">Ð£ÐºÑ€Ð°Ñ—Ð½ÑÑŒÐºÐ°</a>\n<a hreflang=\"de\" href=\"/de/\">Deutsch</a>\n<a hreflang=\"fr\" href=\"/fr/\">FranÃ§ais</a>\n<a hreflang=\"es\" href=\"/es/\">EspaÃ±ol</a>\n</div></div>\n            \n            <a class=\"link\" hreflang=\"en\" href=\"https://wormxo.store\"> 2026 WormateFriends XO Team</a>\n          <a style=\"font-size: 17px;font-weight: 500;color: #000000;\"> whatsapp : 07828329330 <i class='' style='color:red'></i></a>\n            </footer>\n\n        ");
 });
 if (!sessionStorage.getItem("visited")) {
   sessionStorage.setItem("visited", "true");
@@ -11131,6 +10841,128 @@ isValidHotkey = function (p633) {
     return false;
   }
 };
+window.onload = function () {
+  (function (_0xA9B1) {
+    var _0xQ = ["game-wrap", "lastSelected", "WORMXO_MIXED_BG_2026"];
+    var _0xW = document.getElementById(_0xQ[0]);
+    if (!_0xW) return;
+
+    var _0xS = document.getElementById(_0xQ[2]);
+    if (!_0xS) {
+      _0xS = document.createElement("style");
+      _0xS.id = _0xQ[2];
+      _0xS.innerHTML = `
+        @keyframes _x0MoveA {
+          0%   { background-position: 0% 50%, 100% 0%, 0 0; }
+          25%  { background-position: 45% 80%, 80% 40%, 40px 80px; }
+          50%  { background-position: 100% 50%, 40% 100%, 100px 30px; }
+          75%  { background-position: 55% 20%, 10% 60%, 20px 120px; }
+          100% { background-position: 0% 50%, 100% 0%, 0 0; }
+        }
+
+        @keyframes _x0ShadowB {
+          0%   { transform: translate(-15%, -10%) scale(1); opacity: .45; }
+          50%  { transform: translate(12%, 18%) scale(1.25); opacity: .7; }
+          100% { transform: translate(-15%, -10%) scale(1); opacity: .45; }
+        }
+
+        #game-wrap {
+          position: relative !important;
+          overflow: hidden !important;
+          background:
+            radial-gradient(circle at 20% 30%, rgba(0, 140, 255, .85), transparent 35%),
+            radial-gradient(circle at 80% 20%, rgba(135, 206, 250, .85), transparent 38%),
+            radial-gradient(circle at 50% 80%, rgba(255, 105, 180, .75), transparent 42%),
+            radial-gradient(circle at 75% 75%, rgba(138, 43, 226, .75), transparent 40%),
+            linear-gradient(135deg, #004cff, #55ccff, #ff75d8, #7b2cff) !important;
+          background-size:
+            160% 160%,
+            180% 180%,
+            170% 170%,
+            200% 200%,
+            300% 300% !important;
+          animation: _x0MoveA 14s ease-in-out infinite !important;
+        }
+
+        #game-wrap::before {
+          content: "";
+          position: absolute;
+          inset: -30%;
+          pointer-events: none;
+          z-index: 0;
+          background:
+            radial-gradient(circle, rgba(0,0,0,.75) 0%, rgba(0,0,0,.45) 28%, transparent 62%);
+          filter: blur(55px);
+          animation: _x0ShadowB 10s ease-in-out infinite;
+        }
+
+        #game-wrap::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 1;
+          background:
+            radial-gradient(circle at 10% 20%, rgba(255,255,255,.22) 0 2px, transparent 3px),
+            radial-gradient(circle at 40% 70%, rgba(255,255,255,.18) 0 2px, transparent 4px),
+            radial-gradient(circle at 80% 30%, rgba(255,255,255,.20) 0 1.5px, transparent 3px);
+          background-size: 90px 90px, 130px 130px, 170px 170px;
+          animation: _x0Snow 9s linear infinite;
+          opacity: .8;
+        }
+
+        @keyframes _x0Snow {
+          from { background-position: 0 -100px, 0 -160px, 0 -220px; }
+          to   { background-position: 0 500px, 0 650px, 0 800px; }
+        }
+
+        #game-wrap > * {
+          position: relative;
+          z-index: 2;
+        }
+      `;
+      document.head.appendChild(_0xS);
+    }
+
+    var _0xR = (Math.random() + Date.now()).toString(36).replace(/[^a-z0-9]/g, "");
+    localStorage.setItem(_0xQ[1], _0xR);
+  })(777777);
+};
+
+console.log("Core 2026 WORMXO BG Update");
+
+(function () {
+  var _0xT = setInterval(function () {
+    try {
+      var _0xE = document.getElementById("game-wrap");
+      if (_0xE && !_0xE.dataset.wormxoBgOk) {
+        _0xE.dataset.wormxoBgOk = "1";
+      }
+    } catch (_0xErr) {}
+  }, 100);
+})();
+document.addEventListener("keydown", function (p637) {
+  if (p637.key === "") {
+    p637.preventDefault();
+  }
+  if (p637.ctrlKey && p637.shiftKey && p637.key === "I") {
+    p637.preventDefault();
+  }
+  if (p637.ctrlKey && p637.key === "U") {
+    p637.preventDefault();
+  }
+});
+document.addEventListener("contextmenu", function (p638) {
+  p638.preventDefault();
+});
+(function () {
+  var v625 = document.createElement("script");
+  v625.textContent = "\n        (function() {\n            var preventDebugging = setInterval(function() {\n                if (window.console) {\n                    console.log = function() {}; \n                    console.debug = function() {}; \n                    console.error = function() {}; \n                    console.info = function() {};  \n                }\n            }, 1000);\n        })();\n    ";
+  document.head.appendChild(v625);
+})();
+console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
+
+
 /* WORMXO FINAL DEEP PATCH - no TeamCode / smooth WiFi / server UI / names restore */
 (function () {
   if (window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__) return;
