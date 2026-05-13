@@ -9207,7 +9207,7 @@ function f(p) {
         let v1910 = document.createElement("link");
         v1910.rel = "stylesheet";
         v1910.type = "text/css";
-        v1910.href = "https://wormxo.store/css/wxo.css";
+        v1910.href = vO50.url + "/css/wxo.css";
         v1909.appendChild(v1910);
       } catch (e60) {
         console.error(e60);
