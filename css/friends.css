@@ -3295,7 +3295,7 @@ body {display:block !important;}
   text-align: center;
   font-size: 15px;
   color: #ffffff;
-  background: linear-gradient(to bottom, #f7941d, #ffb347);
+  background-color: #ffffff1f;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
   line-height: 1.6;
   z-index: 9999;
@@ -3305,13 +3305,13 @@ body {display:block !important;}
   font-size:inherit;
   background-color:transparent;
   border:0;
-  color: #0a8135e8;
+  color: #000000e8;
   font-weight: 600;
   text-decoration:none;
   margin:0 5px;
 }
 #markup-wrap #markup-footer .link:hover {
-  color:#f50c40e8;
+  color:#000000e8;
   text-decoration:underline;
 }
 #markup-wrap #markup-footer .lang-menu {
