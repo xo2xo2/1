@@ -1,4 +1,8 @@
 
+#game-wrap #game-cont #stretch-box #main-menu-view #mm-line-bottom .mm-merchant-cont .mm-merchant
+{
+	width:0px;
+}
 /* Arka planı ve canvası karartır  */
        html body  #background-canvas,
         #game-cont,

@@ -11998,7 +11998,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
       $(".mm-merchant-cont").append(`
-  <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px;">
+  <div style="style="display: flex;justify-content: center;align-items: center;margin-top: -53px;width: 351px;"">
     <a href="https://wormxo.store" target="_blank" style="margin-right: 10px;">
       <img src="https://wormxo.store/image/wxo-AA4.png" alt="Happy">
     </a>
