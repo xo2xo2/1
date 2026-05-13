@@ -92,7 +92,7 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
 // by xo
 // by bmw
 // dark , absi , wormfriend , 
-// QQVD =  1.1
+// wormxoli19791125xomajdtixrytprivat5222 =  1.5
 
 /* WORMXO MOBILE LOW-PERFORMANCE CORE - joystick + lag fix */
 window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
