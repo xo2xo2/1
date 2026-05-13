@@ -84,7 +84,7 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
   streamer: localStorage.getItem("XOTEAM_STREAMER_MODE") === "true",
   hideTopKill: localStorage.getItem("XOTEAM_HIDE_TOP_KILL") === "true",
   hideTopHS: localStorage.getItem("XOTEAM_HIDE_TOP_HS") === "true",
-  maskNames: localStorage.getItem("XOTEAM_MASK_NAMES") === "true",
+  maskNames: false,
   showZigZag: localStorage.getItem("XOTEAM_SHOW_ZIGZAG") === "true",
   lowPerf: true
 };
@@ -110,15 +110,6 @@ window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
 window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.WORMXO_MOBILE_PERF.isMobile || window.WORMXO_MOBILE_PERF.memory <= 4));
 
 
-/* WORMXO TEAMCODE CORE - shared minimap dots */
-window.WORMXO_TEAMCODE = window.WORMXO_TEAMCODE || {
-  code: String(localStorage.getItem("WORMXO_TEAM_CODE") || "").replace(/\D/g, "").slice(0, 4),
-  color: localStorage.getItem("WORMXO_TEAM_COLOR") || "#ff8a00",
-  peers: {},
-  lastSend: 0,
-  lastDraw: 0,
-  channel: "wormxo-teamcode-v1"
-};
 
 
 /* WORMXO DEEP REGISTRY MERGE CORE - moved from end */
@@ -1081,7 +1072,6 @@ function XOTEAM_updateTopHSList(row) {
 function XOTEAM_clearLocalBoards() {
   try {
     XOTEAM_removeFromRealBoards(true);
-    try { WORMXO_teamSendNow(true); } catch(e0) {}
     XOTEAM_renderRealBoards();
   } catch (e) {}
 }
@@ -1384,7 +1374,6 @@ function XOTEAM_handleSocketMessage(event) {
     var data = JSON.parse(event.data);
 
     if (typeof XOTEAM_131_handlePacket === "function" && XOTEAM_131_handlePacket(data)) return;
-    if (typeof WORMXO_teamHandlePacket === "function" && WORMXO_teamHandlePacket(data)) return;
     if (typeof XOTEAM_applySharedTop === "function" && XOTEAM_applySharedTop(data)) return;
 
     if (data && data.type === "top_hs_list" && Array.isArray(data.list)) {
@@ -2041,7 +2030,7 @@ function XOTEAM_renderKillMessages(list) {
 window.XOTEAM_renderTopKill = XOTEAM_renderTopKill;
 window.XOTEAM_renderKillMessages = XOTEAM_renderKillMessages;
 
-/* WORMXO COORDS + TEAMCODE UI CORE - replaces kill messages */
+/* WORMXO COORDS UI CORE - kill messages removed */
 try {
   if (vO7.killMsgContainer) {
     vO7.killMsgContainer.removeChildren && vO7.killMsgContainer.removeChildren();
@@ -2061,10 +2050,6 @@ try {
     vO7.killMsgContainer.addChild(vO7.coordBox);
     vO7.killMsgContainer.addChild(vO7.coordText);
   }
-  vO7.teamDotLayer = new PIXI.Container();
-  vO7.teamDotLayer.x = 55;
-  vO7.teamDotLayer.y = 50;
-  vO7.containerCountInfo.addChild(vO7.teamDotLayer);
 } catch (e) {}
 
 function WORMXO_getSelfHead() {
@@ -2089,105 +2074,9 @@ function WORMXO_renderCoordsBox() {
   } catch (e) {}
 }
 
-function XOTEAM_renderKillMessages(list) {
-  WORMXO_renderCoordsBox();
-}
+function XOTEAM_renderKillMessages(list) { WORMXO_renderCoordsBox(); }
 window.XOTEAM_renderKillMessages = XOTEAM_renderKillMessages;
-
-function WORMXO_teamHexNum(hex) {
-  try { return parseInt(String(hex || "#ff8a00").replace("#", ""), 16) || 0xff8a00; } catch (e) { return 0xff8a00; }
-}
-function WORMXO_teamPacket() {
-  try {
-    var cfg = window.WORMXO_TEAMCODE || {};
-    if (!/^\d{4}$/.test(String(cfg.code || ""))) return null;
-    var p = WORMXO_getSelfHead();
-    return { type: "x_team_pos", channel: cfg.channel || "wormxo-teamcode-v1", code: String(cfg.code), color: cfg.color || "#ff8a00", id: (typeof XOTEAM_getClientId === "function" ? XOTEAM_getClientId() : "local"), name: (typeof XOTEAM_getClientName === "function" ? XOTEAM_getClientName() : "Player"), x: Number(p.x || 0), y: Number(p.y || 0), alive: true, at: Date.now() };
-  } catch (e) { return null; }
-}
-function WORMXO_teamSendNow(remove) {
-  try {
-    var cfg = window.WORMXO_TEAMCODE || {};
-    if (!window.XOTEAM_WS || window.XOTEAM_WS.readyState !== WebSocket.OPEN) return;
-    var pkt = WORMXO_teamPacket();
-    if (!pkt) return;
-    if (remove) pkt.alive = false;
-    window.XOTEAM_WS.send(JSON.stringify(pkt));
-  } catch (e) {}
-}
-function WORMXO_teamHandlePacket(data) {
-  try {
-    var cfg = window.WORMXO_TEAMCODE || {};
-    if (!data || data.type !== "x_team_pos" || data.channel !== (cfg.channel || "wormxo-teamcode-v1")) return false;
-    if (!/^\d{4}$/.test(String(cfg.code || "")) || String(data.code) !== String(cfg.code)) return true;
-    if (data.id && typeof XOTEAM_getClientId === "function" && String(data.id) === String(XOTEAM_getClientId())) return true;
-    cfg.peers = cfg.peers || {};
-    if (data.alive === false) delete cfg.peers[String(data.id || "")];
-    else cfg.peers[String(data.id || (data.name || "p"))] = data;
-    return true;
-  } catch (e) { return false; }
-}
-window.WORMXO_teamHandlePacket = WORMXO_teamHandlePacket;
-function WORMXO_teamDrawDots() {
-  try {
-    var cfg = window.WORMXO_TEAMCODE || {};
-    if (!vO7 || !vO7.teamDotLayer) return;
-    vO7.teamDotLayer.removeChildren();
-    if (!/^\d{4}$/.test(String(cfg.code || ""))) return;
-    var self = WORMXO_getSelfHead();
-    var now = Date.now();
-    Object.keys(cfg.peers || {}).forEach(function (id) {
-      var p = cfg.peers[id];
-      if (!p || now - Number(p.at || 0) > 8000) { delete cfg.peers[id]; return; }
-      var dx = (Number(p.x || 0) - Number(self.x || 0)) / 120;
-      var dy = (Number(p.y || 0) - Number(self.y || 0)) / 120;
-      if (dx > 42) dx = 42; if (dx < -42) dx = -42; if (dy > 42) dy = 42; if (dy < -42) dy = -42;
-      var dot = new PIXI.Graphics();
-      dot.beginFill(WORMXO_teamHexNum(p.color || cfg.color), 0.95);
-      dot.drawCircle(dx, dy, 2.4);
-      dot.endFill();
-      vO7.teamDotLayer.addChild(dot);
-    });
-  } catch (e) {}
-}
-setInterval(function () {
-  try {
-    WORMXO_renderCoordsBox();
-    var cfg = window.WORMXO_TEAMCODE || {};
-    if (/^\d{4}$/.test(String(cfg.code || "")) && Date.now() - Number(cfg.lastSend || 0) > 900) {
-      cfg.lastSend = Date.now();
-      WORMXO_teamSendNow(false);
-    }
-    WORMXO_teamDrawDots();
-  } catch (e) {}
-}, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 1200 : 650);
-window.addEventListener("beforeunload", function () { try { WORMXO_teamSendNow(true); } catch(e){} });
-
-function WORMXO_installTeamCodeSettings() {
-  try {
-    if (document.getElementById("wormxo-teamcode-panel")) return;
-    var box = document.createElement("div");
-    box.id = "wormxo-teamcode-panel";
-    box.style.cssText = "position:fixed;right:14px;bottom:14px;z-index:999999;background:rgba(0,0,0,.70);border:1px solid #ff8a00;border-radius:10px;padding:8px;font:bold 12px Arial;color:white;display:flex;gap:6px;align-items:center";
-    box.innerHTML = '<b>TeamCode</b><input id="wormxo-teamcode-input" maxlength="4" inputmode="numeric" style="width:52px;background:#111;color:#fff;border:1px solid #ff8a00;border-radius:6px;padding:4px" placeholder="0000"><input id="wormxo-teamcolor-input" type="color" style="width:34px;height:28px"><button id="wormxo-teamcode-save" style="background:#ff8a00;color:#111;border:0;border-radius:6px;padding:5px 8px;font-weight:900">Save</button>';
-    document.body.appendChild(box);
-    var cfg = window.WORMXO_TEAMCODE || {};
-    document.getElementById("wormxo-teamcode-input").value = String(cfg.code || "");
-    document.getElementById("wormxo-teamcolor-input").value = cfg.color || "#ff8a00";
-    document.getElementById("wormxo-teamcode-save").onclick = function () {
-      var c = String(document.getElementById("wormxo-teamcode-input").value || "").replace(/\D/g, "").slice(0,4);
-      var col = String(document.getElementById("wormxo-teamcolor-input").value || "#ff8a00");
-      window.WORMXO_TEAMCODE.code = c;
-      window.WORMXO_TEAMCODE.color = col;
-      window.WORMXO_TEAMCODE.peers = {};
-      localStorage.setItem("WORMXO_TEAM_CODE", c);
-      localStorage.setItem("WORMXO_TEAM_COLOR", col);
-      WORMXO_teamSendNow(false);
-    };
-  } catch (e) {}
-}
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", WORMXO_installTeamCodeSettings); else WORMXO_installTeamCodeSettings();
-
+setInterval(WORMXO_renderCoordsBox, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 1300 : 650);
 
 /* WORMXO HeadShot-only board finalizer */
 try {
@@ -11071,3 +10960,149 @@ document.addEventListener("contextmenu", function (p638) {
   document.head.appendChild(v625);
 })();
 console.log("%cDeveloper XO ", "color: #FF7F00; font-size: 18px; font-weight: bold;");
+
+
+/* WORMXO FINAL DEEP PATCH - no TeamCode / smooth WiFi / server UI / names restore */
+(function () {
+  if (window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__) return;
+  window.__WORMXO_FINAL_NO_TEAM_SMOOTH_2026__ = true;
+
+  try {
+    localStorage.setItem("XOTEAM_MASK_NAMES", "false");
+    if (window.WORMXO_UI_STATE) window.WORMXO_UI_STATE.maskNames = false;
+  } catch (e) {}
+
+  function xoRestoreNames() {
+    try {
+      if (window.WORMXO_UI_STATE) window.WORMXO_UI_STATE.maskNames = false;
+      var game = window.anApp;
+      if (!game || !game.o || !game.o.hb) return;
+      Object.keys(game.o.hb).forEach(function (id) {
+        var p = game.o.hb[id];
+        [p && p.qj, p && p.nameText, p && p.nickname].forEach(function (t) {
+          if (!t || typeof t.text === "undefined") return;
+          if (typeof t.__XOTEAM_REAL_TEXT !== "undefined") {
+            t.text = t.__XOTEAM_REAL_TEXT;
+            delete t.__XOTEAM_REAL_TEXT;
+          }
+          if (/^0[-_]{2,}/.test(String(t.text || ""))) {
+            var name = "Player";
+            try { if (p && p.Mb && p.Mb.ad) name = String(p.Mb.ad).trim() || name; } catch (e0) {}
+            t.text = name;
+          }
+        });
+      });
+    } catch (e) {}
+  }
+
+  window.XOTEAM_maskOneName = function () {};
+  window.XOTEAM_applyNameMask = xoRestoreNames;
+  setInterval(xoRestoreNames, 900);
+
+  function addHeadHint(rel, href) {
+    try {
+      if (document.querySelector('link[rel="' + rel + '"][href="' + href + '"]')) return;
+      var l = document.createElement("link");
+      l.rel = rel;
+      l.href = href;
+      if (rel === "preconnect") l.crossOrigin = "anonymous";
+      (document.head || document.documentElement).appendChild(l);
+    } catch (e) {}
+  }
+  ["https://cdnjs.cloudflare.com", "https://static.cloudflareinsights.com", "https://resources.wormate.io", "https://wormxo.store", "https://wm.wormy.online", "https://jkr.wormy.online"].forEach(function (h) {
+    addHeadHint("preconnect", h);
+    addHeadHint("dns-prefetch", h);
+  });
+
+  function xoApplyPerf() {
+    try {
+      var low = (navigator.connection && /2g|3g|slow-2g/i.test(navigator.connection.effectiveType || "")) || Number(navigator.deviceMemory || 4) <= 4;
+      if (window.vO4) {
+        vO4.smoothCamera = low ? 0.30 : Math.min(Number(vO4.smoothCamera || 0.5), 0.42);
+        vO4.eat_animation = low ? 0.002 : Math.min(Number(vO4.eat_animation || 0.005), 0.0035);
+        vO4.FoodShadow = low ? 0 : vO4.FoodShadow;
+        vO4.FoodSize = low ? Math.min(Number(vO4.FoodSize || 2), 1.1) : Math.min(Number(vO4.FoodSize || 2), 1.5);
+        vO4.PortionSize = low ? Math.min(Number(vO4.PortionSize || 2), 1.25) : Math.min(Number(vO4.PortionSize || 2), 1.6);
+        vO4.PortionAura = low ? 0.65 : Math.min(Number(vO4.PortionAura || 1.2), 0.9);
+      }
+      if (window.PIXI && PIXI.settings) {
+        PIXI.settings.ROUND_PIXELS = true;
+        PIXI.settings.RESOLUTION = low ? 0.85 : 1;
+        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES && PIXI.SCALE_MODES.LINEAR;
+      }
+    } catch (e) {}
+  }
+  xoApplyPerf();
+  try { if (navigator.connection) navigator.connection.addEventListener("change", xoApplyPerf); } catch (e) {}
+
+  function installLoading2022() {
+    try {
+      if (document.getElementById("wormxo-loading-2022-style")) return;
+      var st = document.createElement("style");
+      st.id = "wormxo-loading-2022-style";
+      st.textContent = "#wormxo-loading-2022{position:fixed;inset:0;z-index:999998;background:radial-gradient(circle at 50% 42%,#2b1b10 0,#110b08 48%,#030303 100%);display:none;align-items:center;justify-content:center;flex-direction:column;color:#ffb545;font-family:Arial,Tahoma,sans-serif}#wormxo-loading-2022 .worm{width:96px;height:96px;border:5px solid rgba(255,150,0,.18);border-top-color:#ff8a00;border-radius:50%;animation:wormxoSpin .9s linear infinite}#wormxo-loading-2022 b{margin-top:16px;font-size:19px;letter-spacing:2px;text-shadow:0 0 12px #ff8a00}@keyframes wormxoSpin{to{transform:rotate(360deg)}}.description-text-hiep{background:rgba(8,8,12,.78)!important;border:1px solid rgba(255,153,0,.5)!important;border-radius:14px!important;box-shadow:0 0 22px rgba(255,138,0,.18)!important;padding:8px!important}.title-wormate-friends-connect{color:#ffb13b!important;text-shadow:0 0 10px rgba(255,138,0,.6)!important;font-weight:900!important}.servers-container p.selectSala{background:linear-gradient(90deg,rgba(255,138,0,.14),rgba(255,255,255,.04))!important;border:1px solid rgba(255,170,0,.32)!important;border-radius:10px!important;margin:6px 4px!important;padding:8px 10px!important;color:#fff!important;font-weight:900!important;transition:.12s!important;box-shadow:inset 0 0 8px rgba(255,138,0,.08)!important}.servers-container p.selectSala:hover{transform:translateX(3px);background:linear-gradient(90deg,rgba(255,138,0,.32),rgba(255,255,255,.08))!important;border-color:#ffb13b!important}.ui-tabs-nav .ui-tabs-tab{border-radius:9px!important;background:rgba(255,255,255,.06)!important}.ui-tabs-nav .ui-tab-active{background:rgba(255,138,0,.28)!important;box-shadow:0 0 10px rgba(255,138,0,.32)!important}";
+      (document.head || document.documentElement).appendChild(st);
+      var d = document.createElement("div");
+      d.id = "wormxo-loading-2022";
+      d.innerHTML = '<div class="worm"></div><b>WORMXO LOADING 2022</b><span style="margin-top:8px;color:#fff;opacity:.8">Connecting to server...</span>';
+      document.body.appendChild(d);
+    } catch (e) {}
+  }
+  function showLoad(v) { try { installLoading2022(); document.getElementById("wormxo-loading-2022").style.display = v ? "flex" : "none"; } catch (e) {} }
+  window.WORMXO_showLoading2022 = showLoad;
+  document.addEventListener("click", function (ev) {
+    try {
+      var el = ev.target && ev.target.closest ? ev.target.closest("#mm-action-play,.selectSala") : null;
+      if (!el) return;
+      showLoad(true);
+      setTimeout(function () { showLoad(false); }, 9000);
+    } catch (e) {}
+  }, true);
+  setInterval(function () {
+    try {
+      var lv = document.getElementById("loading-view");
+      var gameCanvas = document.querySelector("canvas");
+      if (lv && getComputedStyle(lv).display === "none") showLoad(false);
+      if (gameCanvas && window.anApp && window.anApp.o) showLoad(false);
+    } catch (e) {}
+  }, 800);
+
+  function offlineToast(txt) {
+    try {
+      var id = "wormxo-offline-toast";
+      var d = document.getElementById(id);
+      if (!d) {
+        d = document.createElement("div");
+        d.id = id;
+        d.style.cssText = "position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:999999;background:rgba(0,0,0,.82);color:#ffb13b;border:1px solid #ff8a00;border-radius:12px;padding:10px 16px;font:bold 14px Arial;box-shadow:0 0 18px rgba(255,138,0,.35)";
+        document.body.appendChild(d);
+      }
+      d.textContent = txt || "فقد الاتصال بالخادم";
+      d.style.display = "block";
+      setTimeout(function () { d.style.display = "none"; }, 4200);
+    } catch (e) {}
+  }
+  window.WORMXO_offlineToast = offlineToast;
+  window.addEventListener("offline", function () { offlineToast("فقد اتصال الإنترنت / Wi-Fi ضعيف"); showLoad(false); });
+
+  var OldWS = window.WebSocket;
+  if (OldWS && !OldWS.__WORMXO_SAFE__) {
+    function SafeWS(url, protocols) {
+      var ws = protocols ? new OldWS(url, protocols) : new OldWS(url);
+      var opened = false;
+      var timer = setTimeout(function () {
+        if (!opened || ws.readyState !== 1) {
+          try { offlineToast("فقد الاتصال بالخادم"); showLoad(false); } catch (e) {}
+        }
+      }, 6500);
+      ws.addEventListener("open", function () { opened = true; clearTimeout(timer); showLoad(false); });
+      ws.addEventListener("close", function () { if (!opened) offlineToast("السيرفر لا يستجيب"); showLoad(false); });
+      ws.addEventListener("error", function () { offlineToast("فقد الاتصال بالخادم"); showLoad(false); });
+      return ws;
+    }
+    SafeWS.prototype = OldWS.prototype;
+    SafeWS.CONNECTING = OldWS.CONNECTING; SafeWS.OPEN = OldWS.OPEN; SafeWS.CLOSING = OldWS.CLOSING; SafeWS.CLOSED = OldWS.CLOSED;
+    SafeWS.__WORMXO_SAFE__ = true;
+    window.WebSocket = SafeWS;
+  }
+})();
