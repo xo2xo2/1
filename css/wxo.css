@@ -1,3 +1,18 @@
+
+/* Arka planı ve canvası karartır  */
+       html body  #background-canvas,
+        #game-cont,
+        #game-wrap,
+        body {
+            background-color: #092b00 !important;
+            background-image: url(https://wormxo.store/image/background.jpg) !important;
+			background-repeat:no-repeat;
+			background-size:cover;
+        }
+#game-wrap #game-cont #background-canvas {
+            width : 0%
+        }
+
 #div_map {
 	border-radius: 5px;
     border: 1px solid #ff9700;
