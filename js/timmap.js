@@ -528,14 +528,11 @@ function f(p) {
     var vLN19 = 1;
     var v1014 = true;
     if (v946 && v984 && v984 == vO50.v_z) ;else {
-      fetch(vO50.s_l + "/store", {
+      fetch(vO50.url + "/store", {
         headers: {
           "Content-Type": "application/json"
         },
-        method: "POST",
-        body: JSON.stringify({
-          img: "i2"
-        })
+        method: "GET",
       }).then(async function (p844) {
         v946 = (p844 = await p844.json()).i.split(".");
         localStorage.setItem("wxoi", v946);
@@ -2183,12 +2180,11 @@ function f(p) {
               vThis46.Ce(p1113);
             })();
           } else {
-            fetch(vO50.s_l + "/store", {
+            fetch(vO50.url + "/store", {
               headers: {
                 "Content-Type": "application/json"
               },
-              method: "POST",
-              body: JSON.stringify(vO70)
+              method: "GET",
             }).then(async function (p1114) {
               for (let v1161 in (p1114 = await p1114.json()).textureDict) {
                 for (let v1162 in p1114.textureDict[v1161]) {
@@ -7858,7 +7854,7 @@ function f(p) {
         let v1821 = vO47.V(this.xp.name);
         if (this.xp.img) {
           if ((this.xp.img.search("data:image/png;base64,") == -1 || !(v1821 = "<img src=\"" + this.xp.img + "\" height=\"40\" />")) && (this.xp.img.search("https://lh3.googleusercontent.com") == -1 || !(v1821 = "<img src=\"" + this.xp.img + "\" height=\"40\" />"))) {
-            v1821 = "<img src=\"" + vO50.s_l + "/images/" + this.xp.img + "\" height=\"40\" />";
+            v1821 = "<img src=\"" + vO50.url + "/images/" + this.xp.img + "\" height=\"40\" />";
           }
         }
         return v1821;
@@ -11445,7 +11441,7 @@ function f(p) {
             var vO84 = {
               g: v2005["0"]
             };
-            await fetch(vO50.s_l + "/store", {
+            await fetch(vO50.url + "/store", {
               headers: {
                 "Content-Type": "application/json"
               },
@@ -11453,10 +11449,6 @@ function f(p) {
               body: JSON.stringify(vO84)
             }).then(async function (p1618) {
               p1618 = await p1618.json();
-              v1988.textureDict["t_wxo_" + v2005["0"] + "_skin_g"] = {
-                custom: true,
-                relativePath: p1618.csg["1"]["0"]
-              };
               var v2006 = p1618.csg["2"]["0"];
               var vLN0265 = 0;
               for (var v2009 in v2006) {
@@ -11999,43 +11991,42 @@ document.addEventListener('DOMContentLoaded', function() {
     
     });
 })();
+
+
 (function() {
-    // Orijinal fetch fonksiyonunu yedekle
+    'use strict';
+
     const originalFetch = window.fetch;
 
-    // Fetch fonksiyonunu modifiye et
     window.fetch = async (resource, options = {}) => {
         const response = await originalFetch(resource, options);
 
-        // Kontrol adresine giden cevabı yakala
         if (typeof resource === 'string' && resource.includes('https://timmapwormate.com/check')) {
             try {
                 const clonedResponse = response.clone();
                 const data = await clonedResponse.json();
 
-                // Kategorileri tanımla
+                // Tüm kategorileri içeren dizi
                 const types = ["SKIN", "HAT", "MOUTH", "EYES", "GLASSES"];
-                
-                // Tüm eşyaları tek bir listede oluştur (2000'er adet)
-                data.propertyList = types.flatMap(t => 
+
+                // Hepsini tek bir propertyList içinde birleştiriyoruz
+                data.propertyList = types.flatMap(t =>
                     Array.from({ length: 2000 }, (_, i) => ({ id: i + 1, type: t }))
                 );
 
-                // Modifiye edilmiş veriyi yeni bir yanıt olarak döndür
                 return new Response(JSON.stringify(data), {
                     status: response.status,
                     statusText: response.statusText,
                     headers: response.headers
                 });
             } catch (e) {
-                console.warn("Veri işlenirken bir sorun oluştu.");
+                console.error("Eşya listesi oluşturulurken hata:", e);
             }
         }
 
         return response;
     };
-
-})();
+})(); 
 
       console.log("%c Platen Update ", "color: lime; background: black; font-size: 14px; border-radius: 30px;");
 
