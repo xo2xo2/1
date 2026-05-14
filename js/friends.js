@@ -4719,7 +4719,7 @@ vF172.prototype.Se = function (p281) {
         this.lf.Bf(p294.af == vO17.$e ? vF93.q.Cf : vF93.q.Df);
         var v197 = this.mf;
         v197.clear();
-        v197.lineStyle(0.8, 65535);
+        v197.lineStyle(0.6, 0x4A0000, 0.35);
         v197.drawCircle(0, 0, p294.ub);
         v197.endFill();
         this.vf.Ef = p295;
@@ -5803,16 +5803,18 @@ vF172.prototype.Se = function (p281) {
           this.Nf = p372;
           this.Pf = p373;
         }
-        f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
-          this.Nf.Mg(true);
-          this.Nf.nh(p374, p375);
-          this.Nf.oh(p376);
-          this.Nf.qh(p377);
-          this.Pf.Mg(true);
-          this.Pf.nh(p374, p375);
-          this.Pf.oh(p378);
-          this.Pf.qh(p379);
-        };
+f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
+  this.Nf.Mg(true);
+  this.Nf.nh(p374, p375);
+  this.Nf.oh(p376);
+  this.Nf.qh(p377);
+
+  this.Pf.Mg(true);
+  this.Pf.nh(p374, p375);
+
+  this.Pf.oh(p378 * 1.45);
+  this.Pf.qh(0.82);
+};
         f70.prototype.lh = function () {
           this.Nf.Mg(false);
           this.Pf.Mg(false);
