@@ -2226,9 +2226,6 @@ function f(p) {
             var v1165 = p1116[vO47.a("af94d45a47914743f381da5e")][v1164];
             if (v1165.custom) {
               var vLS2 = "";
-              if (v1165.relativePath) {
-                vLS2 = v1165.relativePath.search("https://lh3.googleusercontent.com") != -1 ? v1165.relativePath : vO50.s_l + v1165.relativePath;
-              }
               var v1168 = v1165.file || vLS2;
               var v1169 = 0;
               var v1170 = "";
