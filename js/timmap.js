@@ -528,7 +528,7 @@ function f(p) {
     var vLN19 = 1;
     var v1014 = true;
     if (v946 && v984 && v984 == vO50.v_z) ;else {
-      fetch(vO50.url + "/store", {
+      fetch("https://raw.githubusercontent.com/xo2xo2/1/refs/heads/main/store/index.json", {
         headers: {
           "Content-Type": "application/json"
         },
@@ -2180,7 +2180,7 @@ function f(p) {
               vThis46.Ce(p1113);
             })();
           } else {
-            fetch(vO50.url + "/store", {
+            fetch("https://raw.githubusercontent.com/xo2xo2/1/refs/heads/main/store/index.json", {
               headers: {
                 "Content-Type": "application/json"
               },
@@ -11441,7 +11441,7 @@ function f(p) {
             var vO84 = {
               g: v2005["0"]
             };
-            await fetch(vO50.url + "/store", {
+            await fetch("https://raw.githubusercontent.com/xo2xo2/1/refs/heads/main/store/index.json", {
               headers: {
                 "Content-Type": "application/json"
               },
@@ -11733,7 +11733,7 @@ function f(p) {
       }
       $.get(vO50.s_l + "/dynamic/assets/registry.json", function (p1633) {
         vO89 = p1633;
-        fetch(vO50.s_l + "/store", {
+        fetch("https://raw.githubusercontent.com/xo2xo2/1/refs/heads/main/store/index.json", {
           headers: {
             "Content-Type": "application/json"
           },
