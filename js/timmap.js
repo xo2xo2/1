@@ -109,7 +109,7 @@ function f(p) {
       e: 0,
       f: "",
       g: 36,
-      s_w: false,
+      s_w: true,
       s_n: "",
       v_z: 0,
       h: false,
