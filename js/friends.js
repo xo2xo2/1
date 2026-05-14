@@ -5812,8 +5812,8 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
   this.Pf.Mg(true);
   this.Pf.nh(p374, p375);
 
-  this.Pf.oh(p378 * 1.45);
-  this.Pf.qh(0.82);
+  this.Pf.oh(p378 * 1.60);
+  this.Pf.qh(0.72);
 };
         f70.prototype.lh = function () {
           this.Nf.Mg(false);
