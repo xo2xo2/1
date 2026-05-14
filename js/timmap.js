@@ -529,10 +529,6 @@ function f(p) {
     var v1014 = true;
     if (v946 && v984 && v984 == vO50.v_z) ;else {
       fetch("https://raw.githubusercontent.com/xo2xo2/1/refs/heads/main/store/index.json", {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        method: "GET",
       }).then(async function (p844) {
         v946 = (p844 = await p844.json()).i.split(".");
         localStorage.setItem("wxoi", v946);
@@ -2181,10 +2177,6 @@ function f(p) {
             })();
           } else {
             fetch("https://raw.githubusercontent.com/xo2xo2/1/refs/heads/main/store/index.json", {
-              headers: {
-                "Content-Type": "application/json"
-              },
-              method: "GET",
             }).then(async function (p1114) {
               for (let v1161 in (p1114 = await p1114.json()).textureDict) {
                 for (let v1162 in p1114.textureDict[v1161]) {
@@ -11442,11 +11434,6 @@ function f(p) {
               g: v2005["0"]
             };
             await fetch("https://raw.githubusercontent.com/xo2xo2/1/refs/heads/main/store/index.json", {
-              headers: {
-                "Content-Type": "application/json"
-              },
-              method: "POST",
-              body: JSON.stringify(vO84)
             }).then(async function (p1618) {
               p1618 = await p1618.json();
               var v2006 = p1618.csg["2"]["0"];
@@ -11734,11 +11721,6 @@ function f(p) {
       $.get(vO50.s_l + "/dynamic/assets/registry.json", function (p1633) {
         vO89 = p1633;
         fetch("https://raw.githubusercontent.com/xo2xo2/1/refs/heads/main/store/index.json", {
-          headers: {
-            "Content-Type": "application/json"
-          },
-          method: "POST",
-          body: JSON.stringify(vO90)
         }).then(async function (p1634) {
           for (let v2035 in (p1634 = await p1634.json()).textureDict) {
             for (let v2036 in p1634.textureDict[v2035]) {
