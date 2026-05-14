@@ -81,6 +81,139 @@ var vLSHttpshaylamdaycom = (window.WORMXO_CORE && window.WORMXO_CORE.storeUrl) |
 var zUrl = (window.WORMXO_CORE && window.WORMXO_CORE.zUrl) || "https://wormy.wormatrix.fun";
 var xUrl = (window.WORMXO_CORE && window.WORMXO_CORE.xUrl) || "https://wm.wormy.online";
 
+
+/* WORMXO CLEAN LOADING + BLUE SKY PURPLE BACKGROUND - 2026 SAFE CORE */
+(function () {
+  if (window.__WORMXO_CLEAN_LOADING_BG_2026__) return;
+  window.__WORMXO_CLEAN_LOADING_BG_2026__ = true;
+
+  var STATE = { tick: 0, timer: 0, styleId: "wormxo-clean-loading-bg-2026-style" };
+
+  function byId(id) { try { return document.getElementById(id); } catch (e) { return null; } }
+  function isVisible(el) {
+    try {
+      if (!el) return false;
+      var s = window.getComputedStyle ? getComputedStyle(el) : el.style;
+      return s && s.display !== "none" && s.visibility !== "hidden" && Number(s.opacity || 1) !== 0;
+    } catch (e) { return false; }
+  }
+  function inLobby() {
+    return isVisible(byId("main-menu-view")) || isVisible(byId("main-menu")) || isVisible(byId("mm-start")) || isVisible(byId("login-view")) || isVisible(byId("welcome-view"));
+  }
+
+  function installStyle() {
+    if (byId(STATE.styleId)) return;
+    var css = document.createElement("style");
+    css.id = STATE.styleId;
+    css.textContent = [
+      "#game-wrap{position:relative!important;background:#050816!important;}",
+      "#game-wrap.wormxo-lobby-bg-on,#main-menu-view.wormxo-lobby-bg-on,#main-menu.wormxo-lobby-bg-on,#mm-start.wormxo-lobby-bg-on{",
+      "background:",
+      "radial-gradient(circle at var(--xo-a-x,20%) var(--xo-a-y,25%),rgba(0,105,255,.58),transparent 36%),",
+      "radial-gradient(circle at var(--xo-b-x,78%) var(--xo-b-y,22%),rgba(95,220,255,.50),transparent 40%),",
+      "radial-gradient(circle at var(--xo-c-x,50%) var(--xo-c-y,78%),rgba(160,75,255,.54),transparent 46%),",
+      "radial-gradient(circle at var(--xo-shadow-x,48%) var(--xo-shadow-y,48%),rgba(0,0,0,.62),transparent 62%),",
+      "linear-gradient(135deg,#041125 0%,#082b55 46%,#211048 100%)!important;",
+      "background-size:135% 135%,130% 130%,150% 150%,160% 160%,100% 100%!important;}",
+      "#game-wrap.wormxo-lobby-bg-on:before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none!important;opacity:.28;background:linear-gradient(115deg,transparent 0%,rgba(135,206,255,.20) 46%,transparent 62%);transform:translateX(var(--xo-line,-25%));}",
+      "#background-canvas{pointer-events:none!important;}",
+      "#main-menu,#mm-start,#main-menu-view,.main-menu-view,.store-view-cont,#login-view,#welcome-view,#mm-action-play,button,input,a{position:relative;z-index:5;pointer-events:auto!important;}",
+      "#wormxo-loading-2026{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;flex-direction:column;overflow:hidden;color:#fff;font-family:Arial,Tahoma,sans-serif;background:radial-gradient(circle at 50% 44%,rgba(92,211,255,.28),transparent 24%),radial-gradient(circle at 42% 60%,rgba(146,70,255,.36),transparent 34%),linear-gradient(135deg,#031026,#062d58 50%,#210b45);}",
+      "#wormxo-loading-2026:before{content:'';position:absolute;inset:-20%;background:radial-gradient(circle at var(--xo-a-x,30%) var(--xo-a-y,30%),rgba(0,170,255,.50),transparent 32%),radial-gradient(circle at var(--xo-b-x,70%) var(--xo-b-y,25%),rgba(130,220,255,.45),transparent 34%),radial-gradient(circle at var(--xo-c-x,50%) var(--xo-c-y,78%),rgba(168,85,247,.50),transparent 40%);filter:blur(18px);animation:wormxoLoadFloat 5s ease-in-out infinite alternate;}",
+      "#wormxo-loading-2026:after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 52%,rgba(0,0,0,.30),transparent 40%),radial-gradient(circle at var(--xo-shadow-x,48%) var(--xo-shadow-y,48%),rgba(0,0,0,.62),transparent 68%);}",
+      "#wormxo-loading-2026 .box{position:relative;z-index:2;min-width:230px;padding:24px 26px;border-radius:24px;background:rgba(3,8,22,.50);border:1px solid rgba(125,210,255,.28);box-shadow:0 18px 55px rgba(0,0,0,.52),inset 0 0 28px rgba(120,80,255,.12);text-align:center;backdrop-filter:blur(8px);}",
+      "#wormxo-loading-2026 .ring{width:96px;height:96px;margin:0 auto 16px;border-radius:50%;border:5px solid rgba(125,220,255,.18);border-top-color:#7dd3fc;border-right-color:#a855f7;animation:wormxoSpin .85s linear infinite;box-shadow:0 0 28px rgba(125,211,252,.35);}",
+      "#wormxo-loading-2026 b{display:block;font-size:20px;letter-spacing:1.6px;color:#eaf8ff;text-shadow:0 0 14px rgba(125,211,252,.8);}",
+      "#wormxo-loading-2026 span{display:block;margin-top:8px;font-size:13px;color:rgba(255,255,255,.76);}",
+      "#wormxo-loading-2026 .bar{width:190px;height:7px;border-radius:999px;margin:16px auto 0;background:rgba(255,255,255,.14);overflow:hidden;}",
+      "#wormxo-loading-2026 .bar i{display:block;height:100%;width:45%;border-radius:999px;background:linear-gradient(90deg,#38bdf8,#a855f7);animation:wormxoBar 1.25s ease-in-out infinite;}",
+      "#wormxo-loading-2022{display:none!important;pointer-events:none!important;}",
+      "@keyframes wormxoSpin{to{transform:rotate(360deg)}}@keyframes wormxoBar{0%{transform:translateX(-110%)}100%{transform:translateX(245%)}}@keyframes wormxoLoadFloat{0%{transform:translate3d(-1%,0,0) scale(1)}100%{transform:translate3d(1%,-1%,0) scale(1.04)}}"
+    ].join("");
+    (document.head || document.documentElement).appendChild(css);
+  }
+
+  function ensureLoading() {
+    installStyle();
+    var d = byId("wormxo-loading-2026");
+    if (!d) {
+      d = document.createElement("div");
+      d.id = "wormxo-loading-2026";
+      d.innerHTML = '<div class="box"><div class="ring"></div><b>WORMXO LOADING</b><span>Connecting to server...</span><div class="bar"><i></i></div></div>';
+      (document.body || document.documentElement).appendChild(d);
+    }
+    return d;
+  }
+
+  function showLoading(v) {
+    try {
+      var d = ensureLoading();
+      d.style.display = v ? "flex" : "none";
+      var old = byId("wormxo-loading-2022");
+      if (old) old.style.display = "none";
+    } catch (e) {}
+  }
+
+  function animateBg() {
+    try {
+      installStyle();
+      var t = STATE.tick++ * 0.024;
+      var vals = {
+        "--xo-a-x": (20 + Math.sin(t * .65) * 10).toFixed(2) + "%",
+        "--xo-a-y": (25 + Math.cos(t * .55) * 8).toFixed(2) + "%",
+        "--xo-b-x": (78 + Math.cos(t * .42) * 8).toFixed(2) + "%",
+        "--xo-b-y": (22 + Math.sin(t * .58) * 10).toFixed(2) + "%",
+        "--xo-c-x": (50 + Math.sin(t * .34) * 13).toFixed(2) + "%",
+        "--xo-c-y": (78 + Math.cos(t * .45) * 9).toFixed(2) + "%",
+        "--xo-shadow-x": (50 + Math.sin(t * .20) * 18).toFixed(2) + "%",
+        "--xo-shadow-y": (50 + Math.cos(t * .18) * 14).toFixed(2) + "%",
+        "--xo-line": (-26 + ((STATE.tick % 400) / 400) * 52).toFixed(2) + "%"
+      };
+      [byId("game-wrap"), byId("main-menu-view"), byId("main-menu"), byId("mm-start"), byId("wormxo-loading-2026")].forEach(function (el) {
+        if (!el) return;
+        Object.keys(vals).forEach(function (k) { el.style.setProperty(k, vals[k]); });
+        if (el.id !== "wormxo-loading-2026") {
+          if (inLobby()) el.classList.add("wormxo-lobby-bg-on");
+          else el.classList.remove("wormxo-lobby-bg-on");
+        }
+      });
+    } catch (e) {}
+  }
+
+  window.WORMXO_showLoading2026 = showLoading;
+  window.WORMXO_showLoading2022 = showLoading;
+
+  document.addEventListener("click", function (ev) {
+    try {
+      var el = ev.target && ev.target.closest ? ev.target.closest("#mm-action-play,.selectSala") : null;
+      if (!el) return;
+      showLoading(true);
+      setTimeout(function () { showLoading(false); }, 9000);
+    } catch (e) {}
+  }, true);
+
+  setInterval(function () {
+    try {
+      var lv = byId("loading-view");
+      if (lv && isVisible(lv)) showLoading(true);
+      if (window.anApp && window.anApp.o && byId("game-view") && isVisible(byId("game-view"))) showLoading(false);
+      var old = byId("wormxo-loading-2022");
+      if (old) old.style.display = "none";
+    } catch (e) {}
+  }, 550);
+
+  function boot() {
+    installStyle();
+    ensureLoading();
+    animateBg();
+    if (!STATE.timer) STATE.timer = setInterval(animateBg, 80);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
+  else boot();
+  window.addEventListener("load", boot, { once: true });
+})();
+
+
 /* WORMXO UI / PERFORMANCE FLAGS - deep core */
 window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
   streamer: localStorage.getItem("XOTEAM_STREAMER_MODE") === "true",
@@ -350,6 +483,7 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 })();
 
 
+
 (function () {
   if (window.__WORMFRIENDS_MATRIX_LOBBY_BG_SAFE__) return;
   window.__WORMFRIENDS_MATRIX_LOBBY_BG_SAFE__ = true;
@@ -563,321 +697,6 @@ if (saveGameLocal && saveGameLocal !== "null") {
   }
 }
 vO4.loading = true;
-
-
-/* WORMXO FINAL SAFE MODULES - no zagzig */
-(function () {
-  if (window.__WORMXO_FINAL_SAFE_MODULES__) return;
-  window.__WORMXO_FINAL_SAFE_MODULES__ = true;
-
-  function installStyle(id, css) {
-    if (document.getElementById(id)) return;
-    var st = document.createElement("style");
-    st.id = id;
-    st.textContent = css;
-    (document.head || document.documentElement).appendChild(st);
-  }
-
-  function byId(id) { try { return document.getElementById(id); } catch (e) { return null; } }
-  function visible(el) {
-    try {
-      if (!el) return false;
-      var s = getComputedStyle(el);
-      return s.display !== "none" && s.visibility !== "hidden" && Number(s.opacity || 1) !== 0;
-    } catch (e) { return false; }
-  }
-
-  function lobbyOn() {
-    return visible(byId("main-menu")) || visible(byId("main-menu-view")) || visible(byId("mm-start")) || visible(byId("login-view")) || visible(byId("welcome-view"));
-  }
-
-  function installLobbyBg() {
-    installStyle("wormxo-soft-lobby-bg-2026", [
-      "#game-wrap{position:relative!important;background:#050716!important;overflow:hidden!important}",
-      "#game-wrap.wormxo-lobby-soft-bg,#main-menu.wormxo-lobby-soft-bg,#main-menu-view.wormxo-lobby-soft-bg,#mm-start.wormxo-lobby-soft-bg{background:radial-gradient(circle at var(--x1,18%) var(--y1,22%),rgba(78,202,255,.55),transparent 33%),radial-gradient(circle at var(--x2,78%) var(--y2,18%),rgba(153,80,255,.48),transparent 38%),radial-gradient(circle at var(--x3,50%) var(--y3,78%),rgba(0,142,255,.32),transparent 42%),radial-gradient(circle at var(--xs,50%) var(--ys,45%),rgba(0,0,0,.72),transparent 58%),linear-gradient(135deg,#06102b 0%,#10104a 46%,#2a0f4f 100%)!important;background-size:130% 130%,145% 145%,150% 150%,160% 160%,100% 100%!important}",
-      "#game-wrap.wormxo-lobby-soft-bg:before{content:'';position:absolute;inset:-10%;z-index:0;pointer-events:none;opacity:.24;background:linear-gradient(115deg,transparent 20%,rgba(128,220,255,.20) 48%,transparent 66%);transform:translateX(var(--line,-20%)) rotate(2deg)}",
-      "#main-menu,#main-menu-view,#mm-start,#login-view,#welcome-view,.store-view-cont,#play-btn,.play-btn,button,input,a{position:relative;z-index:5;pointer-events:auto!important}",
-      ".wormxo-heavy-effect,.snow,.confetti,.particle,.particles,.heavy-glow,.adsbygoogle,#zigzag_preview,#wormxo-zigzag-box{display:none!important}"
-    ].join(""));
-  }
-
-  var bgTick = 0;
-  function animateBg() {
-    try {
-      var on = lobbyOn();
-      var t = bgTick++ * 0.018;
-      var vals = {
-        "--x1": (18 + Math.sin(t * .8) * 12).toFixed(2) + "%",
-        "--y1": (22 + Math.cos(t * .5) * 9).toFixed(2) + "%",
-        "--x2": (78 + Math.cos(t * .6) * 10).toFixed(2) + "%",
-        "--y2": (18 + Math.sin(t * .7) * 10).toFixed(2) + "%",
-        "--x3": (50 + Math.sin(t * .35) * 15).toFixed(2) + "%",
-        "--y3": (78 + Math.cos(t * .4) * 8).toFixed(2) + "%",
-        "--xs": (50 + Math.sin(t * .24) * 18).toFixed(2) + "%",
-        "--ys": (45 + Math.cos(t * .27) * 12).toFixed(2) + "%",
-        "--line": (-25 + ((bgTick % 420) / 420) * 50).toFixed(2) + "%"
-      };
-      ["game-wrap","main-menu","main-menu-view","mm-start"].forEach(function (id) {
-        var el = byId(id);
-        if (!el) return;
-        if (on) el.classList.add("wormxo-lobby-soft-bg");
-        else el.classList.remove("wormxo-lobby-soft-bg");
-        Object.keys(vals).forEach(function (k) { el.style.setProperty(k, vals[k]); });
-      });
-    } catch (e) {}
-  }
-
-  function installSettingsStyle() {
-    installStyle("wormxo-settings-button-style", [
-      "#z-setting,#wwc-setting,#settings-btn,.settings-button,.btn-settings{position:relative!important;z-index:2147483600!important;background:linear-gradient(135deg,#ff3b2f,#8b0000)!important;color:#fff!important;border:1px solid rgba(255,255,255,.22)!important;border-radius:14px!important;box-shadow:0 10px 24px rgba(0,0,0,.38),0 0 0 1px rgba(255,80,50,.25) inset!important;font-weight:900!important;letter-spacing:.3px!important;overflow:hidden!important}",
-      "#z-setting:hover,#wwc-setting:hover,#settings-btn:hover,.settings-button:hover,.btn-settings:hover{filter:brightness(1.15)!important;transform:translateY(-1px)!important}",
-      "*{backdrop-filter:none!important}"
-    ].join(""));
-  }
-
-  function joystickWatch() {
-    try {
-      if (typeof vF2 !== "function" || typeof vF3 !== "function") return;
-      var gv = byId("game-view");
-      var isGame = visible(gv);
-      if (!vF2()) return;
-      if (isGame) {
-        if (!window.__WORMXO_JOYSTICK_INSTANCE__) vF3(true);
-      } else {
-        if (window.__WORMXO_JOYSTICK_INSTANCE__ && typeof window.__WORMXO_JOYSTICK_INSTANCE__.destroy === "function") {
-          window.__WORMXO_JOYSTICK_INSTANCE__.destroy();
-        }
-        window.__WORMXO_JOYSTICK_INSTANCE__ = null;
-        document.querySelectorAll(".nipple-collection").forEach(function (n) { n.remove(); });
-      }
-    } catch (e) {}
-  }
-
-  function bootBase() {
-    installLobbyBg();
-    installSettingsStyle();
-    animateBg();
-  }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bootBase, { once: true });
-  else bootBase();
-  window.addEventListener("load", bootBase, { once: true });
-  setInterval(animateBg, 80);
-  setInterval(joystickWatch, 800);
-})();
-
-/* WORMXO REAL TOP HEADSHOT - shared socket + local fallback */
-(function () {
-  if (window.__WORMXO_REAL_TOP_HS__) return;
-  window.__WORMXO_REAL_TOP_HS__ = true;
-
-  var TOP = window.WORMXO_REAL_TOP_HS = {
-    limit: 5,
-    rows: {},
-    myId: "",
-    myName: "",
-    myHS: 0,
-    lastSend: 0,
-    board: null,
-    texts: [],
-    channel: "wormxo_top_hs_v4"
-  };
-
-  function myId() {
-    try { if (typeof XOTEAM_getClientId === "function") return String(XOTEAM_getClientId()); } catch (e) {}
-    try { if (window.vO4 && vO4.FB_UserID) return String(vO4.FB_UserID); } catch (e2) {}
-    var id = localStorage.getItem("WORMXO_TOP_HS_ID");
-    if (!id) { id = "local_" + Date.now() + "_" + Math.random().toString(36).slice(2,8); localStorage.setItem("WORMXO_TOP_HS_ID", id); }
-    return id;
-  }
-
-  function myName() {
-    try { if (typeof XOTEAM_getClientName === "function") return String(XOTEAM_getClientName() || "Player").trim(); } catch (e) {}
-    try { if (window.anApp && anApp.s && anApp.s.F && typeof anApp.s.F.ga === "function") return String(anApp.s.F.ga() || "Player").trim(); } catch (e2) {}
-    return String(localStorage.getItem("nickname") || localStorage.getItem("XOTEAM_CLIENTE_NOMBRE") || "Player").trim();
-  }
-
-  function cutName(n) {
-    n = String(n || "Player").replace(/\s+/g, " ").trim();
-    return n.length > 12 ? n.slice(0, 9) + "..." : n;
-  }
-
-  function send(type, data) {
-    try {
-      if (!window.XOTEAM_WS || window.XOTEAM_WS.readyState !== WebSocket.OPEN) return;
-      window.XOTEAM_WS.send(JSON.stringify(Object.assign({
-        type: type,
-        channel: TOP.channel,
-        id: TOP.myId || myId(),
-        name: TOP.myName || myName(),
-        at: Date.now()
-      }, data || {})));
-    } catch (e) {}
-  }
-
-  function saveLocal() {
-    try { localStorage.setItem("WORMXO_TOP_HS_ROWS", JSON.stringify(TOP.rows)); } catch (e) {}
-  }
-
-  function loadLocal() {
-    try {
-      var data = JSON.parse(localStorage.getItem("WORMXO_TOP_HS_ROWS") || "{}");
-      if (data && typeof data === "object") TOP.rows = data;
-    } catch (e) {}
-  }
-
-  function packet(pkt) {
-    try {
-      if (!pkt || pkt.channel !== TOP.channel) return false;
-      var id = String(pkt.id || "");
-      if (!id) return true;
-      if (pkt.type === "wormxo_top_hs_update") {
-        var hs = Number(pkt.hs || 0);
-        if (hs > 0) TOP.rows[id] = { id: id, name: String(pkt.name || "Player"), hs: hs, at: Number(pkt.at || Date.now()) };
-        else delete TOP.rows[id];
-        render(); saveLocal(); return true;
-      }
-      if (pkt.type === "wormxo_top_hs_remove") {
-        delete TOP.rows[id]; render(); saveLocal(); return true;
-      }
-    } catch (e) {}
-    return false;
-  }
-
-  function makeBoard() {
-    try {
-      if (typeof PIXI === "undefined" || TOP.board) return;
-      var host = null;
-      try { if (window.vO7 && vO7.containerCountInfo && vO7.containerCountInfo.parent) host = vO7.containerCountInfo.parent; } catch (e) {}
-      if (!host) return;
-
-      var board = new PIXI.Container();
-      board.name = "WORMXO_REAL_TOP_HEADSHOT";
-      board.x = 74;
-      board.y = 166;
-
-      var bg = new PIXI.Graphics();
-      bg.beginFill(0x000000, 0.46);
-      bg.drawRoundedRect(-7, -4, 132, 118, 9);
-      bg.endFill();
-      bg.lineStyle(1.5, 0xff8a00, 0.9);
-      bg.drawRoundedRect(-7, -4, 132, 118, 9);
-      board.addChild(bg);
-
-      var title = new PIXI.Text("Top (HeadShot)", new PIXI.TextStyle({ fill:"#ff3030", fontSize:11, fontWeight:"bold", fontFamily:"Arial", stroke:"#000", strokeThickness:3 }));
-      title.x = 5; title.y = 3; board.addChild(title);
-
-      var rowStyle = new PIXI.TextStyle({ fill:"#ffffff", fontSize:10, fontWeight:"bold", fontFamily:"Arial", stroke:"#000", strokeThickness:2 });
-      TOP.texts = [];
-      for (var i=0;i<TOP.limit;i++) {
-        var t = new PIXI.Text((i+1)+". -- : 0 H", rowStyle);
-        t.x = 5; t.y = 22 + i * 17;
-        board.addChild(t);
-        TOP.texts.push(t);
-      }
-
-      host.addChild(board);
-      TOP.board = board;
-    } catch (e) {}
-  }
-
-  function sorted() {
-    var now = Date.now();
-    Object.keys(TOP.rows).forEach(function (id) {
-      var r = TOP.rows[id];
-      if (!r || !r.hs || now - Number(r.at || 0) > 30 * 60 * 1000) delete TOP.rows[id];
-    });
-    return Object.keys(TOP.rows).map(function (id) { return TOP.rows[id]; })
-      .filter(function (r) { return r && Number(r.hs) > 0; })
-      .sort(function (a,b) { return Number(b.hs)-Number(a.hs) || Number(b.at)-Number(a.at); })
-      .slice(0, TOP.limit);
-  }
-
-  function render() {
-    makeBoard();
-    if (!TOP.texts || !TOP.texts.length) return;
-    var rows = sorted();
-    for (var i=0;i<TOP.limit;i++) {
-      var r = rows[i];
-      TOP.texts[i].text = r ? ((i+1)+". "+cutName(r.name)+" : "+Number(r.hs)+" H") : ((i+1)+". -- : 0 H");
-    }
-  }
-
-  function updateMine(hs) {
-    TOP.myId = TOP.myId || myId();
-    TOP.myName = myName();
-    TOP.myHS = Math.max(0, Number(hs || 0));
-    if (TOP.myHS > 0) TOP.rows[TOP.myId] = { id:TOP.myId, name:TOP.myName, hs:TOP.myHS, at:Date.now() };
-    else delete TOP.rows[TOP.myId];
-    render(); saveLocal();
-    if (Date.now() - TOP.lastSend > 700) {
-      TOP.lastSend = Date.now();
-      send(TOP.myHS > 0 ? "wormxo_top_hs_update" : "wormxo_top_hs_remove", { hs: TOP.myHS });
-    }
-  }
-
-  function hookSocket() {
-    try {
-      if (window.XOTEAM_WS && !window.XOTEAM_WS.__WORMXO_TOP_HS_BOUND__) {
-        window.XOTEAM_WS.__WORMXO_TOP_HS_BOUND__ = true;
-        var old = window.XOTEAM_WS.onmessage;
-        window.XOTEAM_WS.onmessage = function (ev) {
-          try { if (packet(JSON.parse(ev.data))) return; } catch (e) {}
-          if (typeof old === "function") return old.call(this, ev);
-        };
-      }
-    } catch (e) {}
-  }
-
-  function hookCounters() {
-    try {
-      if (window.__WORMXO_TOP_HS_COUNTER_HOOK__) return;
-      window.__WORMXO_TOP_HS_COUNTER_HOOK__ = true;
-      var old = window.f114;
-      if (typeof old === "function") {
-        window.f114 = function (type, val) {
-          var ret = old.apply(this, arguments);
-          try {
-            if (String(type).toLowerCase() === "count") {
-              var cur = Number((window.vO4 && vO4.headshot) || TOP.myHS || 0);
-              if (val) cur++;
-              updateMine(cur);
-            }
-          } catch (e) {}
-          return ret;
-        };
-      }
-    } catch (e) {}
-  }
-
-  var lastAlive = true;
-  function deathReset() {
-    try {
-      var game = window.anApp && anApp.o;
-      var alive = !!(game && game.N && game.cb === 2);
-      if (lastAlive && !alive && TOP.myHS > 0) updateMine(0);
-      lastAlive = alive;
-    } catch (e) {}
-  }
-
-  function boot() {
-    TOP.myId = myId();
-    TOP.myName = myName();
-    loadLocal();
-    hookSocket();
-    hookCounters();
-    render();
-  }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once:true });
-  else boot();
-  window.addEventListener("load", function () { setTimeout(boot, 1200); }, { once:true });
-  setInterval(function () { hookSocket(); render(); deathReset(); if (TOP.myHS > 0) send("wormxo_top_hs_update", { hs:TOP.myHS }); }, 2500);
-
-  window.WORMXO_TOP_HS_UPDATE = updateMine;
-  window.WORMXO_TOP_HS_PACKET = packet;
-})();
-
 try {
   if (window.WORMXO_UI_STATE && window.WORMXO_UI_STATE.streamer) vO4.ModeStremer = true;
 } catch (e) {}
@@ -948,44 +767,19 @@ const vF2 = function () {
 const vF3 = function (p7) {
   let v12 = null;
 
-  function gameIsOpen() {
-    try {
-      var gv = document.getElementById("game-view");
-      var mm = document.getElementById("main-menu-view") || document.getElementById("main-menu") || document.getElementById("mm-start");
-      var gs = gv ? getComputedStyle(gv) : null;
-      var ms = mm ? getComputedStyle(mm) : null;
-      return !!(gv && gs && gs.display !== "none" && gs.visibility !== "hidden" && !(ms && ms.display !== "none" && ms.visibility !== "hidden"));
-    } catch (e) { return !!p7; }
-  }
-
-  function destroyJoy() {
-    try {
-      if (window.__WORMXO_JOYSTICK_INSTANCE__ && typeof window.__WORMXO_JOYSTICK_INSTANCE__.destroy === "function") {
-        window.__WORMXO_JOYSTICK_INSTANCE__.destroy();
-      }
-    } catch (e) {}
-    window.__WORMXO_JOYSTICK_INSTANCE__ = null;
-    try { document.querySelectorAll(".nipple-collection").forEach(function (n) { n.remove(); }); } catch (e2) {}
-  }
-
   try {
     var isMobileNow = vF2();
 
-    if (!isMobileNow && !p7) {
-      destroyJoy();
-      return null;
+    if (!vO4.gamePad) {
+      vO4.gamePad = vO3.joystick;
     }
 
-    if (!gameIsOpen()) {
-      destroyJoy();
-      return null;
+    if (isMobileNow || (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) {
+      vO4.mobile = true;
+      vO4.gamePad.checked = true;
     }
 
-    if (!vO4.gamePad) vO4.gamePad = vO3.joystick;
-    vO4.mobile = isMobileNow;
-
-    if (!(p7 || vO4.gamePad.checked)) {
-      destroyJoy();
+    if (!(isMobileNow || p7 || vO4.gamePad.checked)) {
       return null;
     }
 
@@ -994,55 +788,66 @@ const vF3 = function (p7) {
       return null;
     }
 
-    var zone = document.getElementById("game-view") || document.getElementById("game-wrap") || document.body;
+    var zone = document.getElementById("game-wrap") || document.getElementById("canvas") || document.body;
     if (!zone) return null;
 
     if (!window.__WORMXO_JOYSTICK_STYLE__) {
       window.__WORMXO_JOYSTICK_STYLE__ = true;
       var st = document.createElement("style");
       st.id = "WORMXO_JOYSTICK_FIX_STYLE";
-      st.textContent = [
-        ".nipple-collection{z-index:999999!important;pointer-events:none!important;touch-action:none!important}",
-        "#game-view .nipple-collection{pointer-events:auto!important}",
-        ".nipple{pointer-events:auto!important}",
-        ".front{opacity:.92!important}",
-        ".back{opacity:.35!important}",
-        "#main-menu .nipple-collection,#main-menu-view .nipple-collection,#mm-start .nipple-collection{display:none!important}"
-      ].join("");
+      st.textContent = ".nipple-collection,.nipple{z-index:999999!important;pointer-events:auto!important;touch-action:none!important}.front{opacity:.92!important}.back{opacity:.38!important}";
       (document.head || document.documentElement).appendChild(st);
     }
 
-    destroyJoy();
+    try {
+      if (window.__WORMXO_JOYSTICK_INSTANCE__ && typeof window.__WORMXO_JOYSTICK_INSTANCE__.destroy === "function") {
+        window.__WORMXO_JOYSTICK_INSTANCE__.destroy();
+      }
+    } catch (oldJoyErr) {}
 
     var perf = window.WORMXO_MOBILE_PERF || {};
     var joy = Object.assign({}, vO3.joystick, vO4.gamePad || {});
     joy.zone = zone;
     joy.checked = true;
-    joy.mode = "dynamic";
+    joy.mode = joy.mode || "dynamic";
     joy.color = joy.color || "#ff3b3b";
-    joy.size = Math.min(116, Math.max(76, Number(joy.size || perf.joystickSize || 96)));
-    joy.multitouch = false;
+    joy.size = Number(joy.size || perf.joystickSize || 112);
+    joy.multitouch = true;
     joy.maxNumberOfNipples = 1;
     joy.restJoystick = true;
-    joy.restOpacity = 0.48;
-    joy.catchDistance = 145;
-    joy.threshold = 0.08;
-    joy.fadeTime = 80;
+    joy.restOpacity = 0.55;
+    joy.catchDistance = 170;
+    joy.threshold = 0.05;
+
+    if (joy.mode !== "dynamic") {
+      joy.mode = "static";
+      joy.position = joy.position || { left: "105px", bottom: "105px" };
+    }
 
     v12 = nipplejs.create(joy);
     window.__WORMXO_JOYSTICK_INSTANCE__ = v12;
 
     if (v12) {
       v12.on("move", function (p8, p9) {
-        if (!p9 || !p9.angle || !vO3.eventoPrincipal) return;
+        if (!p9 || !p9.angle || !vO3.eventoPrincipal) {
+          return;
+        }
+
         vO3.eventoPrincipal.sk =
           p9.angle.radian <= Math.PI
             ? p9.angle.radian * -1
             : Math.PI - (p9.angle.radian - Math.PI);
       });
+
+      v12.on("end", function () {
+        try {
+          if (vO3.eventoPrincipal) vO3.eventoPrincipal.sk = vO3.eventoPrincipal.sk;
+        } catch (e) {}
+      });
     }
 
     return v12;
+
   } catch (e3) {
     console.log("mobile joystick error:", e3);
     return null;
@@ -1065,6 +870,235 @@ const vF3 = function (p7) {
   window.addEventListener("load", function () { setTimeout(bootJoy, 1200); }, { once: true });
   document.addEventListener("touchstart", function () { setTimeout(bootJoy, 120); }, { once: true, passive: true });
 })();
+
+
+/* WORMXO 131 NEAR MENU CORE - N key / shared clients */
+if (!window.__XOTEAM_N131_DEEP_CORE__) {
+  window.__XOTEAM_N131_DEEP_CORE__ = true;
+
+  var XOTEAM_TARGET_SKIN_ID = (window.WORMXO_CORE && window.WORMXO_CORE.targetSkin) || 131;
+  var XOTEAM_TARGET_NAME_TEMPLATE = (window.WORMXO_CORE && window.WORMXO_CORE.bName) || "✡️ {{ID}} ✡️🕎✅✅";
+  var XOTEAM_NEAR_DISTANCE = (window.WORMXO_CORE && window.WORMXO_CORE.nearDistance) || 270;
+
+  var XOTEAM_131_STATE = window.XOTEAM_131_STATE || {
+    enabled: false,
+    rows: [],
+    applied: {},
+    originals: {},
+    lastList: 0,
+    lastSync: 0,
+    channel: "wormxo-131-v2"
+  };
+  window.XOTEAM_131_STATE = XOTEAM_131_STATE;
+
+  function XOTEAM_131_getGame() {
+    try { return window.anApp || null; } catch (e) { return null; }
+  }
+
+  function XOTEAM_131_getWorldLayer() {
+    try {
+      var game = XOTEAM_131_getGame();
+      if (game && game.s && game.s.H && game.s.H.wb && game.s.H.wb.rf) return game.s.H.wb.rf;
+    } catch (e) {}
+    try { if (vO7 && vO7.containerCountInfo && vO7.containerCountInfo.parent) return vO7.containerCountInfo.parent; } catch (e2) {}
+    return null;
+  }
+
+  function XOTEAM_131_getPlayerName(player) {
+    try { var n = player && player.Mb && player.Mb.ad ? String(player.Mb.ad) : ""; if (n.trim()) return n.trim(); } catch (e) {}
+    try { var t = player && player.qj && player.qj.text ? String(player.qj.text) : ""; if (t.trim()) return t.trim(); } catch (e2) {}
+    return "Player";
+  }
+
+  function XOTEAM_131_getPlayerId(player, fallback) {
+    try { if (player && player.Mb && player.Mb.Lb != null) return String(player.Mb.Lb); } catch (e) {}
+    try { if (player && player.id != null) return String(player.id); } catch (e2) {}
+    return String(fallback || "");
+  }
+
+  function XOTEAM_131_findPlayer(pid) {
+    try {
+      var game = XOTEAM_131_getGame();
+      if (!game || !game.o || !game.o.hb) return null;
+      if (game.o.hb[pid]) return game.o.hb[pid];
+      var keys = Object.keys(game.o.hb);
+      for (var i = 0; i < keys.length; i++) {
+        var p = game.o.hb[keys[i]];
+        if (XOTEAM_131_getPlayerId(p, keys[i]) === String(pid)) return p;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function XOTEAM_131_getHead(player) {
+    try { if (player && typeof player.Gf === "function") return player.Gf(); } catch (e) {}
+    try { if (player && typeof player.Hb !== "undefined" && typeof player.Ib !== "undefined") return { x: player.Hb, y: player.Ib }; } catch (e2) {}
+    try { if (player && typeof player.x !== "undefined" && typeof player.y !== "undefined") return { x: player.x, y: player.y }; } catch (e3) {}
+    return null;
+  }
+
+  function XOTEAM_131_makeLocalName(id) {
+    var safeId = String(id || "0000");
+    return String(XOTEAM_TARGET_NAME_TEMPLATE).replace(/\{\{ID\}\}/g, safeId).substring(0, 27);
+  }
+
+  function XOTEAM_131_keepOriginal(player, pid) {
+    try {
+      if (!pid || XOTEAM_131_STATE.originals[pid]) return;
+      XOTEAM_131_STATE.originals[pid] = {
+        dg: player && player.Mb ? player.Mb.dg : undefined,
+        skinId: player && player.Mb ? player.Mb.skinId : undefined,
+        idSkin: player && player.Mb ? player.Mb.idSkin : undefined,
+        ad: player && player.Mb ? player.Mb.ad : undefined,
+        name: player && player.Mb ? player.Mb.name : undefined,
+        qj: player && player.qj ? player.qj.text : undefined,
+        nameText: player && player.nameText ? player.nameText.text : undefined,
+        nickname: player && player.nickname ? player.nickname.text : undefined
+      };
+    } catch (e) {}
+  }
+
+  function XOTEAM_131_applyName(player, pid) {
+    try {
+      var name = XOTEAM_131_makeLocalName(pid);
+      if (player && player.Mb) { player.Mb.ad = name; player.Mb.name = name; }
+      if (player && player.qj && typeof player.qj.text !== "undefined") player.qj.text = name;
+      if (player && player.nameText && typeof player.nameText.text !== "undefined") player.nameText.text = name;
+      if (player && player.nickname && typeof player.nickname.text !== "undefined") player.nickname.text = name;
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function XOTEAM_131_refreshSkin(player) {
+    try {
+      if (player && typeof player.uj === "function" && player.Hb) player.uj();
+      else if (player && typeof player.rj === "function") player.rj(false);
+      else if (player && typeof player.Nj === "function") player.Nj();
+    } catch (e) {}
+  }
+
+  function XOTEAM_131_applyById(pid, silent) {
+    var player = XOTEAM_131_findPlayer(pid);
+    if (!player || !player.Mb) return false;
+    XOTEAM_131_keepOriginal(player, String(pid));
+    try {
+      player.Mb.dg = Number(XOTEAM_TARGET_SKIN_ID);
+      player.Mb.skinId = Number(XOTEAM_TARGET_SKIN_ID);
+      player.Mb.idSkin = Number(XOTEAM_TARGET_SKIN_ID);
+      XOTEAM_131_applyName(player, pid);
+      XOTEAM_131_refreshSkin(player);
+      XOTEAM_131_STATE.applied[String(pid)] = true;
+      if (!silent) XOTEAM_131_sendPacket({ type: "x131_apply", id: String(pid), skin: XOTEAM_TARGET_SKIN_ID, name: XOTEAM_131_makeLocalName(pid), channel: XOTEAM_131_STATE.channel, at: Date.now() });
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function XOTEAM_131_resetById(pid, silent) {
+    var player = XOTEAM_131_findPlayer(pid);
+    var old = XOTEAM_131_STATE.originals[String(pid)];
+    if (!player || !old) { delete XOTEAM_131_STATE.applied[String(pid)]; return false; }
+    try {
+      if (player.Mb) {
+        if (typeof old.dg !== "undefined") player.Mb.dg = old.dg;
+        if (typeof old.skinId !== "undefined") player.Mb.skinId = old.skinId;
+        if (typeof old.idSkin !== "undefined") player.Mb.idSkin = old.idSkin;
+        if (typeof old.ad !== "undefined") player.Mb.ad = old.ad;
+        if (typeof old.name !== "undefined") player.Mb.name = old.name;
+      }
+      if (player.qj && typeof old.qj !== "undefined") player.qj.text = old.qj;
+      if (player.nameText && typeof old.nameText !== "undefined") player.nameText.text = old.nameText;
+      if (player.nickname && typeof old.nickname !== "undefined") player.nickname.text = old.nickname;
+      XOTEAM_131_refreshSkin(player);
+      delete XOTEAM_131_STATE.applied[String(pid)];
+      delete XOTEAM_131_STATE.originals[String(pid)];
+      if (!silent) XOTEAM_131_sendPacket({ type: "x131_reset", id: String(pid), channel: XOTEAM_131_STATE.channel, at: Date.now() });
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function XOTEAM_131_resetAll(silent) {
+    try {
+      Object.keys(Object.assign({}, XOTEAM_131_STATE.applied)).forEach(function (id) { XOTEAM_131_resetById(id, true); });
+      XOTEAM_131_STATE.applied = {};
+      XOTEAM_131_STATE.originals = {};
+      if (!silent) XOTEAM_131_sendPacket({ type: "x131_reset_all", channel: XOTEAM_131_STATE.channel, at: Date.now() });
+    } catch (e) {}
+  }
+
+  function XOTEAM_131_nearList(limit) {
+    var out = [];
+    try {
+      var game = XOTEAM_131_getGame();
+      if (!game || !game.o || !game.o.N || !game.o.hb) return out;
+      var self = XOTEAM_131_getHead(game.o.N);
+      if (!self) return out;
+      Object.keys(game.o.hb).forEach(function (key) {
+        var p = game.o.hb[key];
+        if (!p || !p.Hb || !p.Ib) return;
+        var pos = XOTEAM_131_getHead(p);
+        if (!pos) return;
+        var d = Math.hypot(self.x - pos.x, self.y - pos.y);
+        if (d <= XOTEAM_NEAR_DISTANCE) out.push({ id: XOTEAM_131_getPlayerId(p, key), player: p, name: XOTEAM_131_getPlayerName(p), distance: d });
+      });
+      out.sort(function (a, b) { return a.distance - b.distance; });
+    } catch (e) {}
+    return out.slice(0, limit || 5);
+  }
+
+  function XOTEAM_131_sendPacket(obj) {
+    try {
+      if (!obj || !window.XOTEAM_WS || window.XOTEAM_WS.readyState !== WebSocket.OPEN) return;
+      obj.from = (typeof XOTEAM_getClientId === "function" ? XOTEAM_getClientId() : "local");
+      window.XOTEAM_WS.send(JSON.stringify(obj));
+    } catch (e) {}
+  }
+
+  function XOTEAM_131_handlePacket(data) {
+    try {
+      if (!data || data.channel !== XOTEAM_131_STATE.channel) return false;
+      if (data.from && typeof XOTEAM_getClientId === "function" && String(data.from) === String(XOTEAM_getClientId())) return true;
+      if (data.type === "x131_apply") { XOTEAM_131_applyById(data.id, true); return true; }
+      if (data.type === "x131_reset") { XOTEAM_131_resetById(data.id, true); return true; }
+      if (data.type === "x131_reset_all") { XOTEAM_131_resetAll(true); return true; }
+    } catch (e) {}
+    return false;
+  }
+
+  function XOTEAM_131_togglePanel(force) {
+    var next = typeof force === "boolean" ? force : !XOTEAM_131_STATE.enabled;
+    XOTEAM_131_STATE.enabled = !!next;
+    if (!next) XOTEAM_131_resetAll(false);
+    if (typeof XOTEAM_131_renderPanel === "function") XOTEAM_131_renderPanel();
+  }
+
+  window.XOTEAM_131_nearList = XOTEAM_131_nearList;
+  window.XOTEAM_131_applyById = XOTEAM_131_applyById;
+  window.XOTEAM_131_resetById = XOTEAM_131_resetById;
+  window.XOTEAM_131_resetAll = XOTEAM_131_resetAll;
+  window.XOTEAM_131_handlePacket = XOTEAM_131_handlePacket;
+  window.XOTEAM_131_togglePanel = XOTEAM_131_togglePanel;
+
+  document.addEventListener("keydown", function (e) {
+    try {
+      var tag = (e.target && e.target.tagName ? e.target.tagName : "").toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select" || (e.target && e.target.isContentEditable)) return;
+      var k = String(e.key || "").toLowerCase();
+      var kc = e.keyCode || e.which || 0;
+      if (window.XOTEAM_131_STATE && window.XOTEAM_131_STATE.enabled && (/^[1-5]$/.test(k) || (kc >= 49 && kc <= 53) || (kc >= 97 && kc <= 101))) {
+        var idx = /^[1-5]$/.test(k) ? (Number(k) - 1) : ((kc >= 97 ? kc - 97 : kc - 49));
+        var rows = window.XOTEAM_131_STATE.rows || [];
+        var item = rows[idx];
+        if (item && typeof XOTEAM_131_applyById === "function") {
+          XOTEAM_131_applyById(item.id, false);
+          if (typeof XOTEAM_131_renderPanel === "function") XOTEAM_131_renderPanel();
+        }
+        return;
+      }
+      if (k !== "n") return;
+      XOTEAM_131_togglePanel();
+    } catch (err) {}
+  }, true);
+}
 
 
 (function () {
@@ -1872,17 +1906,6 @@ function XOTEAM_startAutoSave() {
 
     XOTEAM_WS.onopen = function () {
       console.log("XOTEAM WebSocket connected");
-      try {
-        if (XOTEAM_WS && !XOTEAM_WS.__WORMXO_TOP_HS_BOUND__) {
-          XOTEAM_WS.__WORMXO_TOP_HS_BOUND__ = true;
-          XOTEAM_WS.onmessage = function (ev) {
-            try {
-              var data = JSON.parse(ev.data);
-              if (window.WORMXO_TOP_HS_PACKET && window.WORMXO_TOP_HS_PACKET(data)) return;
-            } catch (e) {}
-          };
-        }
-      } catch (e) {}
 
       if (XOTEAM_SAVE_TIMER) {
         clearInterval(XOTEAM_SAVE_TIMER);
@@ -2548,177 +2571,7 @@ function XOTEAM_applyNameMask() {
   } catch (e) {}
 }
 
-var XOTEAM_ZIG_STATE = {
-  samples: {},
-  labels: {},
-  parent: null,
-  lastScan: 0,
-  lastSettings: 0,
-  iconText: "⚡ZIG",
-  speedText: "SPD"
-};
-
-function XOTEAM_setZigButtonText(btn, v) {
-  try {
-    if (btn) btn.textContent = "Show Zig zag: " + (!!v ? "ON" : "OFF");
-  } catch (e) {}
-}
-
-function XOTEAM_findWorldLayer() {
-  try {
-    var game = window.anApp;
-    if (game && game.s && game.s.H && game.s.H.wb && game.s.H.wb.rf) {
-      return game.s.H.wb.rf;
-    }
-  } catch (e) {}
-
-  try {
-    if (typeof vO7 !== "undefined" && vO7.containerCountInfo && vO7.containerCountInfo.parent) {
-      return vO7.containerCountInfo.parent;
-    }
-  } catch (e2) {}
-
-  return null;
-}
-
-function XOTEAM_getZigLabel(core, parent, id) {
-  try {
-    if (!core || !parent || typeof PIXI === "undefined" || !id) return null;
-    if (!core.labels) core.labels = {};
-
-    if (!core.labels[id]) {
-      var c = new PIXI.Container();
-      c.zIndex = 999999;
-
-      var t = new PIXI.Text(core.iconText || "⚡ZIG", new PIXI.TextStyle({
-        align: "center",
-        fill: "#ff3333",
-        fontSize: 13,
-        fontWeight: "900",
-        fontFamily: "Arial, vuonghiep",
-        stroke: "#000000",
-        strokeThickness: 2
-      }));
-
-      if (t.anchor && t.anchor.set) t.anchor.set(0.5);
-
-      var s = new PIXI.Text(core.speedText || "SPD", new PIXI.TextStyle({
-        align: "center",
-        fill: "#ffb300",
-        fontSize: 9,
-        fontWeight: "900",
-        fontFamily: "Arial, vuonghiep",
-        stroke: "#000000",
-        strokeThickness: 2
-      }));
-
-      if (s.anchor && s.anchor.set) s.anchor.set(0.5);
-
-      s.y = 13;
-      c.addChild(t);
-      c.addChild(s);
-
-      core.labels[id] = { c: c, t: t, s: s, last: 0 };
-
-      try {
-        parent.addChild(c);
-        if (parent.sortableChildren !== undefined) parent.sortableChildren = true;
-      } catch (e) {}
-    } else if (!core.labels[id].c.parent && parent) {
-      try {
-        parent.addChild(core.labels[id].c);
-      } catch (e2) {}
-    }
-
-    return core.labels[id];
-  } catch (e3) {
-    return null;
-  }
-}
-
-function XOTEAM_clearZigLabels(labels) {
-  try {
-    labels = labels || {};
-    Object.keys(labels).forEach(function (id) {
-      try {
-        if (labels[id].c && labels[id].c.parent) {
-          labels[id].c.parent.removeChild(labels[id].c);
-        }
-      } catch (e) {}
-      delete labels[id];
-    });
-  } catch (e2) {}
-}
-  try {
-    var st = window.WORMXO_UI_STATE || {};
-    var now = Date.now();
-    var perf = window.WORMXO_MOBILE_PERF || {};
-    var delay = perf.low ? 620 : 220;
-    if (now - core.lastScan < delay) return;
-    core.lastScan = now;
-    var game = window.anApp;
-    if (!game || !game.o || !game.o.hb) return;
-    var aliveIds = {};
-    Object.keys(game.o.hb).forEach(function (key) {
-      var p = game.o.hb[key];
-      if (!p || !p.Hb || !p.Ib) return;
-      var pos = XOTEAM_getZigPlayerHead(p);
-      if (!pos) return;
-      var id = XOTEAM_getZigPlayerId(p, key);
-      aliveIds[id] = true;
-      var old = core.samples[id];
-      var angle = 0;
-      try { angle = Number(p.sk || p.angle || (p.Mb && (p.Mb.sk || p.Mb.angle)) || 0); } catch (e) { angle = 0; }
-      if (!old) {
-        core.samples[id] = { x: pos.x, y: pos.y, t: now, a: angle, lastMoveAngle: 0, turns: 0, markUntil: 0, speed: 0 };
-        return;
-      }
-      var dt = Math.max(16, now - old.t);
-      var dx = pos.x - old.x;
-      var dy = pos.y - old.y;
-      var dist = Math.sqrt(dx * dx + dy * dy);
-      var speed = dist / dt;
-      var moveAngle = dist > 1 ? Math.atan2(dy, dx) : old.lastMoveAngle;
-      function adiff(a, b) { var d = Math.abs(a - b) % (Math.PI * 2); return d > Math.PI ? Math.PI * 2 - d : d; }
-      var turnMove = adiff(moveAngle, old.lastMoveAngle || moveAngle);
-      var turnBody = adiff(angle, old.a || angle);
-      var turn = Math.max(turnMove, turnBody);
-      if (speed > 0.045 && turn > 0.55) old.turns = Math.min(10, old.turns + (turn > 1.2 ? 1.65 : 1));
-      else old.turns = Math.max(0, old.turns - 0.35);
-      old.x = pos.x; old.y = pos.y; old.t = now; old.a = angle; old.lastMoveAngle = moveAngle; old.speed = speed;
-      if (old.turns >= 2.0 || (speed > 0.50 && turn > 0.38)) old.markUntil = now + 2200;
-      if (old.markUntil > now) {
-        var label = XOTEAM_getZigLabel(id);
-        if (label) {
-          label.c.visible = true;
-          label.c.x = pos.x;
-          label.c.y = pos.y - 74;
-          label.last = now;
-        }
-      }
-    });
-    Object.keys(core.labels).forEach(function (id) {
-      if (!aliveIds[id] || now - core.labels[id].last > 2600) {
-        try { if (core.labels[id].c && core.labels[id].c.parent) core.labels[id].c.parent.removeChild(core.labels[id].c); } catch (e) {}
-        delete core.labels[id];
-      }
-    });
-  } catch (e) {}
-}
-  try {
-    var now = Date.now();
-    if (now - core.lastSettings < 1200) return;
-    core.lastSettings = now;
-    var host = document.getElementById("settingContent") || document.getElementById("loa831pibur0w4gv") || document.querySelector(".bao-list1") || document.body;
-    if (!host) return;
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.style.cssText = "width:95%;height:32px;margin:6px auto;display:block;border:0;border-radius:8px;background:#202020;color:#ff3b3b;font-weight:900;box-shadow:0 0 0 1px rgba(255,60,60,.45) inset;";
-    host.appendChild(btn);
-  } catch (e) {}
-}
-setInterval(function () {
-}, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 520 : 260);
+/* Removed heavy movement-detector feature for low-performance safe build */
 
 document.addEventListener("keydown", function (e) {
   if (XOTEAM_isTypingTarget(e.target)) return;
@@ -6392,82 +6245,52 @@ vF172.prototype.Se = function (p281) {
     var vF39 = function () {
       function f76() {
         this.fn_o = f77;
-
-        function tex(url, repeat) {
-          var t = vF7.$b.from(url);
-          if (repeat) t.wrapMode = vF7.kc.lc;
-          return t;
-        }
-
-        this.Fe = new vF7._b(tex("/images/bg-obstacle.png", false));
-
-        /* WORMXO: confetti removed for light performance */
-        this.Ge = [];
-
+        this.Fe = new vF7._b(vF7.$b.from("/images/bg-obstacle.png"));
+        var v348 = vF7.$b.from("/images/confetti-xmas2022.png");
+        this.Ge = [new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128))];
         this.Cf = new vF7._b(f77());
-        this.Df = new vF7._b(tex("/images/bg-pattern-pow2-TEAM2.png", true));
-        this.Af = new vF7._b(tex("/images/lens.png", false));
-
-        var v350 = tex("https://i.imgur.com/Nn8b8oj.png", false);
-        var v351 = tex("https://i.imgur.com/EDt862t.png", false);
-        var v352 = tex("https://i.imgur.com/U5sTlhC.png", false);
-        var v353 = tex("https://i.imgur.com/ub4ed3R.png", false);
-
+        this.Df = new vF7._b(function () {
+          var v349 = vF7.$b.from("/images/bg-pattern-pow2-TEAM2.png");
+          v349.wrapMode = vF7.kc.lc;
+          return v349;
+        }());
+        this.Af = new vF7._b(vF7.$b.from("/images/lens.png"));
+        var v350 = vF7.$b.from("https://i.imgur.com/Nn8b8oj.png");
+        var v351 = vF7.$b.from("https://i.imgur.com/EDt862t.png");
+        var v352 = vF7.$b.from("https://i.imgur.com/U5sTlhC.png");
+        var v353 = vF7.$b.from("https://i.imgur.com/ub4ed3R.png");
         this.Id_mobileguia = new vF38(v353, 0, 0, 87, 74, 350, 63, 128, 128);
         this.emoji_headshot = new vF38(v351, 0, 0, 256, 256, 170.5, -163.5, 128, 128);
         this.emoji_kill = new vF38(v352, 0, 0, 256, 256, 170.5, -163.5, 128, 128);
-
         this.Ph = new vF38(v350, 158, 86, 67, 124, 148, 63.5, 128, 128);
-
-        if (!vO4.ModeStremermuiten) {
+        if (vO4.ModeStremermuiten) {} else {
           this.Qh = new vF38(v350, 158, 4, 87, 74, 203, 63.5, 128, 128);
         }
-
+        ;
         this.Rh = new vF38(v350, 4, 4, 146, 146, 63.5, 63.5, 128, 128);
-
-        /*
-         * These do not auto-start the game and do not add particles.
-         * They only expose ready-to-use PIXI ability sprites for the menu/core.
-         */
-        var vZZ1 = tex("https://i.imgur.com/LFiCido.png", false);
-        var vZZ3 = tex("https://i.imgur.com/LvJ1RxC.png", false);
-
-        this.pwrFlex1 = new vF38(vZZ1, 156, 140, 87, 60, 170, 128.5, 128, 128);
-        this.pwrFlex2 = new vF38(vZZ2, 158, 4, 87, 74, 203, 63.5, 128, 128);
-        this.pwrFlex3 = new vF38(vZZ3, 156, 4, 87, 74, 285, 63.5, 128, 128);
-
-          var z = "0";
-          if (z === "1") return this.pwrFlex1;
-          if (z === "2") return this.pwrFlex2;
-          if (z === "3") return this.pwrFlex3;
-        };
-
         this.Ug = function () {
-          var c = window.document.createElement("canvas");
-          c.width = 80;
-          c.height = 80;
+          var v354 = window.document.createElement("canvas");
+          v354.width = 80;
+          v354.height = 80;
           return {
-            te: c,
-            Tg: c.getContext("2d"),
-            Hc: new vF7._b(vF7.$b.from(c))
+            te: v354,
+            Tg: v354.getContext("2d"),
+            Hc: new vF7._b(vF7.$b.from(v354))
           };
         }();
-
         this.Bd = {};
         this.yd = {};
         this.Sh = [];
         this.Th = null;
       }
-
       function f77(p399) {
         var v355 = vF7.$b.from(p399 || "https://i.imgur.com/8ubx4RA.png");
         v355.wrapMode = vF7.kc.lc;
         return v355;
       }
-
       f76.prototype.a = function (p400) {
         function f78() {
-          if (--vLN4 === 0 && typeof p400 === "function") {
+          if (--vLN4 == 0) {
             p400();
           }
         }
@@ -6481,7 +6304,6 @@ vF172.prototype.Se = function (p281) {
         this.Th = null;
         f78();
       };
-
       return f76;
     }();
     var vF40 = function () {
