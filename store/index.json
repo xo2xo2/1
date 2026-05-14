@@ -43567,7 +43567,7 @@
         {
             "isCustom": true,
             "id": "s_Arab",
-            "img": "/images\/group\/group_Arab.png",
+            "img": "group\/group_Arab.png",
             "name": {
                 "de": "Arab",
                 "en": "Arab",
@@ -43617,7 +43617,7 @@
         {
             "isCustom": true,
             "id": "snakeskins",
-            "img": "/images\/group\/Snake_skins.png",
+            "img": "group\/Snake_skins.png",
             "name": {
                 "de": "Snake skins",
                 "en": "Snake skins",
@@ -43677,7 +43677,7 @@
         {
             "isCustom": true,
             "id": "s_wup",
-            "img": "/images\/group\/wormate-play.png",
+            "img": "group\/wormate-play.png",
             "name": {
                 "de": "Wormate Skins",
                 "en": "Wormate Skins",
@@ -43802,7 +43802,7 @@
         {
             "isCustom": true,
             "id": "s_show_skin_gif",
-            "img": "/images\/group\/group_show_gif.png",
+            "img": "group\/group_show_gif.png",
             "name": {
                 "de": "Show gif skin",
                 "en": "Show gif skin",
@@ -43819,7 +43819,7 @@
         {
             "isCustom": true,
             "id": "s_HPBD",
-            "img": "/images\/group\/group_HPBD.png",
+            "img": "group\/group_HPBD.png",
             "name": {
                 "de": "HPBD",
                 "en": "HPBD",
@@ -43843,7 +43843,7 @@
         {
             "isCustom": true,
             "id": "s_valentine",
-            "img": "/images\/group\/group_valentine.png",
+            "img": "group\/group_valentine.png",
             "name": {
                 "de": "Valentine",
                 "en": "Valentine",
