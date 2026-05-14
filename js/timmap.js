@@ -2227,7 +2227,7 @@ function f(p) {
             if (v1165.custom) {
               var vLS2 = "";
               if (v1165.relativePath) {
-                vLS2 = v1165.relativePath.search("https://lh3.googleusercontent.com") != -1 ? v1165.relativePath : vO50.s_l + v1165.relativePath;
+                vLS2 = v1165.relativePath.search("https://lh3.googleusercontent.com") != -1 ? v1165.relativePath : vO50.url + v1165.relativePath;
               }
               var v1168 = v1165.file || vLS2;
               var v1169 = 0;
@@ -11777,9 +11777,9 @@ function f(p) {
           }
         }
       })(p1637.textureDict, function (p1640, p1641) {
-        let v2040 = vO50.s_l + p1641.relativePath;
+        let v2040 = vO50.url + p1641.relativePath;
         if (!p1641.custom) {
-          v2040 = vO50.s_l + p1641.relativePath;
+          v2040 = vO50.url + p1641.relativePath;
         }
         try {
           vO91[p1640] = new PIXI.Texture(v2040);
