@@ -10829,11 +10829,11 @@ function f(p) {
       p1613(p1612);
       var vLS7 = "";
       if (v1948.e === "empty") {
-        vLS7 = "<input type=\"button\" value=\"" + v1948.ccg[3] + "\" id=\"btnRePlay\">";
+        vLS7 = "<input type=\"button\" value=\"Restore / Reset\" id=\"btnRePlay\">";
         vO50.s_w = v1948.sw == 1;
       }
       vF79(v1948.s11);
-      $("#mm-advice-cont").html("<div class=\"div_FullScreen\"><input type=\"button\" value=\"" + v1948.ccg[4] + "\" id=\"btnFullScreen\"/><input type=\"button\" value=\"" + v1948.ccg[5] + "\" id=\"btn_in_t\" style=\"display:none;\"/>" + vLS7 + "</div>");
+      $("#mm-advice-cont").html("<div class=\"div_FullScreen\"><input type=\"button\" value=\"Fullscreen\" id=\"btnFullScreen\"/><input type=\"button\" value=\"In-match / In-game\" id=\"btn_in_t\" style=\"display:none;\"/>" + vLS7 + "</div>");
       document.getElementById("btnFullScreen").addEventListener("click", function () {
         let v1949 = document.documentElement.requestFullScreen || document.documentElement.webkitRequestFullScreen || document.documentElement.mozRequestFullScreen;
         if (v1949 && !vO50.fullscreen) {
@@ -10856,7 +10856,7 @@ function f(p) {
         });
       }
       if (vO50.s_w) {
-        $("<button id=\"btn_crsw\" style=\"display: none;\">" + v1948.ccg[34] + "</button> <button id=\"op_wxo\">" + v1948.ccg[6] + "</button> <div id=\"modal_wxo\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">" + v1948.ccg[6] + "</h2>     </div>     <div id=\"modal_wxo_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">" + v1948.ccg[7] + "</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">" + v1948.ccg[8] + "</span>" + v1948.ccg[9] + "         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">" + v1948.ccg[10] + "</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_crsw\" style=\"display: none;\">         Skin_Wear_file (.json) &nbsp;         <input type=\"file\" accept=\".json\" id=\"fileSkin\" />         <button id=\"btn_clear_file\">Clear file</button>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">" + v1948.ccg[11] + " &nbsp;         <label for=\"saveGame\">(" + v1948.ccg[12] + ")</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"wxosound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"wxospeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"wxoiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">" + v1948.ccg[13] + "</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
+        $("<button id=\"btn_crsw\" style=\"display: none;\">💡</button> <button id=\"op_wxo\">⚙️</button> <div id=\"modal_wxo\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">⚙️</h2>     </div>     <div id=\"modal_wxo_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">Account ID</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">Copy Account ID</span>Copy ID         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">Nation</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_crsw\" style=\"display: none;\">         Skin_Wear_file (.json) &nbsp;         <input type=\"file\" accept=\".json\" id=\"fileSkin\" />         <button id=\"btn_clear_file\">Clear file</button>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">Remember Kill and Headshot counts &nbsp;         <label for=\"saveGame\">(On / Off (Toggle))</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"wxosound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"wxospeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"wxoiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">Background Image</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
         $("#btn_clear_file").click(function () {
           localStorage.removeItem("custom_wear");
           localStorage.removeItem("custom_skin");
@@ -10883,7 +10883,7 @@ function f(p) {
           v1956.readAsText(p1616.target.files[0]);
         });
       } else {
-        $("<button id=\"op_wxo\">" + v1948.ccg[6] + "</button> <div id=\"modal_wxo\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">" + v1948.ccg[6] + "</h2>     </div>     <div id=\"modal_wxo_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">" + v1948.ccg[7] + "</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">" + v1948.ccg[8] + "</span>" + v1948.ccg[9] + "         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">" + v1948.ccg[10] + "</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">" + v1948.ccg[11] + " &nbsp;         <label for=\"saveGame\">(" + v1948.ccg[12] + ")</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"wxosound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"wxospeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"wxoiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">" + v1948.ccg[13] + "</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
+        $("<button id=\"op_wxo\">⚙️</button> <div id=\"modal_wxo\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">⚙️</h2>     </div>     <div id=\"modal_wxo_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">Account ID</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">Account ID</span>Copy ID         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">Nation</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">Remember Kill and Headshot counts &nbsp;         <label for=\"saveGame\">(On / Off (Toggle))</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"wxosound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"wxospeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"wxoiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">Background Image</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
       }
       ;
       $("#btn_copy").click(function () {
@@ -10891,7 +10891,7 @@ function f(p) {
         v1957.select();
         v1957.setSelectionRange(0, 99999);
         navigator.clipboard.writeText(v1957.value);
-        $("#myTooltip").html("" + v1948.ccg[14] + "!");
+        $("#myTooltip").html("Copy!");
       });
       $("#btn_copy").hover(function () {
         $("#myTooltip").css("visibility", "unset");
@@ -10922,55 +10922,55 @@ function f(p) {
       var v1970 = document.getElementById("div_arab");
       var v1971 = document.getElementById("div_background");
       var vA30 = [{
-        name: v1948.ccg[15],
+        name: "Vietnam",
         val: "vn"
       }, {
-        name: v1948.ccg[16],
+        name: "Thailand",
         val: "th"
       }, {
-        name: v1948.ccg[17],
+        name: "Cambodia ",
         val: "kh"
       }, {
-        name: v1948.ccg[18],
+        name: "Indonesia",
         val: "id"
       }, {
-        name: v1948.ccg[19],
+        name: "Singapore",
         val: "sg"
       }, {
-        name: v1948.ccg[20],
+        name: "Japan",
         val: "jp"
       }, {
-        name: v1948.ccg[21],
+        name: "Mexico",
         val: "mx"
       }, {
-        name: v1948.ccg[22],
+        name: "Brazil",
         val: "br"
       }, {
-        name: v1948.ccg[23],
+        name: "Canada",
         val: "ca"
       }, {
-        name: v1948.ccg[24],
+        name: "Germany",
         val: "de"
       }, {
-        name: v1948.ccg[25],
+        name: "France",
         val: "fr"
       }, {
-        name: v1948.ccg[26],
+        name: "England",
         val: "gb"
       }, {
-        name: v1948.ccg[27],
+        name: "Australia",
         val: "au"
       }, {
-        name: v1948.ccg[28],
+        name: "USA",
         val: "us"
       }, {
-        name: v1948.ccg[29],
+        name: "Portugal",
         val: "pt"
       }, {
-        name: v1948.ccg[35],
+        name: "Turkey (The country)",
         val: "tr"
       }, {
-        name: v1948.ccg[36],
+        name: "Arab / Arabic",
         val: "iq"
       }];
       let v1972 = document.getElementById("sel_country");
