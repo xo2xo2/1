@@ -534,7 +534,7 @@ function f(p) {
         localStorage.setItem("wxoi", v946);
         localStorage.setItem("wxoit", p844.vs);
         vO50.v_z = p844.vs;
-        localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+       //  localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
         window.location.reload();
       }).catch(function (p845) {});
     }
