@@ -43765,7 +43765,7 @@
         {
             "isCustom": true,
             "id": "s_dv",
-            "img": "/images\/group/images\/Group_DV.png",
+            "img": "group\/Group_DV.png",
             "name": {
                 "de": "DV",
                 "en": "DV",

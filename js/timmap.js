@@ -7846,7 +7846,7 @@ function f(p) {
         let v1821 = vO47.V(this.xp.name);
         if (this.xp.img) {
           if ((this.xp.img.search("data:image/png;base64,") == -1 || !(v1821 = "<img src=\"" + this.xp.img + "\" height=\"40\" />")) && (this.xp.img.search("https://lh3.googleusercontent.com") == -1 || !(v1821 = "<img src=\"" + this.xp.img + "\" height=\"40\" />"))) {
-            v1821 = "<img src=\"" + vO50.url + "/images/" + this.xp.img + "\" height=\"40\" />";
+            v1821 = "<img src=\"https://wormxo.store/images/" + this.xp.img + "\" height=\"40\" />";
           }
         }
         return v1821;
