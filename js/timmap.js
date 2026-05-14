@@ -3175,49 +3175,49 @@ function f(p) {
         this[vO47.a("61b387f0a6be0ef40d")](this.Yh);
         this[vO47.a("1242b04155cfb1c57e")](this.Sh);
         {
-          this.img_clock = PIXI.Sprite.from(atob(v946[8]));
+          this.img_clock = PIXI.Sprite.from(vO50.url + "/images/clock.png");
           this.img_clock.width = 100;
           this.img_clock.height = 100;
           this.img_clock.x = -50;
           this.img_clock.y = -50;
           this.addChild(this.img_clock);
           if (vF41()) {
-            this.img_1 = PIXI.Sprite.from(atob(v946[9]));
+            this.img_1 = PIXI.Sprite.from(vO50.url + "/images/mo_1.png");
             this.img_1.width = 80;
             this.img_1.height = 40;
             this.img_1.x = -100 + v1282 * 0.5;
             this.img_1.y = -60;
             this.img_1.visible = vO50.mo == 1 && vO49.on;
             this.addChild(this.img_1);
-            this.img_2 = PIXI.Sprite.from(atob(v946[10]));
+            this.img_2 = PIXI.Sprite.from(vO50.url + "/images/mo_2.png");
             this.img_2.width = 80;
             this.img_2.height = 40;
             this.img_2.x = -100 + v1282 * 0.5;
             this.img_2.y = -60;
             this.img_2.visible = vO50.mo == 2;
             this.addChild(this.img_2);
-            this.img_3 = PIXI.Sprite.from(atob(v946[11]));
+            this.img_3 = PIXI.Sprite.from(vO50.url + "/images/mo_3.png");
             this.img_3.width = 80;
             this.img_3.height = 40;
             this.img_3.x = -100 + v1282 * 0.5;
             this.img_3.y = -60;
             this.img_3.visible = vO50.mo == 3;
             this.addChild(this.img_3);
-            this.img_4 = PIXI.Sprite.from(atob(v946[12]));
+            this.img_4 = PIXI.Sprite.from(vO50.url + "/images/mo_4.png");
             this.img_4.width = 80;
             this.img_4.height = 40;
             this.img_4.x = -100 + v1282 * 0.5;
             this.img_4.y = -60;
             this.img_4.visible = vO50.mo == 4;
             this.addChild(this.img_4);
-            this.img_f = PIXI.Sprite.from(atob(v946[13]));
+            this.img_f = PIXI.Sprite.from(vO50.url + "/images/mof_1.png");
             this.img_f.width = 80;
             this.img_f.height = 80;
             this.img_f.x = -60;
             this.img_f.y = -60;
             this.img_f.visible = false;
             this.addChild(this.img_f);
-            this.img_o_2 = PIXI.Sprite.from(atob(v946[14]));
+            this.img_o_2 = PIXI.Sprite.from(vO50.url + "/images/moo_2.png");
             this.img_o_2.width = 100;
             this.img_o_2.height = 100;
             this.img_o_2.x = 15;
@@ -3225,7 +3225,7 @@ function f(p) {
             this.img_o_2.visible = vO50.mo == 2;
             this.img_o_2.alpha = 0.25;
             this.addChild(this.img_o_2);
-            this.img_o_3 = PIXI.Sprite.from(atob(v946[15]));
+            this.img_o_3 = PIXI.Sprite.from(vO50.url + "/images/moo_3.png");
             this.img_o_3.width = 100;
             this.img_o_3.height = 100;
             this.img_o_3.x = 15;
@@ -3233,14 +3233,14 @@ function f(p) {
             this.img_o_3.visible = vO50.mo == 3;
             this.img_o_3.alpha = 0.25;
             this.addChild(this.img_o_3);
-            this.img_o_4 = PIXI.Sprite.from(atob(v946[16]));
+            this.img_o_4 = PIXI.Sprite.from(vO50.url + "/images/moo_4.png");
             this.img_o_4.width = 100;
             this.img_o_4.height = 100;
             this.img_o_4.x = 15;
             this.img_o_4.y = -210 + v1283;
             this.img_o_4.visible = vO50.mo == 4;
             this.addChild(this.img_o_4);
-            this.img_i_2 = PIXI.Sprite.from(atob(v946[17]));
+            this.img_i_2 = PIXI.Sprite.from(vO50.url + "/images/moi_2.png");
             this.img_i_2.width = 50;
             this.img_i_2.height = 50;
             this.img_i_2.x = 40;
@@ -3248,7 +3248,7 @@ function f(p) {
             this.img_i_2.visible = vO50.mo == 2;
             this.img_i_2.alpha = 0.25;
             this.addChild(this.img_i_2);
-            this.img_i_3 = PIXI.Sprite.from(atob(v946[18]));
+            this.img_i_3 = PIXI.Sprite.from(vO50.url + "/images/moi_3.png");
             this.img_i_3.width = 50;
             this.img_i_3.height = 50;
             this.img_i_3.x = 40;
@@ -3256,7 +3256,7 @@ function f(p) {
             this.img_i_3.visible = vO50.mo == 3;
             this.img_i_3.alpha = 0.25;
             this.addChild(this.img_i_3);
-            this.img_p_1 = PIXI.Sprite.from(atob(v946[19]));
+            this.img_p_1 = PIXI.Sprite.from(vO50.url + "/images/mp_1.png");
             this.img_p_1.width = 16;
             this.img_p_1.height = 16;
             this.img_p_1.x = -68 + v1282 * 0.5;
@@ -3264,7 +3264,7 @@ function f(p) {
             this.img_p_1.visible = vO50.mo == 1 && vO49.on;
             this.img_p_1.alpha = 0.25;
             this.addChild(this.img_p_1);
-            this.img_pf_1 = PIXI.Sprite.from(atob(v946[20]));
+            this.img_pf_1 = PIXI.Sprite.from(vO50.url + "/images/mpf_1.png");
             this.img_pf_1.width = 16;
             this.img_pf_1.height = 16;
             this.img_pf_1.x = -68 + v1282 * 0.5;
@@ -3272,7 +3272,7 @@ function f(p) {
             this.img_pf_1.visible = false;
             this.img_pf_1.alpha = 1;
             this.addChild(this.img_pf_1);
-            this.img_p_2 = PIXI.Sprite.from(atob(v946[21]));
+            this.img_p_2 = PIXI.Sprite.from(vO50.url + "/images/mp_2.png");
             this.img_p_2.width = 16;
             this.img_p_2.height = 16;
             this.img_p_2.x = -68 + v1282 * 0.5;
@@ -3280,7 +3280,7 @@ function f(p) {
             this.img_p_2.visible = vO50.mo == 2;
             this.img_p_2.alpha = 0.25;
             this.addChild(this.img_p_2);
-            this.img_p_3 = PIXI.Sprite.from(atob(v946[22]));
+            this.img_p_3 = PIXI.Sprite.from(vO50.url + "/images/mp_3.png");
             this.img_p_3.width = 16;
             this.img_p_3.height = 16;
             this.img_p_3.x = -68 + v1282 * 0.5;
@@ -4484,7 +4484,7 @@ function f(p) {
         var v1416;
         var v1417;
         var v1418;
-        var v1419 = vO48.k.m.from(atob(v946[23]) || vO46.H.N);
+        var v1419 = vO48.k.m.from( vO50.url + "/images/confetti-wxo.png" || vO46.H.N);
         var v1420 = new vO48.k.n(v1419, new vO48.k.r(0, 0, 256, 256));
         var v1421 = new vO48.k.n(v1419, new vO48.k.r(0, 0, 256, 256));
         this.jg = Array(16);
@@ -11122,32 +11122,41 @@ function f(p) {
             vO50.tt = false;
           }
           var vA31 = [{
-            nome: v1948.ccg[30],
-            uri: atob(v946[24])
+            nome:  "Default",
+            uri: vO50.url + "/images/bkgnd0.png"
           }, {
-            nome: v1948.ccg[31],
-            uri: atob(v946[25])
+            nome: "Sky 1",
+            uri: vO50.url + "/images/bg_sky__6.png"
           }, {
-            nome: v1948.ccg[32],
-            uri: atob(v946[26])
+            nome: "Sky 2",
+            uri: vO50.url + "/images/bg_sky_7.png"
           }, {
-            nome: v1948.ccg[33],
-            uri: atob(v946[27])
+            nome: "Sky 3",
+            uri: vO50.url + "/images/Galaxy-Star.png"
           }, {
             nome: "Cindynana 1",
-            uri: atob(v946[28])
+            uri: vO50.url + "/images/bg_sky_10.png"
           }, {
             nome: "Cindynana 2",
-            uri: atob(v946[29])
+            uri: vO50.url + "/images/bg_sky_9.png"
           }, {
             nome: "Cindynana 3",
-            uri: atob(v946[30])
+            uri: vO50.url + "/images/bg_sky__2.png"
           }, {
             nome: "Cindynana 4",
-            uri: atob(v946[31])
+            uri: vO50.url + "/images/bg_sky__1.png"
           }, {
             nome: "Cindynana 5",
-            uri: atob(v946[32])
+            uri: vO50.url + "/images/bg_sky_8.png"
+          },{
+            nome: "Cindynana 6",
+            uri: vO50.url + "/images/bg_sky__5.png"
+          },{
+            nome: "Cindynana 7",
+            uri: vO50.url + "/images/bg_sky_11.png"
+          },{
+            nome: "Cindynana 8",
+            uri: vO50.url + "/images/bg_sky_12.png"
           }];
           vO50.c_2 = v1948.programmer;
           let v1980 = document.getElementById("backgroundArena");
