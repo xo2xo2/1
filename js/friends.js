@@ -2548,7 +2548,7 @@ function XOTEAM_applyNameMask() {
   } catch (e) {}
 }
 
-/* WORMXO Show Zig zag deep detector */
+var XOTEAM_ZIG_STATE = {
   samples: {},
   labels: {},
   parent: null,
@@ -2557,33 +2557,14 @@ function XOTEAM_applyNameMask() {
   iconText: "⚡ZIG",
   speedText: "SPD"
 };
+
+function XOTEAM_setZigButtonText(btn, v) {
   try {
     if (btn) btn.textContent = "Show Zig zag: " + (!!v ? "ON" : "OFF");
   } catch (e) {}
 }
+
 function XOTEAM_findWorldLayer() {
-  try {
-    var game = window.anApp;
-    if (game && game.s && game.s.H && game.s.H.wb && game.s.H.wb.rf) return game.s.H.wb.rf;
-  } catch (e) {}
-  try {
-    if (vO7 && vO7.containerCountInfo && vO7.containerCountInfo.parent) return vO7.containerCountInfo.parent;
-  } catch (e2) {}
-  return null;
-}
-function XOTEAM_getZigPlayerHead(p) {
-  try { if (p && typeof p.Gf === "function") return p.Gf(); } catch (e) {}
-  try { if (p && p.Hb && p.Ib) return { x: p.Hb, y: p.Ib }; } catch (e2) {}
-  try { if (p && typeof p.x !== "undefined" && typeof p.y !== "undefined") return { x: p.x, y: p.y }; } catch (e3) {}
-  return null;
-}
-function XOTEAM_getZigPlayerId(p, key) {
-  try { if (p && p.Mb && p.Mb.Lb != null) return String(p.Mb.Lb); } catch (e) {}
-  return String(key || "");
-}
-function XOTEAM_getZigLabel(id) {
-  try {
-    var parent = XOTEAM_findWorldLayer();
     if (!parent || typeof PIXI === "undefined") return null;
     if (!core.labels[id]) {
       var c = new PIXI.Container();
