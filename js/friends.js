@@ -367,25 +367,6 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 })();
 
 
-/* WormFriends Matrix lobby background core */
-(function () {
-  if (window.__WORMFRIENDS_MATRIX_LOBBY_BG__) return;
-  window.__WORMFRIENDS_MATRIX_LOBBY_BG__ = true;
-  function install() {
-    try {
-      var old = document.getElementById("wormxo-lobby-bg-style");
-      if (old && old.parentNode) old.parentNode.removeChild(old);
-      if (document.getElementById("wormfriends-matrix-lobby-bg-style")) return;
-      var css = document.createElement("style");
-      css.id = "wormfriends-matrix-lobby-bg-style";
-      css.textContent = "#game-wrap,#mm-start,#main-menu,#main-menu-view,.background-canva{background:radial-gradient(circle at 15% 20%,rgba(0,95,255,.50),transparent 32%),radial-gradient(circle at 82% 22%,rgba(80,220,255,.44),transparent 34%),radial-gradient(circle at 50% 86%,rgba(155,60,255,.40),transparent 40%),radial-gradient(circle at 48% 42%,rgba(0,0,0,.55),transparent 48%),linear-gradient(135deg,#040615 0%,#061b3d 42%,#16082e 100%)!important;background-size:190% 190%,180% 180%,200% 200%,170% 170%,100% 100%!important;animation:wfmLobbyFlow 18s ease-in-out infinite alternate!important;}@keyframes wfmLobbyFlow{0%{background-position:0% 20%,100% 15%,45% 100%,40% 45%,0 0;}50%{background-position:45% 60%,58% 34%,60% 70%,58% 40%,0 0;}100%{background-position:95% 80%,12% 82%,25% 40%,45% 58%,0 0;}}#main-menu,#mm-start,#main-menu-view,.store-view-cont,#login-view,#welcome-view,#mm-player-info,#wf-tool-button,#popup{position:relative!important;z-index:5!important;pointer-events:auto!important;}";
-      (document.head || document.documentElement).appendChild(css);
-    } catch (e) {}
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install, { once: true }); else install();
-})();
-
-
 window.detectLog = null;
 const vO = {
   BETAisSkinCustom(p) {
@@ -457,6 +438,14 @@ var vO3 = {
     pxy: 105
   }
 };
+
+window.WORMXO_2023_BG_ASSETS = {
+  F: "/images/linelogo-valday2023.png",
+  G: "/images/guest-avatar-valday2023.png",
+  H: "/images/confetti-valday2023.png",
+  I: "/images/bg-event-pattern-valday2023.png"
+};
+
 var vO4 = {
   FB_UserID: "",
   smoothCamera: 0.5,
@@ -5812,8 +5801,8 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
   this.Pf.Mg(true);
   this.Pf.nh(p374, p375);
 
-  this.Pf.oh(p378 * 1.60);
-  this.Pf.qh(0.72);
+  this.Pf.oh(p378 * 1.45);
+  this.Pf.qh(0.82);
 };
         f70.prototype.lh = function () {
           this.Nf.Mg(false);
@@ -11049,5 +11038,61 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
     SafeWS.CONNECTING = OldWS.CONNECTING; SafeWS.OPEN = OldWS.OPEN; SafeWS.CLOSING = OldWS.CLOSING; SafeWS.CLOSED = OldWS.CLOSED;
     SafeWS.__WORMXO_SAFE__ = true;
     window.WebSocket = SafeWS;
+  }
+})();
+
+
+(function WORMXO_VALDAY_2023_BG() {
+  if (window.__WORMXO_VALDAY_2023_BG__) return;
+  window.__WORMXO_VALDAY_2023_BG__ = true;
+
+  var assets = window.WORMXO_2023_BG_ASSETS || {
+    H: "/images/confetti-valday2023.png",
+    I: "/images/bg-event-pattern-valday2023.png"
+  };
+
+  function install() {
+    try {
+      var old = document.getElementById("wormfriends-matrix-lobby-bg-style");
+      if (old && old.parentNode) old.parentNode.removeChild(old);
+
+      var st = document.getElementById("wormxo-valday2023-bg-style");
+      if (st) return;
+
+      st = document.createElement("style");
+      st.id = "wormxo-valday2023-bg-style";
+      st.textContent =
+        "#game-wrap,#mm-start,#main-menu,#main-menu-view,.background-canva{" +
+        "background-image:" +
+        "url('" + assets.H + "')," +
+        "url('" + assets.I + "')," +
+        "radial-gradient(circle at 20% 25%,rgba(255,70,120,.28),transparent 35%)," +
+        "radial-gradient(circle at 80% 20%,rgba(255,190,80,.22),transparent 35%)," +
+        "linear-gradient(135deg,#1b0612 0%,#401018 45%,#13040a 100%)!important;" +
+        "background-repeat:repeat,repeat,no-repeat,no-repeat,no-repeat!important;" +
+        "background-size:260px 260px,420px 420px,100% 100%,100% 100%,100% 100%!important;" +
+        "animation:wormxoValday2023Move 22s linear infinite!important;" +
+        "}" +
+
+        "@keyframes wormxoValday2023Move{" +
+        "0%{background-position:0 0,0 0,0 0,0 0,0 0;}" +
+        "50%{background-position:180px 260px,-220px 160px,0 0,0 0,0 0;}" +
+        "100%{background-position:360px 520px,-440px 320px,0 0,0 0,0 0;}" +
+        "}" +
+
+        "#main-menu,#mm-start,#main-menu-view,.store-view-cont,#login-view,#welcome-view,#mm-player-info,#popup{" +
+        "position:relative!important;z-index:5!important;" +
+        "}";
+
+      (document.head || document.documentElement).appendChild(st);
+    } catch (e) {
+      console.log("WORMXO VALDAY 2023 BG error:", e);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", install, { once: true });
+  } else {
+    install();
   }
 })();
