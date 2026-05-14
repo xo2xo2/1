@@ -92,6 +92,180 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
 };
 
 
+
+/* WORMXO ZIGZAG FULL SELECT CORE - pulled from source and adapted for friends */
+(function () {
+  if (window.__WORMXO_ZIGZAG_SELECT_CORE__) return;
+  window.__WORMXO_ZIGZAG_SELECT_CORE__ = true;
+
+  var ZZ = window.WORMXO_ZIGZAG_SELECT = window.WORMXO_ZIGZAG_SELECT || {
+    style: "0",
+    lastUi: 0,
+    timer: 0,
+    urls: {
+      "0": "",
+      "1": "https://i.imgur.com/LFiCido.png",
+      "2": "https://wormup.in/assets/images/zigzagability1.png",
+      "3": "https://i.imgur.com/LvJ1RxC.png"
+    },
+    labels: {
+      "0": "Normal Zigzag",
+      "1": "Zigzag 1",
+      "2": "Zigzag 2",
+      "3": "Zigzag 3"
+    }
+  };
+
+  function readStyle() {
+    try {
+      var v = localStorage.getItem("WORMXO_ZIGZAG_STYLE");
+      if (v === null || v === undefined) v = localStorage.getItem("XOTEAM_ZIGZAG_STYLE");
+      v = String(v || "0");
+      return /^(0|1|2|3)$/.test(v) ? v : "0";
+    } catch (e) {
+      return "0";
+    }
+  }
+
+  function saveStyle(v) {
+    try {
+      localStorage.setItem("WORMXO_ZIGZAG_STYLE", String(v));
+      localStorage.setItem("XOTEAM_ZIGZAG_STYLE", String(v));
+      if (window.WORMXO_UI_STATE) {
+        window.WORMXO_UI_STATE.showZigZag = String(v) !== "0";
+      }
+      localStorage.setItem("XOTEAM_SHOW_ZIGZAG", String(String(v) !== "0"));
+    } catch (e) {}
+  }
+
+  function applyStyle(v) {
+    v = /^(0|1|2|3)$/.test(String(v)) ? String(v) : "0";
+    ZZ.style = v;
+    saveStyle(v);
+
+    try {
+      if (window.WORMXO_ZIGZAG_CORE) {
+        window.WORMXO_ZIGZAG_CORE.iconText = v === "0" ? "⚡ZIG" : ("⚡ZIG " + v);
+        window.WORMXO_ZIGZAG_CORE.speedText = v === "0" ? "SPD" : ("STYLE " + v);
+      }
+    } catch (e) {}
+
+    try {
+      if (typeof XOTEAM_toggleZigZagShow === "function") {
+        XOTEAM_toggleZigZagShow(v !== "0");
+      }
+    } catch (e2) {}
+
+    try {
+      var sel = document.getElementById("sel_zigzag");
+      if (sel && sel.value !== v) sel.value = v;
+      var btn = document.getElementById("wormxo-zigzag-toggle");
+      if (btn) btn.textContent = "Show Zig zag: " + (v !== "0" ? "ON" : "OFF");
+      renderPreview();
+    } catch (e3) {}
+  }
+
+  function cssOnce() {
+    if (document.getElementById("wormxo-zigzag-style-css")) return;
+    var st = document.createElement("style");
+    st.id = "wormxo-zigzag-style-css";
+    st.textContent = [
+      "#wormxo-zigzag-box{width:95%;margin:7px auto;padding:8px;border-radius:10px;background:rgba(10,10,10,.78);box-shadow:0 0 0 1px rgba(255,80,0,.55) inset;color:#fff;font-family:Arial,sans-serif;}",
+      "#wormxo-zigzag-box label{display:block;margin-bottom:5px;color:#ff8a00;font-weight:900;font-size:12px;}",
+      "#sel_zigzag{width:100%;height:30px;border:1px solid rgba(255,138,0,.75);border-radius:8px;background:#171717;color:#fff;font-weight:800;outline:none;}",
+      "#zigzag_preview{display:block;margin:8px auto 0;max-width:120px;max-height:68px;filter:drop-shadow(0 0 7px rgba(255,90,0,.75));}"
+    ].join("");
+    (document.head || document.documentElement).appendChild(st);
+  }
+
+  function renderPreview() {
+    try {
+      var old = document.getElementById("zigzag_preview");
+      var url = ZZ.urls[String(ZZ.style || "0")];
+      if (!url) {
+        if (old && old.parentNode) old.parentNode.removeChild(old);
+        return;
+      }
+      if (!old) {
+        old = document.createElement("img");
+        old.id = "zigzag_preview";
+        var box = document.getElementById("wormxo-zigzag-box") || document.getElementById("wwc-set-view") || document.body;
+        box.appendChild(old);
+      }
+      old.src = url;
+    } catch (e) {}
+  }
+
+  function makeSelect() {
+    cssOnce();
+
+    var hosts = [
+      document.getElementById("wwc-set-view"),
+      document.getElementById("settingContent"),
+      document.getElementById("loa831pibur0w4gv"),
+      document.querySelector(".bao-list1"),
+      document.querySelector(".settings"),
+      document.body
+    ].filter(Boolean);
+
+    var host = hosts[0];
+    if (!host) return;
+
+    if (!document.getElementById("wormxo-zigzag-box")) {
+      var box = document.createElement("div");
+      box.id = "wormxo-zigzag-box";
+      box.innerHTML = '<label for="sel_zigzag">Zigzag Ability</label><select id="sel_zigzag"><option value="0">Normal Zigzag</option><option value="1">Zigzag 1</option><option value="2">Zigzag 2</option><option value="3">Zigzag 3</option></select>';
+      host.appendChild(box);
+    }
+
+    var sel = document.getElementById("sel_zigzag");
+    if (sel && !sel.__WORMXO_ZZ_BOUND__) {
+      sel.__WORMXO_ZZ_BOUND__ = true;
+      sel.value = ZZ.style;
+      sel.addEventListener("change", function () {
+        applyStyle(this.value);
+      }, false);
+    }
+
+    renderPreview();
+  }
+
+  function tick() {
+    try {
+      ZZ.style = readStyle();
+      makeSelect();
+      if (window.WORMXO_ZIGZAG_CORE) {
+        window.WORMXO_ZIGZAG_CORE.iconText = ZZ.style === "0" ? "⚡ZIG" : ("⚡ZIG " + ZZ.style);
+        window.WORMXO_ZIGZAG_CORE.speedText = ZZ.style === "0" ? "SPD" : ("STYLE " + ZZ.style);
+      }
+    } catch (e) {}
+  }
+
+  ZZ.style = readStyle();
+  if (window.WORMXO_UI_STATE) {
+    window.WORMXO_UI_STATE.showZigZag = ZZ.style !== "0" || window.WORMXO_UI_STATE.showZigZag === true;
+  }
+
+  window.WORMXO_applyZigZagStyle = applyStyle;
+  window.WORMXO_getZigZagStyle = function () { return ZZ.style; };
+
+  document.addEventListener("keydown", function (e) {
+    try {
+      var tag = (e.target && e.target.tagName ? e.target.tagName : "").toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select" || (e.target && e.target.isContentEditable)) return;
+      if (String(e.key || "").toLowerCase() !== "z") return;
+      var n = (Number(readStyle()) + 1) % 4;
+      applyStyle(String(n));
+    } catch (err) {}
+  }, true);
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", tick, { once: true });
+  else tick();
+
+  window.addEventListener("load", function () { setTimeout(tick, 600); }, { once: true });
+  ZZ.timer = setInterval(tick, 1500);
+})();
+
 /* WORMXO MOBILE LOW-PERFORMANCE CORE - joystick + lag fix */
 window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
   enabled: true,
@@ -2573,8 +2747,8 @@ function XOTEAM_updateZigZagDetect() {
           label.c.visible = true;
           label.c.x = pos.x;
           label.c.y = pos.y - 74;
-          label.t.text = turn > 0.75 ? "⚡ZIG" : "↯TURN";
-          label.s.text = "TURN " + Math.round(turn * 100) + " / SPD " + Math.round(speed * 100);
+          label.t.text = turn > 0.75 ? ((window.WORMXO_ZIGZAG_CORE && window.WORMXO_ZIGZAG_CORE.iconText) || "⚡ZIG") : "↯TURN";
+          label.s.text = ((window.WORMXO_ZIGZAG_CORE && window.WORMXO_ZIGZAG_CORE.speedText) || "SPD") + " " + Math.round(speed * 100) + " / TURN " + Math.round(turn * 100);
           label.last = now;
         }
       }
@@ -6294,7 +6468,7 @@ vF172.prototype.Se = function (p281) {
 
         this.Fe = new vF7._b(tex("/images/bg-obstacle.png", false));
 
-        /* WORMXO: confetti removed for lighter render */
+        /* WORMXO: confetti removed for light performance */
         this.Ge = [];
 
         this.Cf = new vF7._b(f77());
@@ -6305,12 +6479,6 @@ vF172.prototype.Se = function (p281) {
         var v351 = tex("https://i.imgur.com/EDt862t.png", false);
         var v352 = tex("https://i.imgur.com/U5sTlhC.png", false);
         var v353 = tex("https://i.imgur.com/ub4ed3R.png", false);
-
-        /* WORMXO: zigzag ability textures loaded inside core item factory */
-        var v354z = tex("https://wormup.in/assets/images/zigzagability.png", false);
-        var v355z = tex("https://i.imgur.com/LFiCido.png", false);
-        var v356z = tex("https://wormup.in/assets/images/zigzagability1.png", false);
-        var v357z = tex("https://i.imgur.com/LvJ1RxC.png", false);
 
         this.Id_mobileguia = new vF38(v353, 0, 0, 87, 74, 350, 63, 128, 128);
         this.emoji_headshot = new vF38(v351, 0, 0, 256, 256, 170.5, -163.5, 128, 128);
@@ -6324,19 +6492,38 @@ vF172.prototype.Se = function (p281) {
 
         this.Rh = new vF38(v350, 4, 4, 146, 146, 63.5, 63.5, 128, 128);
 
-        this.ZigZagNormal = new vF38(v354z, 158, 4, 87, 74, 203, 63.5, 128, 128);
-        this.ZigZagOne = new vF38(v355z, 156, 140, 87, 60, 170, 128.5, 128, 128);
-        this.ZigZagTwo = new vF38(v356z, 158, 4, 87, 74, 203, 63.5, 128, 128);
-        this.ZigZagThree = new vF38(v357z, 156, 4, 87, 74, 285, 63.5, 128, 128);
+        /*
+         * WORMXO ZIGZAG ABILITY TEXTURES - pulled into core.
+         * These do not auto-start the game and do not add particles.
+         * They only expose ready-to-use PIXI ability sprites for the menu/core.
+         */
+        var vZZ0 = tex("https://wormup.in/assets/images/zigzagability.png", false);
+        var vZZ1 = tex("https://i.imgur.com/LFiCido.png", false);
+        var vZZ2 = tex("https://wormup.in/assets/images/zigzagability1.png", false);
+        var vZZ3 = tex("https://i.imgur.com/LvJ1RxC.png", false);
+
+        this.zigzag_ability = new vF38(vZZ0, 158, 4, 87, 74, 203, 63.5, 128, 128);
+        this.pwrFlex1 = new vF38(vZZ1, 156, 140, 87, 60, 170, 128.5, 128, 128);
+        this.pwrFlex2 = new vF38(vZZ2, 158, 4, 87, 74, 203, 63.5, 128, 128);
+        this.pwrFlex3 = new vF38(vZZ3, 156, 4, 87, 74, 285, 63.5, 128, 128);
+
+        this.WORMXO_getZigZagAbility = function () {
+          var z = "0";
+          try { z = String(localStorage.getItem("WORMXO_ZIGZAG_STYLE") || "0"); } catch (e) {}
+          if (z === "1") return this.pwrFlex1;
+          if (z === "2") return this.pwrFlex2;
+          if (z === "3") return this.pwrFlex3;
+          return this.zigzag_ability;
+        };
 
         this.Ug = function () {
-          var v354 = window.document.createElement("canvas");
-          v354.width = 80;
-          v354.height = 80;
+          var c = window.document.createElement("canvas");
+          c.width = 80;
+          c.height = 80;
           return {
-            te: v354,
-            Tg: v354.getContext("2d"),
-            Hc: new vF7._b(vF7.$b.from(v354))
+            te: c,
+            Tg: c.getContext("2d"),
+            Hc: new vF7._b(vF7.$b.from(c))
           };
         }();
 
@@ -6371,7 +6558,6 @@ vF172.prototype.Se = function (p281) {
 
       return f76;
     }();
-
     var vF40 = function () {
       function f79() {
         this.H = new vF52();
@@ -11300,111 +11486,4 @@ isValidHotkey = function (p633) {
     SafeWS.__WORMXO_SAFE__ = true;
     window.WebSocket = SafeWS;
   }
-})();
-
-
-/* WORMXO ZIGZAG SELECTOR SAFE CORE - added by patch */
-(function () {
-  if (window.__WORMXO_ZIGZAG_SELECTOR_SAFE__) return;
-  window.__WORMXO_ZIGZAG_SELECTOR_SAFE__ = true;
-
-  var LS_MODE = "WORMXO_ZIGZAG_MODE";
-  var LS_SHOW = "XOTEAM_SHOW_ZIGZAG";
-
-  window.WORMXO_ZIGZAG_MODE = String(localStorage.getItem(LS_MODE) || "0");
-
-  function save(mode) {
-    try {
-      window.WORMXO_ZIGZAG_MODE = String(mode || "0");
-      localStorage.setItem(LS_MODE, window.WORMXO_ZIGZAG_MODE);
-      localStorage.setItem(LS_SHOW, window.WORMXO_ZIGZAG_MODE === "0" ? "false" : "true");
-      if (window.WORMXO_UI_STATE) window.WORMXO_UI_STATE.showZigZag = window.WORMXO_ZIGZAG_MODE !== "0";
-      if (typeof window.XOTEAM_toggleZigZagShow === "function") {
-        window.XOTEAM_toggleZigZagShow(window.WORMXO_ZIGZAG_MODE !== "0");
-      }
-      updatePreview();
-    } catch (e) {}
-  }
-
-  function img(mode) {
-    if (mode === "1") return "https://i.imgur.com/LFiCido.png";
-    if (mode === "2") return "https://wormup.in/assets/images/zigzagability1.png";
-    if (mode === "3") return "https://i.imgur.com/LvJ1RxC.png";
-    return "";
-  }
-
-  function updatePreview() {
-    try {
-      var box = document.getElementById("wormxo-zigzag-box");
-      var pv = document.getElementById("wormxo-zigzag-preview");
-      var sel = document.getElementById("wormxo-zigzag-select");
-      if (sel) sel.value = window.WORMXO_ZIGZAG_MODE;
-      var src = img(window.WORMXO_ZIGZAG_MODE);
-      if (pv) {
-        if (src) {
-          pv.src = src;
-          pv.style.display = "block";
-        } else {
-          pv.removeAttribute("src");
-          pv.style.display = "none";
-        }
-      }
-      if (box) {
-        box.setAttribute("data-mode", window.WORMXO_ZIGZAG_MODE);
-      }
-    } catch (e) {}
-  }
-
-  function installStyle() {
-    if (document.getElementById("wormxo-zigzag-selector-style")) return;
-    var st = document.createElement("style");
-    st.id = "wormxo-zigzag-selector-style";
-    st.textContent = [
-      "#wormxo-zigzag-box{position:fixed;right:18px;bottom:88px;z-index:999999;background:rgba(8,8,16,.86);border:1px solid rgba(255,80,0,.75);border-radius:12px;padding:8px 10px;color:#fff;font:700 12px Arial;box-shadow:0 0 18px rgba(255,100,0,.22);pointer-events:auto}",
-      "#wormxo-zigzag-box label{display:block;color:#ff9b32;margin-bottom:5px}",
-      "#wormxo-zigzag-select{width:126px;height:28px;border:1px solid #ff7a00;border-radius:8px;background:#111;color:#fff;font-weight:800;outline:none}",
-      "#wormxo-zigzag-preview{display:none;width:56px;height:56px;object-fit:contain;margin:7px auto 0;filter:drop-shadow(0 0 8px rgba(255,90,0,.7))}",
-      "body.wormxo-zigzag-hide #wormxo-zigzag-box{display:none!important}"
-    ].join("");
-    (document.head || document.documentElement).appendChild(st);
-  }
-
-  function installBox() {
-    try {
-      installStyle();
-      if (document.getElementById("wormxo-zigzag-box")) {
-        updatePreview();
-        return;
-      }
-
-      var box = document.createElement("div");
-      box.id = "wormxo-zigzag-box";
-      box.innerHTML = '<label>Zig Zag</label><select id="wormxo-zigzag-select"><option value="0">OFF</option><option value="1">Zigzag 1</option><option value="2">Zigzag 2</option><option value="3">Zigzag 3</option></select><img id="wormxo-zigzag-preview" alt="">';
-      (document.body || document.documentElement).appendChild(box);
-
-      document.getElementById("wormxo-zigzag-select").onchange = function () {
-        save(this.value);
-      };
-
-      updatePreview();
-    } catch (e) {}
-  }
-
-  document.addEventListener("keydown", function (e) {
-    try {
-      var tag = (e.target && e.target.tagName ? e.target.tagName : "").toLowerCase();
-      if (tag === "input" || tag === "textarea" || tag === "select" || (e.target && e.target.isContentEditable)) return;
-      var k = String(e.key || "").toLowerCase();
-      if (k === "z") {
-        var n = (Number(window.WORMXO_ZIGZAG_MODE || 0) + 1) % 4;
-        save(String(n));
-      }
-    } catch (err) {}
-  }, true);
-
-  setInterval(installBox, 1500);
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", installBox, { once: true });
-  else installBox();
-
-  if (window.WORMXO_ZIGZAG_MODE !== "0") save(window.WORMXO_ZIGZAG_MODE);
 })();
