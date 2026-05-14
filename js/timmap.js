@@ -539,14 +539,14 @@ function f(p) {
       }).catch(function (p845) {});
     }
     ;
-    var v1015 = PIXI.Texture.from(atob(v946[0]));
-    var v1016 = PIXI.Texture.from(atob(v946[1]));
-    var v1017 = PIXI.Texture.from(atob(v946[2]));
-    var v1018 = PIXI.Texture.from(atob(v946[3]));
-    var v1019 = PIXI.Texture.from(atob(v946[4]));
-    var v1020 = PIXI.Texture.from(atob(v946[5]));
-    var v1021 = PIXI.Texture.from(atob(v946[6]));
-    var v1022 = PIXI.Texture.from(atob(v946[7]));
+    var v1015 = PIXI.Texture.from(vO50.url + "/images/close_q.png");
+    var v1016 = PIXI.Texture.from(vO50.url + "/images/open_q.png");
+    var v1017 = PIXI.Texture.from(vO50.url + "/images/close_w.png");
+    var v1018 = PIXI.Texture.from(vO50.url + "/images/open_w.png");
+    var v1019 = PIXI.Texture.from(vO50.url + "/images/close_z.png");
+    var v1020 = PIXI.Texture.from(vO50.url + "/images/open_z.png");
+    var v1021 = PIXI.Texture.from(vO50.url + "/images/z_i.png");
+    var v1022 = PIXI.Texture.from(vO50.url + "/images/z_o.png");
     var v1023 = new PIXI.Sprite(v1015);
     v1023.buttonMode = true;
     v1023.anchor.set(0.5);
