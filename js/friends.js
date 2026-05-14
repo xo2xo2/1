@@ -87,187 +87,14 @@ window.WORMXO_UI_STATE = window.WORMXO_UI_STATE || {
   hideTopKill: localStorage.getItem("XOTEAM_HIDE_TOP_KILL") === "true",
   hideTopHS: localStorage.getItem("XOTEAM_HIDE_TOP_HS") === "true",
   maskNames: false,
-  showZigZag: localStorage.getItem("XOTEAM_SHOW_ZIGZAG") === "true",
   lowPerf: true
 };
 
 
 
-/* WORMXO ZIGZAG FULL SELECT CORE - pulled from source and adapted for friends */
-(function () {
-  if (window.__WORMXO_ZIGZAG_SELECT_CORE__) return;
-  window.__WORMXO_ZIGZAG_SELECT_CORE__ = true;
+/* WORMXO ZIGZAG FULL SELECT CORE - pulled from source and adapted fo/* WORMXO ZIGZAG REMOVED: feature disabled for performance. */
 
-  var ZZ = window.WORMXO_ZIGZAG_SELECT = window.WORMXO_ZIGZAG_SELECT || {
-    style: "0",
-    lastUi: 0,
-    timer: 0,
-    urls: {
-      "0": "",
-      "1": "https://i.imgur.com/LFiCido.png",
-      "2": "https://wormup.in/assets/images/zigzagability1.png",
-      "3": "https://i.imgur.com/LvJ1RxC.png"
-    },
-    labels: {
-      "0": "Normal Zigzag",
-      "1": "Zigzag 1",
-      "2": "Zigzag 2",
-      "3": "Zigzag 3"
-    }
-  };
-
-  function readStyle() {
-    try {
-      var v = localStorage.getItem("WORMXO_ZIGZAG_STYLE");
-      if (v === null || v === undefined) v = localStorage.getItem("XOTEAM_ZIGZAG_STYLE");
-      v = String(v || "0");
-      return /^(0|1|2|3)$/.test(v) ? v : "0";
-    } catch (e) {
-      return "0";
-    }
-  }
-
-  function saveStyle(v) {
-    try {
-      localStorage.setItem("WORMXO_ZIGZAG_STYLE", String(v));
-      localStorage.setItem("XOTEAM_ZIGZAG_STYLE", String(v));
-      if (window.WORMXO_UI_STATE) {
-        window.WORMXO_UI_STATE.showZigZag = String(v) !== "0";
-      }
-      localStorage.setItem("XOTEAM_SHOW_ZIGZAG", String(String(v) !== "0"));
-    } catch (e) {}
-  }
-
-  function applyStyle(v) {
-    v = /^(0|1|2|3)$/.test(String(v)) ? String(v) : "0";
-    ZZ.style = v;
-    saveStyle(v);
-
-    try {
-      if (window.WORMXO_ZIGZAG_CORE) {
-        window.WORMXO_ZIGZAG_CORE.iconText = v === "0" ? "⚡ZIG" : ("⚡ZIG " + v);
-        window.WORMXO_ZIGZAG_CORE.speedText = v === "0" ? "SPD" : ("STYLE " + v);
-      }
-    } catch (e) {}
-
-    try {
-      if (typeof XOTEAM_toggleZigZagShow === "function") {
-        XOTEAM_toggleZigZagShow(v !== "0");
-      }
-    } catch (e2) {}
-
-    try {
-      var sel = document.getElementById("sel_zigzag");
-      if (sel && sel.value !== v) sel.value = v;
-      var btn = document.getElementById("wormxo-zigzag-toggle");
-      if (btn) btn.textContent = "Show Zig zag: " + (v !== "0" ? "ON" : "OFF");
-      renderPreview();
-    } catch (e3) {}
-  }
-
-  function cssOnce() {
-    if (document.getElementById("wormxo-zigzag-style-css")) return;
-    var st = document.createElement("style");
-    st.id = "wormxo-zigzag-style-css";
-    st.textContent = [
-      "#wormxo-zigzag-box{width:95%;margin:7px auto;padding:8px;border-radius:10px;background:rgba(10,10,10,.78);box-shadow:0 0 0 1px rgba(255,80,0,.55) inset;color:#fff;font-family:Arial,sans-serif;}",
-      "#wormxo-zigzag-box label{display:block;margin-bottom:5px;color:#ff8a00;font-weight:900;font-size:12px;}",
-      "#sel_zigzag{width:100%;height:30px;border:1px solid rgba(255,138,0,.75);border-radius:8px;background:#171717;color:#fff;font-weight:800;outline:none;}",
-      "#zigzag_preview{display:block;margin:8px auto 0;max-width:120px;max-height:68px;filter:drop-shadow(0 0 7px rgba(255,90,0,.75));}"
-    ].join("");
-    (document.head || document.documentElement).appendChild(st);
-  }
-
-  function renderPreview() {
-    try {
-      var old = document.getElementById("zigzag_preview");
-      var url = ZZ.urls[String(ZZ.style || "0")];
-      if (!url) {
-        if (old && old.parentNode) old.parentNode.removeChild(old);
-        return;
-      }
-      if (!old) {
-        old = document.createElement("img");
-        old.id = "zigzag_preview";
-        var box = document.getElementById("wormxo-zigzag-box") || document.getElementById("wwc-set-view") || document.body;
-        box.appendChild(old);
-      }
-      old.src = url;
-    } catch (e) {}
-  }
-
-  function makeSelect() {
-    cssOnce();
-
-    var hosts = [
-      document.getElementById("wwc-set-view"),
-      document.getElementById("settingContent"),
-      document.getElementById("loa831pibur0w4gv"),
-      document.querySelector(".bao-list1"),
-      document.querySelector(".settings"),
-      document.body
-    ].filter(Boolean);
-
-    var host = hosts[0];
-    if (!host) return;
-
-    if (!document.getElementById("wormxo-zigzag-box")) {
-      var box = document.createElement("div");
-      box.id = "wormxo-zigzag-box";
-      box.innerHTML = '<label for="sel_zigzag">Zigzag Ability</label><select id="sel_zigzag"><option value="0">Normal Zigzag</option><option value="1">Zigzag 1</option><option value="2">Zigzag 2</option><option value="3">Zigzag 3</option></select>';
-      host.appendChild(box);
-    }
-
-    var sel = document.getElementById("sel_zigzag");
-    if (sel && !sel.__WORMXO_ZZ_BOUND__) {
-      sel.__WORMXO_ZZ_BOUND__ = true;
-      sel.value = ZZ.style;
-      sel.addEventListener("change", function () {
-        applyStyle(this.value);
-      }, false);
-    }
-
-    renderPreview();
-  }
-
-  function tick() {
-    try {
-      ZZ.style = readStyle();
-      makeSelect();
-      if (window.WORMXO_ZIGZAG_CORE) {
-        window.WORMXO_ZIGZAG_CORE.iconText = ZZ.style === "0" ? "⚡ZIG" : ("⚡ZIG " + ZZ.style);
-        window.WORMXO_ZIGZAG_CORE.speedText = ZZ.style === "0" ? "SPD" : ("STYLE " + ZZ.style);
-      }
-    } catch (e) {}
-  }
-
-  ZZ.style = readStyle();
-  if (window.WORMXO_UI_STATE) {
-    window.WORMXO_UI_STATE.showZigZag = ZZ.style !== "0" || window.WORMXO_UI_STATE.showZigZag === true;
-  }
-
-  window.WORMXO_applyZigZagStyle = applyStyle;
-  window.WORMXO_getZigZagStyle = function () { return ZZ.style; };
-
-  document.addEventListener("keydown", function (e) {
-    try {
-      var tag = (e.target && e.target.tagName ? e.target.tagName : "").toLowerCase();
-      if (tag === "input" || tag === "textarea" || tag === "select" || (e.target && e.target.isContentEditable)) return;
-      if (String(e.key || "").toLowerCase() !== "z") return;
-      var n = (Number(readStyle()) + 1) % 4;
-      applyStyle(String(n));
-    } catch (err) {}
-  }, true);
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", tick, { once: true });
-  else tick();
-
-  window.addEventListener("load", function () { setTimeout(tick, 600); }, { once: true });
-  ZZ.timer = setInterval(tick, 1500);
-})();
-
-/* WORMXO MOBILE LOW-PERFORMANCE CORE - joystick + lag fix */
-window.WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
+WORMXO_MOBILE_PERF = window.WORMXO_MOBILE_PERF || {
   enabled: true,
   isMobile: /android|iphone|ipad|ipod|mobile|silk|tablet/i.test(navigator.userAgent || ""),
   memory: Number(navigator.deviceMemory || 4),
@@ -526,102 +353,81 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 
 
 
+
 (function () {
-  if (window.__WORMFRIENDS_MATRIX_LOBBY_BG_SAFE__) return;
-  window.__WORMFRIENDS_MATRIX_LOBBY_BG_SAFE__ = true;
+  if (window.__WORMXO_LIGHT_LOBBY_BG_2026__) return;
+  window.__WORMXO_LIGHT_LOBBY_BG_2026__ = true;
 
-  var BG = {
-    styleId: "wormfriends-matrix-safe-lobby-bg-style",
-    tick: 0,
-    timer: 0
-  };
+  var BG = { styleId: "wormxo-light-lobby-bg-2026", tick: 0, timer: 0, fps: 8 };
 
-  function q(id) {
-    try { return document.getElementById(id); } catch (e) { return null; }
-  }
-
-  function shown(el) {
+  function q(id) { try { return document.getElementById(id); } catch (e) { return null; } }
+  function visible(el) {
     try {
       if (!el) return false;
-      var s = window.getComputedStyle ? getComputedStyle(el) : el.style;
-      return s && s.display !== "none" && s.visibility !== "hidden" && Number(s.opacity || 1) !== 0;
+      var cs = window.getComputedStyle ? getComputedStyle(el) : el.style;
+      if (!cs) return false;
+      return cs.display !== "none" && cs.visibility !== "hidden" && Number(cs.opacity || 1) > 0;
     } catch (e) { return false; }
   }
-
   function lobbyActive() {
-    return shown(q("main-menu")) || shown(q("mm-start")) || shown(q("main-menu-view")) || shown(q("login-view")) || shown(q("welcome-view")) || shown(document.querySelector && document.querySelector(".store-view-cont"));
+    return visible(q("main-menu")) || visible(q("mm-start")) || visible(q("main-menu-view")) ||
+           visible(q("login-view")) || visible(q("welcome-view")) ||
+           visible(document.querySelector && document.querySelector(".store-view-cont"));
   }
-
   function installStyle() {
     if (q(BG.styleId)) return;
-    var css = document.createElement("style");
-    css.id = BG.styleId;
-    css.textContent = [
-      "#game-wrap{position:relative!important;background:#050715!important;}",
-      "#game-wrap.wormfriends-matrix-lobby-bg-on,#mm-start.wormfriends-matrix-lobby-bg-on,#main-menu.wormfriends-matrix-lobby-bg-on,#main-menu-view.wormfriends-matrix-lobby-bg-on{",
+    var st = document.createElement("style");
+    st.id = BG.styleId;
+    st.textContent = [
+      "#game-wrap{position:relative!important;background:#050715!important;overflow:hidden;}",
+      ".wormxo-lobby-bg-on{",
       "background:",
-      "radial-gradient(circle at var(--wmx-a-x,18%) var(--wmx-a-y,24%),rgba(0,92,255,.55),transparent 34%),",
-      "radial-gradient(circle at var(--wmx-b-x,76%) var(--wmx-b-y,22%),rgba(80,215,255,.46),transparent 38%),",
-      "radial-gradient(circle at var(--wmx-c-x,50%) var(--wmx-c-y,78%),rgba(158,78,255,.50),transparent 44%),",
-      "radial-gradient(circle at var(--wmx-d-x,44%) var(--wmx-d-y,52%),rgba(0,255,255,.25),transparent 30%),",
-      "radial-gradient(circle at var(--wmx-s-x,48%) var(--wmx-s-y,46%),rgba(0,0,0,.58),transparent 58%),",
-      "linear-gradient(135deg,#050715 0%,#071833 48%,#1a0b33 100%)!important;",
-      "background-size:130% 130%,130% 130%,140% 140%,120% 120%,150% 150%,100% 100%!important;",
+      "radial-gradient(circle at var(--xo-a-x,20%) var(--xo-a-y,22%),rgba(0,115,255,.58),transparent 36%),",
+      "radial-gradient(circle at var(--xo-b-x,78%) var(--xo-b-y,28%),rgba(86,218,255,.48),transparent 38%),",
+      "radial-gradient(circle at var(--xo-c-x,46%) var(--xo-c-y,76%),rgba(160,65,255,.50),transparent 46%),",
+      "radial-gradient(circle at var(--xo-s-x,50%) var(--xo-s-y,48%),rgba(0,0,0,.70),transparent 62%),",
+      "linear-gradient(135deg,#030611 0%,#071b39 52%,#1d0a39 100%)!important;",
+      "background-size:150% 150%,145% 145%,160% 160%,170% 170%,100% 100%!important;",
       "}",
-      "#game-wrap.wormfriends-matrix-lobby-bg-on:before{content:\"\";position:absolute;inset:0;z-index:0;pointer-events:none!important;opacity:.28;background:linear-gradient(115deg,transparent 0%,rgba(135,206,255,.18) 45%,transparent 58%);transform:translateX(var(--wmx-line,-18%));}",
-      "#main-menu,#mm-start,#main-menu-view,.main-menu-view,.store-view-cont,#login-view,#welcome-view,#play-btn,.play-btn,button,input,a{position:relative;z-index:5;pointer-events:auto!important;}",
-      "#wormfriends-matrix-lobby-bg,#wormfriends-matrix-lobby-bg *{pointer-events:none!important;display:none!important;}",
-      "#background-canvas{pointer-events:none!important;}",
-      "#game-wrap:not(.wormfriends-matrix-lobby-bg-on) #background-canvas{pointer-events:auto!important;}"
+      "#game-wrap.wormxo-lobby-bg-on:before{content:\"\";position:absolute;inset:-8%;z-index:0;pointer-events:none!important;opacity:.20;background:linear-gradient(112deg,transparent 0%,rgba(135,215,255,.22) 45%,transparent 62%);transform:translateX(var(--xo-line,-20%));will-change:transform;}",
+      "#main-menu,#mm-start,#main-menu-view,.main-menu-view,.store-view-cont,#login-view,#welcome-view,#play-btn,.play-btn,button,input,a{position:relative;z-index:6;pointer-events:auto!important;}",
+      "#background-canvas{pointer-events:none!important;}"
     ].join("");
-    (document.head || document.documentElement).appendChild(css);
+    (document.head || document.documentElement).appendChild(st);
   }
-
-  function applyVars() {
+  function frame() {
     try {
       var on = lobbyActive();
-      var t = BG.tick++ * 0.022;
-      var x1 = 18 + Math.sin(t * .70) * 10;
-      var y1 = 24 + Math.cos(t * .52) * 8;
-      var x2 = 76 + Math.cos(t * .46) * 8;
-      var y2 = 22 + Math.sin(t * .60) * 9;
-      var x3 = 50 + Math.sin(t * .38) * 12;
-      var y3 = 78 + Math.cos(t * .44) * 8;
-      var x4 = 44 + Math.cos(t * .86) * 10;
-      var y4 = 52 + Math.sin(t * .82) * 7;
-      var xs = 48 + Math.sin(t * .25) * 16;
-      var ys = 46 + Math.cos(t * .21) * 13;
-      var line = -22 + ((BG.tick % 360) / 360) * 44;
+      var t = BG.tick++ * 0.09;
+      var vals = {
+        "--xo-a-x": (20 + Math.sin(t * .47) * 11).toFixed(2) + "%",
+        "--xo-a-y": (22 + Math.cos(t * .39) * 9).toFixed(2) + "%",
+        "--xo-b-x": (78 + Math.cos(t * .35) * 9).toFixed(2) + "%",
+        "--xo-b-y": (28 + Math.sin(t * .42) * 10).toFixed(2) + "%",
+        "--xo-c-x": (46 + Math.sin(t * .29) * 13).toFixed(2) + "%",
+        "--xo-c-y": (76 + Math.cos(t * .31) * 9).toFixed(2) + "%",
+        "--xo-s-x": (50 + Math.sin(t * .20) * 18).toFixed(2) + "%",
+        "--xo-s-y": (48 + Math.cos(t * .18) * 15).toFixed(2) + "%",
+        "--xo-line": (-24 + ((BG.tick % 160) / 160) * 48).toFixed(2) + "%"
+      };
       [q("game-wrap"), q("mm-start"), q("main-menu"), q("main-menu-view")].forEach(function (el) {
         if (!el) return;
-        if (on) el.classList.add("wormfriends-matrix-lobby-bg-on");
-        else el.classList.remove("wormfriends-matrix-lobby-bg-on");
-        el.style.setProperty("--wmx-a-x", x1.toFixed(2) + "%");
-        el.style.setProperty("--wmx-a-y", y1.toFixed(2) + "%");
-        el.style.setProperty("--wmx-b-x", x2.toFixed(2) + "%");
-        el.style.setProperty("--wmx-b-y", y2.toFixed(2) + "%");
-        el.style.setProperty("--wmx-c-x", x3.toFixed(2) + "%");
-        el.style.setProperty("--wmx-c-y", y3.toFixed(2) + "%");
-        el.style.setProperty("--wmx-d-x", x4.toFixed(2) + "%");
-        el.style.setProperty("--wmx-d-y", y4.toFixed(2) + "%");
-        el.style.setProperty("--wmx-s-x", xs.toFixed(2) + "%");
-        el.style.setProperty("--wmx-s-y", ys.toFixed(2) + "%");
-        el.style.setProperty("--wmx-line", line.toFixed(2) + "%");
+        if (on) el.classList.add("wormxo-lobby-bg-on"); else el.classList.remove("wormxo-lobby-bg-on");
+        Object.keys(vals).forEach(function (k) { el.style.setProperty(k, vals[k]); });
       });
     } catch (e) {}
   }
-
   function boot() {
     installStyle();
-    applyVars();
-    if (!BG.timer) BG.timer = setInterval(applyVars, 50);
+    frame();
+    if (!BG.timer) BG.timer = setInterval(frame, Math.max(120, 1000 / BG.fps));
   }
-
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
   else boot();
   window.addEventListener("load", boot, { once: true });
-  window.WORMFRIENDS_MATRIX_LOBBY_BG = BG;
+  window.WORMXO_LIGHT_LOBBY_BG = BG;
 })();
+
 
 window.detectLog = null;
 const vO = {
@@ -806,10 +612,36 @@ const vF2 = function () {
   }
   return v10;
 };
+
+function WORMXO_isGameplayActive() {
+  try {
+    var lobbyIds = ["main-menu", "mm-start", "main-menu-view", "login-view", "welcome-view"];
+    for (var i = 0; i < lobbyIds.length; i++) {
+      var el = document.getElementById(lobbyIds[i]);
+      if (!el) continue;
+      var cs = window.getComputedStyle ? getComputedStyle(el) : el.style;
+      if (cs && cs.display !== "none" && cs.visibility !== "hidden" && Number(cs.opacity || 1) > 0) return false;
+    }
+    return !!(window.anApp && window.anApp.o && window.anApp.o.N);
+  } catch (e) {
+    return false;
+  }
+}
+
+function WORMXO_destroyJoystickInLobby() {
+  try {
+    if (!WORMXO_isGameplayActive() && window.__WORMXO_JOYSTICK_INSTANCE__ && typeof window.__WORMXO_JOYSTICK_INSTANCE__.destroy === "function") {
+      window.__WORMXO_JOYSTICK_INSTANCE__.destroy();
+      window.__WORMXO_JOYSTICK_INSTANCE__ = null;
+    }
+  } catch (e) {}
+}
+
 const vF3 = function (p7) {
   let v12 = null;
 
   try {
+    if (!WORMXO_isGameplayActive()) { WORMXO_destroyJoystickInLobby(); return null; }
     var isMobileNow = vF2();
 
     if (!vO4.gamePad) {
@@ -830,14 +662,14 @@ const vF3 = function (p7) {
       return null;
     }
 
-    var zone = document.getElementById("game-wrap") || document.getElementById("canvas") || document.body;
+    var zone = document.getElementById("canvas") || document.getElementById("game-canvas") || document.getElementById("game-wrap") || document.body;
     if (!zone) return null;
 
     if (!window.__WORMXO_JOYSTICK_STYLE__) {
       window.__WORMXO_JOYSTICK_STYLE__ = true;
       var st = document.createElement("style");
       st.id = "WORMXO_JOYSTICK_FIX_STYLE";
-      st.textContent = ".nipple-collection,.nipple{z-index:999999!important;pointer-events:auto!important;touch-action:none!important}.front{opacity:.92!important}.back{opacity:.38!important}";
+      st.textContent = ".nipple-collection,.nipple{z-index:999999!important;pointer-events:auto!important;touch-action:none!important}.front{opacity:.92!important}.back{opacity:.38!important}body.wormxo-lobby-joy-off .nipple-collection,body.wormxo-lobby-joy-off .nipple{display:none!important;pointer-events:none!important;}";
       (document.head || document.documentElement).appendChild(st);
     }
 
@@ -903,7 +735,7 @@ const vF3 = function (p7) {
   window.__WORMXO_JOYSTICK_BOOT__ = true;
   function bootJoy() {
     try {
-      if ((vF2 && vF2()) || (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) {
+      if (WORMXO_isGameplayActive() && ((vF2 && vF2()) || (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low))) {
         if (vO4 && vO4.gamePad) vO4.gamePad.checked = true;
         vF3(true);
       }
@@ -913,6 +745,19 @@ const vF3 = function (p7) {
   document.addEventListener("touchstart", function () { setTimeout(bootJoy, 120); }, { once: true, passive: true });
 })();
 
+
+
+(function () {
+  if (window.__WORMXO_JOY_LOBBY_MONITOR__) return;
+  window.__WORMXO_JOY_LOBBY_MONITOR__ = true;
+  setInterval(function () {
+    try {
+      var active = WORMXO_isGameplayActive();
+      if (document.body) document.body.classList.toggle("wormxo-lobby-joy-off", !active);
+      if (!active) WORMXO_destroyJoystickInLobby();
+    } catch (e) {}
+  }, 700);
+})();
 
 /* WORMXO 131 NEAR MENU CORE - N key / shared clients */
 if (!window.__XOTEAM_N131_DEEP_CORE__) {
@@ -1750,51 +1595,50 @@ function XOTEAM_makeUser() {
   };
 }
 
-/* TOP HS SYSTEM */
+/* TOP HS SYSTEM - REAL ONLINE + LOW LAG */
+window.XOTEAM_TOP_HS_ONLINE = window.XOTEAM_TOP_HS_ONLINE || [];
+
 function XOTEAM_getCurrentHS() {
-  try {
-    return Number(vO4.headshot || 0);
-  } catch (e) {
-    return 0;
-  }
+  try { return Math.max(0, Number(vO4.headshot || 0)); } catch (e) { return 0; }
 }
 
 function XOTEAM_makeTopHSPayload(type) {
+  var hs = XOTEAM_getCurrentHS();
   return {
     type: type,
     cliente_ID: XOTEAM_getClientId(),
     cliente_NOMBRE: XOTEAM_getClientName(),
-    hs: XOTEAM_getCurrentHS(),
-    alive: type !== "top_hs_remove",
+    name: XOTEAM_getClientName(),
+    hs: hs,
+    headshot: hs,
+    alive: type !== "top_hs_remove" && hs > 0,
     time: Date.now()
   };
 }
 
-function XOTEAM_sendTopHSNow() {
+function XOTEAM_normalizeTopHSRow(row) {
   try {
-    if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) return;
-
-    var hs = XOTEAM_getCurrentHS();
-    if (hs <= 0) return;
-
-    XOTEAM_WS.send(JSON.stringify(XOTEAM_makeTopHSPayload("top_hs_update")));
-  } catch (e) {
-    console.log("XOTEAM_sendTopHSNow error:", e);
-  }
-}
-
-function XOTEAM_removeTopHSNow() {
-  try {
-    if (!XOTEAM_WS || XOTEAM_WS.readyState !== WebSocket.OPEN) return;
-
-    XOTEAM_WS.send(JSON.stringify(XOTEAM_makeTopHSPayload("top_hs_remove")));
-  } catch (e) {
-    console.log("XOTEAM_removeTopHSNow error:", e);
-  }
+    if (!row) return null;
+    if (row.row) row = row.row;
+    var id = row.cliente_ID || row.id || row.from || row.userId;
+    if (!id) return null;
+    var hs = Number(row.hs || row.headshot || row.value || 0);
+    return {
+      type: row.type || "top_hs_update",
+      cliente_ID: String(id),
+      cliente_NOMBRE: String(row.cliente_NOMBRE || row.name || "Player").substring(0, 24),
+      name: String(row.cliente_NOMBRE || row.name || "Player").substring(0, 24),
+      hs: hs,
+      headshot: hs,
+      alive: row.alive !== false && row.type !== "top_hs_remove" && hs > 0,
+      time: Number(row.time || row.sentAt || Date.now())
+    };
+  } catch (e) { return null; }
 }
 
 function XOTEAM_updateTopHSList(row) {
   try {
+    row = XOTEAM_normalizeTopHSRow(row);
     if (!row || !row.cliente_ID) return;
 
     window.XOTEAM_TOP_HS_ONLINE = window.XOTEAM_TOP_HS_ONLINE || [];
@@ -1805,7 +1649,6 @@ function XOTEAM_updateTopHSList(row) {
       });
     } else {
       var found = false;
-
       for (var i = 0; i < window.XOTEAM_TOP_HS_ONLINE.length; i++) {
         if (String(window.XOTEAM_TOP_HS_ONLINE[i].cliente_ID) === String(row.cliente_ID)) {
           window.XOTEAM_TOP_HS_ONLINE[i] = row;
@@ -1813,25 +1656,56 @@ function XOTEAM_updateTopHSList(row) {
           break;
         }
       }
-
       if (!found) window.XOTEAM_TOP_HS_ONLINE.push(row);
     }
 
+    var now = Date.now();
     window.XOTEAM_TOP_HS_ONLINE = window.XOTEAM_TOP_HS_ONLINE
-      .filter(function (p) {
-        return p && p.alive !== false && Number(p.hs || 0) > 0;
-      })
-      .sort(function (a, b) {
-        return Number(b.hs || 0) - Number(a.hs || 0);
-      })
+      .filter(function (p) { return p && p.alive !== false && Number(p.hs || 0) > 0 && now - Number(p.time || now) < 90000; })
+      .sort(function (a, b) { return Number(b.hs || 0) - Number(a.hs || 0) || Number(b.time || 0) - Number(a.time || 0); })
       .slice(0, 5);
 
-    if (typeof XOTEAM_renderTopHS === "function") {
-      XOTEAM_renderTopHS(window.XOTEAM_TOP_HS_ONLINE);
+    if (typeof XOTEAM_renderTopHS === "function") XOTEAM_renderTopHS(window.XOTEAM_TOP_HS_ONLINE);
+  } catch (e) { console.log("XOTEAM_updateTopHSList error:", e); }
+}
+
+function XOTEAM_sendTopHSNow() {
+  try {
+    var row = XOTEAM_makeTopHSPayload("top_hs_update");
+    if (Number(row.hs || 0) <= 0) return;
+    XOTEAM_updateTopHSList(row);
+    if (window.XOTEAM_WS && window.XOTEAM_WS.readyState === WebSocket.OPEN) {
+      window.XOTEAM_WS.send(JSON.stringify(row));
+      window.XOTEAM_WS.send(JSON.stringify({ type: "x_real_top_hs_update", row: row }));
     }
-  } catch (e) {
-    console.log("XOTEAM_updateTopHSList error:", e);
-  }
+  } catch (e) { console.log("XOTEAM_sendTopHSNow error:", e); }
+}
+
+function XOTEAM_removeTopHSNow() {
+  try {
+    var row = XOTEAM_makeTopHSPayload("top_hs_remove");
+    row.alive = false;
+    XOTEAM_updateTopHSList(row);
+    if (window.XOTEAM_WS && window.XOTEAM_WS.readyState === WebSocket.OPEN) {
+      window.XOTEAM_WS.send(JSON.stringify(row));
+      window.XOTEAM_WS.send(JSON.stringify({ type: "x_real_top_remove", cliente_ID: row.cliente_ID, row: row, time: Date.now() }));
+    }
+  } catch (e) { console.log("XOTEAM_removeTopHSNow error:", e); }
+}
+
+function XOTEAM_applySharedTop(data) {
+  try {
+    if (!data) return false;
+    if (data.type === "x_real_top_hs_update" || data.type === "top_hs_update") {
+      XOTEAM_updateTopHSList(data.row || data);
+      return true;
+    }
+    if (data.type === "x_real_top_remove" || data.type === "top_hs_remove") {
+      XOTEAM_updateTopHSList(data.row || { type: "top_hs_remove", cliente_ID: data.cliente_ID || data.from, hs: 0, alive: false, time: Date.now() });
+      return true;
+    }
+    return false;
+  } catch (e) { return false; }
 }
 
 function XOTEAM_handleSocketMessage(event) {
@@ -2613,179 +2487,7 @@ function XOTEAM_applyNameMask() {
   } catch (e) {}
 }
 
-/* WORMXO Show Zig zag deep detector */
-window.WORMXO_ZIGZAG_CORE = window.WORMXO_ZIGZAG_CORE || {
-  samples: {},
-  labels: {},
-  parent: null,
-  lastScan: 0,
-  lastSettings: 0,
-  iconText: "⚡ZIG",
-  speedText: "SPD"
-};
-function XOTEAM_toggleZigZagShow(v) {
-  try {
-    window.WORMXO_UI_STATE.showZigZag = !!v;
-    XOTEAM_saveUIFlag("XOTEAM_SHOW_ZIGZAG", !!v);
-    var btn = document.getElementById("wormxo-zigzag-toggle");
-    if (btn) btn.textContent = "Show Zig zag: " + (!!v ? "ON" : "OFF");
-    if (!v) XOTEAM_clearZigZagLabels();
-  } catch (e) {}
-}
-function XOTEAM_findWorldLayer() {
-  try {
-    var game = window.anApp;
-    if (game && game.s && game.s.H && game.s.H.wb && game.s.H.wb.rf) return game.s.H.wb.rf;
-  } catch (e) {}
-  try {
-    if (vO7 && vO7.containerCountInfo && vO7.containerCountInfo.parent) return vO7.containerCountInfo.parent;
-  } catch (e2) {}
-  return null;
-}
-function XOTEAM_getZigPlayerHead(p) {
-  try { if (p && typeof p.Gf === "function") return p.Gf(); } catch (e) {}
-  try { if (p && p.Hb && p.Ib) return { x: p.Hb, y: p.Ib }; } catch (e2) {}
-  try { if (p && typeof p.x !== "undefined" && typeof p.y !== "undefined") return { x: p.x, y: p.y }; } catch (e3) {}
-  return null;
-}
-function XOTEAM_getZigPlayerId(p, key) {
-  try { if (p && p.Mb && p.Mb.Lb != null) return String(p.Mb.Lb); } catch (e) {}
-  return String(key || "");
-}
-function XOTEAM_getZigLabel(id) {
-  try {
-    var core = window.WORMXO_ZIGZAG_CORE;
-    var parent = XOTEAM_findWorldLayer();
-    if (!parent || typeof PIXI === "undefined") return null;
-    if (!core.labels[id]) {
-      var c = new PIXI.Container();
-      c.zIndex = 999999;
-      var t = new PIXI.Text(core.iconText, new PIXI.TextStyle({
-        align: "center",
-        fill: "#ff3333",
-        fontSize: 13,
-        fontWeight: "900",
-        fontFamily: "Arial, vuonghiep",
-        stroke: "#000000",
-        strokeThickness: 2
-      }));
-      t.anchor && t.anchor.set ? t.anchor.set(0.5) : null;
-      var s = new PIXI.Text(core.speedText, new PIXI.TextStyle({
-        align: "center",
-        fill: "#ffb300",
-        fontSize: 9,
-        fontWeight: "900",
-        fontFamily: "Arial, vuonghiep",
-        stroke: "#000000",
-        strokeThickness: 2
-      }));
-      s.anchor && s.anchor.set ? s.anchor.set(0.5) : null;
-      s.y = 13;
-      c.addChild(t);
-      c.addChild(s);
-      core.labels[id] = { c: c, t: t, s: s, last: 0 };
-      try { parent.addChild(c); if (parent.sortableChildren !== undefined) parent.sortableChildren = true; } catch (e) {}
-    } else if (!core.labels[id].c.parent && parent) {
-      try { parent.addChild(core.labels[id].c); } catch (e2) {}
-    }
-    return core.labels[id];
-  } catch (e3) { return null; }
-}
-function XOTEAM_clearZigZagLabels() {
-  try {
-    var labels = (window.WORMXO_ZIGZAG_CORE && window.WORMXO_ZIGZAG_CORE.labels) || {};
-    Object.keys(labels).forEach(function (id) {
-      try { if (labels[id].c && labels[id].c.parent) labels[id].c.parent.removeChild(labels[id].c); } catch (e) {}
-      delete labels[id];
-    });
-  } catch (e2) {}
-}
-function XOTEAM_updateZigZagDetect() {
-  try {
-    var st = window.WORMXO_UI_STATE || {};
-    if (!st.showZigZag) { XOTEAM_clearZigZagLabels(); return; }
-    var now = Date.now();
-    var perf = window.WORMXO_MOBILE_PERF || {};
-    var delay = perf.low ? 620 : 220;
-    var core = window.WORMXO_ZIGZAG_CORE;
-    if (now - core.lastScan < delay) return;
-    core.lastScan = now;
-    var game = window.anApp;
-    if (!game || !game.o || !game.o.hb) return;
-    var aliveIds = {};
-    Object.keys(game.o.hb).forEach(function (key) {
-      var p = game.o.hb[key];
-      if (!p || !p.Hb || !p.Ib) return;
-      var pos = XOTEAM_getZigPlayerHead(p);
-      if (!pos) return;
-      var id = XOTEAM_getZigPlayerId(p, key);
-      aliveIds[id] = true;
-      var old = core.samples[id];
-      var angle = 0;
-      try { angle = Number(p.sk || p.angle || (p.Mb && (p.Mb.sk || p.Mb.angle)) || 0); } catch (e) { angle = 0; }
-      if (!old) {
-        core.samples[id] = { x: pos.x, y: pos.y, t: now, a: angle, lastMoveAngle: 0, turns: 0, markUntil: 0, speed: 0 };
-        return;
-      }
-      var dt = Math.max(16, now - old.t);
-      var dx = pos.x - old.x;
-      var dy = pos.y - old.y;
-      var dist = Math.sqrt(dx * dx + dy * dy);
-      var speed = dist / dt;
-      var moveAngle = dist > 1 ? Math.atan2(dy, dx) : old.lastMoveAngle;
-      function adiff(a, b) { var d = Math.abs(a - b) % (Math.PI * 2); return d > Math.PI ? Math.PI * 2 - d : d; }
-      var turnMove = adiff(moveAngle, old.lastMoveAngle || moveAngle);
-      var turnBody = adiff(angle, old.a || angle);
-      var turn = Math.max(turnMove, turnBody);
-      if (speed > 0.045 && turn > 0.55) old.turns = Math.min(10, old.turns + (turn > 1.2 ? 1.65 : 1));
-      else old.turns = Math.max(0, old.turns - 0.35);
-      old.x = pos.x; old.y = pos.y; old.t = now; old.a = angle; old.lastMoveAngle = moveAngle; old.speed = speed;
-      if (old.turns >= 2.0 || (speed > 0.50 && turn > 0.38)) old.markUntil = now + 2200;
-      if (old.markUntil > now) {
-        var label = XOTEAM_getZigLabel(id);
-        if (label) {
-          label.c.visible = true;
-          label.c.x = pos.x;
-          label.c.y = pos.y - 74;
-          label.t.text = turn > 0.75 ? ((window.WORMXO_ZIGZAG_CORE && window.WORMXO_ZIGZAG_CORE.iconText) || "⚡ZIG") : "↯TURN";
-          label.s.text = ((window.WORMXO_ZIGZAG_CORE && window.WORMXO_ZIGZAG_CORE.speedText) || "SPD") + " " + Math.round(speed * 100) + " / TURN " + Math.round(turn * 100);
-          label.last = now;
-        }
-      }
-    });
-    Object.keys(core.labels).forEach(function (id) {
-      if (!aliveIds[id] || now - core.labels[id].last > 2600) {
-        try { if (core.labels[id].c && core.labels[id].c.parent) core.labels[id].c.parent.removeChild(core.labels[id].c); } catch (e) {}
-        delete core.labels[id];
-      }
-    });
-  } catch (e) {}
-}
-function XOTEAM_installZigZagSetting() {
-  try {
-    var now = Date.now();
-    var core = window.WORMXO_ZIGZAG_CORE;
-    if (now - core.lastSettings < 1200) return;
-    core.lastSettings = now;
-    if (document.getElementById("wormxo-zigzag-toggle")) return;
-    var host = document.getElementById("settingContent") || document.getElementById("loa831pibur0w4gv") || document.querySelector(".bao-list1") || document.body;
-    if (!host) return;
-    var btn = document.createElement("button");
-    btn.id = "wormxo-zigzag-toggle";
-    btn.type = "button";
-    btn.textContent = "Show Zig zag: " + ((window.WORMXO_UI_STATE || {}).showZigZag ? "ON" : "OFF");
-    btn.style.cssText = "width:95%;height:32px;margin:6px auto;display:block;border:0;border-radius:8px;background:#202020;color:#ff3b3b;font-weight:900;box-shadow:0 0 0 1px rgba(255,60,60,.45) inset;";
-    btn.onclick = function () { XOTEAM_toggleZigZagShow(!(window.WORMXO_UI_STATE || {}).showZigZag); };
-    host.appendChild(btn);
-  } catch (e) {}
-}
-setInterval(function () {
-  XOTEAM_updateZigZagDetect();
-  XOTEAM_installZigZagSetting();
-}, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 520 : 260);
-setTimeout(XOTEAM_installZigZagSetting, 1200);
-window.XOTEAM_toggleZigZagShow = XOTEAM_toggleZigZagShow;
-window.XOTEAM_updateZigZagDetect = XOTEAM_updateZigZagDetect;
+/* WORMXO ZIGZAG DETECTOR REMOVED: no labels, timers, settings, or keybinds. */
 
 document.addEventListener("keydown", function (e) {
   if (XOTEAM_isTypingTarget(e.target)) return;
@@ -6491,32 +6193,8 @@ vF172.prototype.Se = function (p281) {
         }
 
         this.Rh = new vF38(v350, 4, 4, 146, 146, 63.5, 63.5, 128, 128);
-
-        /*
-         * WORMXO ZIGZAG ABILITY TEXTURES - pulled into core.
-         * These do not auto-start the game and do not add particles.
-         * They only expose ready-to-use PIXI ability sprites for the menu/core.
-         */
-        var vZZ0 = tex("https://wormup.in/assets/images/zigzagability.png", false);
-        var vZZ1 = tex("https://i.imgur.com/LFiCido.png", false);
-        var vZZ2 = tex("https://wormup.in/assets/images/zigzagability1.png", false);
-        var vZZ3 = tex("https://i.imgur.com/LvJ1RxC.png", false);
-
-        this.zigzag_ability = new vF38(vZZ0, 158, 4, 87, 74, 203, 63.5, 128, 128);
-        this.pwrFlex1 = new vF38(vZZ1, 156, 140, 87, 60, 170, 128.5, 128, 128);
-        this.pwrFlex2 = new vF38(vZZ2, 158, 4, 87, 74, 203, 63.5, 128, 128);
-        this.pwrFlex3 = new vF38(vZZ3, 156, 4, 87, 74, 285, 63.5, 128, 128);
-
-        this.WORMXO_getZigZagAbility = function () {
-          var z = "0";
-          try { z = String(localStorage.getItem("WORMXO_ZIGZAG_STYLE") || "0"); } catch (e) {}
-          if (z === "1") return this.pwrFlex1;
-          if (z === "2") return this.pwrFlex2;
-          if (z === "3") return this.pwrFlex3;
-          return this.zigzag_ability;
-        };
-
-        this.Ug = function () {
+          /* WORMXO ZIGZAG ABILITY TEXTURES REMOVED */
+this.Ug = function () {
           var c = window.document.createElement("canvas");
           c.width = 80;
           c.height = 80;
@@ -11486,4 +11164,42 @@ isValidHotkey = function (p633) {
     SafeWS.__WORMXO_SAFE__ = true;
     window.WebSocket = SafeWS;
   }
+})();
+
+
+/* WORMXO SETTINGS BUTTON BEAUTIFIER + LOW LAG CLEANUP */
+(function () {
+  if (window.__WORMXO_SETTINGS_BUTTON_2026__) return;
+  window.__WORMXO_SETTINGS_BUTTON_2026__ = true;
+  function css() {
+    if (document.getElementById("wormxo-settings-button-css")) return;
+    var st = document.createElement("style");
+    st.id = "wormxo-settings-button-css";
+    st.textContent = [
+      "#settings-btn,#setting-btn,#btn-settings,.settings-btn,.setting-button,[data-action='settings']{",
+      "position:relative!important;z-index:2147483000!important;border-radius:14px!important;",
+      "border:1px solid rgba(135,215,255,.75)!important;background:linear-gradient(135deg,rgba(7,24,51,.94),rgba(58,14,93,.92))!important;",
+      "color:#fff!important;font-weight:900!important;box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 18px rgba(86,218,255,.35)!important;",
+      "backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow:hidden!important;}",
+      "#settings-btn:hover,#setting-btn:hover,#btn-settings:hover,.settings-btn:hover,.setting-button:hover,[data-action='settings']:hover{transform:translateY(-1px);filter:brightness(1.12);}"
+    ].join("");
+    (document.head || document.documentElement).appendChild(st);
+  }
+  function lift() {
+    try {
+      css();
+      var nodes = Array.prototype.slice.call(document.querySelectorAll("button,input,a,div"));
+      nodes.forEach(function (el) {
+        var tx = String((el.id || "") + " " + (el.className || "") + " " + (el.textContent || el.value || "")).toLowerCase();
+        if (/setting|settings|اعدادات|إعدادات|⚙/.test(tx)) {
+          el.classList.add("settings-btn");
+          el.style.zIndex = "2147483000";
+          el.style.position = el.style.position || "relative";
+        }
+      });
+    } catch (e) {}
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", lift, { once: true }); else lift();
+  window.addEventListener("load", function () { setTimeout(lift, 400); }, { once: true });
+  setInterval(lift, 2500);
 })();
