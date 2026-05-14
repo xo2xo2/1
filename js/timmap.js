@@ -11776,14 +11776,6 @@ function f(p) {
             p1639(v2039, p1638[v2039]);
           }
         }
-      })(p1637.textureDict, function (p1640, p1641) {
-        let v2040 = vO50.s_l + p1641.relativePath;
-        if (!p1641.custom) {
-          v2040 = vO50.s_l + p1641.relativePath;
-        }
-        try {
-          vO91[p1640] = new PIXI.Texture(v2040);
-        } catch (e63) {}
       });
     };
   });
