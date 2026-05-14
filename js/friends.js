@@ -2565,11 +2565,32 @@ function XOTEAM_setZigButtonText(btn, v) {
 }
 
 function XOTEAM_findWorldLayer() {
-    if (!parent || typeof PIXI === "undefined") return null;
+  try {
+    var game = window.anApp;
+    if (game && game.s && game.s.H && game.s.H.wb && game.s.H.wb.rf) {
+      return game.s.H.wb.rf;
+    }
+  } catch (e) {}
+
+  try {
+    if (typeof vO7 !== "undefined" && vO7.containerCountInfo && vO7.containerCountInfo.parent) {
+      return vO7.containerCountInfo.parent;
+    }
+  } catch (e2) {}
+
+  return null;
+}
+
+function XOTEAM_getZigLabel(core, parent, id) {
+  try {
+    if (!core || !parent || typeof PIXI === "undefined" || !id) return null;
+    if (!core.labels) core.labels = {};
+
     if (!core.labels[id]) {
       var c = new PIXI.Container();
       c.zIndex = 999999;
-      var t = new PIXI.Text(core.iconText, new PIXI.TextStyle({
+
+      var t = new PIXI.Text(core.iconText || "⚡ZIG", new PIXI.TextStyle({
         align: "center",
         fill: "#ff3333",
         fontSize: 13,
@@ -2578,8 +2599,10 @@ function XOTEAM_findWorldLayer() {
         stroke: "#000000",
         strokeThickness: 2
       }));
-      t.anchor && t.anchor.set ? t.anchor.set(0.5) : null;
-      var s = new PIXI.Text(core.speedText, new PIXI.TextStyle({
+
+      if (t.anchor && t.anchor.set) t.anchor.set(0.5);
+
+      var s = new PIXI.Text(core.speedText || "SPD", new PIXI.TextStyle({
         align: "center",
         fill: "#ffb300",
         fontSize: 9,
@@ -2588,21 +2611,40 @@ function XOTEAM_findWorldLayer() {
         stroke: "#000000",
         strokeThickness: 2
       }));
-      s.anchor && s.anchor.set ? s.anchor.set(0.5) : null;
+
+      if (s.anchor && s.anchor.set) s.anchor.set(0.5);
+
       s.y = 13;
       c.addChild(t);
       c.addChild(s);
+
       core.labels[id] = { c: c, t: t, s: s, last: 0 };
-      try { parent.addChild(c); if (parent.sortableChildren !== undefined) parent.sortableChildren = true; } catch (e) {}
+
+      try {
+        parent.addChild(c);
+        if (parent.sortableChildren !== undefined) parent.sortableChildren = true;
+      } catch (e) {}
     } else if (!core.labels[id].c.parent && parent) {
-      try { parent.addChild(core.labels[id].c); } catch (e2) {}
+      try {
+        parent.addChild(core.labels[id].c);
+      } catch (e2) {}
     }
+
     return core.labels[id];
-  } catch (e3) { return null; }
+  } catch (e3) {
+    return null;
+  }
 }
+
+function XOTEAM_clearZigLabels(labels) {
   try {
+    labels = labels || {};
     Object.keys(labels).forEach(function (id) {
-      try { if (labels[id].c && labels[id].c.parent) labels[id].c.parent.removeChild(labels[id].c); } catch (e) {}
+      try {
+        if (labels[id].c && labels[id].c.parent) {
+          labels[id].c.parent.removeChild(labels[id].c);
+        }
+      } catch (e) {}
       delete labels[id];
     });
   } catch (e2) {}
