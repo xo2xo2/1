@@ -11054,39 +11054,3 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
     window.WebSocket = SafeWS;
   }
 })();
-
-
-/* WORMXO VALDAY 2023 BACKGROUND FINAL FIX - end patch */
-(function () {
-  if (window.__WORMXO_VALDAY_2023_FINAL_FIX__) return;
-  window.__WORMXO_VALDAY_2023_FINAL_FIX__ = true;
-
-  function addStyle() {
-    if (document.getElementById("wormxo-valday-2023-final-style")) return;
-    var st = document.createElement("style");
-    st.id = "wormxo-valday-2023-final-style";
-    st.textContent = "#background-canvas{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;height:100%!important;z-index:0!important;background:#000!important;pointer-events:none!important}#main-menu-view,#main-menu,#mm-start,#game-wrap{background:transparent!important}#stretch-box,#markup-wrap{position:relative!important}#markup-wrap{z-index:1!important}";
-    (document.head || document.documentElement).appendChild(st);
-  }
-
-  function enableBg() {
-    try { addStyle(); } catch (e) {}
-    try { if (typeof vF14 !== "undefined" && vF14 && typeof vF14.Le === "function") vF14.Le(true); } catch (e1) {}
-    try {
-      var bg = document.getElementById("background-canvas");
-      if (bg) {
-        bg.style.display = "block";
-        bg.style.visibility = "visible";
-        bg.style.opacity = "1";
-      }
-    } catch (e2) {}
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", enableBg, { once: true });
-  } else {
-    enableBg();
-  }
-  window.addEventListener("load", function () { setTimeout(enableBg, 250); setTimeout(enableBg, 1200); }, { once: true });
-  setInterval(enableBg, 2000);
-})();
