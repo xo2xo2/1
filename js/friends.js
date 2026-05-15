@@ -484,6 +484,12 @@ var vO4 = {
   bSkin: 131
 };
 
+if (typeof vO4.fa !== "function") {
+  vO4.fa = function () {
+    return Math.random().toString(36).substring(2, 15);
+  };
+}
+
 vO2.Af = function () {
       function _0x9f75x6(f71, p488, p489) {
         this.wf = p489;
