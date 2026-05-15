@@ -4200,27 +4200,14 @@ $.get(v89, function (p97) {
     }();
 var vF14 = function () {
   function f53(p261) {
-    this.se = p261;
-    this.te = p261.get()[0];
-    this.ctx = this.te.getContext("2d");
-    this.parts = [];
-    this.bg = new Image();
-    this.cf = new Image();
-
-    this.bg.src = "https://wormate.io/images/bg-event-pattern-valday2023.png";
-    this.cf.src = "https://wormate.io/images/confetti-valday2023.png";
-
-    for (var i = 0; i < 28; i++) {
-      this.parts.push({
-        x: Math.random(),
-        y: Math.random(),
-        s: 18 + Math.random() * 42,
-        r: Math.random() * Math.PI * 2,
-        v: 0.00008 + Math.random() * 0.00012,
-        a: 0.35 + Math.random() * 0.55
-      });
+    this.se = p261 || (window.jQuery ? jQuery("#background-canvas") : null);
+    this.te = null;
+    try {
+      this.te = this.se && this.se.get ? this.se.get()[0] : document.getElementById("background-canvas");
+    } catch (e) {
+      this.te = document.getElementById("background-canvas");
     }
-
+    this.a();
     this.Ra();
   }
 
@@ -4228,90 +4215,92 @@ var vF14 = function () {
 
   f53.Le = function () {
     f53.sc = true;
+    f53.install();
   };
 
-  f53.prototype.a = function () {};
+  f53.install = function () {
+    try {
+      if (window.__WORMXO_VALDAY_2023_BG_OK__) return;
+      window.__WORMXO_VALDAY_2023_BG_OK__ = true;
+
+      var css = document.getElementById("wormxo-valday-2023-deep-bg-css");
+      if (!css) {
+        css = document.createElement("style");
+        css.id = "wormxo-valday-2023-deep-bg-css";
+        css.textContent = "\n" +
+          "@keyframes wormxoValday2023DeepMove{\n" +
+          "0%{background-position:0 0,0 0,0 0,0 0,0 0;}\n" +
+          "50%{background-position:220px 310px,-260px 180px,0 0,0 0,0 0;}\n" +
+          "100%{background-position:440px 620px,-520px 360px,0 0,0 0,0 0;}\n" +
+          "}\n" +
+          "#wormxo-valday-2023-deep-bg{\n" +
+          "position:absolute!important;left:0!important;top:0!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;\n" +
+          "z-index:0!important;pointer-events:none!important;display:block!important;visibility:visible!important;opacity:1!important;\n" +
+          "background-color:#000!important;\n" +
+          "background-image:url('https://wormate.io/images/confetti-valday2023.png'),url('https://wormate.io/images/bg-event-pattern-valday2023.png'),radial-gradient(circle at 22% 25%,rgba(255,70,115,.32),transparent 34%),radial-gradient(circle at 78% 22%,rgba(255,195,80,.24),transparent 36%),linear-gradient(135deg,#000 0%,#16020a 45%,#000 100%)!important;\n" +
+          "background-repeat:repeat,repeat,no-repeat,no-repeat,no-repeat!important;\n" +
+          "background-size:240px 240px,520px 520px,100% 100%,100% 100%,100% 100%!important;\n" +
+          "animation:wormxoValday2023DeepMove 24s linear infinite!important;\n" +
+          "}\n" +
+          "#game-wrap,#stretch-box,#markup-wrap,#main-menu-view,#main-menu,#mm-start{position:relative!important;}\n" +
+          "#background-canvas{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;height:100%!important;z-index:0!important;background:transparent!important;pointer-events:none!important;}\n" +
+          "#game-view,#results-view,#popup-view,#toaster-view,#loading-view,#social-buttons,#markup-footer{position:relative!important;z-index:5!important;}\n" +
+          "#main-menu-view>*:not(#wormxo-valday-2023-deep-bg),#main-menu>*:not(#wormxo-valday-2023-deep-bg),#mm-start>*:not(#wormxo-valday-2023-deep-bg){position:relative;z-index:2;}\n";
+        (document.head || document.documentElement).appendChild(css);
+      }
+
+      var host = document.getElementById("main-menu-view") || document.getElementById("game-wrap") || document.body;
+      if (host && !document.getElementById("wormxo-valday-2023-deep-bg")) {
+        var layer = document.createElement("div");
+        layer.id = "wormxo-valday-2023-deep-bg";
+        if (host.firstChild) host.insertBefore(layer, host.firstChild);
+        else host.appendChild(layer);
+      }
+
+      try {
+        var c = document.getElementById("background-canvas");
+        if (c) {
+          c.style.display = "block";
+          c.style.visibility = "visible";
+          c.style.opacity = "1";
+        }
+      } catch (e0) {}
+    } catch (e) {
+      console.log("WORMXO Valday 2023 deep bg install error:", e);
+    }
+  };
+
+  f53.prototype.a = function () {
+    f53.install();
+  };
 
   f53.prototype.Ra = function () {
-    var dpr = window.devicePixelRatio || 1;
-    var w = this.se.width() || window.innerWidth;
-    var h = this.se.height() || window.innerHeight;
-
-    this.te.width = w * dpr;
-    this.te.height = h * dpr;
-    this.te.style.width = w + "px";
-    this.te.style.height = h + "px";
-    this.te.style.display = "block";
-    this.te.style.visibility = "visible";
-    this.te.style.opacity = "1";
-
-    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    try {
+      f53.install();
+      this.se = (window.jQuery ? jQuery("#background-canvas") : this.se);
+      this.te = this.se && this.se.get ? this.se.get()[0] : document.getElementById("background-canvas");
+      if (!this.te) return;
+      var w = (this.se && this.se.width && this.se.width()) || window.innerWidth || 1;
+      var h = (this.se && this.se.height && this.se.height()) || window.innerHeight || 1;
+      var dpr = window.devicePixelRatio || 1;
+      this.te.width = Math.max(1, Math.floor(w * dpr));
+      this.te.height = Math.max(1, Math.floor(h * dpr));
+      this.te.style.width = w + "px";
+      this.te.style.height = h + "px";
+    } catch (e) {}
   };
 
-  f53.prototype.Pa = function (p267, p268) {
-    var ctx = this.ctx;
-    var w = this.se.width() || window.innerWidth;
-    var h = this.se.height() || window.innerHeight;
-    var t = (p267 || Date.now()) / 1000;
-    var dt = p268 || 16;
+  f53.prototype.Pa = function () {
+    f53.install();
+  };
 
-    if (!w || !h) return;
-
-    ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, w, h);
-
-    if (this.bg.complete && this.bg.naturalWidth > 0) {
-      var size = Math.max(w, h) * 0.55;
-
-      for (var i = 0; i < 9; i++) {
-        var x = w * (0.5 + Math.sin(t * 0.12 + i * 1.7) * 0.42);
-        var y = h * (0.5 + Math.cos(t * 0.10 + i * 1.3) * 0.42);
-
-        ctx.save();
-        ctx.globalAlpha = 0.22;
-        ctx.translate(x, y);
-        ctx.rotate(t * 0.05 + i);
-        ctx.drawImage(this.bg, -size / 2, -size / 2, size, size);
-        ctx.restore();
-      }
+  try {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () { f53.install(); }, { once: true });
     } else {
-      ctx.fillStyle = "rgba(255,255,255,0.18)";
-      for (var b = 0; b < 12; b++) {
-        ctx.beginPath();
-        ctx.arc(
-          w * (0.1 + ((b * 0.19 + t * 0.015) % 0.9)),
-          h * (0.15 + ((b * 0.13 + t * 0.01) % 0.75)),
-          Math.max(w, h) * 0.08,
-          0,
-          Math.PI * 2
-        );
-        ctx.fill();
-      }
+      setTimeout(function () { f53.install(); }, 0);
     }
-
-    if (this.cf.complete && this.cf.naturalWidth > 0) {
-      for (var j = 0; j < this.parts.length; j++) {
-        var p = this.parts[j];
-        p.y += p.v * dt;
-        p.r += 0.01;
-
-        if (p.y > 1.18) {
-          p.y = -0.18;
-          p.x = Math.random();
-        }
-
-        ctx.save();
-        ctx.globalAlpha = p.a;
-        ctx.translate(p.x * w, p.y * h);
-        ctx.rotate(p.r + t * 0.4);
-        ctx.drawImage(this.cf, -p.s / 2, -p.s / 2, p.s, p.s);
-        ctx.restore();
-      }
-    }
-
-    ctx.globalAlpha = 1;
-  };
+  } catch (e) {}
 
   return f53;
 }();
@@ -5950,7 +5939,7 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
         this.Ge = [new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128))];
         this.Cf = new vF7._b(f77());
         this.Df = new vF7._b(function () {
-          var v349 = vF7.$b.from("/images/bg-pattern-pow2-TEAM2.png");
+          var v349 = vF7.$b.from("https://wormate.io/images/bg-event-pattern-valday2023.png");
           v349.wrapMode = vF7.kc.lc;
           return v349;
         }());
@@ -10979,4 +10968,19 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
     SafeWS.__WORMXO_SAFE__ = true;
     window.WebSocket = SafeWS;
   }
+})();
+
+
+/* WORMXO VALDAY 2023 BACKGROUND WATCHDOG - keeps real lobby background alive */
+(function () {
+  if (window.__WORMXO_VALDAY_2023_WATCHDOG__) return;
+  window.__WORMXO_VALDAY_2023_WATCHDOG__ = true;
+  function run() {
+    try {
+      if (typeof vF14 !== "undefined" && vF14.Le) vF14.Le(true);
+    } catch (e) {}
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run, { once: true });
+  else run();
+  setInterval(run, 1000);
 })();
