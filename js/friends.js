@@ -484,8 +484,6 @@ var vO4 = {
   bSkin: 131
 };
 
-
-
 saveGameLocal = localStorage.getItem("SaveGameXT");
 if (saveGameLocal && saveGameLocal !== "null") {
   let v6 = JSON.parse(saveGameLocal);
@@ -4304,7 +4302,6 @@ $.get(v89, function (p97) {
         this.we = new Array(vA7.length);
         for (var vLN017 = 0; vLN017 < this.we.length; vLN017++) {
           this.we[vLN017] = new vF7.ec();
-          this.we[vLN017].texture = vF7.$b.from("https://wormate.io/images/bg-event-pattern-valday2023.png");
           this.we[vLN017].texture = vF92.q.Fe;
           this.we[vLN017].anchor.set(0.5);
           this.we[vLN017].zIndex = 1;
@@ -4313,7 +4310,6 @@ $.get(v89, function (p97) {
         this.xe = new Array(vF92.q.Ge.length);
         for (var vLN018 = 0; vLN018 < this.xe.length; vLN018++) {
           this.xe[vLN018] = new vF7.ec();
-          this.xe[vLN018].texture = vF7.$b.from("https://wormate.io/images/confetti-valday2023.png");
           this.xe[vLN018].texture = vF92.q.Ge[vLN018];
           this.xe[vLN018].anchor.set(0.5);
           this.xe[vLN018].zIndex = 2;
@@ -6126,48 +6122,22 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
         }
         return -1;
       }
-f79.prototype.a = function () {
-  this.bi = [
-    this.H,
-    this.F,
-    this.Uh,
-    this.Vh,
-    this.Wh,
-    this.Xh,
-    this.Yh,
-    this.Zh,
-    this.xa,
-    this.$h,
-    this._h,
-    this.ai,
-    this.aa,
-    this.ua,
-    this.pa
-  ];
-
-  for (var vLN056 = 0; vLN056 < this.bi.length; vLN056++) {
-    this.bi[vLN056].a();
-  }
-
-  this.ci = new vF14(vF51.di);
-
-  try {
-    vF14.Le(true);
-  } catch (e) {
-    console.log("VALDAY 2023 BG enable error:", e);
-  }
-};
-
-f79.prototype.Qa = function (p407, p408) {
-  if (this.ci != null) {
-    this.ci.Ra();
-    this.ci.Pa(p407 || Date.now(), p408 || 16);
-  }
-
-  for (var v358 = this.bi.length - 1; v358 >= 0; v358--) {
-    this.bi[v358].Pa(p407, p408);
-  }
-};
+      f79.prototype.a = function () {
+        this.bi = [this.H, this.F, this.Uh, this.Vh, this.Wh, this.Xh, this.Yh, this.Zh, this.xa, this.$h, this._h, this.ai, this.aa, this.ua, this.pa];
+        for (var vLN056 = 0; vLN056 < this.bi.length; vLN056++) {
+          this.bi[vLN056].a();
+        }
+        this.ci = new vF14(vF51.di);
+        try { vF14.Le(true); } catch (e) {}
+      };
+      f79.prototype.Qa = function (p407, p408) {
+        if (this.ci != null) {
+          try { this.ci.Pa(p407 || Date.now(), p408 || 16); } catch (e0) {}
+        }
+        for (var v358 = this.bi.length - 1; v358 >= 0; v358--) {
+          this.bi[v358].Pa(p407, p408);
+        }
+      };
       f79.prototype.Ra = function () {
         for (var v359 = this.bi.length - 1; v359 >= 0; v359--) {
           this.bi[v359].Ra();
@@ -7534,6 +7504,7 @@ f79.prototype.Qa = function (p407, p408) {
       f96.lk = $("#stretch-box");
       f96.mk = $("#game-canvas");
       f96.di = $("#background-canvas");
+
 
       f96.nk = $("#social-buttons");
       f96.ok = $("#markup-wrap");
@@ -11074,36 +11045,38 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
   }
 })();
 
+
+/* WORMXO VALDAY 2023 BACKGROUND FINAL FIX - end patch */
 (function () {
-  var st = document.createElement("style");
-  st.id = "fix-bg-canvas-2023";
-  st.textContent = `
-    #background-canvas{
-      display:block!important;
-      visibility:visible!important;
-      opacity:1!important;
-      position:absolute!important;
-      left:0!important;
-      top:0!important;
-      width:100%!important;
-      height:100%!important;
-      z-index:0!important;
-      background:#000!important;
-      pointer-events:none!important;
-    }
+  if (window.__WORMXO_VALDAY_2023_FINAL_FIX__) return;
+  window.__WORMXO_VALDAY_2023_FINAL_FIX__ = true;
 
-    #main-menu-view,
-    #main-menu,
-    #mm-start,
-    #game-wrap{
-      background:transparent!important;
-    }
+  function addStyle() {
+    if (document.getElementById("wormxo-valday-2023-final-style")) return;
+    var st = document.createElement("style");
+    st.id = "wormxo-valday-2023-final-style";
+    st.textContent = "#background-canvas{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;height:100%!important;z-index:0!important;background:#000!important;pointer-events:none!important}#main-menu-view,#main-menu,#mm-start,#game-wrap{background:transparent!important}#stretch-box,#markup-wrap{position:relative!important}#markup-wrap{z-index:1!important}";
+    (document.head || document.documentElement).appendChild(st);
+  }
 
-    #markup-wrap,
-    #stretch-box{
-      position:relative!important;
-      z-index:1!important;
-    }
-  `;
-  document.head.appendChild(st);
+  function enableBg() {
+    try { addStyle(); } catch (e) {}
+    try { if (typeof vF14 !== "undefined" && vF14 && typeof vF14.Le === "function") vF14.Le(true); } catch (e1) {}
+    try {
+      var bg = document.getElementById("background-canvas");
+      if (bg) {
+        bg.style.display = "block";
+        bg.style.visibility = "visible";
+        bg.style.opacity = "1";
+      }
+    } catch (e2) {}
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", enableBg, { once: true });
+  } else {
+    enableBg();
+  }
+  window.addEventListener("load", function () { setTimeout(enableBg, 250); setTimeout(enableBg, 1200); }, { once: true });
+  setInterval(enableBg, 2000);
 })();
