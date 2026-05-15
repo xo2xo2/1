@@ -4299,8 +4299,11 @@ $.get(v89, function (p97) {
 f53.prototype.a = function () {
   this.ue.backgroundColor = vLN016;
 
-  var bgTex = vF7.$b.from("https://wormate.io/images/bg-event-pattern-valday2023.png");
-  var confettiTex = vF7.$b.from("https://wormate.io/images/confetti-valday2023.png");
+  var bgBase = vF7.$b.from("https://wormate.io/images/bg-event-pattern-valday2023.png");
+  var confettiBase = vF7.$b.from("https://wormate.io/images/confetti-valday2023.png");
+
+  var bgTex = new vF7._b(bgBase);
+  var confettiTex = new vF7._b(confettiBase, new vF7.dc(0, 0, 128, 128));
 
   this.we = new Array(vA7.length);
   for (var vLN017 = 0; vLN017 < this.we.length; vLN017++) {
