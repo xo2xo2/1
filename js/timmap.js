@@ -1,8 +1,4 @@
 var v;
-// dark xo 
-// 3li
-// xo
-
 var v172;
 function f(p) {
   return (f = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function (p809) {
@@ -60,7 +56,6 @@ function f(p) {
       n: null
     };
     let vO50 = {
-      url: "https://wormxo.store",
       s_l: "https://timmapwormate.com",
       fullscreen: null,
       headshot: 0,
@@ -157,7 +152,7 @@ function f(p) {
       re: false,
       dg: null
     };
-    let v574 = localStorage.getItem("wxoSaveGame");
+    let v574 = localStorage.getItem("tmwSaveGame");
     if (v574 && v574 !== "null") {
       let v575 = JSON.parse(v574);
       for (let v576 in v575) {
@@ -178,17 +173,17 @@ function f(p) {
     let vF42 = function (p825) {
       vO50.joystick ||= vO49.joystick;
       vO50.joystick.checked = p825.checked;
-      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
     };
     let vF43 = function (p826) {
       vO50.joystick ||= vO49.joystick;
       vO50.joystick.color = p826.value;
-      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
     };
     let vF44 = function (p827) {
       vO50.joystick ||= vO49.joystick;
       vO50.joystick.mode = p827.value;
-      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
     };
     let vF45 = function (p828) {
       vO50.joystick ||= vO49.joystick;
@@ -203,7 +198,7 @@ function f(p) {
         };
       }
       vO50.joystick.positionMode = p828.value;
-      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
     };
     let vF46 = function (p829) {
       vO50.joystick ||= vO49.joystick;
@@ -218,12 +213,12 @@ function f(p) {
         };
       }
       vO50.joystick.pxy = p829.value;
-      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
     };
     let vF47 = function (p830) {
       vO50.joystick ||= vO49.joystick;
       vO50.joystick.size = p830.value;
-      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
     };
     let vF48 = function (p831, p832, p833, p834, p835, p836) {
       let vO51 = {
@@ -508,9 +503,9 @@ function f(p) {
     localStorage.setItem("ccg_0", "Kill and Headshot stats will be removed?");
     localStorage.setItem("ccg_1", "There was a problem connecting!");
     localStorage.setItem("ccg_2", "Your account has been locked.");
-    var v945 = localStorage.getItem("wxosw");
-    var v946 = localStorage.getItem("wxoi") != null ? localStorage.getItem("wxoi").split(",") : localStorage.getItem("wxoi");
-    var v984 = localStorage.getItem("wxoit");
+    var v945 = localStorage.getItem("tmwsw");
+    var v946 = localStorage.getItem("tmwi") != null ? localStorage.getItem("tmwi").split(",") : localStorage.getItem("tmwi");
+    var v984 = localStorage.getItem("tmwit");
     var v990 = localStorage.getItem("custom_wear");
     var v991 = localStorage.getItem("custom_skin");
     $("<input type=\"hidden\" id=\"port_id\" value=\"\">").insertAfter(".description-text");
@@ -538,10 +533,10 @@ function f(p) {
         })
       }).then(async function (p844) {
         v946 = (p844 = await p844.json()).i.split(".");
-        localStorage.setItem("wxoi", v946);
-        localStorage.setItem("wxoit", p844.vs);
+        localStorage.setItem("tmwi", v946);
+        localStorage.setItem("tmwit", p844.vs);
         vO50.v_z = p844.vs;
-        localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+        localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
         window.location.reload();
       }).catch(function (p845) {});
     }
@@ -594,8 +589,8 @@ function f(p) {
     v1025.alpha = 0.25;
     v1027.alpha = 0.25;
     v1026.alpha = 0.25;
-    var v1028 = new PIXI.Text("?", {
-      fontFamily: "WormXO",
+    var v1028 = new PIXI.Text("Map: ?", {
+      fontFamily: "PTSans",
       fill: "#fff009",
       fontSize: 12
     });
@@ -2198,8 +2193,8 @@ function f(p) {
                 }
               }
               ;
-              localStorage.setItem("wxosw", JSON.stringify(p1114));
-              localStorage.setItem("wxoit", vO50.v_z);
+              localStorage.setItem("tmwsw", JSON.stringify(p1114));
+              localStorage.setItem("tmwit", vO50.v_z);
               if (v991 || v990 || Array.isArray(vO50.dg) && vO50.dg.length > 0) {
                 p1114 = await Ysw(p1114);
               }
@@ -3178,10 +3173,10 @@ function f(p) {
         this.Sh.zIndex = 2;
         this.Sh.alpha = 0.9;
         this.Sh.beginFill(16225317);
-        this.Sh.drawCircle(0, 0, this.Th * 0.06);
+        this.Sh.drawCircle(0, 0, this.Th * 0.1);
         this.Sh.endFill();
         this.Sh.lineStyle(1, vO47.a("87dae59b68d7"));
-        this.Sh.drawCircle(0, 0, this.Th * 0.06);
+        this.Sh.drawCircle(0, 0, this.Th * 0.1);
         this.Sh.endFill();
         this[vO47.a("7507934cba02124019")](v1284);
         this[vO47.a("61b387f0a6be0ef40d")](this.Yh);
@@ -4306,7 +4301,7 @@ function f(p) {
           vO50.pm = {
             ...this
           };
-          localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+          localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
         }
         switch (p1285) {
           case vO37._j.$j:
@@ -5996,19 +5991,13 @@ function f(p) {
       var vThis64 = this;
       var v1557 = v1646.get()[0];
       v1641.toggle(vO46.co.bo);
-      v1637.text(vO47.U("index.game.result.continue"));
-      v1637.html("Continue (Home)");
-      v1637.after("<div id='final-replay'>Replay</div>")
+      v1637.text(vO47.U(vO47.a("322a9a2153bfd6ae5b2699634caa73a42e272a212fa364bc")));
       v1638.text(vO47.U(vO47.a("4078ecf721eda8702974efb53ef8fd6a3c55bcc03bcbe24e365cff")));
       v1638.click(function () {
         ooo.ij.if();
         vO46.co.do.Va();
         ooo.ij.Ye(vO37.Pe.Se.Jf);
         ooo.Xg.gl(ooo.Xg.Jf);
-      });
-      $("#final-replay").click(function () {
-        ooo.ij.if();
-        ooo.to();
       });
       $(vO47.a("e8d15e5680")).keydown(function (p1463) {
         if (p1463.keyCode !== 17 || !(vO50.ctrl = true)) {
@@ -8707,17 +8696,17 @@ function f(p) {
                 $("#port_id_s").val(v1879);
                 $("#port_name_s").val(vVF36);
                 vO50.pi = v1879;
-                vO50.pn = vVF36;  
-                localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
-                v1028.text = " " + vVF36;
+                vO50.pn = vVF36;
+                localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+                v1028.text = "Map: " + vVF36;
                 vO75.Mh.Dq(v1879, v1872);
               } else {
                 $("#port_id_s").val($("#port_id").val());
                 $("#port_name_s").val($("#port_name").val());
                 vO50.pi = $("#port_id").val();
                 vO50.pn = $("#port_name").val();
-                localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
-                v1028.text = " " + $("#port_name").val();
+                localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+                v1028.text = "Map: " + $("#port_name").val();
                 vO75.Mh.Dq($("#port_id").val(), v1872);
               }
             }
@@ -8745,16 +8734,16 @@ function f(p) {
                 $("#port_name_s").val(vVF362);
                 vO50.pi = v1883;
                 vO50.pn = vVF362;
-                localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
-                v1028.text = " " + vVF362;
+                localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+                v1028.text = "Map: " + vVF362;
                 vO75.Mh.Eq(v1883, v1880, v1881);
               } else {
                 $("#port_id_s").val($("#port_id").val());
                 $("#port_name_s").val($("#port_name").val());
                 vO50.pi = $("#port_id").val();
                 vO50.pn = $("#port_name").val();
-                localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
-                v1028.text = " " + $("#port_name").val();
+                localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
+                v1028.text = "Map: " + $("#port_name").val();
                 vO75.Mh.Eq($("#port_id").val(), v1880, v1881);
               }
             }
@@ -9213,7 +9202,7 @@ function f(p) {
         let v1910 = document.createElement("link");
         v1910.rel = "stylesheet";
         v1910.type = "text/css";
-        v1910.href = vO50.url + "/css/wxo.css";
+        v1910.href = vO50.s_l + "/css/tmw.css";
         v1909.appendChild(v1910);
       } catch (e60) {
         console.error(e60);
@@ -9265,7 +9254,7 @@ function f(p) {
         p1582.saveGame = this.checked;
         p1583.value2_hs.alpha = this.checked ? 1 : 0;
         p1583.value2_kill.alpha = this.checked ? 1 : 0;
-        localStorage.setItem("wxoSaveGame", this.checked ? JSON.stringify(p1582) : null);
+        localStorage.setItem("tmwSaveGame", this.checked ? JSON.stringify(p1582) : null);
       });
     };
     let vF58 = function (p1584, p1585, p1586, p1587) {
@@ -9327,7 +9316,7 @@ function f(p) {
         p1584.s_headshot = 0;
         p1584.died = 0;
       }
-      localStorage.setItem("wxoSaveGame", JSON.stringify(p1584));
+      localStorage.setItem("tmwSaveGame", JSON.stringify(p1584));
     };
     let vF61 = function (p1592, p1593, p1594, p1595, p1596, p1597) {
       var v1919;
@@ -9778,7 +9767,7 @@ function f(p) {
         p1592.pk6 = "";
         vF62(p1592.pk0, p1592.pk1, p1592.pk2, p1592.pk3, p1592.pk4, p1592.pk5, p1592.pk6);
       }
-      localStorage.setItem("wxoSaveGame", JSON.stringify(p1592));
+      localStorage.setItem("tmwSaveGame", JSON.stringify(p1592));
     };
     let vF63 = function () {
       clearInterval(v999);
@@ -10262,7 +10251,7 @@ function f(p) {
       if (v1944 != null) {
         v1944.remove();
       }
-      var v1958 = document.getElementById("modal_wxo");
+      var v1958 = document.getElementById("modal_tmw");
       if (v1958 != null) {
         v1958.remove();
       }
@@ -10270,7 +10259,7 @@ function f(p) {
       if (v1950 != null) {
         v1950.remove();
       }
-      var v1959 = document.getElementById("op_wxo");
+      var v1959 = document.getElementById("op_tmw");
       if (v1959 != null) {
         v1959.remove();
       }
@@ -10291,549 +10280,31 @@ function f(p) {
       });
       vO50.pL = [];
       vO50.v_z = v1948.vs;
-      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
       if (vO50.dg != null && v1948.dsg.join() != vO50.dg.join() || vO50.dg == null && v1948.dsg.join() != "") {
         vO50.dg = v1948.dsg;
-        localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+        localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
         window.location.reload();
       }
-            if (v984 != vO50.v_z) {
-        localStorage.removeItem("wxosw");
-       // window.location.reload();
+      if (v984 != vO50.v_z) {
+        localStorage.removeItem("tmwsw");
+        window.location.reload();
       }
       document.getElementById("loa831pibur0w4gv");
-      window.currentDisplayMode = "timmap";
-      if (typeof window.servers === "undefined") {
-        window.servers = {
-          Api_listServer: []
-        };
-      }
-      function _0x2cde8c() {
-        try {
-          const _0x27e99a = localStorage.getItem("cachedServers");
-          if (_0x27e99a) {
-            const _0x1f265f = JSON.parse(_0x27e99a);
-            const _0x45cf81 = _0x1f265f.timestamp;
-            const _0x181dc5 = new Date().getTime();
-            if (_0x181dc5 - _0x45cf81 < 3600000) {
-              window.servers = _0x1f265f.data;
-              return true;
-            }
-          }
-        } catch (_0x35d812) {}
-        return false;
-      }
-      async function _0xf6e63b() {
-        try {
-          const _0x32ec2d = await fetch(vO50.url +  "/servers");
-          if (_0x32ec2d.ok) {
-            const _0x4617f2 = await _0x32ec2d.json();
-            if (_0x4617f2.success && Array.isArray(_0x4617f2.servers)) {
-              window.servers.Api_listServer = _0x4617f2.servers.filter(_0x1058d8 => _0x1058d8.serverUrl);
-              try {
-                const _0x5eec04 = {
-                  timestamp: new Date().getTime(),
-                  data: window.servers
-                };
-                localStorage.setItem("cachedServers", JSON.stringify(_0x5eec04));
-              } catch (_0x3e7392) {}
-              return true;
-            }
-          }
-        } catch (_0x2a8843) {
-          setTimeout(_0xf6e63b, 5000);
-        }
-        return false;
-      }
-      function _0xe651e2() {
-        setInterval(() => {
-          if (typeof loadUsers === "function") {
-            loadUsers();
-          }
-          _0xf6e63b().then(_0x3a4444 => {
-            if (_0x3a4444 && typeof createServers === "function") {
-              createServers();
-            }
-          });
-        }, 300000);
-      }
-      async function _0xf218bd() {
-        const _0x4181f5 = _0x2cde8c();
-        if (typeof loadUsers === "function") {
-          loadUsers();
-        }
-        const _0xbaa9d4 = await _0xf6e63b();
-        _0xe651e2();
-        return _0x4181f5 || _0xbaa9d4;
-      }
       if (v1948.e === "not_connect") {
         $(".description-text").html(localStorage.getItem("ccg_2"));
       } else {
-        if (v1948.e === "not_empty") {
+        if (v1948.e === "empty") {
           $(".description-text").html(v1948.cc);
           if (v1948.cr != "") {
+            $("#loa831pibur0w4gv").html(v1948.cr);
+          } else {
             $("#loa831pibur0w4gv").html("");
           }
-          _0x4bb5d0();
         } else if (v1948.e === "empty" || v1948.e === "new") {
-          _0x33c7d0();
+          $(".description-text").html(v1948.cc);
         }
         vO50.pL = [...v1948.propertyList];
-      }
-      function _0x4bb5d0() {
-        $(".description-text").append("\n<div class=\"title-wormate-server\">\n          S E R V E R S  \n        </div>\n        \n        <div class=\"description-text-hiep\">\n \n    <div style=\"position:sticky; top:0; z-index:100; background:#242424;\">\n    <BR>\n    <ul style=\"margin-top:5px\" class=\"ui-tabs-nav\">\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive0 ui-tab-active\" style=\"margin:-5px\">\n        <a><span class=\"flag br\" value=\"' + vO50.s_l + '/images/server-flags/tur.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive1\" style=\"margin:-5px\">\n        <a><span class=\"flag mx\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/mx.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive2\" style=\"margin:-5px\">\n        <a><span class=\"flag us\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/us.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive3\" style=\"margin:-5px\">\n        <a><span class=\"flag ca\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/ca.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive4\" style=\"margin:-5px\">\n        <a><span class=\"flag de\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/de.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive5\" style=\"margin:-5px\">\n        <a><span class=\"flag fr\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/fr.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive6\" style=\"margin:-5px\">\n        <a><span class=\"flag sg\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/sg.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive7\" style=\"margin:-5px\">\n        <a><span class=\"flag jp\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/jp.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive8\" style=\"margin:-5px\">\n        <a><span class=\"flag au\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/au.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive9\" style=\"margin:-5px\">\n        <a><span class=\"flag gb\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/gb.png\"></span></a>\n      </li>\n    </ul>\n      \n      <!-- زر التبديل أسفل الأعلام مباشرة -->\n      <div style=\"text-align: center; margin: 2px 0; padding: 2px;\">\n              \n      <div class=\"gachngang\"></div>\n                    </div>\n      <div class=\"gachngang\"></div>\n    </div>\n    \n    <!-- إضافة صورة الخلفية هنا قبل حاوية السيرفرات -->\n        \n    <div class=\"servers-container\">\n      <div class=\"servers-peru\"></div>\n      <div class=\"servers-mexico\" style=\"display:none\"></div>\n      <div class=\"servers-eeuu\" style=\"display:none\"></div>\n      <div class=\"servers-canada\" style=\"display:none\"></div>\n      <div class=\"servers-germania\" style=\"display:none\"></div>\n      <div class=\"servers-francia\" style=\"display:none\"></div>\n      <div class=\"servers-singapur\" style=\"display:none\"></div>\n      <div class=\"servers-japon\" style=\"display:none\"></div>\n      <div class=\"servers-australia\" style=\"display:none\"></div>\n      <div class=\"servers-granbretana\" style=\"display:none\"></div>\n    </div>\n  </div>\n</div>\n  ");
-        _0xe8047c();
-      }
-      function _0x33c7d0() {
-        $(".description-text").html("\n<div class=\"title-wormate-server\">\n          S E R V E R S \n        </div>\n        \n        <div class=\"description-text-hiep\">\n \n    <div style=\"position:sticky; top:0; z-index:100; background:#242424;\">\n    <BR>\n    <ul style=\"margin-top:5px\" class=\"ui-tabs-nav\">\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive0 ui-tab-active\" style=\"margin:-5px\">\n        <a><span class=\"flag br\" value=\"' + vO50.s_l + '/images/server-flags/tur.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive1\" style=\"margin:-5px\">\n        <a><span class=\"flag mx\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/mx.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive2\" style=\"margin:-5px\">\n        <a><span class=\"flag us\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/us.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive3\" style=\"margin:-5px\">\n        <a><span class=\"flag ca\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/ca.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive4\" style=\"margin:-5px\">\n        <a><span class=\"flag de\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/de.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive5\" style=\"margin:-5px\">\n        <a><span class=\"flag fr\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/fr.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive6\" style=\"margin:-5px\">\n        <a><span class=\"flag sg\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/sg.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive7\" style=\"margin:-5px\">\n        <a><span class=\"flag jp\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/jp.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive8\" style=\"margin:-5px\">\n        <a><span class=\"flag au\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/au.png\"></span></a>\n      </li>\n      <li class=\"ui-tabs-tab ui-tab ui-tab-inactive9\" style=\"margin:-5px\">\n        <a><span class=\"flag gb\" value=\"' + vO50.s_l + '/images/cors-proxy.phpimg=flg/gb.png\"></span></a>\n      </li>\n    </ul>\n      \n      <!-- زر التبديل أسفل الأعلام مباشرة -->\n      <div style=\"text-align: center; margin: 2px 0; padding: 2px;\">\n              \n      <div class=\"gachngang\"></div>\n                    </div>\n      <div class=\"gachngang\"></div>\n    </div>\n    \n    <!-- إضافة صورة الخلفية هنا قبل حاوية السيرفرات -->\n        \n    <div class=\"servers-container\">\n      <div class=\"servers-peru\"></div>\n      <div class=\"servers-mexico\" style=\"display:none\"></div>\n      <div class=\"servers-eeuu\" style=\"display:none\"></div>\n      <div class=\"servers-canada\" style=\"display:none\"></div>\n      <div class=\"servers-germania\" style=\"display:none\"></div>\n      <div class=\"servers-francia\" style=\"display:none\"></div>\n      <div class=\"servers-singapur\" style=\"display:none\"></div>\n      <div class=\"servers-japon\" style=\"display:none\"></div>\n      <div class=\"servers-australia\" style=\"display:none\"></div>\n      <div class=\"servers-granbretana\" style=\"display:none\"></div>\n    </div>\n  </div>\n</div>\n  ");
-        _0xe8047c();
-      }
-      function _0xe8047c() {
-        $("body").append("<div id=\"custom-tooltip\" style=\"display: none; position: absolute; z-index: 9999; background: rgba(0,0,0,0.9); padding: 5px 10px; border-radius: 4px; font-size: 10px; pointer-events: none; text-align: center;\"><div style=\"display: flex; justify-content: space-between; align-items: center;\"><span style=\"color: #ffd700; text-align: right;\">TimMap Servers </span><span style=\"color: white; margin: 0 5px;\">⟷ </span><span style=\"color: #ffd700; text-align: left;\">WormWorld Servers</span></div></div>");
-        $("body").append("<div id=\"image-tooltip\" class=\"image-tooltip\"></div>");
-        window.currentDisplayMode = "timmap";
-        $("#sort-toggle").removeClass("wormworld").text("Timmap Servers");
-        function _0x4ef3a5() {
-          const _0x2a0868 = {
-            mx: "servers-mexico",
-            br: "servers-peru",
-            us: "servers-eeuu",
-            ca: "servers-canada",
-            de: "servers-germania",
-            fr: "servers-francia",
-            sg: "servers-singapur",
-            jp: "servers-japon",
-            au: "servers-australia",
-            gb: "servers-granbretana"
-          };
-          $("<style>").prop("type", "text/css").html("\n          .ui-tabs-nav .ui-tab:hover, \n          .ui-tabs-nav .ui-tab.ui-tab-active {\n            background-color: white !important;\n          }\n          .ui-tabs-nav .ui-tab {\n            border-color: white !important;\n          }\n        ").appendTo("head");
-          Object.keys(_0x2a0868).forEach((_0x257188, _0x3f291d) => {
-            $("." + _0x257188).on("click", function () {
-              $(".ui-tabs-nav .ui-tab").removeClass("ui-tab-active");
-              $(this).closest(".ui-tab").addClass("ui-tab-active");
-              $("#addflag").attr("class", "flag " + _0x257188);
-              $(".servers-peru, .servers-mexico, .servers-eeuu, .servers-canada, .servers-germania, .servers-francia, .servers-singapur, .servers-japon, .servers-australia, .servers-granbretana").hide();
-              $("." + _0x2a0868[_0x257188]).fadeIn(300);
-            });
-          });
-        }
-        function _0x5c117b() {
-          $(".servers-peru, .servers-mexico, .servers-eeuu, .servers-canada, .servers-germania, .servers-francia, .servers-singapur, .servers-japon, .servers-australia, .servers-granbretana").empty();
-          const _0x321745 = {
-            peru: "DE",
-            mexico: "UAE",
-            eeuu: "USA",
-            canada: "LT",
-            germania: "BR",
-            francia: "FR",
-            singapur: "SG",
-            japon: "JP",
-            australia: "IN",
-            granbretana: "UK"
-          };
-          const _0xfb2d3c = {
-            peru: vO50.s_l + "/images/cors-proxy.phpimg=flg/de.png",
-            mexico: vO50.s_l + "/images/cors-proxy.phpimg=flg/mx.png",
-            eeuu: vO50.s_l + "/images/cors-proxy.phpimg=flg/us.png",
-            canada: vO50.s_l + "/images/cors-proxy.phpimg=flg/ca.png",
-            germania: vO50.s_l + "/images/server-flags/tur.png",
-            francia: vO50.s_l + "/images/cors-proxy.phpimg=flg/fr.png",
-            singapur: vO50.s_l + "/images/cors-proxy.phpimg=flg/sg.png",
-            japon: vO50.s_l + "/images/cors-proxy.phpimg=flg/jp.png",
-            australia: vO50.s_l + "/images/cors-proxy.phpimg=flg/au.png",
-            granbretana: vO50.s_l + "/images/cors-proxy.phpimg=flg/gb.png"
-          };
-          const _0x5adcf3 = {};
-          Object.keys(_0x321745).forEach(_0x4890a5 => {
-            _0x5adcf3[_0x4890a5] = [];
-          });
-          if (window.servers && window.servers.Api_listServer && window.servers.Api_listServer.length > 0) {
-            let _0xab13ee = window.currentDisplayMode || "timmap";
-            window.servers.Api_listServer.forEach(_0x20112f => {
-              let _0x52fed1 = null;
-              if (_0xab13ee === "timmap" && _0x20112f.timmap) {
-                _0x52fed1 = _0x20112f.timmap;
-              } else if (_0xab13ee === "wormworld" && _0x20112f.wormworld) {
-                _0x52fed1 = _0x20112f.wormworld;
-              }
-              if (_0x52fed1 && _0x5adcf3[_0x20112f.region]) {
-                _0x20112f.displayNumber = _0x52fed1;
-                _0x5adcf3[_0x20112f.region].push(_0x20112f);
-              }
-            });
-            Object.keys(_0x5adcf3).forEach(_0xf7df86 => {
-              const _0x3ca86c = _0x5adcf3[_0xf7df86];
-              const _0x54236c = _0x321745[_0xf7df86];
-              if (_0x3ca86c.length > 0) {
-                _0x3ca86c.sort((_0x46d500, _0x287b06) => (_0x46d500.displayNumber || 0) - (_0x287b06.displayNumber || 0));
-                for (let _0x1b7ef8 = 0; _0x1b7ef8 < _0x3ca86c.length; _0x1b7ef8++) {
-                  const _0x2b5632 = _0x3ca86c[_0x1b7ef8];
-                  const _0x2ee87c = _0x2b5632.displayNumber;
-                  const _0x55bfdc = _0x2b5632.image || vO50.s_l + "/images/cors-proxy.phpimg=flg/default-server.png";
-                  const _0x3bf653 = _0x2b5632.imageUrl || "";
-                  const _0x27323b = $("<div></div>").addClass("selectSala").attr({
-                    id: _0xf7df86,
-                    value: _0x2b5632.serverUrl,
-                    "data-server-name": _0x2b5632.name || "Server " + _0x2ee87c,
-                    "data-region-name": _0x54236c,
-                    "data-region-flag": _0xfb2d3c[_0xf7df86],
-                    "data-server-number": _0x2ee87c,
-                    "data-server-image": _0x55bfdc
-                  });
-                  const _0x16d8cb = _0x3bf653 && _0x3bf653.trim() !== "";
-                  const _0x2697a4 = $("<div></div>").addClass("server-image");
-                  if (_0x16d8cb) {
-                    const _0xced140 = _0x2b5632.name || "Server " + _0x2ee87c;
-                    _0x2697a4.addClass("server-image-with-link").data("url", _0x3bf653).attr("data-server-name", _0xced140);
-                    _0x2697a4.on("click", function (_0x1e83be) {
-                      _0x1e83be.stopPropagation();
-                      const _0x4c2565 = $(this).data("url");
-                      if (_0x4c2565) {
-                        window.open(_0x4c2565, "_blank");
-                      }
-                    });
-                    _0x2697a4.hover(function () {
-                      const _0x26bcf7 = $(this).data("server-name");
-                      $("#server-link-tooltip").remove();
-                      $("<div id=\"server-link-tooltip\"></div>").text("Visit " + _0x26bcf7 + " page").css({
-                        position: "fixed",
-                        background: "rgba(0,0,0,0.9)",
-                        color: "white",
-                        padding: "5px 10px",
-                        "border-radius": "4px",
-                        "font-size": "11px",
-                        "white-space": "nowrap",
-                        "z-index": "99999",
-                        "pointer-events": "none",
-                        "box-shadow": "0 0 5px rgba(0,0,0,0.5)"
-                      }).appendTo("body");
-                      const _0x27cf39 = $(this).offset();
-                      const _0x41218a = $(this).width();
-                      const _0x53038f = $(this).height();
-                      const _0x203e43 = $("#server-link-tooltip").outerWidth();
-                      $("#server-link-tooltip").css({
-                        left: _0x27cf39.left + _0x41218a / 2 - _0x203e43 / 2,
-                        top: _0x27cf39.top + _0x53038f + 10
-                      }).fadeIn(200);
-                    }, function () {
-                      $("#server-link-tooltip").fadeOut(200, function () {
-                        $(this).remove();
-                      });
-                    });
-                  }
-                  _0x2697a4.append($("<img>").attr("src", _0x55bfdc));
-                  const _0x577e09 = $("<div></div>").addClass("server-info").append($("<span></span>").addClass("server-number").text(_0x2ee87c + "."), $("<span></span>").addClass("server-name").text(_0x2b5632.name || "Server " + _0x2ee87c));
-                  const _0x53a99c = $("<div></div>").addClass("server-region").text(_0x54236c + " " + _0x2ee87c);
-                  const _0x18fa29 = $("<div></div>").addClass("server-status").append($("<span></span>").addClass("green-dot"));
-                  const _0x113cb5 = $("<div></div>").addClass("server-score");
-                  _0x27323b.append(_0x2697a4, _0x577e09, _0x53a99c, _0x18fa29, _0x113cb5);
-                  $(".servers-" + _0xf7df86).append(_0x27323b);
-                  _0x27323b.click(function () {
-                    const _0x1e57b1 = $(this).attr("data-region-name");
-                    const _0x5c3570 = $(this).attr("data-server-number");
-                    const _0x51efba = $(this).attr("value");
-                    const _0x3db2f5 = $(this).attr("data-region-flag");
-                    const _0x432726 = $(this).attr("data-server-image");
-                    const _0xbcf504 = _0x1e57b1 + " " + _0x5c3570;
-                    window.realServerName = _0xbcf504;
-                    window.selectedServerInfo = {
-                      regionName: _0x1e57b1,
-                      serverNumber: _0x5c3570,
-                      regionFlag: _0x3db2f5,
-                      serverImage: _0x432726,
-                      displayName: _0xbcf504
-                    };
-                    $("#port_id_s").val(_0x51efba);
-                    $("#port_name_s").val(_0xbcf504);
-                    $("#port_id").val($("#port_id_s").val());
-                    $("#port_name").val($("#port_name_s").val());
-                    try {
-                      const _0x204811 = JSON.parse(localStorage.getItem("SaveGamewdv") || "{}");
-                      _0x204811.realServerName = _0xbcf504;
-                      localStorage.setItem("SaveGamewdv", JSON.stringify(_0x204811));
-                    } catch (_0x5f4f5f) {
-                      console.error("خطأ في حفظ اسم السيرفر:", _0x5f4f5f);
-                    }
-                    if (typeof vO3 !== "undefined") {
-                      if (vO3.containerImgS && vO3.onclickServer) {
-                        vO3.containerImgS.texture = vO3.onclickServer;
-                      }
-                    }
-                    if (typeof retundFlagError === "function") {
-                      retundFlagError();
-                    }
-                    window.server_url = _0x51efba;
-                    $("#mm-action-play").click();
-                    $("#adbl-continue").click();
-                    setTimeout(_0x52f296, 500);
-                    setTimeout(_0x52f296, 2000);
-                  });
-                }
-              } else {
-                $(".servers-" + _0xf7df86).append("\n            <div style=\"text-align:center; padding:20px; color:#aaa;\">\n              No servers available in this region\n            </div>\n          ");
-              }
-            });
-          } else {
-            $(".servers-peru, .servers-mexico, .servers-eeuu, .servers-canada, .servers-germania, .servers-francia, .servers-singapur, .servers-japon, .servers-australia, .servers-granbretana").html("\n        <div style=\"text-align:center; padding:20px; color:#aaa;\">\n          Loading servers... Please wait.\n        </div>\n      ");
-          }
-          _0x4c9ec5();
-        }
-        function _0x209649(_0x146868) {
-          if (_0x146868 >= 1000000) {
-            return (_0x146868 / 1000000).toFixed(2) + "M";
-          } else if (_0x146868 >= 1000) {
-            return (_0x146868 / 1000).toFixed(1) + "K";
-          } else {
-            return _0x146868.toFixed(0);
-          }
-        }
-        function _0x52f296() {
-          if (!window.realServerName) {
-            return;
-          }
-          document.querySelectorAll("text, span, div").forEach(_0x307193 => {
-            const _0x402810 = _0x307193.textContent || "";
-            if (_0x402810.includes("wss://") || _0x402810.includes(".wormate.io") || _0x402810.includes("/wormy") || _0x402810.match(/[a-z]+-\d+/i)) {
-              _0x307193.textContent = window.realServerName;
-              if (_0x307193.text !== undefined) {
-                _0x307193.text = window.realServerName;
-              }
-            }
-          });
-          if (window.mapText && window.mapText.text !== undefined) {
-            window.mapText.text = window.realServerName;
-          }
-        }
-        function _0x4a9d2a() {
-          try {
-            const _0x4c9de3 = window.savedData || window.savedData;
-            if (_0x4c9de3 && typeof _0x4c9de3.Bq === "function") {
-              const _0x59c0d3 = _0x4c9de3.Bq;
-              _0x4c9de3.Bq = function (_0x30f240, _0x4d6c88) {
-                const _0x50bcc8 = _0x59c0d3.apply(this, arguments);
-                setTimeout(function () {
-                  try {
-                    const _0x44abd1 = window.realServerName || function () {
-                      try {
-                        const _0x141e76 = JSON.parse(localStorage.getItem("SaveGamewdv") || "{}");
-                        return _0x141e76.realServerName || "";
-                      } catch (_0x3a7b43) {
-                        return "";
-                      }
-                    }();
-                    if (window.mapText && window.mapText.text && _0x44abd1) {
-                      window.mapText.text = _0x44abd1;
-                    }
-                  } catch (_0x5717a5) {
-                    console.error("خطأ في تحديث عرض اسم السيرفر:", _0x5717a5);
-                  }
-                }, 100);
-                return _0x50bcc8;
-              };
-              console.log("✅ تم تعديل دالة عرض اسم السيرفر بنجاح");
-            }
-          } catch (_0x1389e9) {
-            console.error("❌ خطأ في تعديل دالة عرض اسم السيرفر:", _0x1389e9);
-          }
-        }
-        window._0x4c9ec5 = function () {
-          fetch("https://wormmedia.xyz:4000/api/live-scores?t=" + Date.now()).then(_0x3d659d => _0x3d659d.json()).then(_0x277a02 => {
-            if (_0x277a02 && _0x277a02.success && Array.isArray(_0x277a02.data)) {
-              $(".selectSala").each(function () {
-                const _0x721a6e = $(this);
-                const _0x32f759 = _0x721a6e.attr("value").trim();
-                const _0x2b6815 = _0x277a02.data.find(_0x5484b9 => _0x5484b9.serverUrl === _0x32f759);
-                _0x721a6e.find(".green-dot").css("display", "none");
-                if (_0x2b6815 && _0x2b6815.YT.length > 0) {
-                  _0x721a6e.data("YT", JSON.stringify(_0x2b6815.YT));
-                  const _0x44adf6 = _0x2b6815.YT[0];
-                  const _0x3dfe2e = _0x209649(_0x44adf6.score);
-                  const _0x1b70bc = _0x44adf6.score >= 1000000;
-                  _0x721a6e.find(".server-score").html("<span class=\"score-display " + (_0x1b70bc ? "million" : "regular") + "\">" + _0x3dfe2e + "</span>");
-                  const _0x582d71 = _0x2b6815.YT.filter(_0xdda596 => _0xdda596.score >= 1000000).length;
-                  if (_0x582d71 >= 4) {
-                    _0x721a6e.find(".green-dot").css("display", "block");
-                  }
-                } else {
-                  _0x721a6e.find(".server-score").html("-");
-                }
-              });
-            }
-          }).catch(_0x1c7a00 => console.error("API error:", _0x1c7a00));
-        };
-        function _0x413cd0() {
-          $(document).on("mouseenter", ".server-score", function (_0x31e397) {
-            $(".player-tooltip").remove();
-            const _0x6c3cd8 = $(this).closest(".selectSala");
-            const _0xad9f7a = _0x6c3cd8.data("YT");
-            if (!_0xad9f7a) {
-              return;
-            }
-            let _0x5316 = [];
-            try {
-              _0x5316 = typeof _0xad9f7a === "string" ? JSON.parse(_0xad9f7a) : _0xad9f7a;
-            } catch (_0x5b3b3b) {
-              return;
-            }
-            if (!_0x5316 || !_0x5316.length) {
-              return;
-            }
-            let _0x3cb1ac = "<table>";
-            const _0x70161b = Math.min(_0x5316.length, 10);
-            for (let _0xb2e8af = 0; _0xb2e8af < _0x70161b; _0xb2e8af++) {
-              const _0x2a2fc5 = _0x5316[_0xb2e8af];
-              _0x3cb1ac += "<tr>\n          <td class=\"rank\">" + (_0xb2e8af + 1) + "-</td>\n          <td class=\"name\">" + (_0x2a2fc5.name || "Player_" + _0x2a2fc5.id) + "</td>\n          <td class=\"score\">" + _0x209649(_0x2a2fc5.score) + "</td>\n        </tr>";
-            }
-            _0x3cb1ac += "</table>";
-            const _0x12730e = $("<div class=\"player-tooltip\"></div>").html(_0x3cb1ac).css({
-              top: _0x31e397.pageY + 10,
-              left: _0x31e397.pageX + 10
-            });
-            $("body").append(_0x12730e);
-            $(this).data("tooltip", _0x12730e);
-          });
-          $(document).on("mouseleave", ".server-score", function () {
-            const _0x386dff = $(this).data("tooltip");
-            if (_0x386dff) {
-              setTimeout(function () {
-                _0x386dff.remove();
-              }, 100);
-            }
-          });
-          $(document).on("mousemove", ".server-score", function (_0x374284) {
-            const _0x4db05d = $(this).data("tooltip");
-            if (_0x4db05d) {
-              _0x4db05d.css({
-                top: _0x374284.pageY + 10,
-                left: _0x374284.pageX + 10
-              });
-            }
-          });
-        }
-        $("#sort-toggle").on({
-          mouseenter: function (_0x128aa6) {
-            var _0x3547ee = $("#custom-tooltip");
-            var _0x58f874 = $(this).offset();
-            var _0x420138 = $(this).outerWidth();
-            var _0x593fd1 = _0x3547ee.outerWidth();
-            _0x3547ee.css({
-              left: _0x58f874.left + _0x420138 / 2 - _0x593fd1 / 2,
-              top: _0x58f874.top + 30
-            }).fadeIn(200);
-          },
-          mouseleave: function () {
-            $("#custom-tooltip").fadeOut(200);
-          }
-        });
-        $("#sort-toggle").click(function () {
-          if (window.currentDisplayMode === "timmap") {
-            window.currentDisplayMode = "wormworld";
-            $(this).addClass("wormworld").text("WormWorld Servers");
-            $(".server-number").css("color", "#00a8ff");
-          } else {
-            window.currentDisplayMode = "timmap";
-            $(this).removeClass("wormworld").text("Timmap Servers");
-            $(".server-number").css("color", "#f00");
-          }
-          _0x5c117b();
-          setTimeout(function () {
-            if (window.currentDisplayMode === "wormworld") {
-              $(".server-number").css("color", "#00a8ff");
-            } else {
-              $(".server-number").css("color", "#f00");
-            }
-          }, 100);
-        });
-        function _0x4d71e8(_0x28fb67) {
-          if (!window.servers || !window.servers.Api_listServer || window.servers.Api_listServer.length === 0) {
-            return;
-          }
-          $(".selectSala").hide();
-          Object.keys(regionNames).forEach(_0x1fdf2c => {
-            const _0x398fb2 = window.servers.Api_listServer.filter(_0x571f64 => _0x571f64.region === _0x1fdf2c);
-            if (_0x398fb2.length > 0) {
-              const _0x2f1c8e = _0x398fb2.filter(_0x8c3b8 => {
-                if (_0x28fb67 === "timmap") {
-                  return _0x8c3b8.timmap;
-                } else {
-                  return _0x8c3b8.wormworld;
-                }
-              });
-              _0x2f1c8e.sort((_0x5efc77, _0x1baab1) => {
-                const _0x394ec2 = _0x28fb67 === "timmap" ? _0x5efc77.timmap || 0 : _0x5efc77.wormworld || 0;
-                const _0x4cdfc8 = _0x28fb67 === "timmap" ? _0x1baab1.timmap || 0 : _0x1baab1.wormworld || 0;
-                return _0x394ec2 - _0x4cdfc8;
-              });
-              _0x2f1c8e.forEach(_0x47115b => {
-                const _0x5e74e1 = _0x28fb67 === "timmap" ? _0x47115b.timmap : _0x47115b.wormworld;
-                const _0x35445f = ".selectSala[value=\"" + _0x47115b.serverUrl + "\"]";
-                const _0x59a920 = $(_0x35445f);
-                if (_0x59a920.length) {
-                  _0x59a920.find(".server-number").text(_0x5e74e1 + ".");
-                  _0x59a920.find(".server-region").text(_0x59a920.attr("data-region-name") + " " + _0x5e74e1);
-                  _0x59a920.attr("data-server-number", _0x5e74e1);
-                  if ($(".servers-" + _0x1fdf2c).is(":visible")) {
-                    _0x59a920.show();
-                  }
-                }
-              });
-            }
-          });
-        }
-        function _0x349dd5() {
-          if (window.currentDisplayMode === "wormworld") {
-            $(".server-number").css("color", "#00a8ff");
-          } else {
-            $(".server-number").css("color", "#f00");
-          }
-        }
-        $(".ui-tab").on("click", _0x4ef3a5);
-        $(".flag").click(function () {
-          let _0x39c64b = $(this).attr("value");
-          if (typeof theoKzObjects !== "undefined") {
-            theoKzObjects.flag = _0x39c64b;
-          }
-          if (typeof vO3 !== "undefined" && vO3.containerImgS) {
-            vO3.containerImgS.texture = vO3.onclickServer;
-          }
-          if (typeof retundFlagError === "function") {
-            retundFlagError();
-          }
-        });
-        _0x4ef3a5();
-        _0x413cd0();
-        _0x4a9d2a();
-        _0xf218bd().then(_0x15655e => {
-          if (_0x15655e) {
-            _0x5c117b();
-            setTimeout(function () {
-              let _0x46a116 = 0;
-              let _0x227b67 = setInterval(function () {
-                if (_0x46a116 >= 6) {
-                  clearInterval(_0x227b67);
-                  window.currentDisplayMode = "timmap";
-                  $("#sort-toggle").removeClass("wormworld").text("Timmap Servers");
-                  $(".server-number").css("color", "#f00");
-                  _0x5c117b();
-                  return;
-                }
-                if (_0x46a116 % 2 === 0) {
-                  window.currentDisplayMode = "wormworld";
-                  $("#sort-toggle").addClass("wormworld").text("WormWorld Servers");
-                  $(".server-number").css("color", "#00a8ff");
-                } else {
-                  window.currentDisplayMode = "timmap";
-                  $("#sort-toggle").removeClass("wormworld").text("Timmap Servers");
-                  $(".server-number").css("color", "#f00");
-                }
-                if (_0x46a116 === 0 || _0x46a116 === 1) {
-                  _0x5c117b();
-                }
-                _0x46a116++;
-              }, 700);
-            }, 1500);
-          }
-        });
       }
       p1613(p1612);
       var vLS7 = "";
@@ -10865,7 +10336,7 @@ function f(p) {
         });
       }
       if (vO50.s_w) {
-        $("<button id=\"btn_crsw\" style=\"display: none;\">" + v1948.ccg[34] + "</button> <button id=\"op_wxo\">" + v1948.ccg[6] + "</button> <div id=\"modal_wxo\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">" + v1948.ccg[6] + "</h2>     </div>     <div id=\"modal_wxo_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">" + v1948.ccg[7] + "</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">" + v1948.ccg[8] + "</span>" + v1948.ccg[9] + "         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">" + v1948.ccg[10] + "</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_crsw\" style=\"display: none;\">         Skin_Wear_file (.json) &nbsp;         <input type=\"file\" accept=\".json\" id=\"fileSkin\" />         <button id=\"btn_clear_file\">Clear file</button>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">" + v1948.ccg[11] + " &nbsp;         <label for=\"saveGame\">(" + v1948.ccg[12] + ")</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"wxosound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"wxospeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"wxoiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">" + v1948.ccg[13] + "</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
+        $("<button id=\"btn_crsw\" style=\"display: none;\">" + v1948.ccg[34] + "</button> <button id=\"op_tmw\">" + v1948.ccg[6] + "</button> <div id=\"modal_tmw\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">" + v1948.ccg[6] + "</h2>     </div>     <div id=\"modal_tmw_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">" + v1948.ccg[7] + "</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">" + v1948.ccg[8] + "</span>" + v1948.ccg[9] + "         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">" + v1948.ccg[10] + "</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_crsw\" style=\"display: none;\">         Skin_Wear_file (.json) &nbsp;         <input type=\"file\" accept=\".json\" id=\"fileSkin\" />         <button id=\"btn_clear_file\">Clear file</button>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">" + v1948.ccg[11] + " &nbsp;         <label for=\"saveGame\">(" + v1948.ccg[12] + ")</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"tmwsound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"tmwspeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"tmwiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">" + v1948.ccg[13] + "</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
         $("#btn_clear_file").click(function () {
           localStorage.removeItem("custom_wear");
           localStorage.removeItem("custom_skin");
@@ -10892,7 +10363,7 @@ function f(p) {
           v1956.readAsText(p1616.target.files[0]);
         });
       } else {
-        $("<button id=\"op_wxo\">" + v1948.ccg[6] + "</button> <div id=\"modal_wxo\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">" + v1948.ccg[6] + "</h2>     </div>     <div id=\"modal_wxo_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">" + v1948.ccg[7] + "</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">" + v1948.ccg[8] + "</span>" + v1948.ccg[9] + "         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">" + v1948.ccg[10] + "</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">" + v1948.ccg[11] + " &nbsp;         <label for=\"saveGame\">(" + v1948.ccg[12] + ")</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"wxosound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"wxospeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"wxoiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">" + v1948.ccg[13] + "</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
+        $("<button id=\"op_tmw\">" + v1948.ccg[6] + "</button> <div id=\"modal_tmw\" class=\"modal\">   <div class=\"modal-content\">     <div class=\"center\">       <span class=\"close\">×</span>       <h2 class=\"modal-title\">" + v1948.ccg[6] + "</h2>     </div>     <div id=\"modal_tmw_body\" class=\"modal-body\">       <div>         <label for=\"id_customer\">" + v1948.ccg[7] + "</label>         <input value=\"" + p1612.userId + "\" style=\"width: 185px;\" type=\"text\" id=\"id_customer\" readonly>         <button id=\"btn_copy\">           <span class=\"tooltiptext\" id=\"myTooltip\">" + v1948.ccg[8] + "</span>" + v1948.ccg[9] + "         </button>       </div>       <br>       <div id=\"div_server\">         <label for=\"sel_server\">" + v1948.ccg[10] + "</label>         <select id=\"sel_country\"></select>       </div>       <br>       <div id=\"div_save\" style=\"display: none;\">" + v1948.ccg[11] + " &nbsp;         <label for=\"saveGame\">(" + v1948.ccg[12] + ")</label>         <input type=\"checkbox\" id=\"saveGame\" value=\"true\">       </div>       <br>       <div>         <div id=\"div_sound\" style=\"display: none;\">           🔊<input type=\"checkbox\" id=\"tmwsound\" value=\"true\">           <audio id=\"s_h\">             <source src=\"" + atob(v946[34]) + "\" type=\"audio/mpeg\">           </audio>         </div>         <div id=\"div_speed\" style=\"display: none;\">           ⏩<input type=\"checkbox\" id=\"tmwspeed\" value=\"true\">         </div>         <div class=\"setting-item\" id=\"div_zigzag\" style=\"display: none;\">           <select id=\"sel_zigzag\" style=\"margin-left: 10px;\">             <option value=\"0\">No Zigzag</option>             <option value=\"1\">Zigzag 1</option>             <option value=\"2\">Zigzag 2</option>             <option value=\"3\">Zigzag 3</option>           </select>         </div>         <div id=\"div_w1\" style=\"display: none;width: 150px;text-align: center;\">           🖥️<select id=\"sel_sc\">             <option value=\"0\">100%</option>             <option value=\"1\">⬛</option>             <option value=\"2\">Center</option>           </select>         </div>         <div id=\"div_top\" style=\"display: none;width: 120px;text-align: center;\">           Top: <select id=\"sel_top\">             <option value=\"0\">0</option>             <option value=\"1\">1</option>             <option value=\"2\">2</option>             <option value=\"3\">3</option>             <option value=\"4\">4</option>             <option value=\"5\">5</option>             <option value=\"6\">6</option>             <option value=\"7\">7</option>             <option value=\"8\">8</option>             <option value=\"9\">9</option>             <option value=\"10\">10</option>           </select>         </div>         <div id=\"div_arab\" style=\"display: none;width: 120px;text-align: center;\">           عربي<input type=\"checkbox\" id=\"tmwiq\" value=\"true\">         </div>         <div id=\"div_sm\" style=\"display: none;width: 150px;text-align: center;\">           Smooth: <select id=\"sel_sm\">             <option value=\"20\">Normal</option>             <option value=\"10\">Hight</option>           </select>         </div>       </div>       <br>       <div id=\"div_background\" style=\"display: none;\">         <label for=\"backgroundArena\">" + v1948.ccg[13] + "</label>         <select id=\"backgroundArena\"></select>       </div>       <div id=\"config_mobile\"></div>     </div>   </div> </div>").insertAfter("#mm-store");
       }
       ;
       $("#btn_copy").click(function () {
@@ -10909,8 +10380,8 @@ function f(p) {
         $("#myTooltip").css("visibility", "visible");
         $("#myTooltip").css("opacity", "0");
       });
-      var v1958 = document.getElementById("modal_wxo");
-      var v1959 = document.getElementById("op_wxo");
+      var v1958 = document.getElementById("modal_tmw");
+      var v1959 = document.getElementById("op_tmw");
       var v1960 = document.getElementsByClassName("close")[0];
       v1959.onclick = function () {
         v1958.style.display = "block";
@@ -11008,7 +10479,7 @@ function f(p) {
           method: "POST",
           body: JSON.stringify(vO80)
         });
-        localStorage.removeItem("wxosw");
+        localStorage.removeItem("tmwsw");
         window.location.reload();
       };
       var v1975 = false;
@@ -11031,7 +10502,7 @@ function f(p) {
           var v1979 = ooo.Xg.Kf.Wg.Ah;
           v1961.style.display = "block";
           v1962.style.display = "inline-block";
-          var v$25 = $("#wxosound");
+          var v$25 = $("#tmwsound");
           v$25.prop("checked", vO50.vh);
           v$25.change(function () {
             if (this.checked) {
@@ -11039,10 +10510,10 @@ function f(p) {
             } else {
               vO50.vh = false;
             }
-            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
           });
           v1963.style.display = "inline-block";
-          var v$26 = $("#wxospeed");
+          var v$26 = $("#tmwspeed");
           v$26.prop("checked", vO50.vp);
           v$26.change(function () {
             if (this.checked) {
@@ -11050,13 +10521,13 @@ function f(p) {
             } else {
               vO50.vp = false;
             }
-            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
           });
           $("#div_zigzag").css("display", "inline-block");
           $("#sel_zigzag").val(vO50.flx || 0);
           $("#sel_zigzag").change(function () {
             vO50.flx = parseInt($(this).val());
-            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
           });
           v1963.style.display = "inline-block";
           v1964.style.display = "inline-block";
@@ -11068,7 +10539,7 @@ function f(p) {
             } else {
               vO50.vp = false;
             }
-            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
           });
           if (vO50.mobile) {
             v1965.style.display = "none";
@@ -11085,24 +10556,24 @@ function f(p) {
               if (vO50.sc == 2) {
                 vO50.wi = 0;
               }
-              localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+              localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
             };
           }
           v1966.style.display = "inline-block";
           sel_sm.value = vO50.sm;
           sel_sm.onchange = function () {
             vO50.sm = parseInt(sel_sm.value);
-            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
           };
           v1968.style.display = "inline-block";
           v1969.value = vO50.to;
           v1969.onchange = function () {
             vO50.to = parseInt(v1969.value);
-            localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+            localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
           };
           if (v1972.value == "iq") {
             v1970.style.display = "inline-block";
-            var v$29 = $("#wxoiq");
+            var v$29 = $("#tmwiq");
             v$29.prop("checked", vO50.iq);
             v$29.change(function () {
               if (this.checked) {
@@ -11110,7 +10581,7 @@ function f(p) {
               } else {
                 vO50.iq = false;
               }
-              localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+              localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
             });
           } else {
             vO50.iq = false;
@@ -11171,10 +10642,10 @@ function f(p) {
           ;
           vO50.c_3 = v1948.extension;
           v1980.value = vO50.background || vA31[0].uri;
-          $("#backgroundArena").wxosle({
+          $("#backgroundArena").tmwsle({
             onSelected: function () {
               vO50.background = $("#backgroundArena-value").val();
-              localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+              localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
               ooo.ef.F_bg = new PIXI.Texture(ooo.ef.fn_o(vO50.background));
             }
           });
@@ -11265,7 +10736,7 @@ function f(p) {
         ;
         if (v1948.ccc && v1948.ccc != "gb" && v1948.ccc != v944) {
           localStorage.setItem("oco", v1948.ccc);
-          localStorage.removeItem("wxosw");
+          localStorage.removeItem("tmwsw");
           window.location.reload();
         }
         if (!v944) {
@@ -11273,7 +10744,7 @@ function f(p) {
         }
       }
       ;
-      localStorage.setItem("wxoSaveGame", JSON.stringify(vO50));
+      localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
     };
     Ysw = async function (p1617) {
       var v1988 = await p1617;
@@ -11303,7 +10774,7 @@ function f(p) {
             var vLN0258 = 0;
             for (var v1992 in v991.csg["0"]) {
               for (var v1994 = v991.csg["1"][v1992].split("|"), vLN0264 = 0; vLN0264 < v1994.length; vLN0264++) {
-                v1988.textureDict["t_wxo_" + (vO50.g / 9 * 1000 + vLN0258)] = {
+                v1988.textureDict["t_tmw_" + (vO50.g / 9 * 1000 + vLN0258)] = {
                   custom: true,
                   file: "data:image/png;base64," + v1994[vLN0264].substr(v1994[vLN0264].length - vO50.c_v, vO50.c_v) + v1994[vLN0264].substr(0, v1994[vLN0264].length - vO50.c_v)
                 };
@@ -11333,7 +10804,7 @@ function f(p) {
                     glow: v1995[v2004]
                   };
                   for (var vLN0264 = 0; vLN0264 < v1995[v2004].length; vLN0264++) {
-                    vO83.base.push("s_wxo_" + (vO50.g / 9 * 1000 + vLN0256) + "_" + (v1995[v2004].length - vLN0264));
+                    vO83.base.push("s_tmw_" + (vO50.g / 9 * 1000 + vLN0256) + "_" + (v1995[v2004].length - vLN0264));
                   }
                   ;
                   v1988.skinArrayDict.push(vO83);
@@ -11385,9 +10856,9 @@ function f(p) {
                   glow: v1995[v2004]
                 };
                 for (var vLN0264 = 0; vLN0264 < v1995[v2004].length; vLN0264++) {
-                  vO83.base.push("s_wxo_" + vO83.id + "_" + (v1995[v2004].length - vLN0264));
-                  v1988.regionDict["s_wxo_" + vO83.id + "_" + (vLN0264 + 1)] = {
-                    texture: "t_wxo_" + vO83.id,
+                  vO83.base.push("s_tmw_" + vO83.id + "_" + (v1995[v2004].length - vLN0264));
+                  v1988.regionDict["s_tmw_" + vO83.id + "_" + (vLN0264 + 1)] = {
+                    texture: "t_tmw_" + vO83.id,
                     h: 96,
                     w: 96,
                     x: (vLN0264 || 0) * 99,
@@ -11450,7 +10921,7 @@ function f(p) {
               body: JSON.stringify(vO84)
             }).then(async function (p1618) {
               p1618 = await p1618.json();
-              v1988.textureDict["t_wxo_" + v2005["0"] + "_skin_g"] = {
+              v1988.textureDict["t_tmw_" + v2005["0"] + "_skin_g"] = {
                 custom: true,
                 relativePath: p1618.csg["1"]["0"]
               };
@@ -11481,9 +10952,9 @@ function f(p) {
                   glow: v2006[v2009]
                 };
                 for (var vLN0267 = 0; vLN0267 < v2006[v2009].length; vLN0267++) {
-                  vO85.base.push("s_wxo_" + vO85.id + "_" + (v2006[v2009].length - vLN0267));
-                  v1988.regionDict["s_wxo_" + vO85.id + "_" + (vLN0267 + 1)] = {
-                    texture: "t_wxo_" + v2005["0"] + "_skin_g",
+                  vO85.base.push("s_tmw_" + vO85.id + "_" + (v2006[v2009].length - vLN0267));
+                  v1988.regionDict["s_tmw_" + vO85.id + "_" + (vLN0267 + 1)] = {
+                    texture: "t_tmw_" + v2005["0"] + "_skin_g",
                     h: 96,
                     w: 96,
                     x: (vLN0267 || 0) * 99,
@@ -11512,7 +10983,7 @@ function f(p) {
       s_h.pause();
     }
     (function (p1620) {
-      p1620.fn.wxosle = function (p1621) {
+      p1620.fn.tmwsle = function (p1621) {
         if (vO86[p1621]) {
           return vO86[p1621].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof p1621 != "object" && p1621) {
@@ -11802,211 +11273,3 @@ function f(p) {
     };
   });
 })();
-
-
-
-// ========== أضافه خطوط الرقيقه لجلد الثعبان xo dark ==========
-(function() {
-  let snakeLinesEnabled = false;
-  let linesContainer = null;
-  let linesGraphics = null;
-
-  // Initialize the lines graphics container
-  function initLinesGraphics() {
-    if (linesContainer) return true;
-
-    try {
-      // Find the render container - try multiple paths
-      let renderContainer = null;
-      
-      if (window._wxo && window._wxo._anApp && window._wxo._anApp.og && 
-          window._wxo._anApp.og.af && window._wxo._anApp.og.af.ng && 
-          window._wxo._anApp.og.af.ng.Qg) {
-        renderContainer = window._wxo._anApp.og.af.ng.Qg; // Snake container
-      } else if (window._1f8817 && window._1f8817.og && window._1f8817.og.af && 
-                 window._1f8817.og.af.ng && window._1f8817.og.af.ng.Qg) {
-        renderContainer = window._1f8817.og.af.ng.Qg;
-      }
-      
-      if (!renderContainer) {
-        console.log('Render container not found');
-        return false;
-      }
-
-      // Create container for lines
-      linesContainer = new PIXI.Container();
-      linesGraphics = new PIXI.Graphics();
-      linesContainer.addChild(linesGraphics);
-      linesContainer.zIndex = 9999; // Render on top
-      renderContainer.addChild(linesContainer);
-      
-      console.log('Lines graphics initialized successfully');
-      return true;
-    } catch (e) {
-      console.error('Failed to init lines graphics:', e);
-      return false;
-    }
-  }
-
-  // Draw horizontal lines on snake body
-  function drawSnakeLines() {
-    if (!snakeLinesEnabled || !linesGraphics) return;
-
-    try {
-      linesGraphics.clear();
-
-      // Get the game instance
-      const gameInstance = window._wxo?._anApp?.dh || window._1f8817?.dh;
-      if (!gameInstance || !gameInstance.Fh) return;
-
-      // Set line style
-      linesGraphics.lineStyle(0.2, 0xFFFFFF, 0.9); // White lines, thicker and more opaque
-
-      // Iterate through all players/snakes
-      for (const playerId in gameInstance.Fh) {
-        const worm = gameInstance.Fh[playerId];
-        if (!worm || !worm.xi || !worm.Eh) continue;
-        if (!worm.wi) continue; // Skip dead worms
-
-        // Get snake body positions from _c array (interpolated positions)
-        const positions = worm._c;
-        const segmentCount = worm.ad; // actual segment count
-        const radius = worm.$c || 10; // segment radius
-
-        if (!positions || segmentCount < 2) continue;
-
-        // Draw lines on each body segment
-        const spacing = 1; // Draw a line every 3 segments
-        
-        for (let i = 0; i < segmentCount - 1; i += spacing) {
-          const x1 = positions[i * 2];
-          const y1 = positions[i * 2 + 1];
-          const x2 = positions[(i + 1) * 2];
-          const y2 = positions[(i + 1) * 2 + 1];
-
-          // Calculate perpendicular direction
-          const dx = x2 - x1;
-          const dy = y2 - y1;
-          const length = Math.sqrt(dx * dx + dy * dy);
-          
-          if (length === 0) continue;
-
-          // Normalized perpendicular vector
-          const perpX = -dy / length;
-          const perpY = dx / length;
-
-          // Draw horizontal line across the segment
-          const lineLength = radius * 2; // Line extends across body width
-          const startX = x1 + perpX * lineLength;
-          const startY = y1 + perpY * lineLength;
-          const endX = x1 - perpX * lineLength;
-          const endY = y1 - perpY * lineLength;
-
-          linesGraphics.moveTo(startX, startY);
-          linesGraphics.lineTo(endX, endY);
-        }
-      }
-    } catch (e) {
-      console.error('Error drawing snake lines:', e);
-    }
-  }
-
-  // Toggle lines on/off
-  function toggleSnakeLines() {
-    snakeLinesEnabled = !snakeLinesEnabled;
-    
-    if (snakeLinesEnabled) {
-      if (!initLinesGraphics()) {
-        console.log('❌ Failed to initialize lines graphics');
-        snakeLinesEnabled = false;
-        return;
-      }
-      console.log('✅ Snake body lines ENABLED');
-      linesContainer.visible = true;
-    } else {
-      console.log('❌ Snake body lines DISABLED');
-      if (linesContainer) {
-        linesContainer.visible = false;
-      }
-      if (linesGraphics) {
-        linesGraphics.clear();
-      }
-    }
-  }
-
-  // Render loop - update lines every frame
-  function updateLines() {
-    if (snakeLinesEnabled) {
-      drawSnakeLines();
-    }
-    requestAnimationFrame(updateLines);
-  }
-
-  // Initialize the system
-  function init() {
-    if (typeof PIXI === 'undefined') {
-      console.log('Waiting for PIXI...');
-      setTimeout(init, 1000);
-      return;
-    }
-    
-    if (!window._wxo && !window._1f8817) {
-      console.log('Waiting for game to load...');
-      setTimeout(init, 1000);
-      return;
-    }
-    
-    updateLines();
-    console.log('🐍 Snake lines system initialized. Press N to toggle.');
-  }
-
-  // Start initialization
-  setTimeout(init, 3000);
-
-  // Keyboard handler for 'N' key
-  document.addEventListener('keydown', function(e) {
-    // Check for 'N' key (keyCode 78)
-    if (e.keyCode === 78 || e.key === 'l' || e.key === 'L') {
-      // Ignore if typing in input fields......
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-        return;
-      }
-      
-      e.preventDefault();
-      toggleSnakeLines();
-    }
-  });
-
-  // Expose toggle function globally (optional)
-  window.toggleSnakeLines = toggleSnakeLines;
-})();
-
-// Fix settings button click handler
-document.addEventListener('DOMContentLoaded', function() {
-  // Periodic memory cleanup every 30 seconds
-  setInterval(cleanupBackgroundMemory, 30000);
-  
-  // Settings panel interactive features....
-  setTimeout(() => {
-    const copyBtn = document.querySelector('#mm-wxo-close').parentElement.querySelector('button[onclick*="clipboard"]');
-    const idInput = document.getElementById('wormate_id');
-    const clearBtn = document.querySelector('button[onclick*="fileSkin.value"]');
-    const fileInput = document.getElementById('fileSkin');
-   
-    
-    });
-
-
-      $(".mm-merchant-cont").append(`
-  <div style="style="display: flex;justify-content: center;align-items: center;margin-top: -53px;width: 351px;"">
-    <a href="https://wormxo.store" target="_blank" style="margin-right: 10px;">
-      <img src="https://wormxo.store/image/wxo-AA4.png" alt="Happy">
-    </a>
-  </div>
-  `);
-
-})();
-      console.log("%c Platen Update ", "color: lime; background: black; font-size: 14px; border-radius: 30px;");
-
-
-
