@@ -367,25 +367,6 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 })();
 
 
-/* WormFriends Matrix lobby background core */
-(function () {
-  if (window.__WORMFRIENDS_MATRIX_LOBBY_BG__) return;
-  window.__WORMFRIENDS_MATRIX_LOBBY_BG__ = true;
-  function install() {
-    try {
-      var old = document.getElementById("wormxo-lobby-bg-style");
-      if (old && old.parentNode) old.parentNode.removeChild(old);
-      if (document.getElementById("wormfriends-matrix-lobby-bg-style")) return;
-      var css = document.createElement("style");
-      css.id = "wormfriends-matrix-lobby-bg-style";
-      css.textContent = "#game-wrap,#mm-start,#main-menu,#main-menu-view,.background-canva{background:radial-gradient(circle at 15% 20%,rgba(0,95,255,.50),transparent 32%),radial-gradient(circle at 82% 22%,rgba(80,220,255,.44),transparent 34%),radial-gradient(circle at 50% 86%,rgba(155,60,255,.40),transparent 40%),radial-gradient(circle at 48% 42%,rgba(0,0,0,.55),transparent 48%),linear-gradient(135deg,#040615 0%,#061b3d 42%,#16082e 100%)!important;background-size:190% 190%,180% 180%,200% 200%,170% 170%,100% 100%!important;animation:wfmLobbyFlow 18s ease-in-out infinite alternate!important;}@keyframes wfmLobbyFlow{0%{background-position:0% 20%,100% 15%,45% 100%,40% 45%,0 0;}50%{background-position:45% 60%,58% 34%,60% 70%,58% 40%,0 0;}100%{background-position:95% 80%,12% 82%,25% 40%,45% 58%,0 0;}}#main-menu,#mm-start,#main-menu-view,.store-view-cont,#login-view,#welcome-view,#mm-player-info,#wf-tool-button,#popup{position:relative!important;z-index:5!important;pointer-events:auto!important;}";
-      (document.head || document.documentElement).appendChild(css);
-    } catch (e) {}
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install, { once: true }); else install();
-})();
-
-
 window.detectLog = null;
 const vO = {
   BETAisSkinCustom(p) {
@@ -457,6 +438,14 @@ var vO3 = {
     pxy: 105
   }
 };
+
+window.WORMXO_2023_BG_ASSETS = {
+  F: "/images/linelogo-valday2023.png",
+  G: "/images/guest-avatar-valday2023.png",
+  H: "/images/confetti-valday2023.png",
+  I: "/images/bg-event-pattern-valday2023.png"
+};
+
 var vO4 = {
   FB_UserID: "",
   smoothCamera: 0.5,
@@ -494,6 +483,7 @@ var vO4 = {
   bName: "✡️ {{ID}} ✡️🕎✅✅",
   bSkin: 131
 };
+
 saveGameLocal = localStorage.getItem("SaveGameXT");
 if (saveGameLocal && saveGameLocal !== "null") {
   let v6 = JSON.parse(saveGameLocal);
@@ -4224,7 +4214,7 @@ $.get(v89, function (p97) {
         this.ye = [];
         this.a();
       }
-      var vLN016 = 0;
+      var vLN016 = 0x000000;
       function f54(p262, p263) {
         return p262 + Math.random(p263 - p262);
       }
@@ -4336,7 +4326,7 @@ $.get(v89, function (p97) {
         }
         this.Ra();
       };
-      f53.sc = false;
+      f53.sc = true;
       f53.Le = function (p266) {
         f53.sc = p266;
       };
@@ -4719,7 +4709,7 @@ vF172.prototype.Se = function (p281) {
         this.lf.Bf(p294.af == vO17.$e ? vF93.q.Cf : vF93.q.Df);
         var v197 = this.mf;
         v197.clear();
-        v197.lineStyle(0.8, 65535);
+        v197.lineStyle(0.6, 0x4A0000, 0.35);
         v197.drawCircle(0, 0, p294.ub);
         v197.endFill();
         this.vf.Ef = p295;
@@ -5803,16 +5793,18 @@ vF172.prototype.Se = function (p281) {
           this.Nf = p372;
           this.Pf = p373;
         }
-        f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
-          this.Nf.Mg(true);
-          this.Nf.nh(p374, p375);
-          this.Nf.oh(p376);
-          this.Nf.qh(p377);
-          this.Pf.Mg(true);
-          this.Pf.nh(p374, p375);
-          this.Pf.oh(p378);
-          this.Pf.qh(p379);
-        };
+f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
+  this.Nf.Mg(true);
+  this.Nf.nh(p374, p375);
+  this.Nf.oh(p376);
+  this.Nf.qh(p377);
+
+  this.Pf.Mg(true);
+  this.Pf.nh(p374, p375);
+
+  this.Pf.oh(p378 * 1.45);
+  this.Pf.qh(0.82);
+};
         f70.prototype.lh = function () {
           this.Nf.Mg(false);
           this.Pf.Mg(false);
@@ -6027,8 +6019,8 @@ vF172.prototype.Se = function (p281) {
     var vF39 = function () {
       function f76() {
         this.fn_o = f77;
-        this.Fe = new vF7._b(vF7.$b.from("/images/bg-obstacle.png"));
-        var v348 = vF7.$b.from("/images/confetti-xmas2022.png");
+        this.Fe = new vF7._b(vF7.$b.from("https://wormate.io/images/bg-event-pattern-valday2023.png"));
+        var v348 = vF7.$b.from("https://wormate.io/images/confetti-valday2023.png");
         this.Ge = [new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128))];
         this.Cf = new vF7._b(f77());
         this.Df = new vF7._b(function () {
@@ -6136,13 +6128,15 @@ vF172.prototype.Se = function (p281) {
           this.bi[vLN056].a();
         }
         this.ci = new vF14(vF51.di);
+        vF14.Le(true);
+        try { vF14.Le(true); } catch (e) {}
       };
       f79.prototype.Qa = function (p407, p408) {
+        if (this.ci != null) {
+          try { this.ci.Pa(p407 || Date.now(), p408 || 16); } catch (e0) {}
+        }
         for (var v358 = this.bi.length - 1; v358 >= 0; v358--) {
           this.bi[v358].Pa(p407, p408);
-        }
-        if (this.bi[0] != this.H && this.bi[0] != this.pa && this.ci != null) {
-          this.ci.Pa(p407, p408);
         }
       };
       f79.prototype.Ra = function () {
@@ -7498,29 +7492,40 @@ vF172.prototype.Se = function (p281) {
       };
       return f95;
     }();
-    var vF51 = function () {
-      function f96(p550) {
-        this.rc = p550;
-      }
-      f96.fk = $("#game-view");
-      f96.gk = $("#results-view");
-      f96.hk = $("#main-menu-view");
-      f96.ik = $("#popup-view");
-      f96.jk = $("#toaster-view");
-      f96.kk = $("#loading-view");
-      f96.lk = $("#stretch-box");
-      f96.mk = $("#game-canvas");
-      f96.di = $("#background-canvas");
-      f96.nk = $("#social-buttons");
-      f96.ok = $("#markup-wrap");
-      f96.prototype.a = function () {};
-      f96.prototype.ii = function () {};
-      f96.prototype.ji = function () {};
-      f96.prototype.ei = function () {};
-      f96.prototype.Ra = function () {};
-      f96.prototype.Pa = function (p551, p552) {};
-      return f96;
-    }();
+var vF51 = function () {
+  function f96(p550) {
+    this.rc = p550;
+  }
+
+  f96.fk = $("#game-view");
+  f96.gk = $("#results-view");
+  f96.hk = $("#main-menu-view");
+  f96.ik = $("#popup-view");
+  f96.jk = $("#toaster-view");
+  f96.kk = $("#loading-view");
+  f96.lk = $("#stretch-box");
+
+  f96.mk = $("#game-canvas");
+  f96.di = $("#background-canvas");
+
+  window.__WORMXO_BG_CANVAS__ = f96.di;
+
+  if (window.PIXI && f96.di && f96.di.length) {
+    console.log("BG canvas ready");
+  }
+
+  f96.nk = $("#social-buttons");
+  f96.ok = $("#markup-wrap");
+
+  f96.prototype.a = function () {};
+  f96.prototype.ii = function () {};
+  f96.prototype.ji = function () {};
+  f96.prototype.ei = function () {};
+  f96.prototype.Ra = function () {};
+  f96.prototype.Pa = function (p551, p552) {};
+
+  return f96;
+}();
     var vF52 = function () {
       function f97(p553, p554, p555, p556, p557, p558) {}
       var v$3 = $("#final-caption");
@@ -7637,7 +7642,7 @@ vF172.prototype.Se = function (p281) {
           vF51.lk.fadeOut(1);
           vF51.di.stop();
           vF51.di.fadeOut(50);
-          vF14.Le(false);
+          vF14.Le(true);
           vF51.nk.stop();
           vF51.nk.fadeOut(50);
           vF51.ok.stop();
@@ -7659,7 +7664,7 @@ vF172.prototype.Se = function (p281) {
           vF51.lk.fadeOut(1);
           vF51.di.stop();
           vF51.di.fadeOut(50);
-          vF14.Le(false);
+          vF14.Le(true);
           vF51.nk.stop();
           vF51.nk.fadeOut(50);
           vF51.ok.stop();
@@ -8035,7 +8040,7 @@ vF172.prototype.Se = function (p281) {
         vF51.lk.fadeOut(1);
         vF51.di.stop();
         vF51.di.fadeOut(50);
-        vF14.Le(false);
+        vF14.Le(true);
         vF51.nk.stop();
         vF51.nk.fadeOut(50);
         vF51.ok.stop();
