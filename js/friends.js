@@ -559,10 +559,33 @@ const vF2 = function () {
   }
   return v10;
 };
+function WORMXO_isLobbyVisible() {
+  try {
+    var mm = document.getElementById("main-menu-view") || document.getElementById("main-menu") || document.getElementById("mm-start");
+    var gv = document.getElementById("game-view");
+    var menuVisible = !!(mm && getComputedStyle(mm).display !== "none" && getComputedStyle(mm).visibility !== "hidden" && mm.offsetParent !== null);
+    var gameVisible = !!(gv && getComputedStyle(gv).display !== "none" && getComputedStyle(gv).visibility !== "hidden");
+    return menuVisible && !gameVisible;
+  } catch (e) { return false; }
+}
+function WORMXO_destroyJoystickSafe() {
+  try {
+    if (window.__WORMXO_JOYSTICK_INSTANCE__ && typeof window.__WORMXO_JOYSTICK_INSTANCE__.destroy === "function") {
+      window.__WORMXO_JOYSTICK_INSTANCE__.destroy();
+    }
+    window.__WORMXO_JOYSTICK_INSTANCE__ = null;
+    var els = document.querySelectorAll(".nipple-collection");
+    for (var i = 0; i < els.length; i++) if (els[i] && els[i].parentNode) els[i].parentNode.removeChild(els[i]);
+  } catch (e) {}
+}
 const vF3 = function (p7) {
   let v12 = null;
 
   try {
+    if (!window.__WORMXO_GAME_SOCKET_CONNECTING__ && WORMXO_isLobbyVisible()) {
+      WORMXO_destroyJoystickSafe();
+      return null;
+    }
     var isMobileNow = vF2();
 
     if (!vO4.gamePad) {
@@ -656,9 +679,11 @@ const vF3 = function (p7) {
   window.__WORMXO_JOYSTICK_BOOT__ = true;
   function bootJoy() {
     try {
-      if ((vF2 && vF2()) || (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) {
+      if (((vF2 && vF2()) || (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) && !WORMXO_isLobbyVisible()) {
         if (vO4 && vO4.gamePad) vO4.gamePad.checked = true;
-        vF3(true);
+        vF3(false);
+      } else if (WORMXO_isLobbyVisible()) {
+        WORMXO_destroyJoystickSafe();
       }
     } catch (e) {}
   }
@@ -1529,7 +1554,7 @@ function XOTEAM_startAutoSave() {
         XOTEAM_TOP_HS_TIMER = null;
       }
 
-      setTimeout(XOTEAM_startAutoSave, 3000);
+      setTimeout(XOTEAM_startAutoSave, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 1800 : 1200);
     };
 
     XOTEAM_WS.onerror = function (e) {
@@ -3447,12 +3472,14 @@ $.get(v89, function (p97) {
         }
       };
       vO12.Vb = function (p131, p132) {
+        window.__WORMXO_GAME_SOCKET_CONNECTING__ = true;
         let vVF3 = vF3(!vO4.mobile);
         var v119 = vO12.db = new WebSocket(p131);
         v119.binaryType = "arraybuffer";
         window.onOpen = v119.onopen = function () {
           f114("open");
           if (vO12.db === v119) {
+            window.__WORMXO_GAME_SOCKET_CONNECTING__ = true;
             console.log("Socket opened");
             p132();
             try {
@@ -4229,20 +4256,21 @@ var vF14 = function () {
         css.id = "wormxo-valday-2023-deep-bg-css";
         css.textContent = "\n" +
           "@keyframes wormxoValday2023DeepMove{\n" +
-          "0%{background-position:0 0,0 0,0 0,0 0,0 0;}\n" +
-          "50%{background-position:220px 310px,-260px 180px,0 0,0 0,0 0;}\n" +
-          "100%{background-position:440px 620px,-520px 360px,0 0,0 0,0 0;}\n" +
+          "0%{background-position:0% 50%,100% 50%,0 0,0 0;filter:hue-rotate(0deg);}\n" +
+          "50%{background-position:100% 50%,0% 50%,80px 140px,-120px 80px;filter:hue-rotate(18deg);}\n" +
+          "100%{background-position:0% 50%,100% 50%,160px 280px,-240px 160px;filter:hue-rotate(0deg);}\n" +
           "}\n" +
+          "@keyframes wormxoValdayFloat{0%,100%{transform:translate3d(0,0,0) scale(1);}50%{transform:translate3d(18px,-14px,0) scale(1.04);}}\n" +
           "#wormxo-valday-2023-deep-bg{\n" +
-          "position:absolute!important;left:0!important;top:0!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;\n" +
-          "z-index:0!important;pointer-events:none!important;display:block!important;visibility:visible!important;opacity:1!important;\n" +
-          "background-color:#000!important;\n" +
-          "background-image:url('https://wormate.io/images/confetti-valday2023.png'),url('https://wormate.io/images/bg-event-pattern-valday2023.png'),radial-gradient(circle at 22% 25%,rgba(255,70,115,.32),transparent 34%),radial-gradient(circle at 78% 22%,rgba(255,195,80,.24),transparent 36%),linear-gradient(135deg,#000 0%,#16020a 45%,#000 100%)!important;\n" +
-          "background-repeat:repeat,repeat,no-repeat,no-repeat,no-repeat!important;\n" +
-          "background-size:240px 240px,520px 520px,100% 100%,100% 100%,100% 100%!important;\n" +
-          "animation:wormxoValday2023DeepMove 24s linear infinite!important;\n" +
+          "position:absolute!important;left:0!important;top:0!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;overflow:hidden!important;\n" +
+          "z-index:0!important;pointer-events:none!important;display:block!important;visibility:visible!important;opacity:1!important;background:#02030a!important;\n" +
+          "background-image:radial-gradient(circle at 18% 20%,rgba(0,195,255,.42),transparent 28%),radial-gradient(circle at 82% 26%,rgba(160,80,255,.38),transparent 31%),radial-gradient(circle at 45% 88%,rgba(45,130,255,.24),transparent 35%),linear-gradient(135deg,#050714 0%,#06295b 30%,#4b1c83 64%,#08040f 100%)!important;\n" +
+          "background-repeat:no-repeat!important;background-size:160% 160%,150% 150%,140% 140%,220% 220%!important;animation:wormxoValday2023DeepMove 18s ease-in-out infinite!important;\n" +
+          "box-shadow:inset 0 0 180px rgba(0,0,0,.92),inset 0 0 70px rgba(50,180,255,.18)!important;\n" +
           "}\n" +
-          "#game-wrap,#stretch-box,#markup-wrap,#main-menu-view,#main-menu,#mm-start{position:relative!important;}\n" +
+          "#wormxo-valday-2023-deep-bg:before{content:'';position:absolute;inset:-18%;background:radial-gradient(circle at 35% 35%,rgba(0,225,255,.22),transparent 26%),radial-gradient(circle at 68% 45%,rgba(184,92,255,.20),transparent 30%);filter:blur(28px);animation:wormxoValdayFloat 8s ease-in-out infinite!important;}\n" +
+          "#wormxo-valday-2023-deep-bg:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(0deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:42px 42px;opacity:.28;mix-blend-mode:screen;}\n" +
+          "#game-wrap,#stretch-box,#markup-wrap,#main-menu-view,#main-menu,#mm-start{position:relative!important;background:transparent!important;}\n" +
           "#background-canvas{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;height:100%!important;z-index:0!important;background:transparent!important;pointer-events:none!important;}\n" +
           "#game-view,#results-view,#popup-view,#toaster-view,#loading-view,#social-buttons,#markup-footer{position:relative!important;z-index:5!important;}\n" +
           "#main-menu-view>*:not(#wormxo-valday-2023-deep-bg),#main-menu>*:not(#wormxo-valday-2023-deep-bg),#mm-start>*:not(#wormxo-valday-2023-deep-bg){position:relative;z-index:2;}\n";
@@ -10906,7 +10934,7 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
       st.textContent = "#wormxo-loading-2022{position:fixed;inset:0;z-index:999998;background:radial-gradient(circle at 50% 42%,#2b1b10 0,#110b08 48%,#030303 100%);display:none;align-items:center;justify-content:center;flex-direction:column;color:#ffb545;font-family:Arial,Tahoma,sans-serif}#wormxo-loading-2022 .worm{width:96px;height:96px;border:5px solid rgba(255,150,0,.18);border-top-color:#ff8a00;border-radius:50%;animation:wormxoSpin .9s linear infinite}#wormxo-loading-2022 b{margin-top:16px;font-size:19px;letter-spacing:2px;text-shadow:0 0 12px #ff8a00}@keyframes wormxoSpin{to{transform:rotate(360deg)}}.description-text-hiep{background:rgba(26, 26, 46, 0.36)!important;border:1px solid rgba(255,153,0,.5)!important;border-radius:14px!important;box-shadow:0 0 22px rgba(255,138,0,.18)!important;padding:8px!important}.title-wormate-friends-connect{color:# rgba(0, 0, 0, 0.6)!important;text-shadow:0 0 10px rgba(21, 21, 31, 0.6)!important;font-weight:900!important}.servers-container p.selectSala{background:linear-gradient(90deg,rgba(83, 83, 83, 0.14),rgba(255,255,255,.04))!important;border:1px solid rgba(29, 122, 110, 0.32)!important;border-radius:10px!important;margin:6px 4px!important;padding:8px 10px!important;color:#fff!important;font-weight:900!important;transition:.12s!important;box-shadow:inset 0 0 8px rgba(255,138,0,.08)!important}.servers-container p.selectSala:hover{transform:translateX(3px);background:linear-gradient(90deg,rgba(99, 99, 99, 0.32),rgba(255,255,255,.08))!important;border-color:rgb(16 87 151)!important}.ui-tabs-nav .ui-tabs-tab{border-radius:9px!important;background:rgba(255,255,255,.06)!important}.ui-tabs-nav .ui-tab-active{background:rgba(255,138,0,.28)!important;box-shadow:0 0 10px rgba(255,138,0,.32)!important}";
       (document.head || document.documentElement).appendChild(st);
       var d = document.createElement("div");
-      d.id = "wormxo-loading-2026";
+      d.id = "wormxo-loading-2022";
       d.innerHTML = '<div class="worm"></div><b>WormFriends Matrix Loading</b><span style="margin-top:8px;color:#fff;opacity:.8">Connecting to server...</span>';
       document.body.appendChild(d);
     } catch (e) {}
@@ -10957,7 +10985,7 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
         if (!opened || ws.readyState !== 1) {
           try { offlineToast("فقد الاتصال بالخادم"); showLoad(false); } catch (e) {}
         }
-      }, 6500);
+      }, 4200);
       ws.addEventListener("open", function () { opened = true; clearTimeout(timer); showLoad(false); });
       ws.addEventListener("close", function () { if (!opened) offlineToast("السيرفر لا يستجيب"); showLoad(false); });
       ws.addEventListener("error", function () { offlineToast("فقد الاتصال بالخادم"); showLoad(false); });
@@ -10983,4 +11011,30 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run, { once: true });
   else run();
   setInterval(run, 1000);
+})();
+
+
+/* WORMXO FINAL STABILITY PATCH 2026 - lobby background / mobile joystick / connection */
+(function () {
+  if (window.__WORMXO_FINAL_STABILITY_2026__) return;
+  window.__WORMXO_FINAL_STABILITY_2026__ = true;
+  function ensureBg() {
+    try {
+      if (typeof vF14 !== "undefined" && vF14 && typeof vF14.install === "function") vF14.install();
+      var host = document.getElementById("main-menu-view") || document.getElementById("main-menu") || document.getElementById("mm-start") || document.getElementById("game-wrap");
+      if (host && !document.getElementById("wormxo-valday-2023-deep-bg")) {
+        var layer = document.createElement("div");
+        layer.id = "wormxo-valday-2023-deep-bg";
+        host.insertBefore(layer, host.firstChild || null);
+      }
+    } catch (e) {}
+  }
+  function watchJoy() {
+    try {
+      if (typeof WORMXO_isLobbyVisible === "function" && WORMXO_isLobbyVisible() && typeof WORMXO_destroyJoystickSafe === "function") WORMXO_destroyJoystickSafe();
+    } catch (e) {}
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ensureBg, { once: true }); else ensureBg();
+  window.addEventListener("resize", ensureBg, { passive: true });
+  setInterval(function () { ensureBg(); watchJoy(); }, 1200);
 })();
