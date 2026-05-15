@@ -6124,21 +6124,47 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
         }
         return -1;
       }
-      f79.prototype.a = function () {
-        this.bi = [this.H, this.F, this.Uh, this.Vh, this.Wh, this.Xh, this.Yh, this.Zh, this.xa, this.$h, this._h, this.ai, this.aa, this.ua, this.pa];
-        for (var vLN056 = 0; vLN056 < this.bi.length; vLN056++) {
-          this.bi[vLN056].a();
-        }
-        this.ci = new vF14(vF51.di);
-      };
-      f79.prototype.Qa = function (p407, p408) {
-        for (var v358 = this.bi.length - 1; v358 >= 0; v358--) {
-          this.bi[v358].Pa(p407, p408);
-        }
-        if (this.bi[0] != this.H && this.bi[0] != this.pa && this.ci != null) {
-          this.ci.Pa(p407, p408);
-        }
-      };
+f79.prototype.a = function () {
+  this.bi = [
+    this.H,
+    this.F,
+    this.Uh,
+    this.Vh,
+    this.Wh,
+    this.Xh,
+    this.Yh,
+    this.Zh,
+    this.xa,
+    this.$h,
+    this._h,
+    this.ai,
+    this.aa,
+    this.ua,
+    this.pa
+  ];
+
+  for (var vLN056 = 0; vLN056 < this.bi.length; vLN056++) {
+    this.bi[vLN056].a();
+  }
+
+  this.ci = new vF14(vF51.di);
+
+  try {
+    vF14.Le(true);
+  } catch (e) {
+    console.log("VALDAY 2023 BG enable error:", e);
+  }
+};
+
+f79.prototype.Qa = function (p407, p408) {
+  for (var v358 = this.bi.length - 1; v358 >= 0; v358--) {
+    this.bi[v358].Pa(p407, p408);
+  }
+
+  if (this.ci != null) {
+    this.ci.Pa(p407, p408);
+  }
+};
       f79.prototype.Ra = function () {
         for (var v359 = this.bi.length - 1; v359 >= 0; v359--) {
           this.bi[v359].Ra();
