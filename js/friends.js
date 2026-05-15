@@ -4296,36 +4296,42 @@ $.get(v89, function (p97) {
         De: 5,
         Ee: 11167487
       }];
-      f53.prototype.a = function () {
-        var vF92 = f9();
-        this.ue.backgroundColor = vLN016;
-        this.we = new Array(vA7.length);
-        for (var vLN017 = 0; vLN017 < this.we.length; vLN017++) {
-          this.we[vLN017] = new vF7.ec();
-          this.we[vLN017].texture = vF92.q.Fe;
-          this.we[vLN017].anchor.set(0.5);
-          this.we[vLN017].zIndex = 1;
-          this.ve.addChild(this.we[vLN017]);
-        }
-        this.xe = new Array(vF92.q.Ge.length);
-        for (var vLN018 = 0; vLN018 < this.xe.length; vLN018++) {
-          this.xe[vLN018] = new vF7.ec();
-          this.xe[vLN018].texture = vF92.q.Ge[vLN018];
-          this.xe[vLN018].anchor.set(0.5);
-          this.xe[vLN018].zIndex = 2;
-          this.ve.addChild(this.xe[vLN018]);
-        }
-        this.ye = new Array(this.xe.length);
-        for (var vLN019 = 0; vLN019 < this.ye.length; vLN019++) {
-          this.ye[vLN019] = {
-            He: Math.random(),
-            Ie: Math.random(),
-            Je: Math.random(),
-            Ke: Math.random()
-          };
-        }
-        this.Ra();
-      };
+f53.prototype.a = function () {
+  this.ue.backgroundColor = vLN016;
+
+  var bgTex = vF7.$b.from("https://wormate.io/images/bg-event-pattern-valday2023.png");
+  var confettiTex = vF7.$b.from("https://wormate.io/images/confetti-valday2023.png");
+
+  this.we = new Array(vA7.length);
+  for (var vLN017 = 0; vLN017 < this.we.length; vLN017++) {
+    this.we[vLN017] = new vF7.ec();
+    this.we[vLN017].texture = bgTex;
+    this.we[vLN017].anchor.set(0.5);
+    this.we[vLN017].zIndex = 1;
+    this.ve.addChild(this.we[vLN017]);
+  }
+
+  this.xe = new Array(16);
+  for (var vLN018 = 0; vLN018 < this.xe.length; vLN018++) {
+    this.xe[vLN018] = new vF7.ec();
+    this.xe[vLN018].texture = confettiTex;
+    this.xe[vLN018].anchor.set(0.5);
+    this.xe[vLN018].zIndex = 2;
+    this.ve.addChild(this.xe[vLN018]);
+  }
+
+  this.ye = new Array(this.xe.length);
+  for (var vLN019 = 0; vLN019 < this.ye.length; vLN019++) {
+    this.ye[vLN019] = {
+      He: Math.random(),
+      Ie: Math.random(),
+      Je: Math.random(),
+      Ke: Math.random()
+    };
+  }
+
+  this.Ra();
+};
       f53.sc = true;
       f53.Le = function (p266) {
         f53.sc = p266;
@@ -4384,7 +4390,7 @@ $.get(v89, function (p97) {
             v170.width = v174 * v168;
             v170.height = v174 * v168 * v176;
           }
-          this.ue.render(this.ve, null, true);
+          this.ue.render(this.ve);
         }
       };
       return f53;
@@ -4768,7 +4774,7 @@ vF172.prototype.Se = function (p281) {
           this.tf.Jf.position.y = v204.y / v207 * this.tf.Kf;
           this.uf.Qa(p296);
           this.wf.Te(p296, p297);
-          this.ue.render(this.ve, null, true);
+          this.ue.render(this.ve);
           this.ue.render(this.rf, null, false);
         }
       };
