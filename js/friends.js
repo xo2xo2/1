@@ -4198,206 +4198,123 @@ $.get(v89, function (p97) {
       };
       return f48;
     }();
-    var vF14 = function () {
-      function f53(p261) {
-        this.se = p261;
-        this.te = p261.get()[0];
-        this.ue = new vF7.ac({
-          view: this.te,
-          backgroundColor: vLN016,
-          antialias: true
-        });
-        this.ve = new vF7.Zb();
-        this.ve.sortableChildren = true;
-        this.we = [];
-        this.xe = [];
-        this.ye = [];
-        this.a();
-      }
-      var vLN016 = 0x000000;
-      function f54(p262, p263) {
-        return p262 + Math.random(p263 - p262);
-      }
-      function f55(p264) {
-        if (p264 >= 0) {
-          return Math.cos(p264 % v126);
-        } else {
-          return Math.cos(p264 % v126 + v126);
-        }
-      }
-      function f56(p265) {
-        if (p265 >= 0) {
-          return Math.sin(p265 % v126);
-        } else {
-          return Math.sin(p265 % v126 + v126);
-        }
-      }
-      var vA7 = [{
-        ze: f54(0, v126),
-        Ae: f54(0, v126),
-        Be: f54(0.1, 0.5),
-        Ce: 1,
-        De: 2,
-        Ee: 16737962
-      }, {
-        ze: f54(0, v126),
-        Ae: f54(0, v126),
-        Be: f54(0.1, 0.5),
-        Ce: 1.5,
-        De: 1.5,
-        Ee: 16746632
-      }, {
-        ze: f54(0, v126),
-        Ae: f54(0, v126),
-        Be: f54(0.1, 0.5),
-        Ce: 2,
-        De: 1,
-        Ee: 16755302
-      }, {
-        ze: f54(0, v126),
-        Ae: f54(0, v126),
-        Be: f54(0.1, 0.5),
-        Ce: 3,
-        De: 2,
-        Ee: 11206502
-      }, {
-        ze: f54(0, v126),
-        Ae: f54(0, v126),
-        Be: f54(0.1, 0.5),
-        Ce: 2.5,
-        De: 2.5,
-        Ee: 8978312
-      }, {
-        ze: f54(0, v126),
-        Ae: f54(0, v126),
-        Be: f54(0.1, 0.5),
-        Ce: 2,
-        De: 3,
-        Ee: 6750122
-      }, {
-        ze: f54(0, v126),
-        Ae: f54(0, v126),
-        Be: f54(0.1, 0.5),
-        Ce: 5,
-        De: 4,
-        Ee: 6728447
-      }, {
-        ze: f54(0, v126),
-        Ae: f54(0, v126),
-        Be: f54(0.1, 0.5),
-        Ce: 4.5,
-        De: 4.5,
-        Ee: 8947967
-      }, {
-        ze: f54(0, v126),
-        Ae: f54(0, v126),
-        Be: f54(0.1, 0.5),
-        Ce: 4,
-        De: 5,
-        Ee: 11167487
-      }];
-f53.prototype.a = function () {
-  this.ue.backgroundColor = vLN016;
+var vF14 = function () {
+  function f53(p261) {
+    this.se = p261;
+    this.te = p261.get()[0];
+    this.ctx = this.te.getContext("2d");
+    this.parts = [];
+    this.bg = new Image();
+    this.cf = new Image();
 
-  var bgBase = vF7.$b.from("https://wormate.io/images/bg-event-pattern-valday2023.png");
-  var confettiBase = vF7.$b.from("https://wormate.io/images/confetti-valday2023.png");
+    this.bg.src = "https://wormate.io/images/bg-event-pattern-valday2023.png";
+    this.cf.src = "https://wormate.io/images/confetti-valday2023.png";
 
-  var bgTex = new vF7._b(bgBase);
-  var confettiTex = new vF7._b(confettiBase, new vF7.dc(0, 0, 128, 128));
+    for (var i = 0; i < 28; i++) {
+      this.parts.push({
+        x: Math.random(),
+        y: Math.random(),
+        s: 18 + Math.random() * 42,
+        r: Math.random() * Math.PI * 2,
+        v: 0.00008 + Math.random() * 0.00012,
+        a: 0.35 + Math.random() * 0.55
+      });
+    }
 
-  this.we = new Array(vA7.length);
-  for (var vLN017 = 0; vLN017 < this.we.length; vLN017++) {
-    this.we[vLN017] = new vF7.ec(bgTex);
-    this.we[vLN017].texture = bgTex;
-    this.we[vLN017].anchor.set(0.5);
-    this.we[vLN017].zIndex = 1;
-    this.ve.addChild(this.we[vLN017]);
+    this.Ra();
   }
 
-  this.xe = new Array(16);
-  for (var vLN018 = 0; vLN018 < this.xe.length; vLN018++) {
-    this.xe[vLN018] = new vF7.ec(confettiTex);
-    this.xe[vLN018].texture = confettiTex;
-    this.xe[vLN018].anchor.set(0.5);
-    this.xe[vLN018].zIndex = 2;
-    this.ve.addChild(this.xe[vLN018]);
-  }
+  f53.sc = true;
 
-  this.ye = new Array(this.xe.length);
-  for (var vLN019 = 0; vLN019 < this.ye.length; vLN019++) {
-    this.ye[vLN019] = {
-      He: Math.random(),
-      Ie: Math.random(),
-      Je: Math.random(),
-      Ke: Math.random()
-    };
-  }
+  f53.Le = function () {
+    f53.sc = true;
+  };
 
-  this.Ra();
-};
-      f53.sc = true;
-      f53.Le = function (p266) {
-        f53.sc = p266;
-      };
-      f53.prototype.Ra = function () {
-        var v157 = window.devicePixelRatio ? window.devicePixelRatio : 1;
-        var v158 = this.se.width();
-        var v159 = this.se.height();
-        this.ue.resize(v158, v159);
-        this.ue.resolution = v157;
-        this.te.width = v157 * v158;
-        this.te.height = v157 * v159;
-        var v160 = Math.max(v158, v159) * 0.8;
-        for (var vLN020 = 0; vLN020 < this.we.length; vLN020++) {
-          this.we[vLN020].width = v160;
-          this.we[vLN020].height = v160;
+  f53.prototype.a = function () {};
+
+  f53.prototype.Ra = function () {
+    var dpr = window.devicePixelRatio || 1;
+    var w = this.se.width() || window.innerWidth;
+    var h = this.se.height() || window.innerHeight;
+
+    this.te.width = w * dpr;
+    this.te.height = h * dpr;
+    this.te.style.width = w + "px";
+    this.te.style.height = h + "px";
+    this.te.style.display = "block";
+    this.te.style.visibility = "visible";
+    this.te.style.opacity = "1";
+
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+
+  f53.prototype.Pa = function (p267, p268) {
+    var ctx = this.ctx;
+    var w = this.se.width() || window.innerWidth;
+    var h = this.se.height() || window.innerHeight;
+    var t = (p267 || Date.now()) / 1000;
+    var dt = p268 || 16;
+
+    if (!w || !h) return;
+
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, w, h);
+
+    if (this.bg.complete && this.bg.naturalWidth > 0) {
+      var size = Math.max(w, h) * 0.55;
+
+      for (var i = 0; i < 9; i++) {
+        var x = w * (0.5 + Math.sin(t * 0.12 + i * 1.7) * 0.42);
+        var y = h * (0.5 + Math.cos(t * 0.10 + i * 1.3) * 0.42);
+
+        ctx.save();
+        ctx.globalAlpha = 0.22;
+        ctx.translate(x, y);
+        ctx.rotate(t * 0.05 + i);
+        ctx.drawImage(this.bg, -size / 2, -size / 2, size, size);
+        ctx.restore();
+      }
+    } else {
+      ctx.fillStyle = "rgba(255,255,255,0.18)";
+      for (var b = 0; b < 12; b++) {
+        ctx.beginPath();
+        ctx.arc(
+          w * (0.1 + ((b * 0.19 + t * 0.015) % 0.9)),
+          h * (0.15 + ((b * 0.13 + t * 0.01) % 0.75)),
+          Math.max(w, h) * 0.08,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+    }
+
+    if (this.cf.complete && this.cf.naturalWidth > 0) {
+      for (var j = 0; j < this.parts.length; j++) {
+        var p = this.parts[j];
+        p.y += p.v * dt;
+        p.r += 0.01;
+
+        if (p.y > 1.18) {
+          p.y = -0.18;
+          p.x = Math.random();
         }
-      };
-      f53.prototype.Pa = function (p267, p268) {
-        if (true) {
-          var v161 = p267 / 1000;
-          var v162 = p268 / 1000;
-          var v163 = this.se.width();
-          var v164 = this.se.height();
-          for (var vLN021 = 0; vLN021 < this.we.length; vLN021++) {
-            var v165 = vA7[vLN021 % vA7.length];
-            var v166 = this.we[vLN021];
-            var vF55 = f55(v165.Ce * (v161 * 0.08) + v165.Ae);
-            var vF56 = f56(v165.De * (v161 * 0.08));
-            var v167 = 0.2 + f55(v165.Ae + v165.Be * v161) * 0.2;
-            v166.tint = v165.Ee;
-            v166.alpha = v167;
-            v166.position.set(v163 * (0.2 + (vF55 + 1) * 0.5 * 0.6), v164 * (0.1 + (vF56 + 1) * 0.5 * 0.8));
-          }
-          var v168 = Math.max(v163, v164) * 0.05;
-          for (var vLN022 = 0; vLN022 < this.xe.length; vLN022++) {
-            var v169 = this.ye[vLN022];
-            var v170 = this.xe[vLN022];
-            var v171 = v126 * vLN022 / this.xe.length + v169.He;
-            v169.Ke += v169.Ie * v162;
-            if (v169.Ke > 1.3) {
-              v169.He = Math.random() * v126;
-              v169.Ie = (0.09 + Math.random() * 0.07) * 0.66;
-              v169.Je = 0.15 + Math.random() * 0.7;
-              v169.Ke = -0.3;
-            }
-            var v172 = v169.Je + Math.sin(Math.sin(v171 + v161 * 0.48) * 6) * 0.03;
-            var v173 = v169.Ke;
-            var vF20 = f20(Math.sin(Math.PI * v173), 0.1, 1);
-            var v174 = (0.4 + (1 + Math.sin(v171 + v161 * 0.12)) * 0.5 * 1.2) * 0.5;
-            var v175 = v171 + v169.Ie * 2 * v161;
-            v170.alpha = vF20;
-            v170.position.set(v163 * v172, v164 * v173);
-            v170.rotation = v175;
-            var v176 = v170.texture.width / v170.texture.height;
-            v170.width = v174 * v168;
-            v170.height = v174 * v168 * v176;
-          }
-          this.ue.render(this.ve);
-        }
-      };
-      return f53;
-    }();
+
+        ctx.save();
+        ctx.globalAlpha = p.a;
+        ctx.translate(p.x * w, p.y * h);
+        ctx.rotate(p.r + t * 0.4);
+        ctx.drawImage(this.cf, -p.s / 2, -p.s / 2, p.s, p.s);
+        ctx.restore();
+      }
+    }
+
+    ctx.globalAlpha = 1;
+  };
+
+  return f53;
+}();
     var vF15 = function () {
       function f57() {}
       f57.Na = "consent_state_2";
