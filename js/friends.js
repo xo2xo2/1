@@ -4307,7 +4307,7 @@ f53.prototype.a = function () {
 
   this.we = new Array(vA7.length);
   for (var vLN017 = 0; vLN017 < this.we.length; vLN017++) {
-    this.we[vLN017] = new vF7.Yb(bgTex);
+    this.we[vLN017] = new vF7.ec(bgTex);
     this.we[vLN017].texture = bgTex;
     this.we[vLN017].anchor.set(0.5);
     this.we[vLN017].zIndex = 1;
@@ -4316,7 +4316,7 @@ f53.prototype.a = function () {
 
   this.xe = new Array(16);
   for (var vLN018 = 0; vLN018 < this.xe.length; vLN018++) {
-    this.xe[vLN018] = new vF7.Yb(confettiTex);
+    this.xe[vLN018] = new vF7.ec(confettiTex);
     this.xe[vLN018].texture = confettiTex;
     this.xe[vLN018].anchor.set(0.5);
     this.xe[vLN018].zIndex = 2;
