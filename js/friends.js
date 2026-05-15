@@ -4354,7 +4354,7 @@ f53.prototype.a = function () {
         }
       };
       f53.prototype.Pa = function (p267, p268) {
-        if (f53.sc) {
+        if (true) {
           var v161 = p267 / 1000;
           var v162 = p268 / 1000;
           var v163 = this.se.width();
