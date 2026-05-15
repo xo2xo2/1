@@ -4214,7 +4214,7 @@ $.get(v89, function (p97) {
         this.ye = [];
         this.a();
       }
-      var vLN016 = 0;
+      var vLN016 = 0x000000;
       function f54(p262, p263) {
         return p262 + Math.random(p263 - p262);
       }
@@ -6128,6 +6128,7 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
           this.bi[vLN056].a();
         }
         this.ci = new vF14(vF51.di);
+        vF14.Le(true);
         try { vF14.Le(true); } catch (e) {}
       };
       f79.prototype.Qa = function (p407, p408) {
