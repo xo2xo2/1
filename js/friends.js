@@ -4384,7 +4384,7 @@ $.get(v89, function (p97) {
             v170.width = v174 * v168;
             v170.height = v174 * v168 * v176;
           }
-          this.ue.render(this.ve, null, true);
+          this.ue.render(this.ve);
         }
       };
       return f53;
@@ -4768,7 +4768,7 @@ vF172.prototype.Se = function (p281) {
           this.tf.Jf.position.y = v204.y / v207 * this.tf.Kf;
           this.uf.Qa(p296);
           this.wf.Te(p296, p297);
-          this.ue.render(this.ve, null, true);
+          this.ue.render(this.ve);
           this.ue.render(this.rf, null, false);
         }
       };
