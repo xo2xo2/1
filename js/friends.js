@@ -4304,6 +4304,7 @@ $.get(v89, function (p97) {
         this.we = new Array(vA7.length);
         for (var vLN017 = 0; vLN017 < this.we.length; vLN017++) {
           this.we[vLN017] = new vF7.ec();
+          this.we[vLN017].texture = vF7.$b.from("https://wormate.io/images/bg-event-pattern-valday2023.png");
           this.we[vLN017].texture = vF92.q.Fe;
           this.we[vLN017].anchor.set(0.5);
           this.we[vLN017].zIndex = 1;
@@ -4312,6 +4313,7 @@ $.get(v89, function (p97) {
         this.xe = new Array(vF92.q.Ge.length);
         for (var vLN018 = 0; vLN018 < this.xe.length; vLN018++) {
           this.xe[vLN018] = new vF7.ec();
+          this.xe[vLN018].texture = vF7.$b.from("https://wormate.io/images/confetti-valday2023.png");
           this.xe[vLN018].texture = vF92.q.Ge[vLN018];
           this.xe[vLN018].anchor.set(0.5);
           this.xe[vLN018].zIndex = 2;
