@@ -6157,12 +6157,13 @@ f79.prototype.a = function () {
 };
 
 f79.prototype.Qa = function (p407, p408) {
-  for (var v358 = this.bi.length - 1; v358 >= 0; v358--) {
-    this.bi[v358].Pa(p407, p408);
+  if (this.ci != null) {
+    this.ci.Ra();
+    this.ci.Pa(p407 || Date.now(), p408 || 16);
   }
 
-  if (this.ci != null) {
-    this.ci.Pa(p407, p408);
+  for (var v358 = this.bi.length - 1; v358 >= 0; v358--) {
+    this.bi[v358].Pa(p407, p408);
   }
 };
       f79.prototype.Ra = function () {
@@ -11069,4 +11070,38 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
     SafeWS.__WORMXO_SAFE__ = true;
     window.WebSocket = SafeWS;
   }
+})();
+
+(function () {
+  var st = document.createElement("style");
+  st.id = "fix-bg-canvas-2023";
+  st.textContent = `
+    #background-canvas{
+      display:block!important;
+      visibility:visible!important;
+      opacity:1!important;
+      position:absolute!important;
+      left:0!important;
+      top:0!important;
+      width:100%!important;
+      height:100%!important;
+      z-index:0!important;
+      background:#000!important;
+      pointer-events:none!important;
+    }
+
+    #main-menu-view,
+    #main-menu,
+    #mm-start,
+    #game-wrap{
+      background:transparent!important;
+    }
+
+    #markup-wrap,
+    #stretch-box{
+      position:relative!important;
+      z-index:1!important;
+    }
+  `;
+  document.head.appendChild(st);
 })();
