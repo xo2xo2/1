@@ -367,6 +367,25 @@ window.WORMXO_MOBILE_PERF.low = !!(window.WORMXO_MOBILE_PERF.enabled && (window.
 })();
 
 
+/* WormFriends Matrix lobby background core */
+(function () {
+  if (window.__WORMFRIENDS_MATRIX_LOBBY_BG__) return;
+  window.__WORMFRIENDS_MATRIX_LOBBY_BG__ = true;
+  function install() {
+    try {
+      var old = document.getElementById("wormxo-lobby-bg-style");
+      if (old && old.parentNode) old.parentNode.removeChild(old);
+      if (document.getElementById("wormfriends-matrix-lobby-bg-style")) return;
+      var css = document.createElement("style");
+      css.id = "wormfriends-matrix-lobby-bg-style";
+      css.textContent = "#game-wrap,#mm-start,#main-menu,#main-menu-view,.background-canva{background:radial-gradient(circle at 15% 20%,rgba(0,95,255,.50),transparent 32%),radial-gradient(circle at 82% 22%,rgba(80,220,255,.44),transparent 34%),radial-gradient(circle at 50% 86%,rgba(155,60,255,.40),transparent 40%),radial-gradient(circle at 48% 42%,rgba(0,0,0,.55),transparent 48%),linear-gradient(135deg,#040615 0%,#061b3d 42%,#16082e 100%)!important;background-size:190% 190%,180% 180%,200% 200%,170% 170%,100% 100%!important;animation:wfmLobbyFlow 18s ease-in-out infinite alternate!important;}@keyframes wfmLobbyFlow{0%{background-position:0% 20%,100% 15%,45% 100%,40% 45%,0 0;}50%{background-position:45% 60%,58% 34%,60% 70%,58% 40%,0 0;}100%{background-position:95% 80%,12% 82%,25% 40%,45% 58%,0 0;}}#main-menu,#mm-start,#main-menu-view,.store-view-cont,#login-view,#welcome-view,#mm-player-info,#wf-tool-button,#popup{position:relative!important;z-index:5!important;pointer-events:auto!important;}";
+      (document.head || document.documentElement).appendChild(css);
+    } catch (e) {}
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install, { once: true }); else install();
+})();
+
+
 window.detectLog = null;
 const vO = {
   BETAisSkinCustom(p) {
@@ -438,14 +457,6 @@ var vO3 = {
     pxy: 105
   }
 };
-
-window.WORMXO_2023_BG_ASSETS = {
-  F: "/images/linelogo-valday2023.png",
-  G: "/images/guest-avatar-valday2023.png",
-  H: "/images/confetti-valday2023.png",
-  I: "/images/bg-event-pattern-valday2023.png"
-};
-
 var vO4 = {
   FB_UserID: "",
   smoothCamera: 0.5,
@@ -483,7 +494,6 @@ var vO4 = {
   bName: "✡️ {{ID}} ✡️🕎✅✅",
   bSkin: 131
 };
-
 saveGameLocal = localStorage.getItem("SaveGameXT");
 if (saveGameLocal && saveGameLocal !== "null") {
   let v6 = JSON.parse(saveGameLocal);
@@ -559,33 +569,10 @@ const vF2 = function () {
   }
   return v10;
 };
-function WORMXO_isLobbyVisible() {
-  try {
-    var mm = document.getElementById("main-menu-view") || document.getElementById("main-menu") || document.getElementById("mm-start");
-    var gv = document.getElementById("game-view");
-    var menuVisible = !!(mm && getComputedStyle(mm).display !== "none" && getComputedStyle(mm).visibility !== "hidden" && mm.offsetParent !== null);
-    var gameVisible = !!(gv && getComputedStyle(gv).display !== "none" && getComputedStyle(gv).visibility !== "hidden");
-    return menuVisible && !gameVisible;
-  } catch (e) { return false; }
-}
-function WORMXO_destroyJoystickSafe() {
-  try {
-    if (window.__WORMXO_JOYSTICK_INSTANCE__ && typeof window.__WORMXO_JOYSTICK_INSTANCE__.destroy === "function") {
-      window.__WORMXO_JOYSTICK_INSTANCE__.destroy();
-    }
-    window.__WORMXO_JOYSTICK_INSTANCE__ = null;
-    var els = document.querySelectorAll(".nipple-collection");
-    for (var i = 0; i < els.length; i++) if (els[i] && els[i].parentNode) els[i].parentNode.removeChild(els[i]);
-  } catch (e) {}
-}
 const vF3 = function (p7) {
   let v12 = null;
 
   try {
-    if (!window.__WORMXO_GAME_SOCKET_CONNECTING__ && WORMXO_isLobbyVisible()) {
-      WORMXO_destroyJoystickSafe();
-      return null;
-    }
     var isMobileNow = vF2();
 
     if (!vO4.gamePad) {
@@ -679,11 +666,9 @@ const vF3 = function (p7) {
   window.__WORMXO_JOYSTICK_BOOT__ = true;
   function bootJoy() {
     try {
-      if (((vF2 && vF2()) || (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) && !WORMXO_isLobbyVisible()) {
+      if ((vF2 && vF2()) || (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low)) {
         if (vO4 && vO4.gamePad) vO4.gamePad.checked = true;
-        vF3(false);
-      } else if (WORMXO_isLobbyVisible()) {
-        WORMXO_destroyJoystickSafe();
+        vF3(true);
       }
     } catch (e) {}
   }
@@ -1554,7 +1539,7 @@ function XOTEAM_startAutoSave() {
         XOTEAM_TOP_HS_TIMER = null;
       }
 
-      setTimeout(XOTEAM_startAutoSave, (window.WORMXO_MOBILE_PERF && window.WORMXO_MOBILE_PERF.low) ? 1800 : 1200);
+      setTimeout(XOTEAM_startAutoSave, 3000);
     };
 
     XOTEAM_WS.onerror = function (e) {
@@ -3472,14 +3457,12 @@ $.get(v89, function (p97) {
         }
       };
       vO12.Vb = function (p131, p132) {
-        window.__WORMXO_GAME_SOCKET_CONNECTING__ = true;
         let vVF3 = vF3(!vO4.mobile);
         var v119 = vO12.db = new WebSocket(p131);
         v119.binaryType = "arraybuffer";
         window.onOpen = v119.onopen = function () {
           f114("open");
           if (vO12.db === v119) {
-            window.__WORMXO_GAME_SOCKET_CONNECTING__ = true;
             console.log("Socket opened");
             p132();
             try {
@@ -4225,113 +4208,197 @@ $.get(v89, function (p97) {
       };
       return f48;
     }();
-var vF14 = function () {
-  function f53(p261) {
-    this.se = p261 || (window.jQuery ? jQuery("#background-canvas") : null);
-    this.te = null;
-    try {
-      this.te = this.se && this.se.get ? this.se.get()[0] : document.getElementById("background-canvas");
-    } catch (e) {
-      this.te = document.getElementById("background-canvas");
-    }
-    this.a();
-    this.Ra();
-  }
-
-  f53.sc = true;
-
-  f53.Le = function () {
-    f53.sc = true;
-    f53.install();
-  };
-
-  f53.install = function () {
-    try {
-      if (window.__WORMXO_VALDAY_2023_BG_OK__) return;
-      window.__WORMXO_VALDAY_2023_BG_OK__ = true;
-
-      var css = document.getElementById("wormxo-valday-2023-deep-bg-css");
-      if (!css) {
-        css = document.createElement("style");
-        css.id = "wormxo-valday-2023-deep-bg-css";
-        css.textContent = "\n" +
-          "@keyframes wormxoValday2023DeepMove{\n" +
-          "0%{background-position:0% 50%,100% 50%,0 0,0 0;filter:hue-rotate(0deg);}\n" +
-          "50%{background-position:100% 50%,0% 50%,80px 140px,-120px 80px;filter:hue-rotate(18deg);}\n" +
-          "100%{background-position:0% 50%,100% 50%,160px 280px,-240px 160px;filter:hue-rotate(0deg);}\n" +
-          "}\n" +
-          "@keyframes wormxoValdayFloat{0%,100%{transform:translate3d(0,0,0) scale(1);}50%{transform:translate3d(18px,-14px,0) scale(1.04);}}\n" +
-          "#wormxo-valday-2023-deep-bg{\n" +
-          "position:absolute!important;left:0!important;top:0!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;overflow:hidden!important;\n" +
-          "z-index:0!important;pointer-events:none!important;display:block!important;visibility:visible!important;opacity:1!important;background:#02030a!important;\n" +
-          "background-image:radial-gradient(circle at 18% 20%,rgba(0,195,255,.42),transparent 28%),radial-gradient(circle at 82% 26%,rgba(160,80,255,.38),transparent 31%),radial-gradient(circle at 45% 88%,rgba(45,130,255,.24),transparent 35%),linear-gradient(135deg,#050714 0%,#06295b 30%,#4b1c83 64%,#08040f 100%)!important;\n" +
-          "background-repeat:no-repeat!important;background-size:160% 160%,150% 150%,140% 140%,220% 220%!important;animation:wormxoValday2023DeepMove 18s ease-in-out infinite!important;\n" +
-          "box-shadow:inset 0 0 180px rgba(0,0,0,.92),inset 0 0 70px rgba(50,180,255,.18)!important;\n" +
-          "}\n" +
-          "#wormxo-valday-2023-deep-bg:before{content:'';position:absolute;inset:-18%;background:radial-gradient(circle at 35% 35%,rgba(0,225,255,.22),transparent 26%),radial-gradient(circle at 68% 45%,rgba(184,92,255,.20),transparent 30%);filter:blur(28px);animation:wormxoValdayFloat 8s ease-in-out infinite!important;}\n" +
-          "#wormxo-valday-2023-deep-bg:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(0deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:42px 42px;opacity:.28;mix-blend-mode:screen;}\n" +
-          "#game-wrap,#stretch-box,#markup-wrap,#main-menu-view,#main-menu,#mm-start{position:relative!important;background:transparent!important;}\n" +
-          "#background-canvas{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;height:100%!important;z-index:0!important;background:transparent!important;pointer-events:none!important;}\n" +
-          "#game-view,#results-view,#popup-view,#toaster-view,#loading-view,#social-buttons,#markup-footer{position:relative!important;z-index:5!important;}\n" +
-          "#main-menu-view>*:not(#wormxo-valday-2023-deep-bg),#main-menu>*:not(#wormxo-valday-2023-deep-bg),#mm-start>*:not(#wormxo-valday-2023-deep-bg){position:relative;z-index:2;}\n";
-        (document.head || document.documentElement).appendChild(css);
+    var vF14 = function () {
+      function f53(p261) {
+        this.se = p261;
+        this.te = p261.get()[0];
+        this.ue = new vF7.ac({
+          view: this.te,
+          backgroundColor: vLN016,
+          antialias: true
+        });
+        this.ve = new vF7.Zb();
+        this.ve.sortableChildren = true;
+        this.we = [];
+        this.xe = [];
+        this.ye = [];
+        this.a();
       }
-
-      var host = document.getElementById("main-menu-view") || document.getElementById("game-wrap") || document.body;
-      if (host && !document.getElementById("wormxo-valday-2023-deep-bg")) {
-        var layer = document.createElement("div");
-        layer.id = "wormxo-valday-2023-deep-bg";
-        if (host.firstChild) host.insertBefore(layer, host.firstChild);
-        else host.appendChild(layer);
+      var vLN016 = 0;
+      function f54(p262, p263) {
+        return p262 + Math.random(p263 - p262);
       }
-
-      try {
-        var c = document.getElementById("background-canvas");
-        if (c) {
-          c.style.display = "block";
-          c.style.visibility = "visible";
-          c.style.opacity = "1";
+      function f55(p264) {
+        if (p264 >= 0) {
+          return Math.cos(p264 % v126);
+        } else {
+          return Math.cos(p264 % v126 + v126);
         }
-      } catch (e0) {}
-    } catch (e) {
-      console.log("WORMXO Valday 2023 deep bg install error:", e);
-    }
-  };
-
-  f53.prototype.a = function () {
-    f53.install();
-  };
-
-  f53.prototype.Ra = function () {
-    try {
-      f53.install();
-      this.se = (window.jQuery ? jQuery("#background-canvas") : this.se);
-      this.te = this.se && this.se.get ? this.se.get()[0] : document.getElementById("background-canvas");
-      if (!this.te) return;
-      var w = (this.se && this.se.width && this.se.width()) || window.innerWidth || 1;
-      var h = (this.se && this.se.height && this.se.height()) || window.innerHeight || 1;
-      var dpr = window.devicePixelRatio || 1;
-      this.te.width = Math.max(1, Math.floor(w * dpr));
-      this.te.height = Math.max(1, Math.floor(h * dpr));
-      this.te.style.width = w + "px";
-      this.te.style.height = h + "px";
-    } catch (e) {}
-  };
-
-  f53.prototype.Pa = function () {
-    f53.install();
-  };
-
-  try {
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", function () { f53.install(); }, { once: true });
-    } else {
-      setTimeout(function () { f53.install(); }, 0);
-    }
-  } catch (e) {}
-
-  return f53;
-}();
+      }
+      function f56(p265) {
+        if (p265 >= 0) {
+          return Math.sin(p265 % v126);
+        } else {
+          return Math.sin(p265 % v126 + v126);
+        }
+      }
+      var vA7 = [{
+        ze: f54(0, v126),
+        Ae: f54(0, v126),
+        Be: f54(0.1, 0.5),
+        Ce: 1,
+        De: 2,
+        Ee: 16737962
+      }, {
+        ze: f54(0, v126),
+        Ae: f54(0, v126),
+        Be: f54(0.1, 0.5),
+        Ce: 1.5,
+        De: 1.5,
+        Ee: 16746632
+      }, {
+        ze: f54(0, v126),
+        Ae: f54(0, v126),
+        Be: f54(0.1, 0.5),
+        Ce: 2,
+        De: 1,
+        Ee: 16755302
+      }, {
+        ze: f54(0, v126),
+        Ae: f54(0, v126),
+        Be: f54(0.1, 0.5),
+        Ce: 3,
+        De: 2,
+        Ee: 11206502
+      }, {
+        ze: f54(0, v126),
+        Ae: f54(0, v126),
+        Be: f54(0.1, 0.5),
+        Ce: 2.5,
+        De: 2.5,
+        Ee: 8978312
+      }, {
+        ze: f54(0, v126),
+        Ae: f54(0, v126),
+        Be: f54(0.1, 0.5),
+        Ce: 2,
+        De: 3,
+        Ee: 6750122
+      }, {
+        ze: f54(0, v126),
+        Ae: f54(0, v126),
+        Be: f54(0.1, 0.5),
+        Ce: 5,
+        De: 4,
+        Ee: 6728447
+      }, {
+        ze: f54(0, v126),
+        Ae: f54(0, v126),
+        Be: f54(0.1, 0.5),
+        Ce: 4.5,
+        De: 4.5,
+        Ee: 8947967
+      }, {
+        ze: f54(0, v126),
+        Ae: f54(0, v126),
+        Be: f54(0.1, 0.5),
+        Ce: 4,
+        De: 5,
+        Ee: 11167487
+      }];
+      f53.prototype.a = function () {
+        var vF92 = f9();
+        this.ue.backgroundColor = vLN016;
+        this.we = new Array(vA7.length);
+        for (var vLN017 = 0; vLN017 < this.we.length; vLN017++) {
+          this.we[vLN017] = new vF7.ec();
+          this.we[vLN017].texture = vF92.q.Fe;
+          this.we[vLN017].anchor.set(0.5);
+          this.we[vLN017].zIndex = 1;
+          this.ve.addChild(this.we[vLN017]);
+        }
+        this.xe = new Array(vF92.q.Ge.length);
+        for (var vLN018 = 0; vLN018 < this.xe.length; vLN018++) {
+          this.xe[vLN018] = new vF7.ec();
+          this.xe[vLN018].texture = vF92.q.Ge[vLN018];
+          this.xe[vLN018].anchor.set(0.5);
+          this.xe[vLN018].zIndex = 2;
+          this.ve.addChild(this.xe[vLN018]);
+        }
+        this.ye = new Array(this.xe.length);
+        for (var vLN019 = 0; vLN019 < this.ye.length; vLN019++) {
+          this.ye[vLN019] = {
+            He: Math.random(),
+            Ie: Math.random(),
+            Je: Math.random(),
+            Ke: Math.random()
+          };
+        }
+        this.Ra();
+      };
+      f53.sc = false;
+      f53.Le = function (p266) {
+        f53.sc = p266;
+      };
+      f53.prototype.Ra = function () {
+        var v157 = window.devicePixelRatio ? window.devicePixelRatio : 1;
+        var v158 = this.se.width();
+        var v159 = this.se.height();
+        this.ue.resize(v158, v159);
+        this.ue.resolution = v157;
+        this.te.width = v157 * v158;
+        this.te.height = v157 * v159;
+        var v160 = Math.max(v158, v159) * 0.8;
+        for (var vLN020 = 0; vLN020 < this.we.length; vLN020++) {
+          this.we[vLN020].width = v160;
+          this.we[vLN020].height = v160;
+        }
+      };
+      f53.prototype.Pa = function (p267, p268) {
+        if (f53.sc) {
+          var v161 = p267 / 1000;
+          var v162 = p268 / 1000;
+          var v163 = this.se.width();
+          var v164 = this.se.height();
+          for (var vLN021 = 0; vLN021 < this.we.length; vLN021++) {
+            var v165 = vA7[vLN021 % vA7.length];
+            var v166 = this.we[vLN021];
+            var vF55 = f55(v165.Ce * (v161 * 0.08) + v165.Ae);
+            var vF56 = f56(v165.De * (v161 * 0.08));
+            var v167 = 0.2 + f55(v165.Ae + v165.Be * v161) * 0.2;
+            v166.tint = v165.Ee;
+            v166.alpha = v167;
+            v166.position.set(v163 * (0.2 + (vF55 + 1) * 0.5 * 0.6), v164 * (0.1 + (vF56 + 1) * 0.5 * 0.8));
+          }
+          var v168 = Math.max(v163, v164) * 0.05;
+          for (var vLN022 = 0; vLN022 < this.xe.length; vLN022++) {
+            var v169 = this.ye[vLN022];
+            var v170 = this.xe[vLN022];
+            var v171 = v126 * vLN022 / this.xe.length + v169.He;
+            v169.Ke += v169.Ie * v162;
+            if (v169.Ke > 1.3) {
+              v169.He = Math.random() * v126;
+              v169.Ie = (0.09 + Math.random() * 0.07) * 0.66;
+              v169.Je = 0.15 + Math.random() * 0.7;
+              v169.Ke = -0.3;
+            }
+            var v172 = v169.Je + Math.sin(Math.sin(v171 + v161 * 0.48) * 6) * 0.03;
+            var v173 = v169.Ke;
+            var vF20 = f20(Math.sin(Math.PI * v173), 0.1, 1);
+            var v174 = (0.4 + (1 + Math.sin(v171 + v161 * 0.12)) * 0.5 * 1.2) * 0.5;
+            var v175 = v171 + v169.Ie * 2 * v161;
+            v170.alpha = vF20;
+            v170.position.set(v163 * v172, v164 * v173);
+            v170.rotation = v175;
+            var v176 = v170.texture.width / v170.texture.height;
+            v170.width = v174 * v168;
+            v170.height = v174 * v168 * v176;
+          }
+          this.ue.render(this.ve, null, true);
+        }
+      };
+      return f53;
+    }();
     var vF15 = function () {
       function f57() {}
       f57.Na = "consent_state_2";
@@ -4652,7 +4719,7 @@ vF172.prototype.Se = function (p281) {
         this.lf.Bf(p294.af == vO17.$e ? vF93.q.Cf : vF93.q.Df);
         var v197 = this.mf;
         v197.clear();
-        v197.lineStyle(0.6, 0x4A0000, 0.35);
+        v197.lineStyle(0.8, 65535);
         v197.drawCircle(0, 0, p294.ub);
         v197.endFill();
         this.vf.Ef = p295;
@@ -4711,7 +4778,7 @@ vF172.prototype.Se = function (p281) {
           this.tf.Jf.position.y = v204.y / v207 * this.tf.Kf;
           this.uf.Qa(p296);
           this.wf.Te(p296, p297);
-          this.ue.render(this.ve);
+          this.ue.render(this.ve, null, true);
           this.ue.render(this.rf, null, false);
         }
       };
@@ -5736,18 +5803,16 @@ vF172.prototype.Se = function (p281) {
           this.Nf = p372;
           this.Pf = p373;
         }
-f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
-  this.Nf.Mg(true);
-  this.Nf.nh(p374, p375);
-  this.Nf.oh(p376);
-  this.Nf.qh(p377);
-
-  this.Pf.Mg(true);
-  this.Pf.nh(p374, p375);
-
-  this.Pf.oh(p378 * 1.45);
-  this.Pf.qh(0.82);
-};
+        f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
+          this.Nf.Mg(true);
+          this.Nf.nh(p374, p375);
+          this.Nf.oh(p376);
+          this.Nf.qh(p377);
+          this.Pf.Mg(true);
+          this.Pf.nh(p374, p375);
+          this.Pf.oh(p378);
+          this.Pf.qh(p379);
+        };
         f70.prototype.lh = function () {
           this.Nf.Mg(false);
           this.Pf.Mg(false);
@@ -5962,12 +6027,12 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
     var vF39 = function () {
       function f76() {
         this.fn_o = f77;
-        this.Fe = new vF7._b(vF7.$b.from("https://wormate.io/images/bg-event-pattern-valday2023.png"));
-        var v348 = vF7.$b.from("https://wormate.io/images/confetti-valday2023.png");
+        this.Fe = new vF7._b(vF7.$b.from("/images/bg-obstacle.png"));
+        var v348 = vF7.$b.from("/images/confetti-xmas2022.png");
         this.Ge = [new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128))];
         this.Cf = new vF7._b(f77());
         this.Df = new vF7._b(function () {
-          var v349 = vF7.$b.from("https://wormate.io/images/bg-event-pattern-valday2023.png");
+          var v349 = vF7.$b.from("/images/bg-pattern-pow2-TEAM2.png");
           v349.wrapMode = vF7.kc.lc;
           return v349;
         }());
@@ -6071,15 +6136,13 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
           this.bi[vLN056].a();
         }
         this.ci = new vF14(vF51.di);
-        vF14.Le(true);
-        try { vF14.Le(true); } catch (e) {}
       };
       f79.prototype.Qa = function (p407, p408) {
-        if (this.ci != null) {
-          try { this.ci.Pa(p407 || Date.now(), p408 || 16); } catch (e0) {}
-        }
         for (var v358 = this.bi.length - 1; v358 >= 0; v358--) {
           this.bi[v358].Pa(p407, p408);
+        }
+        if (this.bi[0] != this.H && this.bi[0] != this.pa && this.ci != null) {
+          this.ci.Pa(p407, p408);
         }
       };
       f79.prototype.Ra = function () {
@@ -7435,40 +7498,29 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
       };
       return f95;
     }();
-var vF51 = function () {
-  function f96(p550) {
-    this.rc = p550;
-  }
-
-  f96.fk = $("#game-view");
-  f96.gk = $("#results-view");
-  f96.hk = $("#main-menu-view");
-  f96.ik = $("#popup-view");
-  f96.jk = $("#toaster-view");
-  f96.kk = $("#loading-view");
-  f96.lk = $("#stretch-box");
-
-  f96.mk = $("#game-canvas");
-  f96.di = $("#background-canvas");
-
-  window.__WORMXO_BG_CANVAS__ = f96.di;
-
-  if (window.PIXI && f96.di && f96.di.length) {
-    console.log("BG canvas ready");
-  }
-
-  f96.nk = $("#social-buttons");
-  f96.ok = $("#markup-wrap");
-
-  f96.prototype.a = function () {};
-  f96.prototype.ii = function () {};
-  f96.prototype.ji = function () {};
-  f96.prototype.ei = function () {};
-  f96.prototype.Ra = function () {};
-  f96.prototype.Pa = function (p551, p552) {};
-
-  return f96;
-}();
+    var vF51 = function () {
+      function f96(p550) {
+        this.rc = p550;
+      }
+      f96.fk = $("#game-view");
+      f96.gk = $("#results-view");
+      f96.hk = $("#main-menu-view");
+      f96.ik = $("#popup-view");
+      f96.jk = $("#toaster-view");
+      f96.kk = $("#loading-view");
+      f96.lk = $("#stretch-box");
+      f96.mk = $("#game-canvas");
+      f96.di = $("#background-canvas");
+      f96.nk = $("#social-buttons");
+      f96.ok = $("#markup-wrap");
+      f96.prototype.a = function () {};
+      f96.prototype.ii = function () {};
+      f96.prototype.ji = function () {};
+      f96.prototype.ei = function () {};
+      f96.prototype.Ra = function () {};
+      f96.prototype.Pa = function (p551, p552) {};
+      return f96;
+    }();
     var vF52 = function () {
       function f97(p553, p554, p555, p556, p557, p558) {}
       var v$3 = $("#final-caption");
@@ -7585,7 +7637,7 @@ var vF51 = function () {
           vF51.lk.fadeOut(1);
           vF51.di.stop();
           vF51.di.fadeOut(50);
-          vF14.Le(true);
+          vF14.Le(false);
           vF51.nk.stop();
           vF51.nk.fadeOut(50);
           vF51.ok.stop();
@@ -7607,7 +7659,7 @@ var vF51 = function () {
           vF51.lk.fadeOut(1);
           vF51.di.stop();
           vF51.di.fadeOut(50);
-          vF14.Le(true);
+          vF14.Le(false);
           vF51.nk.stop();
           vF51.nk.fadeOut(50);
           vF51.ok.stop();
@@ -7983,7 +8035,7 @@ var vF51 = function () {
         vF51.lk.fadeOut(1);
         vF51.di.stop();
         vF51.di.fadeOut(50);
-        vF14.Le(true);
+        vF14.Le(false);
         vF51.nk.stop();
         vF51.nk.fadeOut(50);
         vF51.ok.stop();
@@ -10934,7 +10986,7 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
       st.textContent = "#wormxo-loading-2022{position:fixed;inset:0;z-index:999998;background:radial-gradient(circle at 50% 42%,#2b1b10 0,#110b08 48%,#030303 100%);display:none;align-items:center;justify-content:center;flex-direction:column;color:#ffb545;font-family:Arial,Tahoma,sans-serif}#wormxo-loading-2022 .worm{width:96px;height:96px;border:5px solid rgba(255,150,0,.18);border-top-color:#ff8a00;border-radius:50%;animation:wormxoSpin .9s linear infinite}#wormxo-loading-2022 b{margin-top:16px;font-size:19px;letter-spacing:2px;text-shadow:0 0 12px #ff8a00}@keyframes wormxoSpin{to{transform:rotate(360deg)}}.description-text-hiep{background:rgba(26, 26, 46, 0.36)!important;border:1px solid rgba(255,153,0,.5)!important;border-radius:14px!important;box-shadow:0 0 22px rgba(255,138,0,.18)!important;padding:8px!important}.title-wormate-friends-connect{color:# rgba(0, 0, 0, 0.6)!important;text-shadow:0 0 10px rgba(21, 21, 31, 0.6)!important;font-weight:900!important}.servers-container p.selectSala{background:linear-gradient(90deg,rgba(83, 83, 83, 0.14),rgba(255,255,255,.04))!important;border:1px solid rgba(29, 122, 110, 0.32)!important;border-radius:10px!important;margin:6px 4px!important;padding:8px 10px!important;color:#fff!important;font-weight:900!important;transition:.12s!important;box-shadow:inset 0 0 8px rgba(255,138,0,.08)!important}.servers-container p.selectSala:hover{transform:translateX(3px);background:linear-gradient(90deg,rgba(99, 99, 99, 0.32),rgba(255,255,255,.08))!important;border-color:rgb(16 87 151)!important}.ui-tabs-nav .ui-tabs-tab{border-radius:9px!important;background:rgba(255,255,255,.06)!important}.ui-tabs-nav .ui-tab-active{background:rgba(255,138,0,.28)!important;box-shadow:0 0 10px rgba(255,138,0,.32)!important}";
       (document.head || document.documentElement).appendChild(st);
       var d = document.createElement("div");
-      d.id = "wormxo-loading-2022";
+      d.id = "wormxo-loading-2026";
       d.innerHTML = '<div class="worm"></div><b>WormFriends Matrix Loading</b><span style="margin-top:8px;color:#fff;opacity:.8">Connecting to server...</span>';
       document.body.appendChild(d);
     } catch (e) {}
@@ -10985,7 +11037,7 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
         if (!opened || ws.readyState !== 1) {
           try { offlineToast("فقد الاتصال بالخادم"); showLoad(false); } catch (e) {}
         }
-      }, 4200);
+      }, 6500);
       ws.addEventListener("open", function () { opened = true; clearTimeout(timer); showLoad(false); });
       ws.addEventListener("close", function () { if (!opened) offlineToast("السيرفر لا يستجيب"); showLoad(false); });
       ws.addEventListener("error", function () { offlineToast("فقد الاتصال بالخادم"); showLoad(false); });
@@ -10996,45 +11048,4 @@ console.log("%cWormFriends Matrix ", "color: #FF7F00; font-size: 18px; font-weig
     SafeWS.__WORMXO_SAFE__ = true;
     window.WebSocket = SafeWS;
   }
-})();
-
-
-/* WORMXO VALDAY 2023 BACKGROUND WATCHDOG - keeps real lobby background alive */
-(function () {
-  if (window.__WORMXO_VALDAY_2023_WATCHDOG__) return;
-  window.__WORMXO_VALDAY_2023_WATCHDOG__ = true;
-  function run() {
-    try {
-      if (typeof vF14 !== "undefined" && vF14.Le) vF14.Le(true);
-    } catch (e) {}
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run, { once: true });
-  else run();
-  setInterval(run, 1000);
-})();
-
-
-/* WORMXO FINAL STABILITY PATCH 2026 - lobby background / mobile joystick / connection */
-(function () {
-  if (window.__WORMXO_FINAL_STABILITY_2026__) return;
-  window.__WORMXO_FINAL_STABILITY_2026__ = true;
-  function ensureBg() {
-    try {
-      if (typeof vF14 !== "undefined" && vF14 && typeof vF14.install === "function") vF14.install();
-      var host = document.getElementById("main-menu-view") || document.getElementById("main-menu") || document.getElementById("mm-start") || document.getElementById("game-wrap");
-      if (host && !document.getElementById("wormxo-valday-2023-deep-bg")) {
-        var layer = document.createElement("div");
-        layer.id = "wormxo-valday-2023-deep-bg";
-        host.insertBefore(layer, host.firstChild || null);
-      }
-    } catch (e) {}
-  }
-  function watchJoy() {
-    try {
-      if (typeof WORMXO_isLobbyVisible === "function" && WORMXO_isLobbyVisible() && typeof WORMXO_destroyJoystickSafe === "function") WORMXO_destroyJoystickSafe();
-    } catch (e) {}
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ensureBg, { once: true }); else ensureBg();
-  window.addEventListener("resize", ensureBg, { passive: true });
-  setInterval(function () { ensureBg(); watchJoy(); }, 1200);
 })();
