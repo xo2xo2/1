@@ -6021,8 +6021,8 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
     var vF39 = function () {
       function f76() {
         this.fn_o = f77;
-        this.Fe = new vF7._b(vF7.$b.from("/images/bg-obstacle.png"));
-        var v348 = vF7.$b.from("/images/confetti-xmas2022.png");
+        this.Fe = new vF7._b(vF7.$b.from("/images/bg-event-pattern-valday2023.png"));
+        var v348 = vF7.$b.from("/images/confetti-valday2023.png");
         this.Ge = [new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128)), new vF7._b(v348, new vF7.dc(0, 0, 128, 128))];
         this.Cf = new vF7._b(f77());
         this.Df = new vF7._b(function () {
