@@ -4200,107 +4200,160 @@ $.get(v89, function (p97) {
     }();
 var vF14 = function () {
   function f53(p261) {
-    this.se = p261 || (window.jQuery ? jQuery("#background-canvas") : null);
-    this.te = null;
-    try {
-      this.te = this.se && this.se.get ? this.se.get()[0] : document.getElementById("background-canvas");
-    } catch (e) {
-      this.te = document.getElementById("background-canvas");
-    }
+    this.se = p261;
+    this.te = p261.get()[0];
+    this.ue = new vF7.ac({
+      view: this.te,
+      backgroundColor: 0x000000,
+      antialias: true
+    });
+
+    this.ve = new vF7.Zb();
+    this.ve.sortableChildren = true;
+
+    this.we = [];
+    this.xe = [];
+    this.ye = [];
+
     this.a();
-    this.Ra();
   }
+
+  function f55(p264) {
+    return p264 >= 0 ? Math.cos(p264 % v126) : Math.cos(p264 % v126 + v126);
+  }
+
+  function f56(p265) {
+    return p265 >= 0 ? Math.sin(p265 % v126) : Math.sin(p265 % v126 + v126);
+  }
+
+  var vA7 = [
+    { Ae: 0.0, Be: 0.18, Ce: 1.0, De: 2.0, Ee: 16737962 },
+    { Ae: 0.7, Be: 0.16, Ce: 1.5, De: 1.5, Ee: 16746632 },
+    { Ae: 1.4, Be: 0.14, Ce: 2.0, De: 1.0, Ee: 16755302 },
+    { Ae: 2.1, Be: 0.12, Ce: 3.0, De: 2.0, Ee: 11206502 },
+    { Ae: 2.8, Be: 0.16, Ce: 2.5, De: 2.5, Ee: 8978312 },
+    { Ae: 3.5, Be: 0.14, Ce: 2.0, De: 3.0, Ee: 6750122 },
+    { Ae: 4.2, Be: 0.11, Ce: 5.0, De: 4.0, Ee: 6728447 },
+    { Ae: 4.9, Be: 0.13, Ce: 4.5, De: 4.5, Ee: 8947967 },
+    { Ae: 5.6, Be: 0.15, Ce: 4.0, De: 5.0, Ee: 11167487 }
+  ];
+
+  f53.prototype.a = function () {
+    var vF92 = f9();
+
+    this.ue.backgroundColor = 0x000000;
+
+    this.we = new Array(vA7.length);
+    for (var vLN017 = 0; vLN017 < this.we.length; vLN017++) {
+      this.we[vLN017] = new vF7.ec();
+      this.we[vLN017].texture = vF92.q.Fe;
+      this.we[vLN017].anchor.set(0.5);
+      this.we[vLN017].zIndex = 1;
+      this.ve.addChild(this.we[vLN017]);
+    }
+
+    this.xe = new Array(vF92.q.Ge.length);
+    for (var vLN018 = 0; vLN018 < this.xe.length; vLN018++) {
+      this.xe[vLN018] = new vF7.ec();
+      this.xe[vLN018].texture = vF92.q.Ge[vLN018];
+      this.xe[vLN018].anchor.set(0.5);
+      this.xe[vLN018].zIndex = 2;
+      this.ve.addChild(this.xe[vLN018]);
+    }
+
+    this.ye = new Array(this.xe.length);
+    for (var vLN019 = 0; vLN019 < this.ye.length; vLN019++) {
+      this.ye[vLN019] = {
+        He: Math.random() * v126,
+        Ie: (0.09 + Math.random() * 0.07) * 0.66,
+        Je: 0.15 + Math.random() * 0.7,
+        Ke: Math.random()
+      };
+    }
+
+    this.Ra();
+  };
 
   f53.sc = true;
 
-  f53.Le = function () {
+  f53.Le = function (p266) {
     f53.sc = true;
-    f53.install();
-  };
-
-  f53.install = function () {
-    try {
-      if (window.__WORMXO_VALDAY_2023_BG_OK__) return;
-      window.__WORMXO_VALDAY_2023_BG_OK__ = true;
-
-      var css = document.getElementById("wormxo-valday-2023-deep-bg-css");
-      if (!css) {
-        css = document.createElement("style");
-        css.id = "wormxo-valday-2023-deep-bg-css";
-        css.textContent = "\n" +
-          "@keyframes wormxoValday2023DeepMove{\n" +
-          "0%{background-position:0 0,0 0,0 0,0 0,0 0;}\n" +
-          "50%{background-position:220px 310px,-260px 180px,0 0,0 0,0 0;}\n" +
-          "100%{background-position:440px 620px,-520px 360px,0 0,0 0,0 0;}\n" +
-          "}\n" +
-          "#wormxo-valday-2023-deep-bg{\n" +
-          "position:absolute!important;left:0!important;top:0!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;\n" +
-          "z-index:0!important;pointer-events:none!important;display:block!important;visibility:visible!important;opacity:1!important;\n" +
-          "background-color:#000!important;\n" +
-          "background-image:url('https://wormate.io/images/confetti-valday2023.png'),url('https://wormate.io/images/bg-event-pattern-valday2023.png'),radial-gradient(circle at 22% 25%,rgba(255,70,115,.32),transparent 34%),radial-gradient(circle at 78% 22%,rgba(255,195,80,.24),transparent 36%),linear-gradient(135deg,#000 0%,#16020a 45%,#000 100%)!important;\n" +
-          "background-repeat:repeat,repeat,no-repeat,no-repeat,no-repeat!important;\n" +
-          "background-size:240px 240px,520px 520px,100% 100%,100% 100%,100% 100%!important;\n" +
-          "animation:wormxoValday2023DeepMove 24s linear infinite!important;\n" +
-          "}\n" +
-          "#game-wrap,#stretch-box,#markup-wrap,#main-menu-view,#main-menu,#mm-start{position:relative!important;}\n" +
-          "#background-canvas{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;height:100%!important;z-index:0!important;background:transparent!important;pointer-events:none!important;}\n" +
-          "#game-view,#results-view,#popup-view,#toaster-view,#loading-view,#social-buttons,#markup-footer{position:relative!important;z-index:5!important;}\n" +
-          "#main-menu-view>*:not(#wormxo-valday-2023-deep-bg),#main-menu>*:not(#wormxo-valday-2023-deep-bg),#mm-start>*:not(#wormxo-valday-2023-deep-bg){position:relative;z-index:2;}\n";
-        (document.head || document.documentElement).appendChild(css);
-      }
-
-      var host = document.getElementById("main-menu-view") || document.getElementById("game-wrap") || document.body;
-      if (host && !document.getElementById("wormxo-valday-2023-deep-bg")) {
-        var layer = document.createElement("div");
-        layer.id = "wormxo-valday-2023-deep-bg";
-        if (host.firstChild) host.insertBefore(layer, host.firstChild);
-        else host.appendChild(layer);
-      }
-
-      try {
-        var c = document.getElementById("background-canvas");
-        if (c) {
-          c.style.display = "block";
-          c.style.visibility = "visible";
-          c.style.opacity = "1";
-        }
-      } catch (e0) {}
-    } catch (e) {
-      console.log("WORMXO Valday 2023 deep bg install error:", e);
-    }
-  };
-
-  f53.prototype.a = function () {
-    f53.install();
   };
 
   f53.prototype.Ra = function () {
-    try {
-      f53.install();
-      this.se = (window.jQuery ? jQuery("#background-canvas") : this.se);
-      this.te = this.se && this.se.get ? this.se.get()[0] : document.getElementById("background-canvas");
-      if (!this.te) return;
-      var w = (this.se && this.se.width && this.se.width()) || window.innerWidth || 1;
-      var h = (this.se && this.se.height && this.se.height()) || window.innerHeight || 1;
-      var dpr = window.devicePixelRatio || 1;
-      this.te.width = Math.max(1, Math.floor(w * dpr));
-      this.te.height = Math.max(1, Math.floor(h * dpr));
-      this.te.style.width = w + "px";
-      this.te.style.height = h + "px";
-    } catch (e) {}
-  };
+    var v157 = window.devicePixelRatio || 1;
+    var v158 = this.se.width();
+    var v159 = this.se.height();
 
-  f53.prototype.Pa = function () {
-    f53.install();
-  };
+    this.ue.resize(v158, v159);
+    this.ue.resolution = v157;
 
-  try {
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", function () { f53.install(); }, { once: true });
-    } else {
-      setTimeout(function () { f53.install(); }, 0);
+    this.te.width = v157 * v158;
+    this.te.height = v157 * v159;
+
+    var v160 = Math.max(v158, v159) * 0.8;
+
+    for (var vLN020 = 0; vLN020 < this.we.length; vLN020++) {
+      this.we[vLN020].width = v160;
+      this.we[vLN020].height = v160;
     }
-  } catch (e) {}
+  };
+
+  f53.prototype.Pa = function (p267, p268) {
+    var v161 = (p267 || Date.now()) / 1000;
+    var v162 = (p268 || 16) / 1000;
+    var v163 = this.se.width();
+    var v164 = this.se.height();
+
+    for (var vLN021 = 0; vLN021 < this.we.length; vLN021++) {
+      var v165 = vA7[vLN021 % vA7.length];
+      var v166 = this.we[vLN021];
+
+      var vF55 = f55(v165.Ce * (v161 * 0.08) + v165.Ae);
+      var vF56 = f56(v165.De * (v161 * 0.08));
+      var v167 = 0.2 + f55(v165.Ae + v165.Be * v161) * 0.2;
+
+      v166.tint = v165.Ee;
+      v166.alpha = v167;
+      v166.position.set(
+        v163 * (0.2 + (vF55 + 1) * 0.5 * 0.6),
+        v164 * (0.1 + (vF56 + 1) * 0.5 * 0.8)
+      );
+    }
+
+    var v168 = Math.max(v163, v164) * 0.05;
+
+    for (var vLN022 = 0; vLN022 < this.xe.length; vLN022++) {
+      var v169 = this.ye[vLN022];
+      var v170 = this.xe[vLN022];
+      var v171 = v126 * vLN022 / this.xe.length + v169.He;
+
+      v169.Ke += v169.Ie * v162;
+
+      if (v169.Ke > 1.3) {
+        v169.He = Math.random() * v126;
+        v169.Ie = (0.09 + Math.random() * 0.07) * 0.66;
+        v169.Je = 0.15 + Math.random() * 0.7;
+        v169.Ke = -0.3;
+      }
+
+      var v172 = v169.Je + Math.sin(Math.sin(v171 + v161 * 0.48) * 6) * 0.03;
+      var v173 = v169.Ke;
+      var vF20 = f20(Math.sin(Math.PI * v173), 0.1, 1);
+      var v174 = (0.4 + (1 + Math.sin(v171 + v161 * 0.12)) * 0.5 * 1.2) * 0.5;
+      var v175 = v171 + v169.Ie * 2 * v161;
+
+      v170.alpha = vF20;
+      v170.position.set(v163 * v172, v164 * v173);
+      v170.rotation = v175;
+
+      var v176 = v170.texture.width / v170.texture.height;
+      v170.width = v174 * v168;
+      v170.height = v174 * v168 * v176;
+    }
+
+    this.ue.render(this.ve);
+  };
 
   return f53;
 }();
