@@ -7504,8 +7504,8 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
       f96.lk = $("#stretch-box");
       f96.mk = $("#game-canvas");
       f96.di = $("#background-canvas");
-      
-       if (window.PIXI && vF51.di && vF51.di.length) {
+
+if (window.PIXI && f96.di && f96.di.length) {
   console.log("BG canvas ready");
 }
 
