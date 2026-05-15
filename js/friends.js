@@ -7491,34 +7491,40 @@ f70.prototype.mh = function (p374, p375, p376, p377, p378, p379) {
       };
       return f95;
     }();
-    var vF51 = function () {
-      function f96(p550) {
-        this.rc = p550;
-      }
-      f96.fk = $("#game-view");
-      f96.gk = $("#results-view");
-      f96.hk = $("#main-menu-view");
-      f96.ik = $("#popup-view");
-      f96.jk = $("#toaster-view");
-      f96.kk = $("#loading-view");
-      f96.lk = $("#stretch-box");
-      f96.mk = $("#game-canvas");
-      f96.di = $("#background-canvas");
+var vF51 = function () {
+  function f96(p550) {
+    this.rc = p550;
+  }
 
-if (window.PIXI && f96.di && f96.di.length) {
-  console.log("BG canvas ready");
-}
+  f96.fk = $("#game-view");
+  f96.gk = $("#results-view");
+  f96.hk = $("#main-menu-view");
+  f96.ik = $("#popup-view");
+  f96.jk = $("#toaster-view");
+  f96.kk = $("#loading-view");
+  f96.lk = $("#stretch-box");
 
-      f96.nk = $("#social-buttons");
-      f96.ok = $("#markup-wrap");
-      f96.prototype.a = function () {};
-      f96.prototype.ii = function () {};
-      f96.prototype.ji = function () {};
-      f96.prototype.ei = function () {};
-      f96.prototype.Ra = function () {};
-      f96.prototype.Pa = function (p551, p552) {};
-      return f96;
-    }();
+  f96.mk = $("#game-canvas");
+  f96.di = $("#background-canvas");
+
+  window.__WORMXO_BG_CANVAS__ = f96.di;
+
+  if (window.PIXI && f96.di && f96.di.length) {
+    console.log("BG canvas ready");
+  }
+
+  f96.nk = $("#social-buttons");
+  f96.ok = $("#markup-wrap");
+
+  f96.prototype.a = function () {};
+  f96.prototype.ii = function () {};
+  f96.prototype.ji = function () {};
+  f96.prototype.ei = function () {};
+  f96.prototype.Ra = function () {};
+  f96.prototype.Pa = function (p551, p552) {};
+
+  return f96;
+}();
     var vF52 = function () {
       function f97(p553, p554, p555, p556, p557, p558) {}
       var v$3 = $("#final-caption");
