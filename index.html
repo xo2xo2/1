@@ -3,72 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>WormXO - الإضافة الأسطورية لـ Wormate</title>
+<title>WormXO - إضافة مجانية | زوم ومميزات أسطورية</title>
 <link rel="icon" type="image/png" sizes="16x16" href="https://wormxo.store/image/wxo.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://wormxo.store/image/wxo.png">
-<link rel="icon" type="image/png" sizes="48x48" href="https://wormxo.store/image/wxo.png">
-<link rel="icon" type="image/png" sizes="128x128" href="https://wormxo.store/image/wxo.png">
-<link rel="shortcut icon" href="https://wormxo.store/image/wxo.png">
-<link rel="apple-touch-icon" sizes="128x128" href="https://wormxo.store/image/wxo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Google Fonts: خطوط عصرية وجذابة -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Cairo', 'Segoe UI', 'Tahoma', system-ui, sans-serif;
   }
 
   body {
-    min-height: 100vh;
-    background: #0c0a14;
-    color: #edeef5;
+    font-family: 'Cairo', 'Inter', sans-serif;
+    background: #0a0c12;
+    color: #edf2fb;
     overflow-x: hidden;
+    line-height: 1.5;
   }
 
-  /* خلفية ساحرة بتدرجات ليلية */
-  .stellar-bg {
+  /* خلفية عصرية متحركة بتدرجات ليلية عميقة */
+  .dynamic-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -2;
-    background: radial-gradient(ellipse at 30% 40%, #16122b, #0b0820, #04030c);
+    background: radial-gradient(circle at 20% 30%, #121826, #07090f);
   }
 
-  /* دوائر ضبابية راقية */
-  .nebula-orb {
+  /* تأثيرات جسيمات هندسية راقية */
+  .grain-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.3;
+  }
+
+  /* دوائر ضبابية عصرية بألوان أرجوانية وزرقاء عميقة */
+  .glow-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(130px);
-    opacity: 0.4;
+    filter: blur(120px);
+    opacity: 0.35;
     pointer-events: none;
-    animation: celestialDrift 110s infinite alternate ease-in-out;
-    transition: left 18s cubic-bezier(0.2, 0.9, 0.3, 1), top 18s cubic-bezier(0.2, 0.9, 0.3, 1);
+    z-index: -1;
+    animation: floatSlow 24s infinite alternate ease-in-out;
   }
 
-  @keyframes celestialDrift {
+  @keyframes floatSlow {
     0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(2%, -1%) scale(1.02); }
+    100% { transform: translate(3%, -2%) scale(1.05); }
   }
 
-  /* الهيدر الشفاف */
+  /* هيدر أنيق شفاف */
   .header {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(12, 9, 22, 0.75);
-    backdrop-filter: blur(24px);
+    background: rgba(8, 10, 18, 0.75);
+    backdrop-filter: blur(20px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 56px;
+    padding: 14px 56px;
     z-index: 1000;
-    border-bottom: 1px solid rgba(160, 130, 255, 0.4);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(100, 108, 255, 0.25);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 20px;
   }
 
   .logo {
@@ -78,376 +89,507 @@
   }
 
   .logo img {
-    width: 52px;
-    height: 52px;
-    border-radius: 24px;
-    background: #211d33;
-    padding: 5px;
-    box-shadow: 0 0 18px #b794ff;
+    width: 48px;
+    height: 48px;
+    border-radius: 20px;
+    background: #11131f;
+    padding: 6px;
+    box-shadow: 0 0 12px #6c7aff;
+    border: 1px solid #7f8cff;
   }
 
   .logo h1 {
-    font-size: 34px;
+    font-size: 32px;
     font-weight: 800;
-    background: linear-gradient(125deg, #e6d9ff, #bc97ff, #e5cfff);
+    background: linear-gradient(125deg, #ffffff, #9aa9ff, #c084fc);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    letter-spacing: -0.3px;
   }
 
   .nav {
     display: flex;
-    gap: 22px;
+    gap: 24px;
     flex-wrap: wrap;
+    align-items: center;
   }
 
   .nav a {
     text-decoration: none;
-    font-weight: 600;
-    color: #ddd2ff;
-    padding: 8px 28px;
-    border-radius: 60px;
-    background: rgba(30, 24, 55, 0.6);
-    border: 1px solid rgba(160, 120, 255, 0.5);
+    font-weight: 700;
+    color: #d9e2ff;
+    padding: 8px 26px;
+    border-radius: 40px;
+    background: rgba(20, 25, 45, 0.7);
+    border: 1px solid #6c7aff80;
     transition: 0.25s;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .nav a i {
-    margin-left: 8px;
-  }
-
-  .nav a:hover {
-    background: #8f6eff;
-    color: #0d0920;
-    border-color: #d9baff;
-    transform: translateY(-2px);
-    box-shadow: 0 0 20px #aa88ff;
-  }
-
-  /* المحتوى الرئيسي */
-  .hero {
-    padding: 150px 24px 80px;
-    display: flex;
-    justify-content: center;
-    z-index: 10;
-    position: relative;
-  }
-
-  .glass-panel {
-    max-width: 1300px;
-    width: 100%;
-    background: rgba(18, 14, 32, 0.55);
-    backdrop-filter: blur(22px);
-    border-radius: 80px;
-    padding: 55px 48px;
-    box-shadow: 0 45px 85px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(160, 130, 255, 0.35);
-    text-align: center;
-    border: 1px solid rgba(150, 110, 250, 0.5);
-  }
-
-  .main-title {
-    font-size: 74px;
-    font-weight: 900;
-    background: linear-gradient(135deg, #ede2ff, #bd96ff, #f2e3ff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin-bottom: 10px;
-  }
-
-  .brand-icon {
-    margin: 20px auto;
-  }
-
-  .brand-icon img {
-    max-width: 200px;
-    width: 65%;
-    border-radius: 60px;
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), 0 0 0 3px #b48effaa;
-    background: #28223f;
-  }
-
-  .prestige-badge {
-    background: rgba(140, 100, 230, 0.2);
-    display: inline-block;
-    padding: 10px 36px;
-    border-radius: 100px;
-    margin: 18px 0 12px;
-    font-weight: 700;
-    color: #cfbcff;
-    border: 1px solid #b48eff;
     font-size: 1rem;
   }
 
-  .hero-description {
-    font-size: 1.38rem;
-    color: #e3dafc;
-    margin: 22px 0 15px;
+  .nav a:hover {
+    background: #646cff;
+    color: #0a0c18;
+    border-color: #b9c2ff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px #3b3fbb40;
+  }
+
+  /* زر ترجمة مخصص */
+  .translate-btn {
+    background: #2d2f4b;
+    border: 1px solid #818cff;
+    color: white;
+    padding: 8px 26px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.2s;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .translate-btn:hover {
+    background: #646cff;
+    transform: scale(1.02);
+    border-color: white;
+  }
+
+  /* Hero section جديد كلياً */
+  .hero {
+    padding: 160px 24px 90px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 5;
+  }
+
+  .glass-master {
+    max-width: 1250px;
+    width: 100%;
+    background: rgba(12, 15, 28, 0.55);
+    backdrop-filter: blur(16px);
+    border-radius: 64px;
+    padding: 52px 48px;
+    text-align: center;
+    border: 1px solid rgba(120, 130, 255, 0.4);
+    box-shadow: 0 40px 70px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(130, 140, 255, 0.2);
+    transition: all 0.3s;
+  }
+
+  .badge-crown {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(100, 108, 255, 0.18);
+    padding: 8px 26px;
+    border-radius: 100px;
+    font-weight: 800;
+    color: #b8c2ff;
+    border: 1px solid #7b85ff;
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+    letter-spacing: 0.3px;
+  }
+
+  .main-title {
+    font-size: 70px;
+    font-weight: 900;
+    background: linear-gradient(125deg, #fff, #abb4ff, #ccacff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 12px;
+  }
+
+  .brand-icon {
+    margin: 18px auto;
+  }
+
+  .brand-icon img {
+    max-width: 180px;
+    width: 55%;
+    border-radius: 48px;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), 0 0 0 3px #8f9bff;
+    background: #121624;
+  }
+
+  .hero-desc {
+    font-size: 1.3rem;
+    background: rgba(0, 0, 0, 0.35);
+    display: inline-block;
+    padding: 14px 36px;
+    border-radius: 80px;
+    backdrop-filter: blur(8px);
     font-weight: 500;
-    line-height: 1.6;
+    margin: 22px 0 8px;
+    color: #f0f3ff;
+    border: 1px solid #7f8aff4d;
   }
 
   /* الأزرار */
-  .action-buttons {
+  .action-group {
     display: flex;
-    gap: 35px;
+    gap: 30px;
     justify-content: center;
     flex-wrap: wrap;
-    margin: 45px 0 40px;
+    margin: 45px 0 50px;
   }
 
   .btn-cosmic {
-    padding: 18px 48px;
-    border-radius: 100px;
+    padding: 16px 48px;
+    border-radius: 60px;
     font-weight: 800;
-    font-size: 1.28rem;
+    font-size: 1.2rem;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 14px;
-    background: rgba(15, 11, 28, 0.7);
-    border: 1.5px solid #bc97ff;
-    color: #efe6ff;
-    backdrop-filter: blur(6px);
-    transition: 0.3s;
-  }
-
-  .btn-primary-cosmic {
-    background: linear-gradient(105deg, #8f6eff, #6a47c2);
+    transition: all 0.25s;
     border: none;
-    color: white;
-    box-shadow: 0 12px 28px #5e3fc0aa;
+    cursor: pointer;
   }
 
-  .btn-cosmic i {
-    font-size: 1.55rem;
+  .btn-primary-glow {
+    background: linear-gradient(105deg, #5f6cff, #3f47c2);
+    color: white;
+    box-shadow: 0 10px 20px -5px #5f6cffaa;
+  }
+
+  .btn-secondary-glow {
+    background: linear-gradient(105deg, #a855f7, #7c3aed);
+    color: white;
+    box-shadow: 0 10px 20px -5px #a855f7aa;
   }
 
   .btn-cosmic:hover {
     transform: translateY(-6px);
-    filter: brightness(1.07);
-    box-shadow: 0 28px 38px rgba(0, 0, 0, 0.5), 0 0 18px #cbb2ff;
+    filter: brightness(1.08);
+    box-shadow: 0 24px 32px -12px #00000066;
   }
 
-  /* بطاقات الميزات */
-  .features-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 32px;
-    margin-top: 70px;
-    text-align: right;
-  }
-
-  .feature-card {
-    background: rgba(26, 21, 48, 0.7);
-    backdrop-filter: blur(10px);
-    border-radius: 52px;
-    padding: 32px 28px;
-    border-right: 5px solid #b994ff;
-    transition: 0.2s;
-  }
-
-  .feature-card:hover {
-    background: rgba(44, 36, 72, 0.85);
-    transform: translateY(-5px);
-    border-right-color: #e1cbff;
-  }
-
-  .feature-card h3 {
-    font-size: 1.8rem;
-    color: #e0ceff;
-    margin-bottom: 16px;
+  /* ثلاثة مميزات فقط (zoom، مميزات مجانية، سرعة خارقة) */
+  .features-triple {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 45px;
+    margin-top: 30px;
+    margin-bottom: 10px;
   }
 
-  .feature-card p {
-    color: #ddd1f5;
-    line-height: 1.65;
-    font-weight: 450;
-  }
-
-  /* التذييل */
-  .footer {
+  .feature-card-modern {
+    flex: 1;
+    min-width: 250px;
+    max-width: 340px;
+    background: linear-gradient(145deg, #13182b, #0d1022);
+    border-radius: 48px;
+    padding: 38px 28px;
     text-align: center;
-    padding: 36px;
-    color: #b5a1e6;
-    font-weight: 500;
-    border-top: 1px solid #8f6eff40;
-    background: rgba(0, 0, 0, 0.4);
-    margin-top: 40px;
-    font-size: 0.95rem;
-    backdrop-filter: blur(6px);
+    transition: 0.25s;
+    border: 1px solid #4755cf4d;
+    box-shadow: 0 20px 35px -15px rgba(0,0,0,0.5);
   }
 
-  @media (max-width: 800px) {
+  .feature-card-modern:hover {
+    transform: translateY(-10px);
+    border-color: #8b96ff;
+    background: #181f3a;
+    box-shadow: 0 28px 40px -18px #2d3588;
+  }
+
+  .feature-icon {
+    font-size: 3.3rem;
+    background: linear-gradient(135deg, #a0abff, #c084fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 24px;
+  }
+
+  .feature-card-modern h3 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #e4ebff;
+    margin-bottom: 16px;
+  }
+
+  .feature-card-modern p {
+    color: #bfc9f0;
+    font-weight: 500;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  /* تذييل جديد */
+  .footer-new {
+    text-align: center;
+    padding: 32px 20px;
+    color: #b1bbf0;
+    font-weight: 600;
+    border-top: 1px solid #505ecf40;
+    background: rgba(0, 0, 0, 0.5);
+    margin-top: 50px;
+    font-size: 0.95rem;
+    backdrop-filter: blur(4px);
+  }
+
+  @media (max-width: 850px) {
     .header {
-      padding: 12px 24px;
+      padding: 12px 28px;
     }
     .main-title {
       font-size: 48px;
     }
-    .glass-panel {
+    .glass-master {
       padding: 38px 24px;
     }
     .btn-cosmic {
-      padding: 12px 34px;
-      font-size: 1.05rem;
+      padding: 12px 32px;
+      font-size: 1rem;
     }
-    .hero-description {
-      font-size: 1.1rem;
+    .features-triple {
+      gap: 25px;
     }
   }
 
-  @media (max-width: 550px) {
+  @media (max-width: 650px) {
     .main-title {
       font-size: 38px;
     }
-    .action-buttons {
-      gap: 20px;
+    .hero-desc {
+      font-size: 1rem;
     }
-    .feature-card h3 {
-      font-size: 1.45rem;
+    .feature-card-modern h3 {
+      font-size: 1.7rem;
     }
   }
 </style>
 </head>
 <body>
 
-<div class="stellar-bg" id="stellarBg"></div>
+<div class="dynamic-bg"></div>
+<div class="grain-overlay"></div>
+<div id="orbContainer"></div>
 
 <header class="header">
   <div class="logo">
-    <img src="https://wormxo.store/image/wxo.png" alt="شعار WormXO">
-    <h1>Worm<span>XO</span></h1>
+    <img src="https://wormxo.store/image/wxo.png" alt="WormXO">
+    <h1>Worm<span style="color:#c6d0ff;">XO</span></h1>
   </div>
-  <nav class="nav">
-    <a href="#"><i class="fas fa-rocket"></i> الرئيسية</a>
+  <div class="nav">
+    <a href="#"><i class="fas fa-home"></i> الرئيسية</a>
     <a href="https://wormxo.store/file/wormxo.zip"><i class="fas fa-download"></i> التحميل</a>
     <a href="https://discord.gg/wb8pD5ybs" target="_blank"><i class="fab fa-discord"></i> ديسكورد</a>
-  </nav>
+    <button id="customTranslateBtn" class="translate-btn"><i class="fas fa-globe"></i> ترجمة</button>
+  </div>
 </header>
 
 <section class="hero">
-  <div class="glass-panel">
-    <div class="prestige-badge"><i class="fas fa-crown"></i> إضافة WormXO الرسمية | أسطورة Wormate <i class="fas fa-crown"></i></div>
-    <h1 class="main-title">Worm<span style="background:linear-gradient(135deg,#f4e6ff,#c9aef0);-webkit-background-clip:text;background-clip:text;color:transparent;">XO</span> <i class="fa-regular fa-star"></i></h1>
+  <div class="glass-master">
+    <div class="badge-crown"><i class="fas fa-gem"></i> التميز المطلق | WormXO <i class="fas fa-crown"></i></div>
+    <h1 class="main-title">WormXO <i class="fa-regular fa-circle-check"></i></h1>
     <div class="brand-icon">
-      <img src="https://wormxo.store/image/wxo.png" alt="WormXO">
+      <img src="https://wormxo.store/image/wxo.png" alt="شعار WormXO">
     </div>
-    <p class="hero-description">✨ إضافة WormXO تمنحك القوة المطلقة في wormate.io: سكنات خيالية، سرعة كونية، وتقنيات لا تُقهر ✨</p>
+    <p class="hero-desc"><i class="fas fa-bolt"></i> أقوى إضافة مجانية للعبة wormate.io | زوم لا محدود + خيارات أسطورية <i class="fas fa-star"></i></p>
 
-    <div class="action-buttons">
-      <a href="https://wormxo.store/file/wormxo.zip" class="btn-cosmic btn-primary-cosmic" id="btnWormxo">
-        <i class="fas fa-download"></i> تحميل WormXO
+    <div class="action-group">
+      <a href="https://wormxo.store/file/wormxo.zip" class="btn-cosmic btn-primary-glow" id="downloadWorm">
+        <i class="fas fa-download"></i> حمل WormXO الآن
       </a>
-      <a href="https://wormxo.store/file/wormfmx.zip" class="btn-cosmic" id="btnMatrix">
-        <i class="fas fa-download"></i> WormFriendMatrix
+      <a href="https://wormxo.store/file/wormfmx.zip" class="btn-cosmic btn-secondary-glow" id="downloadMatrix">
+        <i class="fas fa-users"></i> WormFriendMatrix
       </a>
     </div>
 
-    <div class="features-container">
-      <div class="feature-card">
-        <h3><i class="fas fa-dragon"></i> كنوز السكنات</h3>
-        <p>أكثر من 75 سكناً حصرياً لم ترها من قبل، تصاميم أسطورية وألوان ساحرة تجعل هويتك فريدة.</p>
+    <!-- ثلاثة مميزات أساسية (زوم مجاني + مميزات مجانيه + تحكم خرافي) -->
+    <div class="features-triple">
+      <div class="feature-card-modern">
+        <div class="feature-icon"><i class="fas fa-search-plus"></i></div>
+        <h3>زوم مجاني</h3>
+        <p>تكبير وتصغير اللامحدود بدون أي قيود، رؤية استثنائية للميدان ومنافسيك، زوم سلس واحترافي داخل wormate.io.</p>
       </div>
-      <div class="feature-card">
-        <h3><i class="fas fa-bolt"></i> سرعة خارقة</h3>
-        <p>تحكم فوري، سرعة فائقة، وزوم متطور - تفوّق على الجميع بسلاسة مطلقة.</p>
+      <div class="feature-card-modern">
+        <div class="feature-icon"><i class="fas fa-gift"></i></div>
+        <h3>مميزات مجانية بالكامل</h3>
+        <p>تمتع بجميع الخيارات: سكنات حصرية، سرعة خارقة، إضافات ذكية، كل شيء مجاني وبدون دفع أي رسوم - إلى الأبد.</p>
       </div>
-      <div class="feature-card">
-        <h3><i class="fas fa-shield-haltered"></i> تقنية Nova</h3>
-        <p>اتصال فائق الثبات بدون أي تقطيع، حتى مع أضعف شبكات الإنترنت.</p>
-      </div>
-      <div class="feature-card">
-        <h3><i class="fas fa-mobile-screen"></i> دعم شامل</h3>
-        <p>يعمل على جميع الأجهزة: حواسيب، جوالات، أجهزة لوحية - الكل يستمتع.</p>
-      </div>
-      <div class="feature-card">
-        <h3><i class="fas fa-gift"></i> مجاني + تحديثات أبدية</h3>
-        <p>الإضافة مجانية بالكامل، ونُحدّثها باستمرار لنبقى الخيار الأمثل دائماً.</p>
+      <div class="feature-card-modern">
+        <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+        <h3>تحكم أسطوري</h3>
+        <p>سرعة فائقة بالحركة، استقرار قوي، دقة عالية، وواجهة سلسة تجعلك لا تقهر داخل الحلبة.</p>
       </div>
     </div>
   </div>
 </section>
 
-<footer class="footer">
-  <span>© 2026 <strong style="color: #c9aeff;">WormXO</strong> — التحفة الفريدة لعشاق wormate.io<br>🚀 حمّل الإضافة الآن واصنع مجدك 🚀</span>
+<footer class="footer-new">
+  <strong>جميع الحقوق محفوظة WORMXO 2026</strong> ©
 </footer>
 
 <script>
-  // ألوان دوائر نبيلا (نيلي، ياقوتي هادئ، زمردي ناعم، لافندر فاتح، أزرق أوركيد)
-  const nebulaColors = [
-    'radial-gradient(circle at 35% 55%, rgba(120, 80, 220, 0.6), rgba(70, 40, 160, 0.25))',
-    'radial-gradient(circle at 65% 30%, rgba(170, 120, 255, 0.65), rgba(100, 60, 200, 0.3))',
-    'radial-gradient(circle at 20% 75%, rgba(80, 200, 160, 0.55), rgba(50, 140, 110, 0.25))',
-    'radial-gradient(circle at 80% 65%, rgba(210, 110, 200, 0.6), rgba(150, 65, 140, 0.3))',
-    'radial-gradient(circle at 45% 25%, rgba(100, 160, 230, 0.6), rgba(50, 100, 180, 0.25))'
+  // دوائر خلفية عصرية (إلغاء القديم وإنشاء جديد متناسق)
+  const orbContainer = document.getElementById('orbContainer');
+  const orbColors = [
+    'radial-gradient(circle at 30% 40%, rgba(100, 108, 255, 0.4), rgba(20, 25, 70, 0.1))',
+    'radial-gradient(circle at 70% 65%, rgba(168, 85, 247, 0.45), rgba(60, 30, 110, 0.15))',
+    'radial-gradient(circle at 45% 25%, rgba(0, 180, 220, 0.35), rgba(0, 70, 100, 0.1))',
+    'radial-gradient(circle at 85% 35%, rgba(200, 120, 255, 0.4), rgba(70, 30, 120, 0.12))',
+    'radial-gradient(circle at 15% 75%, rgba(79, 172, 254, 0.3), rgba(25, 55, 100, 0.1))'
   ];
 
-  const bgLayer = document.getElementById('stellarBg');
-
-  function createNebulaOrbs() {
-    for (let i = 0; i < 6; i++) {
+  function createModernOrbs() {
+    for (let i = 0; i < 5; i++) {
       const orb = document.createElement('div');
-      orb.classList.add('nebula-orb');
-      let size = Math.min(window.innerWidth * 0.72, 850);
-      size = Math.max(size, 550);
+      orb.classList.add('glow-orb');
+      let size = Math.min(window.innerWidth * 0.65, 750);
+      size = Math.max(size, 480);
       orb.style.width = size + 'px';
       orb.style.height = size + 'px';
-      orb.style.background = nebulaColors[i % nebulaColors.length];
-      orb.style.opacity = 0.4 + Math.random() * 0.25;
+      orb.style.background = orbColors[i % orbColors.length];
       orb.style.left = (Math.random() * 70 + 5) + '%';
       orb.style.top = (Math.random() * 70 + 5) + '%';
-      orb.style.position = 'absolute';
-      orb.style.zIndex = '-1';
-      bgLayer.appendChild(orb);
-      
-      // تغيير لون ناعم كل 15 ثانية
-      setInterval(() => {
-        const newColor = nebulaColors[Math.floor(Math.random() * nebulaColors.length)];
-        orb.style.transition = 'background 11s ease-in-out';
-        orb.style.background = newColor;
-      }, 15000 + i * 2000);
+      orb.style.opacity = 0.35 + Math.random() * 0.2;
+      document.body.appendChild(orb);
+    }
+  }
+  createModernOrbs();
+
+  // تحريك بطيء
+  setInterval(() => {
+    const orbs = document.querySelectorAll('.glow-orb');
+    orbs.forEach(orb => {
+      const newX = Math.random() * 78 + 5;
+      const newY = Math.random() * 78 + 5;
+      orb.style.transition = 'left 20s cubic-bezier(0.2, 0.9, 0.3, 1), top 20s cubic-bezier(0.2, 0.9, 0.3, 1)';
+      orb.style.left = newX + '%';
+      orb.style.top = newY + '%';
+    });
+  }, 18000);
+
+  // --------------------- ترجمة جوجل فاخرة --------------------
+  function loadGoogleTranslate() {
+    if (!document.querySelector('#gtranslate-script')) {
+      const script = document.createElement('script');
+      script.id = 'gtranslate-script';
+      script.src = 'https://translate.google.com/translate_a/element.js?cb=initGoogleTranslate';
+      script.async = true;
+      document.head.appendChild(script);
     }
   }
 
-  function adjustOrbSizes() {
-    const orbs = document.querySelectorAll('.nebula-orb');
-    const newSize = Math.min(window.innerWidth * 0.65, 780);
-    orbs.forEach(orb => {
-      orb.style.width = newSize + 'px';
-      orb.style.height = newSize + 'px';
+  window.initGoogleTranslate = function() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'ar',
+      includedLanguages: 'ar,en,fr,es,de,tr,ru,pt,it,zh-CN,ja,ko',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+      autoDisplay: false
+    }, 'translateButtonWrapper');
+    
+    // تصميم أنيق لعنصر جوجل
+    setTimeout(() => {
+      const googleSimple = document.querySelector('.goog-te-gadget-simple');
+      if (googleSimple) {
+        googleSimple.style.backgroundColor = '#2d2f4b';
+        googleSimple.style.border = '1px solid #818cff';
+        googleSimple.style.borderRadius = '40px';
+        googleSimple.style.padding = '6px 20px';
+        const menuValue = googleSimple.querySelector('.goog-te-menu-value');
+        if (menuValue) {
+          menuValue.style.color = 'white';
+          menuValue.style.fontWeight = 'bold';
+          if (menuValue.innerText === 'اختر اللغة') menuValue.innerHTML = '🌐 اختر اللغة';
+        }
+      }
+    }, 200);
+  };
+
+  function simulateClickTranslate() {
+    const translateEl = document.querySelector('.goog-te-gadget-simple');
+    if (translateEl) {
+      translateEl.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    } else {
+      setTimeout(() => {
+        const el = document.querySelector('.goog-te-gadget-simple');
+        if (el) el.click();
+      }, 300);
+    }
+  }
+
+  const translateBtn = document.getElementById('customTranslateBtn');
+  if (translateBtn) {
+    translateBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (typeof google === 'undefined' || !google.translate) {
+        loadGoogleTranslate();
+        const checkExist = setInterval(() => {
+          if (typeof google !== 'undefined' && google.translate && document.querySelector('.goog-te-gadget-simple')) {
+            clearInterval(checkExist);
+            simulateClickTranslate();
+          }
+        }, 400);
+      } else {
+        simulateClickTranslate();
+      }
     });
   }
 
-  createNebulaOrbs();
-  window.addEventListener('resize', adjustOrbSizes);
-  adjustOrbSizes();
+  // تجهيز المكتبة مسبقاً بدون إزعاج
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      if (typeof google === 'undefined' || !google.translate) loadGoogleTranslate();
+    }, 1000);
+  });
 
-  // تحريك الدوائر بشكل بطيء جداً كل 16 ثانية
-  setInterval(() => {
-    const orbs = document.querySelectorAll('.nebula-orb');
-    orbs.forEach(orb => {
-      const newLeft = Math.random() * 78 + 5;
-      const newTop = Math.random() * 78 + 5;
-      orb.style.transition = 'left 18s cubic-bezier(0.2,0.9,0.3,1), top 18s cubic-bezier(0.2,0.9,0.3,1)';
-      orb.style.left = newLeft + '%';
-      orb.style.top = newTop + '%';
-    });
-  }, 16000);
+  // إنشاء عنصر وهمي لإيواء ترجمة جوجل
+  const wrapperDiv = document.createElement('div');
+  wrapperDiv.id = 'translateButtonWrapper';
+  wrapperDiv.style.display = 'none';
+  document.body.appendChild(wrapperDiv);
 
-  // تثبيت الروابط يدوياً
-  const btn1 = document.getElementById('btnWormxo');
-  const btn2 = document.getElementById('btnMatrix');
+  // تأكيد الروابط
+  const btn1 = document.getElementById('downloadWorm');
+  const btn2 = document.getElementById('downloadMatrix');
   if (btn1) btn1.href = 'https://wormxo.store/file/wormxo.zip';
   if (btn2) btn2.href = 'https://wormxo.store/file/wormfmx.zip';
-  
-  // توجيه RTL كامل
+
+  // إضافة بعض التحسينات RTL وتجربة
   document.documentElement.setAttribute('dir', 'rtl');
   document.body.style.direction = 'rtl';
+
+  // إخفاء أي شريط جوجل علوي
+  const styleHide = document.createElement('style');
+  styleHide.textContent = `.goog-te-banner-frame.skiptranslate, .goog-te-balloon-frame { display: none !important; } body { top: 0px !important; } .skiptranslate iframe { display: none; }`;
+  document.head.appendChild(styleHide);
+
+  // تأثيرات نصية بسيطة لجعل التجربة حية
+  const descEl = document.querySelector('.hero-desc');
+  if (descEl) {
+    const texts = ["✨ زوم مجاني - تحكم خرافي - مميزات لا نهائية ✨", "⚡ زوم فوري + مميزات مجانية 100%", "🔥 أسطورة wormate.io بين يديك مجاناً"];
+    let idx = 0;
+    setInterval(() => {
+      idx = (idx + 1) % texts.length;
+      descEl.style.transition = "opacity 0.4s";
+      descEl.style.opacity = "0";
+      setTimeout(() => {
+        if (descEl) descEl.innerHTML = `<i class="fas fa-bolt"></i> ${texts[idx]} <i class="fas fa-star"></i>`;
+        descEl.style.opacity = "1";
+      }, 200);
+    }, 4000);
+  }
 </script>
+
+<!-- ضمان عدم ظهور أي شريط ترجمة علوي -->
 </body>
 </html>
