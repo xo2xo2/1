@@ -1,14 +1,306 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>WormXO Connct</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TimMapWormate - قائمة السيرفرات</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .angry-grid {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      gap: 1px;
+      justify-content: center;
+      align-items: center;
+      justify-items: center;
+      align-content: center;
+      border-bottom: 1px solid #fff;
+      padding: 10px;
+    }
+
+    .angry-grid a {
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .angry-grid a.active {
+      border: 2px solid #ff9800;
+      background-color: rgba(255, 152, 0, 0.2);
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    [id*="wwc_room_item_"] {
+      display: grid;
+      grid-template-columns: 1fr 30px;
+      line-height: 28px;
+      padding: 8px 12px;
+      margin: 5px 0;
+      background: #f5f5f5;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    [id*="wwc_room_item_"]:hover {
+      background-color: #ff9800;
+      color: black;
+      transform: translateX(-5px);
+    }
+
+    [id*="wwc_room_item_"] a:hover {
+      color: black;
+    }
+
+    .dropdown-item {
+      cursor: pointer;
+      line-height: 25px;
+    }
+
+    .dropdown-item strong {
+      font-weight: bold;
+    }
+
+    /* تصميم الأعلام */
+    .sprite {
+      background-image: url(https://asserts.wormworld.io/images/flags_region.png);
+      background-repeat: no-repeat;
+      background-size: 135px 120px;
+      display: inline-block;
+    }
+
+    .sprite-ae-flag { width: 40px; height: 25px; background-position: -3px -4px; }
+    .sprite-au-flag { width: 40px; height: 25px; background-position: -48px -3px; }
+    .sprite-br-flag { width: 40px; height: 25px; background-position: -2px -33px; }
+    .sprite-ca-flag { width: 40px; height: 25px; background-position: -48px -33px; }
+    .sprite-fr-flag { width: 40px; height: 25px; background-position: -2px -62px; }
+    .sprite-de-flag { width: 40px; height: 25px; background-position: -48px -62px; }
+    .sprite-jp-flag { width: 40px; height: 25px; background-position: -48px -92px; }
+    .sprite-mx-flag { width: 40px; height: 25px; background-position: -92px -3px; }
+    .sprite-sg-flag { width: 40px; height: 25px; background-position: -92px -33px; }
+    .sprite-uk-flag { width: 40px; height: 25px; background-position: -92px -92px; }
+    .sprite-us-flag { width: 40px; height: 25px; background-position: -92px -92px; }
+
+    /* عنوان الصفحة */
+    .title-worm-world-connect {
+      position: relative;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      padding: 15px;
+      background: linear-gradient(135deg, #ff9800, #f44336);
+      border-radius: 15px 15px 0 0;
+    }
+
+    #wwc_tabs {
+      background: white;
+      border-radius: 0 0 15px 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .footer-message {
+      text-align: center;
+      background-image: linear-gradient(#22ffcd, #cb5dc5);
+      font-weight: bold;
+      color: white;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 15px;
+    }
+
+    img {
+      width: 25px;
+      height: 25px;
+      vertical-align: middle;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .live-dot {
+      background-color: #4dff00;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
-    <p id="name">WormXO</p>
-    <hr id="1line">
-    
+
+<div style="width: 100%; max-width: 550px; margin: 0 auto;">
+  <div id="load_page_apoiador">
+    <div class="title-worm-world-connect">
+      <img src="https://timmapwormate.com/images/check/linelogo_tmw.png" style="height: 35px; vertical-align: middle;">
+      TimMapWormate
+    </div>
+
+    <div style="height: auto; overflow: auto; border: 1px solid #ddd; margin: 0 auto;" id="wwc_tabs">
+      
+      <!-- تبويبات الأعلام -->
+      <div class="angry-grid f32">
+        <a href="#tabs4" id="linktab_4"><i class="sprite sprite-de-flag"></i></a>
+        <a href="#tabs9" id="linktab_9"><i class="sprite sprite-ae-flag"></i></a>
+        <a href="#tabs0" id="linktab_0"><i class="sprite sprite-br-flag"></i></a>
+        <a href="#tabs1" id="linktab_1"><i class="sprite sprite-us-flag"></i></a>
+        <a href="#tabs2" id="linktab_2"><i class="sprite sprite-ca-flag"></i></a>
+        <a href="#tabs5" id="linktab_5"><i class="sprite sprite-fr-flag"></i></a>
+        <a href="#tabs3" id="linktab_3"><i class="sprite sprite-mx-flag"></i></a>
+        <a href="#tabs6" id="linktab_6"><i class="sprite sprite-sg-flag"></i></a>
+        <a href="#tabs7" id="linktab_7"><i class="sprite sprite-jp-flag"></i></a>
+        <a href="#tabs8" id="linktab_8"><i class="sprite sprite-au-flag"></i></a>
+      </div>
+
+      <!-- ========== ألمانيا DE ========== -->
+      <div class="tab-pane" id="tabs4" style="display: none;">
+        <div id="wwc_room_item_de1"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32053/wormy" data-room="1de"><strong>01. SivasLı Gaminq</strong> <span class="live-dot"></span></div><a href="https://www.tiktok.com/@sivasli_gaming" target="_blank"><img src="https://timmapwormate.com/images/check/Siva.png"></a></div>
+        <div id="wwc_room_item_de2"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32609/wormy" data-room="2de"><strong>02. ألمانيا</strong> <span class="live-dot"></span></div><a href="#" target="_blank"><img src="https://asserts.wormworld.io/rooms/favicon128x128.png"></a></div>
+        <div id="wwc_room_item_de3"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32103/wormy" data-room="3de"><strong>03. FB Team Nike</strong></div><a href="https://www.facebook.com/TeamNike2" target="_blank"><img src="https://timmapwormate.com/images/check/nike.jpg"></a></div>
+        <div id="wwc_room_item_de4"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32064/wormy" data-room="4de"><strong>04. maro_kng</strong></div><a href="https://www.tiktok.com/@maro_kng" target="_blank"><img src="https://timmapwormate.com/images/check/mano_png.jpg"></a></div>
+        <div id="wwc_room_item_de5"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32708/wormy" data-room="5de"><strong>05. 𝙼arshmelo 𝙶aming</strong></div><a href="https://www.facebook.com/marshmelo.gamer" target="_blank"><img src="https://timmapwormate.com/images/check/melo.jpg"></a></div>
+        <div id="wwc_room_item_de6"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32026/wormy" data-room="6de"><strong>06. tik 𓌹 SALIM ✗</strong></div><a href="https://www.tiktok.com/@lb.salim1" target="_blank"><img src="https://timmapwormate.com/images/check/salim.jpg"></a></div>
+        <div id="wwc_room_item_de7"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32285/wormy" data-room="7de"><strong>07. FIRE@YT🔥</strong></div><a href="https://www.tiktok.com/@pindi__gaming" target="_blank"><img src="https://timmapwormate.com/images/check/fire.jpg"></a></div>
+        <div id="wwc_room_item_de8"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:31280/wormy" data-room="8de"><strong>08. tik 𓌹 𝙆𝘼𝙍𝙄𝙈 ✗</strong></div><a href="https://www.tiktok.com/@karim_g11" target="_blank"><img src="https://timmapwormate.com/images/check/karim.png"></a></div>
+        <div id="wwc_room_item_de9"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32017/wormy" data-room="9de"><strong>09. ناصر | ☪️</strong> <span class="live-dot"></span></div><a href="https://www.tiktok.com/@tik.na4" target="_blank"><img src="https://timmapwormate.com/images/check/NS.jpg"></a></div>
+        <div id="wwc_room_item_de10"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32095/wormy" data-room="10de"><strong>10. 🦊 Dziri Gaming</strong></div><a href="https://www.tiktok.com/@dzirigaming" target="_blank"><img src="https://timmapwormate.com/images/check/dziri.jpg"></a></div>
+      </div>
+
+      <!-- ========== الإمارات AE ========== -->
+      <div class="tab-pane" id="tabs9" style="display: none;">
+        <div id="wwc_room_item_ae1"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32053/wormy" data-room="1ae"><strong>01. Ali Gaming</strong></div><a href="https://www.facebook.com/aligamingfriendly125/" target="_blank"><img src="https://timmapwormate.com/images/check/ali.jpg"></a></div>
+        <div id="wwc_room_item_ae2"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32609/wormy" data-room="2ae"><strong>02. Qasim Gaming</strong> <span class="live-dot"></span></div><a href="https://www.tiktok.com/@qasimgamingfb2.0" target="_blank"><img src="https://timmapwormate.com/images/check/qusim.jpg"></a></div>
+        <div id="wwc_room_item_ae3"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32103/wormy" data-room="3ae"><strong>03. FIRE@YT🔥</strong></div><a href="https://www.tiktok.com/@pindi__gaming" target="_blank"><img src="https://timmapwormate.com/images/check/fire.jpg"></a></div>
+      </div>
+
+      <!-- ========== البرازيل BR ========== -->
+      <div class="tab-pane" id="tabs0" style="display: none;">
+        <div id="wwc_room_item_br1"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32053/wormy" data-room="1br"><strong>01. WW - Brasil 1</strong></div><a href="https://wormworld.io" target="_blank"><img src="https://asserts.wormworld.io/rooms/favicon128x128.png"></a></div>
+        <div id="wwc_room_item_br2"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32285/wormy" data-room="2br"><strong>02. WW - Brasil 2</strong></div><a href="https://wormworld.io" target="_blank"><img src="https://asserts.wormworld.io/rooms/favicon128x128.png"></a></div>
+        <div id="wwc_room_item_br3"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32609/wormy" data-room="3br"><strong>03. WW - Brasil 3</strong></div><a href="https://wormworld.io" target="_blank"><img src="https://asserts.wormworld.io/rooms/favicon128x128.png"></a></div>
+      </div>
+
+      <!-- ========== أمريكا US ========== -->
+      <div class="tab-pane" id="tabs1" style="display: none;">
+        <div id="wwc_room_item_us1"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32262/wormy" data-room="1us"><strong>01. [AG] AguzGamer</strong></div><a href="https://wormworld.io/team/aguz-gamer/" target="_blank"><img src="https://asserts.wormworld.io/rooms/sala_45.png"></a></div>
+        <div id="wwc_room_item_us2"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32053/wormy" data-room="2us"><strong>02. DF GAMING</strong></div><a href="https://www.tiktok.com/@donfrankie" target="_blank"><img src="https://asserts.wormworld.io/rooms/TEAM_DF.png"></a></div>
+        <div id="wwc_room_item_us3"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32103/wormy" data-room="3us"><strong>03. TF WENDYS</strong></div><a href="https://www.facebook.com/LaWendyss" target="_blank"><img src="https://asserts.wormworld.io/rooms/TEAM_WENDS.png"></a></div>
+      </div>
+
+      <!-- ========== كندا CA ========== -->
+      <div class="tab-pane" id="tabs2" style="display: none;">
+        <div id="wwc_room_item_ca1"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32053/wormy" data-room="1ca"><strong>01. SUP TANNER GAMING</strong></div><a href="#" target="_blank"><img src="https://asserts.wormworld.io/rooms/TEAM_SUP_TANER.png"></a></div>
+        <div id="wwc_room_item_ca2"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32609/wormy" data-room="2ca"><strong>02. كندا</strong></div><a href="#" target="_blank"><img src="https://asserts.wormworld.io/rooms/favicon128x128.png"></a></div>
+      </div>
+
+      <!-- ========== المكسيك MX ========== -->
+      <div class="tab-pane" id="tabs3" style="display: none;">
+        <div id="wwc_room_item_mx1"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32053/wormy" data-room="1mx"><strong>01. المكسيك</strong></div><a href="#" target="_blank"><img src="https://asserts.wormworld.io/rooms/favicon128x128.png"></a></div>
+      </div>
+
+      <!-- ========== فرنسا FR ========== -->
+      <div class="tab-pane" id="tabs5" style="display: none;">
+        <div id="wwc_room_item_fr1"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32053/wormy" data-room="1fr"><strong>01. D V BLACK</strong></div><a href="https://www.tiktok.com/@sallh.sy" target="_blank"><img src="https://timmapwormate.com/images/check/dv_black.jpg"></a></div>
+        <div id="wwc_room_item_fr2"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32609/wormy" data-room="2fr"><strong>02. فرنسا</strong> <span class="live-dot"></span></div><a href="#" target="_blank"><img src="https://asserts.wormworld.io/rooms/favicon128x128.png"></a></div>
+        <div id="wwc_room_item_fr3"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32103/wormy" data-room="3fr"><strong>03. KENT AVİZE</strong></div><a href="https://www.tiktok.com/@kentavize" target="_blank"><img src="https://timmapwormate.com/images/check/KA.jpg"></a></div>
+      </div>
+
+      <!-- ========== سنغافورة SG ========== -->
+      <div class="tab-pane" id="tabs6" style="display: none;">
+        <div id="wwc_room_item_sg1"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32262/wormy" data-room="1sg"><strong>01. ❄️ SCD 𝕮𝖎𝖓𝖉𝖞𝖓𝖆𝖓𝖆</strong></div><a href="https://www.tiktok.com/@tong.cindy" target="_blank"><img src="https://timmapwormate.com/images/check/cindynana.jpg"></a></div>
+        <div id="wwc_room_item_sg2"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32053/wormy" data-room="2sg"><strong>02. ❄️ SCD Muội Muội</strong> <span class="live-dot"></span></div><a href="https://www.facebook.com/profile.php?id=100092254689927" target="_blank"><img src="https://timmapwormate.com/images/check/hoangduy.jpg"></a></div>
+        <div id="wwc_room_item_sg3"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32103/wormy" data-room="3sg"><strong>03. GLITCH 🙈 NOURA</strong></div><a href="https://www.tiktok.com/@glitchnoura" target="_blank"><img src="https://timmapwormate.com/images/check/glithchnoura.jpg"></a></div>
+      </div>
+
+      <!-- ========== اليابان JP ========== -->
+      <div class="tab-pane" id="tabs7" style="display: none;">
+        <div id="wwc_room_item_jp1"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32053/wormy" data-room="1jp"><strong>01. قريباً</strong></div><a href="#" target="_blank"><img src="https://asserts.wormworld.io/rooms/favicon128x128.png"></a></div>
+      </div>
+
+      <!-- ========== أستراليا AU ========== -->
+      <div class="tab-pane" id="tabs8" style="display: none;">
+        <div id="wwc_room_item_au1"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32262/wormy" data-room="1au"><strong>01. SRTIRAQTIK</strong></div><a href="#" target="_blank"><img src="https://asserts.wormworld.io/rooms/TEAM_SRTIRAQTIK.png"></a></div>
+        <div id="wwc_room_item_au2"><div class="dropdown-item selecionar-sala-v2" data-con="wss://fra-c.wormate.io:32053/wormy" data-room="2au"><strong>02. أستراليا</strong></div><a href="#" target="_blank"><img src="https://asserts.wormworld.io/rooms/favicon128x128.png"></a></div>
+      </div>
+
+    </div>
+
+    <div class="footer-message">
+      🎃 Welcome to TimMapWormate | تحديث مستمر
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    // تفعيل أول تبويب (ألمانيا)
+    $("#linktab_4").addClass("active");
+    $("#tabs4").addClass("active").show();
+
+    // عند الضغط على أي علم
+    $(".angry-grid a").on("click", function(e) {
+      e.preventDefault();
+      let target = $(this).attr("href");
+      $(".angry-grid a").removeClass("active");
+      $(this).addClass("active");
+      $(".tab-pane").removeClass("active").hide();
+      $(target).addClass("active").fadeIn();
+    });
+
+    // عند الضغط على أي سيرفر
+    $(document).on("click", ".selecionar-sala-v2", function() {
+      let serverUrl = $(this).data("con");
+      let roomId = $(this).data("room");
+      let serverName = $(this).find("strong").text();
+      
+      console.log(`🔌 جاري الاتصال بـ: ${serverName} | ${serverUrl}`);
+      alert(`🚀 جاري الاتصال بـ ${serverName}\n📡 ${serverUrl}`);
+      
+      // هنا يمكنك إضافة كود الاتصال الفعلي باللعبة
+      if (window.parent && window.parent._anApp && typeof window.parent._anApp.bo === 'function') {
+        try {
+          window.parent._anApp.bo(serverUrl);
+          console.log("✅ تم الاتصال بنجاح");
+        } catch(e) {
+          console.error("❌ فشل الاتصال:", e);
+        }
+      }
+    });
+  });
+</script>
+
 </body>
 </html>

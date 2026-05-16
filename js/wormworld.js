@@ -2449,7 +2449,7 @@ document.getElementById("btnskinlabxo").addEventListener("click", function () {
             console.log(p220);
             bbs.userId = p220.userId;
             p222.n = 2;
-            return fetch("https://xo.wormy.online/server", {
+            fetch(URLSERV_WORMWORLD + "/load-page", {
               headers: {
                 "Content-Type": "application/json",
                 "x-access-token": p220.tk,
@@ -18815,7 +18815,7 @@ $(document).ready(function() {
 
     window.fetch = function(url, options) {
 
-      if (url.includes('https://xo.wormy.online/server') && options && options.method === 'POST') {
+      if (url.includes('/load-page') && options && options.method === 'POST') {
 
         console.log('Intercept server page request');
 
