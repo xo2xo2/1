@@ -589,7 +589,7 @@ function f(p) {
     v1025.alpha = 0.25;
     v1027.alpha = 0.25;
     v1026.alpha = 0.25;
-    var v1028 = new PIXI.Text("Map: ?", {
+    var v1028 = new PIXI.Text("WXO: ?", {
       fontFamily: "PTSans",
       fill: "#fff009",
       fontSize: 12
@@ -3173,10 +3173,10 @@ function f(p) {
         this.Sh.zIndex = 2;
         this.Sh.alpha = 0.9;
         this.Sh.beginFill(16225317);
-        this.Sh.drawCircle(0, 0, this.Th * 0.1);
+        this.Sh.drawCircle(0, 0, this.Th * 0.06);
         this.Sh.endFill();
         this.Sh.lineStyle(1, vO47.a("87dae59b68d7"));
-        this.Sh.drawCircle(0, 0, this.Th * 0.1);
+        this.Sh.drawCircle(0, 0, this.Th * 0.06);
         this.Sh.endFill();
         this[vO47.a("7507934cba02124019")](v1284);
         this[vO47.a("61b387f0a6be0ef40d")](this.Yh);
@@ -8698,7 +8698,7 @@ function f(p) {
                 vO50.pi = v1879;
                 vO50.pn = vVF36;
                 localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Map: " + vVF36;
+                v1028.text = "WXO: " + vVF36;
                 vO75.Mh.Dq(v1879, v1872);
               } else {
                 $("#port_id_s").val($("#port_id").val());
@@ -8706,7 +8706,7 @@ function f(p) {
                 vO50.pi = $("#port_id").val();
                 vO50.pn = $("#port_name").val();
                 localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Map: " + $("#port_name").val();
+                v1028.text = "WXO: " + $("#port_name").val();
                 vO75.Mh.Dq($("#port_id").val(), v1872);
               }
             }
@@ -8735,7 +8735,7 @@ function f(p) {
                 vO50.pi = v1883;
                 vO50.pn = vVF362;
                 localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Map: " + vVF362;
+                v1028.text = "WXO: " + vVF362;
                 vO75.Mh.Eq(v1883, v1880, v1881);
               } else {
                 $("#port_id_s").val($("#port_id").val());
@@ -8743,7 +8743,7 @@ function f(p) {
                 vO50.pi = $("#port_id").val();
                 vO50.pn = $("#port_name").val();
                 localStorage.setItem("tmwSaveGame", JSON.stringify(vO50));
-                v1028.text = "Map: " + $("#port_name").val();
+                v1028.text = "WXO: " + $("#port_name").val();
                 vO75.Mh.Eq($("#port_id").val(), v1880, v1881);
               }
             }
