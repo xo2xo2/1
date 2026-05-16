@@ -1672,10 +1672,19 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
                           <a href="https://wormworld.io" target="_blank">
                             <img src="https://asserts.wormworld.io/rooms/favicon128x128.png" style="width: 25px; vertical-align: middle">
                           </a>
-                        </div></div>
+                          </div>
+                        
+        </div>
+        
+    </div>
+    
 </div>
-</div>
-<script>
+
+
+
+
+
+  <script>
 
     // تهيئة الصفحة
 
@@ -1686,8 +1695,6 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
       $("#linktab_4").addClass("active");
 
       $("#tabs4").addClass("active").show();
-
-      loadServersFromRemote();
 
       
 
@@ -1713,7 +1720,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
 
       // إضافة حدث النقر على السيرفرات
 
-      $(document).on("click", ".server-name, .selecionar-sala-v2", function() {
+      $(".server-name").on("click", function() {
 
         const serverUrl = $(this).data("con");
 
@@ -1739,95 +1746,25 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
 
       // إضافة تأثيرات بصرية للسيرفرات
 
-      $(document).on("mouseenter", ".server-item, [id*='wwc_room_item_']", function() {
+      $(".server-item").hover(
 
-        $(this).css("background-color", "rgba(0, 0, 0, 0.25)");
+        function() {
 
-      }).on("mouseleave", ".server-item, [id*='wwc_room_item_']", function() {
+          $(this).css("background-color", "rgba(255, 255, 0, 0.2)");
 
-        $(this).css("background-color", "");
+        },
 
-      });
+        function() {
+
+          $(this).css("background-color", "");
+
+        }
+
+      );
 
     });
 
     
-
-    const SERVERS_JSON_URL = "https://xo.wormy.online/server";
-
-    function serverText(value) {
-      return value == null ? "" : String(value);
-    }
-
-    function escapeHtml(value) {
-      return serverText(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function normalizeServer(server, index) {
-      const region = serverText(server.region || server.category || "").toLowerCase();
-      const tab = serverText(server.tab || (region ? "tabs" + region : ""));
-      const number = Number(server.number || server.id || index + 1);
-      const rawName = serverText(server.name || server.label || "WW");
-      const label = serverText(server.label || ((number < 10 ? "0" + number : number) + " &nbsp;" + rawName));
-      return {
-        region: region,
-        tab: tab,
-        number: number,
-        name: rawName,
-        label: label,
-        data_con: serverText(server.data_con || server.serverUrl || server.connection || server.url),
-        data_room: serverText(server.data_room || server.room || server.roomId),
-        data_type: serverText(server.data_type || server.type || "false"),
-        link: serverText(server.link || server.socialLink || "https://wormworld.io"),
-        image: serverText(server.image || server.img || "https://asserts.wormworld.io/rooms/favicon128x128.png")
-      };
-    }
-
-    function tabByRegion(region) {
-      const map = {
-        br: "tabs0",
-        us: "tabs1",
-        ca: "tabs2",
-        mx: "tabs3",
-        de: "tabs4",
-        fr: "tabs5",
-        sg: "tabs6",
-        jp: "tabs7",
-        au: "tabs8",
-        ae: "tabs9"
-      };
-      return map[region] || "tabs4";
-    }
-
-    function createServerHtml(server) {
-      const tabId = server.tab || tabByRegion(server.region);
-      const itemId = "wwc_room_item_" + escapeHtml(server.number);
-      return `\n                        <div id="${itemId}" class="server-item" style="\n          display: grid;\n          grid-template-columns: 1fr 30px;\n          line-height: 28px;\n        ">\n                          <div class="dropdown-item selecionar-sala-v2 server-name" style="cursor: pointer; line-height: 25px"\n                            data-con="${escapeHtml(server.data_con)}" data-room="${escapeHtml(server.data_room)}"\n                            data-type="${escapeHtml(server.data_type)}">\n                            <strong>\n                              ${server.label}\n                            </strong>\n                          </div>\n                          <a href="${escapeHtml(server.link)}" target="_blank">\n                            <img src="${escapeHtml(server.image)}" style="width: 25px; vertical-align: middle" />\n                          </a>\n                        </div>`;
-    }
-
-    function loadServersFromRemote() {
-      return $.getJSON(SERVERS_JSON_URL)
-        .then(function(data) {
-          const servers = Array.isArray(data) ? data : (Array.isArray(data.servers) ? data.servers : []);
-          $(".tab-pane").empty();
-          servers.forEach(function(item, index) {
-            const server = normalizeServer(item, index);
-            const targetTab = server.tab || tabByRegion(server.region);
-            const pane = $("#" + targetTab);
-            if (pane.length) {
-              pane.append(createServerHtml(server));
-            }
-          });
-        })
-        .catch(function(error) {
-          console.error("Failed to load servers:", error);
-        });
-    }
 
     // دالة الاتصال بالسيرفر
 
@@ -1835,76 +1772,87 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
 
       console.log(`محاولة الاتصال بالسيرفر: ${serverUrl} (${roomId})`);
 
+      
+
+      // تغيير مظهر زر السيرفر ليعكس محاولة الاتصال
+
       $(".server-name").css("border", "none");
 
       $(`.server-name[data-room="${roomId}"]`).css("border", "1px solid yellow");
 
-      if ($("#connection-status").length) {
-        $("#connection-status").html(`جاري الاتصال بـ <strong>${serverName}</strong>...`);
-      }
+      
 
-      try {
-        if (window.parent && window.parent._anApp) {
+      // محاولة الاتصال باستخدام وظيفة اللعبة
 
-          console.log("استخدام وظيفة _anApp للاتصال");
+      if (window.parent && window.parent._anApp) {
+
+        try {
+
+          console.log("استخدام وظيفة _anApp.bo للاتصال");
+
+          // إيقاف الصوت (إذا كان متاحًا)
 
           if (window.parent._anApp.Si && typeof window.parent._anApp.Si.Se === 'function') {
+
             window.parent._anApp.Si.Se();
+
           }
+
+          
+
+          // الاتصال بالسيرفر
 
           if (typeof window.parent._anApp.bo === 'function') {
+
             window.parent._anApp.bo(serverUrl);
-            if ($("#connection-status").length) {
-              $("#connection-status").html(`تم الاتصال بنجاح: <strong>${serverName}</strong>`);
-            }
+
+            $("#connection-status").html(`تم الاتصال بنجاح: <strong>${serverName}</strong>`);
+
             return true;
+
           }
 
-          if (typeof window.parent._anApp.connect === 'function') {
-            window.parent._anApp.connect(serverUrl, roomId);
-            if ($("#connection-status").length) {
-              $("#connection-status").html(`تم الاتصال بنجاح: <strong>${serverName}</strong>`);
-            }
-            return true;
-          }
+        } catch (e) {
+
+          console.error("خطأ في الاتصال بالسيرفر:", e);
+
         }
-      } catch (e) {
-        console.error("خطأ في الاتصال بالسيرفر:", e);
+
       }
+
+      
+
+      // محاولة بديلة للاتصال
 
       try {
-        if (typeof window._anApp !== 'undefined') {
-          if (window._anApp.Si && typeof window._anApp.Si.Se === 'function') {
-            window._anApp.Si.Se();
-          }
 
-          if (typeof window._anApp.bo === 'function') {
-            window._anApp.bo(serverUrl);
-            if ($("#connection-status").length) {
-              $("#connection-status").html(`تم الاتصال بنجاح: <strong>${serverName}</strong>`);
-            }
-            return true;
-          }
+        // محاولة فتح عنوان السيرفر مباشرة
 
-          if (typeof window._anApp.connect === 'function') {
-            window._anApp.connect(serverUrl, roomId);
-            if ($("#connection-status").length) {
-              $("#connection-status").html(`تم الاتصال بنجاح: <strong>${serverName}</strong>`);
-            }
-            return true;
-          }
-        }
+        let httpUrl = serverUrl.replace('wss://', 'https://').replace('ws://', 'http://');
+
+        httpUrl = httpUrl.split('/wormy')[0] + '?room=' + roomId;
+
+        
+
+        window.open(httpUrl, '_blank');
+
+        $("#connection-status").html(`تم فتح السيرفر في نافذة جديدة: <strong>${serverName}</strong>`);
+
+        return true;
+
       } catch (e) {
-        console.error("خطأ في الاتصال المحلي بالسيرفر:", e);
-      }
 
-      console.warn("لم يتم العثور على دالة اتصال اللعبة، لن يتم فتح رابط خارجي.");
-      if ($("#connection-status").length) {
-        $("#connection-status").html(`لم يتم العثور على دالة اتصال اللعبة: <strong>${serverName}</strong>`);
+        console.error("فشل في فتح عنوان السيرفر:", e);
+
+        $("#connection-status").html(`فشل الاتصال بالسيرفر: <strong>${serverName}</strong>`);
+
+        return false;
+
       }
-      return false;
 
     }
+
+    
 
     // وظيفة تنشيط التوكن (إذا كانت مطلوبة)
 
@@ -1922,3 +1870,6 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
 
   </script>
 
+</body>
+
+</html>
